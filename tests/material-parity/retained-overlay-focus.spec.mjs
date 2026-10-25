@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { gunzipSync } from 'node:zlib';
 import { chromium } from 'playwright-core';
 
 // Diagnose the retained harness, not a requirement that a future harness keep
@@ -20,6 +21,37 @@ const gates = [];
 const visit = n => { if (ts.isVariableDeclaration(n) && n.name.getText(ast) === 'focusMatches') gates.push(n.initializer.getText(ast)); ts.forEachChild(n, visit); };
 visit(ast); assert.deepEqual(gates, ["state !== 'focus' || referenceFocus === astylarFocus"]);
 const gate = new Function('state', 'referenceFocus', 'astylarFocus', `return ${gates[0]}`);
+
+test('original text-input held rows retain post-release focus,not held-focus evidence',t=>{
+  const bytes=readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(bytes),'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report=JSON.parse(bytes),encoded=readFileSync('docs/evidence/material-original-runner-e01.mjs.gz.b64');
+  const original=gunzipSync(Buffer.from(encoded.toString().replace(/\s/g,''),'base64'));
+  assert.equal(hash(original),'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
+  assert.equal(report.captureProvenance.harnessFiles.find(r=>r.file==='tests/material-parity/run-material-parity.mjs').sha256,hash(original));
+  const tree=ts.createSourceFile('original.mjs',original.toString(),99,true,ts.ScriptKind.JS);
+  const capture=tree.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text==='captureInteractionCase');
+  const statements=capture.body.statements.find(ts.isTryStatement).tryBlock.statements;
+  const position=fragment=>{
+    const matches=[...statements].map((n,i)=>[n.getText(tree),i]).filter(([text])=>text.includes(fragment));
+    assert.equal(matches.length,1);return matches[0][1];
+  };
+  const release=position('for (const release of heldReleases)');
+  assert.ok(position('captureInteractionImage(reference.page')<release);
+  assert.ok(position('const referenceFocus =')>release);assert.ok(position('const astylarFocus =')>release);
+  const cases=[];
+  for(const family of ['input','form-field']){
+    const rows=report.interactions.filter(r=>r.family===family&&r.state==='held');assert.equal(rows.length,8);
+    for(const row of rows){
+      assert.deepEqual(row.focus,{reference:family+'-primary',astylar:family+'-primary',matches:true});
+      assert.equal(gate('held','different-native-owner','different-candidate-owner'),true);
+      cases.push(`interaction:${family}@${row.profile}/${row.viewport.id}/held`);
+    }
+  }
+  assert.equal(new Set(cases).size,16);
+  t.diagnostic(JSON.stringify({cases,originalRunnerSha256:hash(original),
+    boundary:'Exact original input/form-field held records only. Screenshots precede release;focus reads follow release and non-focus gate accepts mismatched owners. Matching normalized post-release IDs do not establish held native focus,raw owner identity,default-action continuity or current rendering. No new renderer diagnosis or acceptance change.'}));
+});
 
 test('current overlay authoring has distinct menu, sheet and dialog focus requests', async t => {
   // Execute the actual authoring methods with a minimal surface boundary.

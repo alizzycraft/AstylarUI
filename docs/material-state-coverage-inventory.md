@@ -4,6 +4,39 @@
 
 ### Current next action and publication status
 
+October25 remaining-coverage prioritization uses accepted8848/index3a73,whose
+complete index hash was checked before reading its2311 case records. Pending
+evidence joins:activation1466,focus1587,localPaint949. Input has204 pending
+obligations across76 cases;datepicker202/111,dialog194/78,form-field192/76,
+autocomplete192/110,timepicker192/110. These are obligation counts,not uninspected
+case counts;all2311 cases remain partial. Every case also retains partial input,
+semantic,history and currentness obligations. Prioritize shared text-control
+action-boundary gaps rather than further settled Divider baseline investigations.
+Existing text/picker focus join already records all216 applicable configured focus
+actions plus40 authored exclusions;do not recapture that cohort from pending
+counts that also include other states/static cases.
+
+Specific next question answered:all16 original input/form-field held rows read
+native focus AFTER pointer release,although screenshots precede release. Original
+runner bytes authenticate ase01ef9dc against the original report harness receipt;
+AST statement ordering and all16 exact profile/DPR records are checked in the
+existing retained-overlay-focus suite. Their normalized primary IDs match,but
+the non-focus gate returns true even for different owners. Therefore these rows
+cannot establish held-focus or raw owner continuity;this is bounded applicability
+of the existing harness timing limitation,not a new core failure. Existing test
+`original text-input held rows` passes1/1,0skip,exit0 (1957.9717ms),without browser
+capture or canonical export. Next evidence must observe raw active owners while
+the pointer remains down,or reuse an existing exact equivalent observation;do
+not reinterpret the release endpoint as a held pass. Original acceptance remains.
+
+Publication retry session32916 terminated1 with `curl 55 Send failure:
+Connection was reset` and unexpected sideband disconnect. Its trailing
+`Everything up-to-date` is not publication proof. No automatic third large
+upload,credential/configuration change or artifact deletion was attempted.
+Independent HTTPS lookup exits0 and still shows remote3b8e4000;D:free586481664
+and C:free463532032bytes. Read connectivity works;verified increments remain
+local pending a successful publication route. This does not block read-only audit.
+
 October25 placement reconciliation answers the next competing explanation:the
 modeled live text tops match the authenticated parent absolute-paragraph/root-
 border predictions within one Float32 coordinate ULP. Local draw offset agrees,
