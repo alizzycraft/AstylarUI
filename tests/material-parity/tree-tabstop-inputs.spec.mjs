@@ -69,6 +69,10 @@ test('Tree staged registry conserves every live source proof finding and plan wi
   const restoredReplay=restoreTreeFocusReplaySource(readFileSync(replayFile));
   assert.equal(hash(restoredReplay),'1421a151e00273dfdc1796af0a48b3b2e5810130d4f2a689c0fcf1b09e729f30');
   assert.throws(()=>restoreTreeFocusReplaySource(readFileSync(replayFile,'utf8')+'\n// drift'));
+  const {restoreTreeFocusPendingSource}=await import('./tree-focus-registration.mjs');
+  const pendingFile='tests/material-parity/pending-evidence-registration.mjs';
+  assert.equal(hash(restoreTreeFocusPendingSource(readFileSync(pendingFile))),'2ecab5e23e19625604db60f59e9fd0dd659cb05c0bd9b41ebc2e0476ac17e8e7');
+  assert.throws(()=>restoreTreeFocusPendingSource(readFileSync(pendingFile,'utf8')+'\n// drift'));
   t.diagnostic(JSON.stringify({stagedSources:1067,stagedProofs:392,stagedFindings:200,stagedTracks:67,completePredecessorsRecovered:true,liveWrites:false,canonicalPublished:false}));
 });
 test('pending Tree findings keep authoring and public core failure scopes separate',async()=>{

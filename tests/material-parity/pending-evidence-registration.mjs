@@ -244,6 +244,11 @@ export function restorePendingEvidenceRegisteredSource(source, file) {
 }
 export function restoreOriginalRunnerExportSource(source, kind) {
   assert.ok(['runner', 'launcher'].includes(kind));
+  if(source.toString().includes(kind==='runner'?'menuSelectDisabledReview':'const menuSelectDisabled =')){
+    const file=path.resolve(kind==='runner'?'scripts/run-material-input-audit.mjs':'scripts/export-material-input-audit-current-ancestry.mjs');
+    const read=(name,options)=>path.resolve(name)===file?(typeof options==='string'?source.toString(options):Buffer.from(source)):readFileSync(name,options);
+    source=createMenuHistoricalRead({root:process.cwd(),read})(file);
+  }
   let text = restoreDividerPaintExportSource(source, kind);
   const file = kind === 'runner' ? 'scripts/run-material-input-audit.mjs' : 'scripts/export-material-input-audit-current-ancestry.mjs';
   if (hash(text) === pendingEvidencePreviousSourceHashes[file]) return text;

@@ -79,6 +79,17 @@ export function restoreTreeFocusSelection(bytes,kind){
   for(const [a,b]of selectionTransitions(kind).toReversed())text=once(text,b,a);assert.equal(hash(text),selectionPrior[kind]);return text;
 }
 const replayPrior='1421a151e00273dfdc1796af0a48b3b2e5810130d4f2a689c0fcf1b09e729f30';
+const pendingPrior='2ecab5e23e19625604db60f59e9fd0dd659cb05c0bd9b41ebc2e0476ac17e8e7';
+const pendingExportHook=`  if(source.toString().includes(kind==='runner'?'menuSelectDisabledReview':'const menuSelectDisabled =')){
+    const file=path.resolve(kind==='runner'?'scripts/run-material-input-audit.mjs':'scripts/export-material-input-audit-current-ancestry.mjs');
+    const read=(name,options)=>path.resolve(name)===file?(typeof options==='string'?source.toString(options):Buffer.from(source)):readFileSync(name,options);
+    source=createMenuHistoricalRead({root:process.cwd(),read})(file);
+  }
+`;
+export function restoreTreeFocusPendingSource(bytes){
+  let text=bytes.toString().replaceAll('\r\n','\n');if(hash(text)===pendingPrior||hash(text)==='638e41f56b35c7be24abd563b631cbc1c41345324814c041fa2f30078ad75d3c')return text;
+  text=once(text,pendingExportHook,'');assert.equal(hash(text),pendingPrior);return text;
+}
 const inheritedStages={
   policy:['cbf641365e8ab55748befc3e59c283e30eadab314519c8f9fbf7f5647f4a7b30'],
   producer:['036c7e1d05923920d4c6ebacfc916ca8a759214bd45cb4c9b8f917d632b233b1','ec5be8ce8f6a47371e22b4c041abcc677013d9263834edc4a6ae4b94d07c906d','d791949cfe8a3821d76250379e0c68795759d2f88650ad3414ceeaa7dbd52b17'],
@@ -89,6 +100,8 @@ export function restoreTreeFocusReplaySource(bytes){
   let text=bytes.toString().replaceAll('\r\n','\n');if(hash(text)===replayPrior)return text;
   for(const hook of [
     "import { createTreeFocusPriorRead, restoreTreeFocusRegistry, restoreTreeFocusSelection } from './tree-focus-registration.mjs';\n",
+    "import { restoreTreeFocusPendingSource } from './tree-focus-registration.mjs';\n",
+    "  if(kind==='pending')source=restoreTreeFocusPendingSource(source);\n",
     '  if(source.toString().includes(\'"scripts/audit-material-tree-pointer-tabstop.mjs"\'))source=restoreTreeFocusRegistry(source,\'producer\');\n',
     "  if(source.toString().includes('--tree-focus'))source=restoreTreeFocusSelection(source,kind);\n",
     '  read=createTreeFocusPriorRead({root,read});\n',
@@ -98,15 +111,15 @@ export function restoreTreeFocusReplaySource(bytes){
 export function createTreeFocusPriorRead({root,read}){
   const paths=new Map([['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy'],
     ['scripts/export-material-input-audit-current-ancestry.mjs','launcher'],['scripts/run-material-input-audit.mjs','runner'],
-    ['tests/material-parity/text-held-registration.mjs','replay']].map(([f,k])=>[path.resolve(root,f),k]));
+    ['tests/material-parity/text-held-registration.mjs','replay'],['tests/material-parity/pending-evidence-registration.mjs','pending']].map(([f,k])=>[path.resolve(root,f),k]));
   return (name,options)=>{
     const kind=paths.get(path.resolve(root,name));if(!kind)return read(name,options);
     const bytes=read(name),text=bytes.toString().replaceAll('\r\n','\n');
-    if(hash(text)===(kind==='replay'?replayPrior:prior[kind]??selectionPrior[kind]))return read(name,options);
+    if(hash(text)===(kind==='pending'?pendingPrior:kind==='replay'?replayPrior:prior[kind]??selectionPrior[kind]))return read(name,options);
     if(inheritedStages[kind]?.includes(hash(text)))return read(name,options);
     if(kind==='producer')assert.ok(text.includes('"scripts/audit-material-tree-pointer-tabstop.mjs"'),'Unexpected producer stage '+hash(text));
     if(kind==='policy')assert.ok(text.includes('core-pointer-move-restores-canvas-tabstop-and-recaptures-backward-exit'),'Unexpected policy stage '+hash(text));
-    const restored=kind==='replay'?restoreTreeFocusReplaySource(bytes):Object.hasOwn(prior,kind)?restoreTreeFocusRegistry(bytes,kind):restoreTreeFocusSelection(bytes,kind),encoding=typeof options==='string'?options:options?.encoding;
+    const restored=kind==='pending'?restoreTreeFocusPendingSource(bytes):kind==='replay'?restoreTreeFocusReplaySource(bytes):Object.hasOwn(prior,kind)?restoreTreeFocusRegistry(bytes,kind):restoreTreeFocusSelection(bytes,kind),encoding=typeof options==='string'?options:options?.encoding;
     return encoding?Buffer.from(restored).toString(encoding):Buffer.from(restored);
   };
 }

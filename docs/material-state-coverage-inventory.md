@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October25 BOTH pre-existing pending inventory failures are resolved without
+changing either test's expected hashes,counts or tampering assertions. Root
+cause:restoreOriginalRunnerExportSource sent newer Menu/owner/editing/held export
+sources directly into old Divider/runner inverse patches. It now first routes
+the supplied complete source through existing createMenuHistoricalRead when the
+newer Menu stage is present;every owning stage still authenticates complete
+bytes. The original inverse patches then recover their unchanged frozen hashes.
+The direct two-test pending suite passes2/2,exit0,7977.3326ms. Earlier failures
+and the pre-Tree control run remain historical evidence,not overwritten success.
+
+The newer pending-helper change itself is reversible to complete2ecab5e2;
+held-helper recovery still yields1421a151. Tree prior applicability now has SIX
+bounded old paths,not five. Unknown added bytes reject in both helpers. No
+source receipt was repointed and no historical source hash was edited.
+Coherent compatibility rerun passes14/14,exit0,11837.3838ms across the five
+existing registration suites,with ONLY the expensive Divider full-review
+constructor excluded. It is not an unfiltered full-suite claim. Held plus Tree
+registry assertions pass2/2,exit0,5903.2731ms afterward. The complete Tree receipt
+loader was not rerun for this metadata repair. Next prepare the old held-test
+snapshot applicability and apply the already-staged registry/selection as one
+verified live milestone. Counts1067/392/200/67 remain staged;canonical8848 and all
+case/gate flags preserve. No browser capture or renderer/fixture implementation.
+
 October25 shared Tree replay compatibility check exposed an actual regression
 before live registration:the newest reader rejected already-restored036c7e1d
 producer and cbf64136 policy stages. It now recognizes their complete prior

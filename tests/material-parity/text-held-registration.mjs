@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { createTreeFocusPriorRead, restoreTreeFocusRegistry, restoreTreeFocusSelection } from './tree-focus-registration.mjs';
+import { restoreTreeFocusPendingSource } from './tree-focus-registration.mjs';
 import { createEditingContextReviewReader } from './editing-context-review-source.mjs';
 import { joinTextHeldEvidence,textHeldPredecessor } from '../../scripts/join-material-text-held-evidence.mjs';
 
@@ -84,6 +85,7 @@ const replayTransitions=[
     ]],
 ];
 export function restoreTextHeldReplaySource(source,kind){
+  if(kind==='pending')source=restoreTreeFocusPendingSource(source);
   assert.ok(['pending','editing'].includes(kind));const entry=replayTransitions[kind==='pending'?0:1];
   let text=source.toString().replaceAll('\r\n','\n');if(hash(text)===entry[1])return text;
   text=once(text,entry[2],'');for(const hook of entry[3])text=once(text,hook,'');
