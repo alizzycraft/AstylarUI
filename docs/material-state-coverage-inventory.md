@@ -13,11 +13,24 @@ not hover. Pending fixture-sort-hover-arrow-omitted is a separate application
 state/presence defect,not the triangulation or a projection diagnosis. Retained
 native opacity is not a raw event timeline or complete paint/current-code proof.
 Both focused Sort tests pass2/2,exit0,3377.4146ms. No new browser/artifact or
-renderer/fixture change. Both pending Sort findings remain outside1070-style
-publication claims:live registry is still1067/392/200/67 and canonical8848 is
+renderer/fixture change. Both pending Sort findings remain outside live
+publication:registry is still1067/392/200/67 and canonical8848 is
 historical. Next consolidate the bounded Sort findings without broad recapture;
 fresh current paint still needs safe browser headroom and original source
 provenance remains unproven. No case is promoted to complete.
+
+Pending sort-arrow-findings.mjs now records both entries with distinct source
+anchors,ownership,actions and uncertainty. Both anchors match exactly once.
+Executable history check:705cf584b749caaf59149bba4b017567ca794c23 first authors
+an activated-only arrow;75fe617bf947eabf8c4353322a1b97ca5b3bc7d7 adds the focus
+gate,and5b74d1b3 retains it for plugin geometry. None of those inspected Sort
+branches reads hover state. Initial2f440115 has no separate arrow at all,so do
+not falsely date the current gate to the initial example. This remains source
+history,not historical runtime or reference-equivalence proof. Consolidated
+focused suite passes3/3,exit0,3639.541ms;no renderer or fixture changes. C:free
+3436544 bytes on the latest preflight;new browser work remains deferred. Next
+join these bounded partial observations to existing case records without
+promoting cases or generating another capture/framework.
 
 October25 next Sort input-mapping question reveals a NEW pending plugin vector
 geometry defect,not a cursor/keyboard recapture. Authenticated originalab42dbec

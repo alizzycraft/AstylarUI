@@ -8,6 +8,21 @@ import {PNG} from 'pngjs';
 import {evaluateFocusedRaster} from './focused-raster-metrics.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
+test('pending Sort arrow findings preserve separate state and vector ownership',async()=>{
+  const {sortArrowFindings:findings}=await import('./sort-arrow-findings.mjs');assert.equal(findings.length,2);
+  assert.equal(new Set(findings.map(f=>f.id)).size,2);
+  for(const f of findings){assert.equal(f.classification,'application-plugin-authoring-defect');assert.equal([...readFileSync(f.file,'utf8').matchAll(new RegExp(f.pattern,'g'))].length,1);assert.ok(f.owner&&f.action&&f.boundary);}
+  assert.equal(findings[0].observation.hoverFailures,8);assert.equal(findings[0].observation.cases,60);
+  assert.match(findings[1].retainedPaint.attribution,/not proof of capture-time plugin identity/);
+  const file='examples/material-showcase/src/app/astylar.component.ts';
+  const branch=revision=>{const s=execFileSync('git',['show',revision+':'+file],{encoding:'utf8',maxBuffer:3e6}),t=ts.createSourceFile(file,s,99,true);let found;
+    const visit=n=>{if(ts.isIfStatement(n)&&n.expression.getText(t)==="family === 'sort'")found=n.getText(t);ts.forEachChild(n,visit);};visit(t);assert.ok(found);return found;};
+  const history=findings[0].history;
+  assert.match(branch(history.initialArrow),/\.\.\.\(state\.open \? \[/);
+  assert.match(branch(history.focusGate),/state\.open \|\| focused/);
+  assert.match(branch(history.pluginArrow),/state\.open \|\| focused/);
+  for(const revision of Object.values(history))assert.equal(/hoveredId/.test(branch(revision)),false);
+});
 test('all retained Sort hover contexts omit the candidate arrow despite visible native opacity',t=>{
   const bytes=readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
   assert.equal(hash(bytes),'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');

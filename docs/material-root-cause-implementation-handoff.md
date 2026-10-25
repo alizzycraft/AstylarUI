@@ -2,6 +2,13 @@
 
 ## Pending Sort arrow vector input defect,October25
 
+Keep the separate fixture-sort-hover-arrow-omitted finding distinct:all eight
+retained hover trees have native opacity.54 but no candidate arrow node. The
+activated-only arrow introduced by705cf584 gained focus presence in75fe617b;
+5b74d1b3 keeps that non-hover gate for plugin geometry. Correct presence through
+authored state later;changing vector triangulation cannot repair a missing node.
+Both pending entries live in sort-arrow-findings.mjs,outside current registration.
+
 The current plugin's five triangles do not reproduce the retained native SVG
 path despite matching bounds. Exact CSS-space witnesses in
 sort-arrow-geometry.spec.mjs show filled notch area outside the native path and
