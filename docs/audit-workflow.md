@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+October25 Sort milestone accepted locally as7a22e84a/index0d9f52fa. Corrected
+export,complete conservation,independent cold comparison (exit0,diskHits0) and
+verified isolated/accepted imports pass. See the current ledger for exact logs.
+Do not repeat those gates for prose. All2311 cases remain partial/current-rendering
+unverified;original acceptance is unchanged. Next publish,then pin the Sort
+conservation test's historical8848 baseline independently of current.json before
+resuming exact-case inspection. Preserve source applicability when that test changes.
+
 October25 Sort export retry prerequisite:the initial run failed before writes
 because new finding evidence objects violated the existing receipt-array
 contract. Registration is corrected without weakening the validator. Its exact

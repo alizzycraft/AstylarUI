@@ -4,6 +4,40 @@
 
 ### Current next action and publication status
 
+October25 Sort/Tree/held evidence batch is now accepted LOCALLY as generation
+`7a22e84a0034a5c887cc7a0d8c68ac68b269dfd7a9d414d9f57a71c2d86e42f1`,
+index `0d9f52fae32e7783dc7dbb6bc08587fe6a0b01b1e3bf0ff94b9c4b6b08837850`.
+Corrected export exits0; independent cold check exits0 after3534290.6306ms,
+authenticating19773 files/3433975179 bytes with diskHits0. Canonical comparison
+passes. Census1070 sources/398 proofs/202 findings/69 implementation tracks;
+436 static plus1875 interaction cases remain partial/current-rendering unverified.
+Input equivalence is NO; this is evidence publication,not rendering acceptance.
+
+Reusable evidence under `artifacts/material-parity/`:
+
+- `sort-receipt-corrected-canonical-export-20261025.log`;
+- `sort-independent-cold-check-20261025.log`;
+- `sort-candidate-sections-metadata-20261025.log` authenticates all80 sections;
+- `sort-metadata-conservation-corrected-20261025.log` preserves prior findings,
+  proof fields,priority-sorted plan entries and source paths with exact additions;
+- `sort-coverage-conservation-20261025.log` preserves all2311 parent cases and
+  prior18397 receipts,with18404 current dependencies;
+- `sort-fixed-shape-leaf-conservation-20261025.log` compares14085648 leaves;
+- `sort-derived-receipt-conservation-20261025.log` explains all147 changes as
+  98 direct producer receipts,48 complete control-proof hashes and one report hash;
+- `sort-isolated-candidate-import-20261025.log` and
+  `sort-accepted-import-20261025.log` verify complete stores. All86 immutable files
+  are hard-linked between stores;accepted import reuses verified generation.
+
+Prior8848 and initial export/conservation failures remain retained. No renderer,
+plugin implementation,fixture,threshold or case-acceptance change occurred.
+Next publish this coherent package,then fix the historical-baseline test anchor:
+`Sort arrow partial join conserves` reads mutable current.json but requires8848.
+Pin that retained generation/index explicitly rather than changing its baseline.
+This source correction must have honest post-package applicability;do not launch
+another full export solely for metadata. Then resume exact-case inspection gaps,
+not settled Sort/Tree captures. All original final acceptance gates remain open.
+
 October25 first Sort canonical export FAILED before writing canonical files:
 sort-canonical-export-20261025.log retains TypeError at the real validator's
 source-diagnostic loop (`definition.evidence is not iterable`). New Sort and

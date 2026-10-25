@@ -1,5 +1,14 @@
 # Material audit: evidence-led implementation priorities
 
+October25 publication checkpoint:Sort/Tree/held batch is accepted locally as
+7a22e84a/index0d9f52fa after export,complete conservation,independent cold replay
+and verified imports. Exact logs and next actions are in the current coverage
+ledger. Census1070/398/202/69;all2311 cases remain partial/current-rendering
+unverified. The older pending/outside-registration wording below is historical.
+No renderer/fixture fixes are authorized by this audit milestone. Pin the Sort
+test's historical8848 baseline before advancing further test-source applicability;
+do not reinterpret current.json advancement as a historical conservation failure.
+
 ## Pending Sort arrow vector input defect,October25
 
 Keep the separate fixture-sort-hover-arrow-omitted finding distinct:all eight

@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+October25 accepted7a22e84a/index0d9f52fa retains the complete predecessor8848.
+Keep the successful corrected-export,cold-check,section/metadata/coverage/leaf/
+derived-receipt conservation and both import logs named in the current ledger,
+including initial failed conservation attempts. Candidate store
+`sort-candidate-store-20261025` and accepted `working-audit` share86 hard-linked
+immutable files;this is not86 duplicate physical allocations. Nothing was deleted.
+Keep `sort-pre-export-8848-20261025` and authenticated predecessor extracts until
+reference closure. Accepted import does not authorize deleting original/failure
+evidence or imply case/current-rendering acceptance.
+
 Keep sort-canonical-export-20261025.log:the initial Sort export fails at the
 source-diagnostic receipt-array contract before canonical writes. Keep the
 receipt-contract-correction and receipt-corrected-reader logs (2/2 and1/1),
