@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October25 supplementary Timepicker DOM-focus join is verified IN MEMORY as
+`1949a8c8f54ce18c8b20b249d851e5b69ba5c47fd0cb8dd34e954ea7ad7c782a`,
+from accepted review8554f8ef. The existing join pattern adds precisely eight
+`programmaticFocus.supplementaryTimepickerDOMProgrammaticFocus` children to the
+exact profile/DPR focus cases;it does not replace the configured pointer action.
+Report,manifest,harness/diagnostic dependencies,paired trees and screenshots
+authenticate. All2311 parent cases,dispositions,remaining lists and activation
+data conserve;removing only those children restores the complete predecessor.
+Forged report/tree controls reject. Existing focus-action-scope suite passes4/4,
+0skip,13507.9762ms in
+`artifacts/material-parity/timepicker-programmatic-focus-join-20261025.log`.
+No physical full proposal,canonical export,source-registry promotion or rendering
+acceptance follows. Accepted7a22 remains unchanged;new probe/join and changed
+focus-scope/Sort tests require bounded source reconciliation in the next coherent
+batch. Do not repeat this capture or focused join for metadata. Next reconcile
+these post-package source transitions before selecting the pending review for
+the existing full dependency validator;then continue missing text/picker action
+boundaries rather than re-testing the known generic focus-open callback.
+
 October25 next shared-action gap answered:the configured Timepicker focus action
 is a pointer click,and retained lifecycle focus-call traces are restoration after
 that click,not initiating programmatic-focus evidence. A supplementary probe now

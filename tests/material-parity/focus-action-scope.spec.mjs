@@ -8,6 +8,31 @@ import { materialInteractionCases } from './benchmark.config.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
+test('supplementary Timepicker focus join preserves the complete accepted predecessor and rejects forged evidence',async t=>{
+  const generation='7a22e84a0034a5c887cc7a0d8c68ac68b269dfd7a9d414d9f57a71c2d86e42f1';
+  const bytes=readFileSync(`artifacts/material-parity/working-audit/${generation}/index.json`);
+  assert.equal(hash(bytes),'0d9f52fae32e7783dc7dbb6bc08587fe6a0b01b1e3bf0ff94b9c4b6b08837850');
+  const coverage=JSON.parse(bytes).metadata.coverage.inspectionEvidence;
+  const parent={kind:'case-obligation-coverage-extension',status:'proposal-not-canonical',scope:coverage.scope,groups:coverage.cases};
+  const {joinTimepickerProgrammaticFocus:join,restoreTimepickerProgrammaticFocus:restore,timepickerProgrammaticFocusPredecessor}=await import('../../scripts/join-material-timepicker-programmatic-focus.mjs');
+  assert.equal(hash(JSON.stringify(parent)),timepickerProgrammaticFocusPredecessor);
+  const joined=join(parent);assert.equal(joined.cases,8);assert.equal(joined.addedChildren,8);
+  assert.equal(hash(JSON.stringify(restore(joined.review))),timepickerProgrammaticFocusPredecessor);
+  let changed=0;for(let i=0;i<parent.groups.length;i++){
+    const a=parent.groups[i],b=joined.review.groups[i];changed+=Number(a!==b);
+    assert.equal(a.inspection,b.inspection);assert.equal(a.currentRendering,b.currentRendering);
+    assert.deepEqual(a.obligations.authoredActivation,b.obligations.authoredActivation);
+    for(const name of Object.keys(a.obligations)){
+      assert.equal(a.obligations[name].disposition,b.obligations[name].disposition);
+      assert.deepEqual(a.obligations[name].remaining,b.obligations[name].remaining);
+    }
+  }
+  assert.equal(changed,8);assert.throws(()=>join(joined.review));
+  for(const ending of ['latest-report.json','timepicker-light-desktop-dpr1-astylar.json'])
+    assert.throws(()=>join(parent,(file,...args)=>String(file).endsWith(ending)?Buffer.from('forged'):readFileSync(file,...args)));
+  t.diagnostic(JSON.stringify({predecessor:timepickerProgrammaticFocusPredecessor,review:joined.sha256,cases:8,addedChildren:8,completePredecessorRecovered:true,canonicalUnchanged:true,currentRenderingAccepted:false}));
+});
+
 test('supplementary Timepicker DOM focus opens only the candidate popup across eight retained contexts', () => {
   const directory='artifacts/material-parity/timepicker-programmatic-focus-20261025';
   const bytes=readFileSync(directory+'/latest-report.json');
