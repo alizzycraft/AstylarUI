@@ -4,6 +4,21 @@
 
 ### Current next action and publication status
 
+October25 replay-boundary integration is now verified. Exact intermediate
+Menu-stage producer/runner/launcher hashes pass through the newer editing reader;
+unknown drift still rejects. The two shared replay-correction files recover
+their complete pre-correction hashes through existing prior-source applicability.
+Both complete registration suites pass6/6,0 skipped. Existing editing-context
+dependency integration passes1/1,validating18397 receipts and exact043361b0 from
+f812d8d9 with56 children and no physical proposal/live producer write.
+Log: `artifacts/material-parity/editing-replay-corrected-dependency-integration-20261025.log`
+(stderr empty). This resolves the staged-test failure recorded below;keep its
+historical result. Four focused collectors already recovered all259 groups.
+Next freeze this corrected source vector for one new canonical export,then
+conservation/independent cold/import. Accepted88be4d47 remains unchanged and
+all2311 cases stay partial/current-rendering unverified. Do not rerun settled
+browser captures or treat this instrumentation recovery as audit completion.
+
 October25 focused replay correction: `restorePendingEvidenceProducer` now
 composes the existing authenticated Menu/prior-registration reader before the
 older owner/frame restoration when the exact newer source marker is present.

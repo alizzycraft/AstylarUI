@@ -64,7 +64,7 @@ test('Editing registration binds unique literal and parameterized proof declarat
   const stagedFiles=new Map([['scripts/export-material-input-audit-current-ancestry.mjs',staged],['scripts/run-material-input-audit.mjs',stagedRunner]].map(([f,s])=>[path.resolve(f),Buffer.from(s)]));
   const read=(name,options)=>stagedFiles.get(path.resolve(name))??readFileSync(name,options),historical=createEditingContextPriorRead({root:process.cwd(),read});
   for(const [file,bytes]of stagedFiles){assert.equal(historical(file,'utf8'),file.endsWith('current-ancestry.mjs')?launcher:runner);stagedFiles.set(file,Buffer.concat([bytes,Buffer.from('\n// drift')]));assert.throws(()=>historical(file));stagedFiles.set(file,bytes);}
-  for(const [file,kind]of [['tests/material-parity/divider-owner-context-registration.mjs','registration'],['tests/material-parity/divider-owner-context-registration.spec.mjs','proof']]){
+  for(const [file,kind]of [['tests/material-parity/divider-owner-context-registration.mjs','registration'],['tests/material-parity/divider-owner-context-registration.spec.mjs','proof'],['tests/material-parity/pending-evidence-registration.mjs','pending-replay'],['tests/material-parity/menu-select-disabled-registration.spec.mjs','menu-proof']]){
     const absolute=path.resolve(file),bytes=readFileSync(file);assert.equal(historical(file,'utf8'),restoreEditingLegacySource(bytes,kind));
     stagedFiles.set(absolute,Buffer.concat([bytes,Buffer.from('\n// drift')]));assert.throws(()=>historical(file));stagedFiles.delete(absolute);
   }

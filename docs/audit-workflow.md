@@ -1,5 +1,14 @@
 # Efficient Material input-audit workflow
 
+October25 export retry prerequisite: the initial editing-context export failed
+before canonical writes. Shared historical replay now composes newer registration
+stages;all four collectors bind259 groups,complete registration suites pass6/6,
+and existing dependency integration validates18397 receipts/043361b0. The earlier
+staged-reader failure is resolved through exact intermediate hashes,not a
+marker-only bypass. Use a fresh `editing-replay-corrected` log prefix for the one
+export retry,then conservation/cold/import. Preserve the original failed logs
+and accepted88be4d47 until all gates pass. No renderer/fixture changes authorized.
+
 October25 publication prerequisite changed:actual HTTPS push completed and an
 independent remote lookup matchesc498f80f on codex/material-audit-alignment-integration.
 GitHub large-file warnings were nonfatal. D: now has940068864 bytes free;the old

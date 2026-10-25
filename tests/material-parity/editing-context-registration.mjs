@@ -61,20 +61,48 @@ export function restoreEditingContextProducer(source,read){
 export function createEditingContextPriorRead({root,read}){
   const producer=path.resolve(root,'tests/material-parity/input-equivalence-audit.mjs');
   const selections=new Map([['launcher','scripts/export-material-input-audit-current-ancestry.mjs'],['runner','scripts/run-material-input-audit.mjs']].map(([kind,file])=>[path.resolve(root,file),kind]));
-  const legacy=new Map([['registration','tests/material-parity/divider-owner-context-registration.mjs'],['proof','tests/material-parity/divider-owner-context-registration.spec.mjs']].map(([kind,file])=>[path.resolve(root,file),kind]));
+  const legacy=new Map([['registration','tests/material-parity/divider-owner-context-registration.mjs'],['proof','tests/material-parity/divider-owner-context-registration.spec.mjs'],['pending-replay','tests/material-parity/pending-evidence-registration.mjs'],['menu-proof','tests/material-parity/menu-select-disabled-registration.spec.mjs']].map(([kind,file])=>[path.resolve(root,file),kind]));
   return (name,options)=>{
     const resolved=path.resolve(root,name),kind=selections.get(resolved),oldKind=legacy.get(resolved);
     if(resolved!==producer&&!kind&&!oldKind)return read(name,options);
     const bytes=read(name),normalized=bytes.toString().replaceAll('\r\n','\n');
+    // Older staged tests can enter between Menu and owner-context registration.
+    // Pass through only the exact authenticated predecessor for the next reader;
+    // absence of this stage's marker alone must never permit arbitrary drift.
+    const intermediate=resolved===producer?'d791949cfe8a3821d76250379e0c68795759d2f88650ad3414ceeaa7dbd52b17':kind==='launcher'?'625e585f51d670cceb52a2eaa0600c70d6051d91c7c743bed1ad4e71f2f6673c':kind==='runner'?'d6b7a4f8704689f5e1a44b0b45795c43913aca48181eefd12179c125856e8bb9':undefined;
+    if(intermediate&&hash(normalized)===intermediate)return read(name,options);
     const expected=oldKind?editingLegacyPrior[oldKind]:kind?editingSelectionPrior[kind]:editingProducerPrior;
     const prior=hash(normalized)===expected?normalized:oldKind?restoreEditingLegacySource(bytes,oldKind):kind?restoreEditingContextSelection(bytes,kind):restoreEditingContextProducer(bytes,f=>read(path.resolve(root,f)));
     assert.equal(hash(prior),expected);
     const encoding=typeof options==='string'?options:options?.encoding;return encoding?Buffer.from(prior).toString(encoding):Buffer.from(prior);
   };
 }
-const editingLegacyPrior=Object.freeze({registration:'73c933562cf3ba381cb258632b88b41059bcf1db2dc58f7320d4e10592b480b4',proof:'035e13aab28532b8e832992c1027ab15d340193d5940df46af5917e0a67380e7'});
+const editingLegacyPrior=Object.freeze({registration:'73c933562cf3ba381cb258632b88b41059bcf1db2dc58f7320d4e10592b480b4',proof:'035e13aab28532b8e832992c1027ab15d340193d5940df46af5917e0a67380e7','pending-replay':'521695641afcadbff787f41213270d305f189f30c4e06cef8d8453826fe06079','menu-proof':'2374097355dafef883d90e879a841adc5bc7cd7e6869df27b16f3fe82cf36920'});
 export function restoreEditingLegacySource(source,kind){
   let text=source.toString().replaceAll('\r\n','\n');
+  if(kind==='pending-replay'){
+    text=once(text,"import { readFileSync } from 'node:fs';\nimport { createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';\n",'');
+    text=once(text,`  if (source.toString().includes('"scripts/audit-material-menu-ax-contexts.mjs"')) {
+    const file = path.resolve('tests/material-parity/input-equivalence-audit.mjs');
+    const read = (name, options) => path.resolve(name) === file
+      ? (typeof options === 'string' ? source.toString(options) : Buffer.from(source))
+      : readFileSync(name, options);
+    source = createMenuHistoricalRead({ root: process.cwd(), read })(file);
+  }
+`,'');
+    assert.equal(hash(text),editingLegacyPrior[kind]);return text;
+  }
+  if(kind==='menu-proof'){
+    text=once(text,"import { restorePendingEvidenceProducer } from './pending-evidence-registration.mjs';\n",'');
+    text=once(text,`  const liveProducer = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+  assert.equal(createHash('sha256').update(restorePendingEvidenceProducer(liveProducer)).digest('hex'),
+    '0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1');
+  assert.throws(() => restorePendingEvidenceProducer(Buffer.concat([
+    liveProducer, Buffer.from('\\n// unexpected mutation'),
+  ])));
+`,'');
+    assert.equal(hash(text),editingLegacyPrior[kind]);return text;
+  }
   text=once(text,"import { createEditingContextPriorRead } from './editing-context-registration.mjs';\n",'');
   if(kind==='registration')text=once(text,'export function createDividerOwnerContextPriorRead({root,read}){\n  read=createEditingContextPriorRead({root,read});\n','export function createDividerOwnerContextPriorRead({root,read}){\n');
   else{
