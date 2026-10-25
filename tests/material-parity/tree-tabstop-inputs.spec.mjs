@@ -8,6 +8,29 @@ import { materialInteractionCases,materialProfiles,materialViewports } from './b
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const ids=['tree-item-0','tree-item-1','tree-item-2'];
+test('current semantic Tab routing leaves nonmodal browser defaults intact unless authored handling cancels',()=>{
+  const file='src/lib/astylar-interaction-runtime.ts',source=readFileSync(file,'utf8');
+  const tree=ts.createSourceFile(file,source,99,true,ts.ScriptKind.TS),methods=[];
+  const names=['handleSemanticKeyDown','dispatchSemanticTabKey'];
+  const visit=n=>{if(ts.isMethodDeclaration(n)&&names.includes(n.name.getText(tree)))methods.push(n);ts.forEachChild(n,visit);};visit(tree);
+  assert.equal(methods.length,2);
+  const code=ts.transpileModule('class Routing {'+methods.map(n=>n.getText(tree)).join('\n')+'}',{compilerOptions:{target:99,module:0}}).outputText;
+  const Routing=new Function(code+';return Routing;')();
+  for(const cancel of [false,true])for(const shiftKey of [false,true]){
+    const owner=new Routing(),calls=[];
+    Object.assign(owner,{disposed:false,getFocusedElementId:()=>ids[1],liveState:()=>({}),
+      dispatcher:{dispatch:event=>{calls.push(event);return {defaultPrevented:cancel};}},
+      handleKeyDown:()=>assert.fail('nonmodal semantic Tab must not enter canvas moveFocus pipeline')});
+    const event={key:'Tab',code:'Tab',shiftKey,defaultPrevented:false,preventDefault(){this.defaultPrevented=true;}};
+    owner.handleSemanticKeyDown(event);
+    assert.equal(event.defaultPrevented,cancel);assert.equal(calls.length,1);
+    assert.equal(calls[0].targetId,ids[1]);assert.equal(calls[0].shiftKey,shiftKey);
+  }
+  const owner=new Routing(),event={key:'Tab'};let delegated;
+  Object.assign(owner,{modalDialog:{},handleKeyDown:e=>{delegated=e;}});
+  owner.handleSemanticKeyDown(event);assert.equal(delegated,event);
+  // Executed current source methods only: not a browser traversal or retained-build proof.
+});
 test('all retained tree pointer contexts expose fixed candidate tab stops behind normalized focus',t=>{
   const file='artifacts/material-parity/current-full-20261005/latest-report.json',bytes=readFileSync(file);
   assert.equal(hash(bytes),'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');

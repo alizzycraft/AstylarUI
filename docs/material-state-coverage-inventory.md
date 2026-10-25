@@ -4,6 +4,30 @@
 
 ### Current next action and publication status
 
+October25 Tree routing followup distinguishes two current core paths rather than
+inferring a core defect from unequal tab-stop inputs. The semantic bridge calls
+handleSemanticKeyDown through astylar.ts;nonmodal semantic Tab dispatches the
+authored key event without entering canvas moveFocus. Browser default remains
+uncanceled unless the authored handler cancels it. Modal Tab deliberately enters
+the containment pipeline. A focused test executes the actual current source
+methods for forward/backward Tab,with/without authored cancellation,and modal
+delegation:1/1 passes,exit0,498.1546ms. This is source-routing evidence,NOT an
+equal-input browser traversal proof or proof about the retained served build.
+The existing Tree DOM capture still cannot establish a general core Tab defect.
+Do not recapture all Tree contexts to answer that narrower question:if it remains
+necessary,use one public equal-input negative-tabindex pointer/Tab reduction and
+record whether the semantic or canvas route actually receives the event.
+
+Normal negotiated HTTPS publication has now FAILED after writing136 objects/
+80.09MiB:remote end hung up unexpectedly,exit1. The subsequent Everything
+up-to-date line is not success;independent ls-remote still returns3b8e4000 while
+local HEAD before this followup isc03bccaf. Retain negotiated-publication-20261025
+log/stderr. Git read access succeeds;no credential/trust defect demonstrated.
+Observed D:567513088 bytes free,C:561774592. Do not repeat the identical push
+or start a large canonical export without a changed prerequisite. Live1060/383
+and historical accepted8848 source-vector distinction remain;all2311 cases are
+still partial/current-rendering-unverified. No renderer or fixture changes.
+
 October25 Tree actual-DOM followup closes the authored-versus-native-property
 uncertainty for ONE light/desktop-DPR1 configured activate context. Capture and
 independent verifier both exit0 (1 case/5 paired boundaries),browser155.0.8059.85;
