@@ -167,7 +167,19 @@ test('one equal-input Tab-exit trace binds pointer-move canvas tab restoration a
     applicability.push({method:name,tokenSha256:hash(JSON.stringify(a))});
   }
   assert.notDeepEqual(tokens(compiled(current.replace('this.canvas.tabIndex = -1','this.canvas.tabIndex = 0'),'connectInteractions')),tokens(method(captured,'connectInteractions')));
+  const introduction='dbe4d8ed1becde19f8036bed8479c971b1e95c58',parent='93526a8e14862d4001db53cd958bd9ef03630d16';
+  assert.equal(execFileSync('git',['rev-parse',introduction+'^'],{encoding:'utf8'}).trim(),parent);
+  const historical=rev=>execFileSync('git',['show',rev+':'+currentFile],{encoding:'utf8',maxBuffer:3e6});
+  const initial=historical(introduction),prior=historical(parent),priorTree=ts.createSourceFile(currentFile,prior,99,true),priorNames=[];
+  const visit=n=>{if(ts.isMethodDeclaration(n))priorNames.push(n.name.getText(priorTree));ts.forEachChild(n,visit);};visit(priorTree);
+  for(const name of ['connectInteractions','queueFocusSync','syncFocus'])assert.equal(priorNames.includes(name),false);
+  assert.deepEqual(tokens(compiled(initial,'connectInteractions')),tokens(method(captured,'connectInteractions')));
+  assert.match(method(initial,'queueFocusSync'),/this\.syncFocus\(elementId, !!elementId && keepCanvasFocus\(elementId\)\)/);
+  assert.match(method(initial,'syncFocus'),/if \(node && active !== node\) node\.focus\(\{ preventScroll: true \}\)/);
+  assert.notDeepEqual(tokens(compiled(initial,'syncFocus')),tokens(method(captured,'syncFocus')),'Later focus-visible work must not be erased from history');
   t.diagnostic(JSON.stringify({sourceApplicability:{current:{file:currentFile,sha256:hash(current)},installed,methods:applicability},
+    history:{introduction,parent,initialSourceSha256:hash(initial),parentSourceSha256:hash(prior),initialConnectMethodIdentical:true,
+      boundary:'Source introduction and ancestry only;initial sync/queue methods later evolved. Not a historical browser run or first-bad runtime bisect.'},
     boundary:'Complete method token equality after TypeScript erasure and trivia removal only;not entire library equality,fresh browser rendering,caller scheduling,history bisect or case closure.'}));
   // Exact installed-package causal trace, corroborated by the uninstrumented pair below.
   // No library fix,all-context claim,whole-library equivalence or full rendering acceptance.

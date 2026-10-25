@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October25 Tab-exit source-history question is bounded by executable ancestry
+checks,not another browser run. dbe4d8ed1becde19f8036bed8479c971b1e95c58
+introduces connectInteractions,queueFocusSync,syncFocus;its exact parent
+93526a8e14862d4001db53cd958bd9ef03630d16 has none of them. Complete initial
+connectInteractions tokens match the captured installed method,including the
+one-time canvas tabindex=-1 assignment. Initial queue and sync already schedule
+and perform semantic node.focus;their later focus-visible changes remain explicit
+and initial sync tokens are asserted NOT identical to current/captured tokens.
+Source SHA256 initial2d5b72aa/parent9acff069 is printed by the focused proof.
+Existing assertion passes1/1,exit0,1197.9355ms (test805.1703ms).
+
+This identifies introduction of the source mechanism,not historical runtime,
+the first failing browser revision,or attribution to a later Material fix. The
+finding's first-bad-runtime uncertainty remains;do not relabel this as a runtime
+bisect or reset settled captures. No new fixture,report layer,proof title or
+acceptance gate. Freeze this Tree investigation and choose the next explicit
+remaining case requirement rather than rechecking unchanged methods. Current
+registered counts and historical canonical/source-vector distinction preserve.
+
 October25 remaining Tab-exit applicability gap is narrowed without recapture.
 The existing causal-trace assertion now authenticates the installed bridge input
 receipt7c892095 and compares COMPLETE current connectInteractions,queueFocusSync,
