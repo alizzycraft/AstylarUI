@@ -60,11 +60,38 @@ export function restoreEditingContextProducer(source,read){
 }
 export function createEditingContextPriorRead({root,read}){
   const producer=path.resolve(root,'tests/material-parity/input-equivalence-audit.mjs');
+  const selections=new Map([['launcher','scripts/export-material-input-audit-current-ancestry.mjs'],['runner','scripts/run-material-input-audit.mjs']].map(([kind,file])=>[path.resolve(root,file),kind]));
   return (name,options)=>{
-    if(path.resolve(root,name)!==producer)return read(name,options);
+    const resolved=path.resolve(root,name),kind=selections.get(resolved);
+    if(resolved!==producer&&!kind)return read(name,options);
     const bytes=read(name),normalized=bytes.toString().replaceAll('\r\n','\n');
-    const prior=hash(normalized)===editingProducerPrior?normalized:restoreEditingContextProducer(bytes,f=>read(path.resolve(root,f)));
-    assert.equal(hash(prior),editingProducerPrior);
+    const expected=kind?editingSelectionPrior[kind]:editingProducerPrior;
+    const prior=hash(normalized)===expected?normalized:kind?restoreEditingContextSelection(bytes,kind):restoreEditingContextProducer(bytes,f=>read(path.resolve(root,f)));
+    assert.equal(hash(prior),expected);
     const encoding=typeof options==='string'?options:options?.encoding;return encoding?Buffer.from(prior).toString(encoding):Buffer.from(prior);
   };
+}
+export const editingSelectionPrior=Object.freeze({launcher:'5168a9b9165fdae234bd90b1db314923a385bbca52b39f536d649dcac30ce955',runner:'34f44830880417b629269d5782131dd9c84c149103b52628ae227573f5c9a005'});
+const selectedReview='043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd';
+const selectionTransitions=kind=>{
+  if(kind==='runner')return [
+    ["import { dividerOwnerContextReview, createDividerOwnerContextReviewReader } from '../tests/material-parity/divider-owner-context-review-source.mjs';", "import { dividerOwnerContextReview, createDividerOwnerContextReviewReader } from '../tests/material-parity/divider-owner-context-review-source.mjs';\nimport { editingContextReview, createEditingContextReviewReader } from '../tests/material-parity/editing-context-review-source.mjs';"],
+    ['const applicability=dividerContextReaderFactory?.','const editingReaderFactory = options.caseObligationReviewSha256===editingContextReview ? createEditingContextReviewReader : dividerContextReaderFactory;\n    const applicability=editingReaderFactory?.'],
+  ];
+  assert.equal(kind,'launcher');return [
+    ["const dividerOwnerContext = rawRequested.includes('--divider-owner-context');","const editingContext = rawRequested.includes('--editing-context');\nassert.ok(!editingContext || rawRequested.every(argument => ['--editing-context', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\nconst dividerOwnerContext = rawRequested.includes('--divider-owner-context');"],
+    ['const requested = rawRequested.filter(',"const requested = rawRequested.filter(argument => argument !== '--editing-context').filter("],
+    ['|--divider-owner-context]','|--divider-owner-context|--editing-context]'],
+    ['for (const [name, relative] of Object.entries(inputs)) {',`if (editingContext) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${selectedReview}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+    ['menuSelectDisabled || dividerOwnerContext)','menuSelectDisabled || dividerOwnerContext || editingContext)'],
+    ["if (requested.includes('--dry-run'))",`if (editingContext) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${selectedReview}';\nif (requested.includes('--dry-run'))`],
+  ];
+};
+export function prepareEditingContextSelection(source,kind){
+  let text=source.toString().replaceAll('\r\n','\n');assert.equal(hash(text),editingSelectionPrior[kind]);
+  for(const [a,b]of selectionTransitions(kind))text=once(text,a,b);return text;
+}
+export function restoreEditingContextSelection(source,kind){
+  let text=source.toString().replaceAll('\r\n','\n');for(const [a,b]of selectionTransitions(kind).toReversed())text=once(text,b,a);
+  assert.equal(hash(text),editingSelectionPrior[kind]);return text;
 }

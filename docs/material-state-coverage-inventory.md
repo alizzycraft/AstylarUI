@@ -9,6 +9,22 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Staged selection is verified WITHOUT switching live files:explicit
+--editing-context routes exact043361b0 path/digest,conflicting supplement flags
+reject,and every older rawRequested flag/default invocation retains identical
+dry-run arguments. Staged runner chooses the successor reader only for exact
+digest;unknown selection falls back to existing reader. Complete launcher/runner
+bytes recover through reversible transforms;historical read scope is now precisely
+three paths(producer,launcher,runner),with appended drift rejected on each and
+unrelated evidence unchanged. No new global historical waiver or filesystem patch.
+
+Existing two focused registration tests pass2/2,exit0,4528.624ms;these exercise
+actual staged launcher child invocations and extracted actual runner selector,
+not browser/canonical acceptance. Live1055 registration is still NOT applied:
+current live1041/365/63-plan remains. Next integration milestone must combine
+staged1055/378/65-plan producer,staged selections and exact successor reader/full
+dependency validation once,before a coherent live switch. No recapture needed.
+
 Staged registration now includes the missing two block-alignment implementation
 tracks:65 generated tracks conserve all63 prior entries and preserve root-cause/
 equal-input safeguards. Live producer still has63 tracks. New exact producer-only

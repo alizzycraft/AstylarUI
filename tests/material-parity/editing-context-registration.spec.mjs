@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import path from 'node:path';
-import { editingContextSources,editingContextProofRows,prepareEditingContextProducer,restoreEditingContextProducer,createEditingContextPriorRead,editingContextPlanDelta } from './editing-context-registration.mjs';
+import { spawnSync } from 'node:child_process';
+import { editingContextSources,editingContextProofRows,prepareEditingContextProducer,restoreEditingContextProducer,createEditingContextPriorRead,editingContextPlanDelta,prepareEditingContextSelection,restoreEditingContextSelection } from './editing-context-registration.mjs';
 
 const inventory=source=>{
   const ast=ts.createSourceFile('producer.mjs',source,99,true,ts.ScriptKind.JS);assert.equal(ast.parseDiagnostics.length,0);const result={sources:[],proofs:[]};
@@ -40,4 +41,23 @@ test('Editing registration binds unique literal and parameterized proof declarat
   for(const r of rows)assert.equal([...readFileSync(r.file,'utf8').matchAll(new RegExp(r.pattern,'g'))].length,1);
   for(const f of editingContextSources)assert.ok(readFileSync(f).length>0);
   assert.equal(rows.filter(r=>r.title.includes('${count}')).length,1);
+  const launcher=readFileSync('scripts/export-material-input-audit-current-ancestry.mjs','utf8').replaceAll('\r\n','\n');
+  const staged=prepareEditingContextSelection(launcher,'launcher');assert.equal(restoreEditingContextSelection(staged,'launcher'),launcher);
+  const rootLine="const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');";
+  const run=(s,flags)=>spawnSync(process.execPath,['--input-type=module','-','--dry-run',...flags],{input:s.replace(rootLine,`const root = ${JSON.stringify(process.cwd())};`),encoding:'utf8',windowsHide:true});
+  const next=run(staged,['--editing-context']);assert.equal(next.status,0,next.stderr);
+  assert.ok(JSON.parse(next.stdout).args.includes('--case-obligation-review-sha256=043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd'));
+  assert.ok(JSON.parse(next.stdout).args.includes('--case-obligation-review=artifacts/material-parity/working-audit/proposals/043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd.json'));
+  const flags=[...launcher.matchAll(/rawRequested\.includes\('(--[^']+)'\)/g)].map(m=>m[1]);
+  for(const flag of flags){const a=run(launcher,[flag]),b=run(staged,[flag]);assert.equal(a.status,0,a.stderr);assert.equal(b.status,0,b.stderr);assert.deepEqual(JSON.parse(b.stdout),JSON.parse(a.stdout));assert.notEqual(run(staged,['--editing-context',flag]).status,0);}
+  assert.deepEqual(JSON.parse(run(staged,[]).stdout),JSON.parse(run(launcher,[]).stdout));
+  const runner=readFileSync('scripts/run-material-input-audit.mjs','utf8').replaceAll('\r\n','\n'),stagedRunner=prepareEditingContextSelection(runner,'runner');
+  assert.equal(restoreEditingContextSelection(stagedRunner,'runner'),runner);
+  const ast=ts.createSourceFile('runner',stagedRunner,99,true,ts.ScriptKind.JS);assert.equal(ast.parseDiagnostics.length,0);let selector;
+  const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(ast)==='editingReaderFactory')selector=n.initializer.getText(ast);ts.forEachChild(n,visit);};visit(ast);assert.ok(selector);
+  const choose=new Function('options','editingContextReview','createEditingContextReviewReader','dividerContextReaderFactory','return '+selector),fresh=()=>{},prior=()=>{},digest='043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd';
+  assert.equal(choose({caseObligationReviewSha256:digest},digest,fresh,prior),fresh);assert.equal(choose({caseObligationReviewSha256:'0'.repeat(64)},digest,fresh,prior),prior);
+  const stagedFiles=new Map([['scripts/export-material-input-audit-current-ancestry.mjs',staged],['scripts/run-material-input-audit.mjs',stagedRunner]].map(([f,s])=>[path.resolve(f),Buffer.from(s)]));
+  const read=(name,options)=>stagedFiles.get(path.resolve(name))??readFileSync(name,options),historical=createEditingContextPriorRead({root:process.cwd(),read});
+  for(const [file,bytes]of stagedFiles){assert.equal(historical(file,'utf8'),file.endsWith('current-ancestry.mjs')?launcher:runner);stagedFiles.set(file,Buffer.concat([bytes,Buffer.from('\n// drift')]));assert.throws(()=>historical(file));stagedFiles.set(file,bytes);}
 });
