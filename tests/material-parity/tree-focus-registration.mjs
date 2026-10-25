@@ -78,14 +78,35 @@ export function restoreTreeFocusSelection(bytes,kind){
   assert.ok(Object.hasOwn(selectionPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
   for(const [a,b]of selectionTransitions(kind).toReversed())text=once(text,b,a);assert.equal(hash(text),selectionPrior[kind]);return text;
 }
+const replayPrior='1421a151e00273dfdc1796af0a48b3b2e5810130d4f2a689c0fcf1b09e729f30';
+const inheritedStages={
+  policy:['cbf641365e8ab55748befc3e59c283e30eadab314519c8f9fbf7f5647f4a7b30'],
+  producer:['036c7e1d05923920d4c6ebacfc916ca8a759214bd45cb4c9b8f917d632b233b1','ec5be8ce8f6a47371e22b4c041abcc677013d9263834edc4a6ae4b94d07c906d','d791949cfe8a3821d76250379e0c68795759d2f88650ad3414ceeaa7dbd52b17'],
+  launcher:['c6fa9144b52a28eba0d001b4a70f85b7c30fda3987df79a53f7b208c18989a82','5168a9b9165fdae234bd90b1db314923a385bbca52b39f536d649dcac30ce955','625e585f51d670cceb52a2eaa0600c70d6051d91c7c743bed1ad4e71f2f6673c'],
+  runner:['a9ad6a99e6f99686aa8e1dc0408753d497c2ce6bfa1e34feaef4ff3ec78add09','34f44830880417b629269d5782131dd9c84c149103b52628ae227573f5c9a005','d6b7a4f8704689f5e1a44b0b45795c43913aca48181eefd12179c125856e8bb9'],
+};
+export function restoreTreeFocusReplaySource(bytes){
+  let text=bytes.toString().replaceAll('\r\n','\n');if(hash(text)===replayPrior)return text;
+  for(const hook of [
+    "import { createTreeFocusPriorRead, restoreTreeFocusRegistry, restoreTreeFocusSelection } from './tree-focus-registration.mjs';\n",
+    '  if(source.toString().includes(\'"scripts/audit-material-tree-pointer-tabstop.mjs"\'))source=restoreTreeFocusRegistry(source,\'producer\');\n',
+    "  if(source.toString().includes('--tree-focus'))source=restoreTreeFocusSelection(source,kind);\n",
+    '  read=createTreeFocusPriorRead({root,read});\n',
+  ])text=once(text,hook,'');
+  assert.equal(hash(text),replayPrior);return text;
+}
 export function createTreeFocusPriorRead({root,read}){
   const paths=new Map([['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy'],
-    ['scripts/export-material-input-audit-current-ancestry.mjs','launcher'],['scripts/run-material-input-audit.mjs','runner']].map(([f,k])=>[path.resolve(root,f),k]));
+    ['scripts/export-material-input-audit-current-ancestry.mjs','launcher'],['scripts/run-material-input-audit.mjs','runner'],
+    ['tests/material-parity/text-held-registration.mjs','replay']].map(([f,k])=>[path.resolve(root,f),k]));
   return (name,options)=>{
     const kind=paths.get(path.resolve(root,name));if(!kind)return read(name,options);
     const bytes=read(name),text=bytes.toString().replaceAll('\r\n','\n');
-    if(hash(text)===(prior[kind]??selectionPrior[kind]))return read(name,options);
-    const restored=Object.hasOwn(prior,kind)?restoreTreeFocusRegistry(bytes,kind):restoreTreeFocusSelection(bytes,kind),encoding=typeof options==='string'?options:options?.encoding;
+    if(hash(text)===(kind==='replay'?replayPrior:prior[kind]??selectionPrior[kind]))return read(name,options);
+    if(inheritedStages[kind]?.includes(hash(text)))return read(name,options);
+    if(kind==='producer')assert.ok(text.includes('"scripts/audit-material-tree-pointer-tabstop.mjs"'),'Unexpected producer stage '+hash(text));
+    if(kind==='policy')assert.ok(text.includes('core-pointer-move-restores-canvas-tabstop-and-recaptures-backward-exit'),'Unexpected policy stage '+hash(text));
+    const restored=kind==='replay'?restoreTreeFocusReplaySource(bytes):Object.hasOwn(prior,kind)?restoreTreeFocusRegistry(bytes,kind):restoreTreeFocusSelection(bytes,kind),encoding=typeof options==='string'?options:options?.encoding;
     return encoding?Buffer.from(restored).toString(encoding):Buffer.from(restored);
   };
 }

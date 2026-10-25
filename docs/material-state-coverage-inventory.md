@@ -4,6 +4,33 @@
 
 ### Current next action and publication status
 
+October25 shared Tree replay compatibility check exposed an actual regression
+before live registration:the newest reader rejected already-restored036c7e1d
+producer and cbf64136 policy stages. It now recognizes their complete prior
+hashes (and the exact existing held-reader intermediate vectors),not a marker
+bypass. Shared held producer/selection restorers strip exact Tree additions
+before old checks;the held prior reader composes the bounded Tree reader.
+The modified held helper itself recovers complete predecessor1421a151,with
+unknown appended drift rejecting. This is a FIVE-path source transition now,
+not the earlier four-path scope. No live producer/policy/selector registration.
+
+Broader registration run initially had11pass/3fail (14 selected assertions).
+Temporarily removing only the four new held-helper hooks and verifying the
+pre-Tree behavior proved the Menu historical-read failure was newly introduced,
+but BOTH pending-evidence inventory tests already failed on old launcher/exporter
+restoration. All hooks were restored. The Menu regression is fixed and passes
+independently;the two pre-existing failures remain explicit,not waived or fixed.
+Their stacks enter restorePendingEvidenceRegisteredSource -> old export-source
+restorers. Next investigate that exact shared entry point before live application.
+
+Focused rerun excludes those TWO known failures and the previously expensive
+Divider full-review constructor:12 registration assertions pass (Node reports
+13 with one empty filtered-file subtest),exit0,9501.8097ms. This is NOT an
+unfiltered suite pass. Separate held registration1/1 passes5556.7921ms;Tree staged
+registry/selector/shared-producer checks1/1 pass5056.2953ms. No full receipt replay
+or browser recapture was repeated. Keep all current case/gate dispositions and
+historical source applicability;publication and storage prerequisites preserve.
+
 October25 Tree explicit selection is prepared in memory and passes the existing
 registry test1/1,exit0,4761.8917ms (test4357.3775ms). --tree-focus selects exact
 6ea59073 only;default and EVERY older rawRequested supplement dry-run object are

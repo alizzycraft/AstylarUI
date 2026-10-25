@@ -59,6 +59,16 @@ test('Tree staged registry conserves every live source proof finding and plan wi
   for(const [f,expected]of [[producer,before],[policy,oldPolicy],[launcherFile,launcher],[runnerFile,runner]]){
     assert.equal(priorReader(f,'utf8'),expected);const original=stages.get(path.resolve(f));stages.set(path.resolve(f),Buffer.concat([original,Buffer.from('\n// drift')]));assert.throws(()=>priorReader(f));stages.set(path.resolve(f),original);
   }
+  const {restorePendingEvidenceProducer}=await import('./pending-evidence-registration.mjs');
+  assert.equal(restorePendingEvidenceProducer(staged),restorePendingEvidenceProducer(before));
+  const {createTextHeldPriorRead}=await import('./text-held-registration.mjs');
+  const historical=createTextHeldPriorRead({root:process.cwd(),read}),control=createTextHeldPriorRead({root:process.cwd(),read:readFileSync});
+  for(const f of [producer,policy,launcherFile,runnerFile])assert.equal(historical(f,'utf8'),control(f,'utf8'));
+  const replayFile='tests/material-parity/text-held-registration.mjs';
+  const {restoreTreeFocusReplaySource}=await import('./tree-focus-registration.mjs');
+  const restoredReplay=restoreTreeFocusReplaySource(readFileSync(replayFile));
+  assert.equal(hash(restoredReplay),'1421a151e00273dfdc1796af0a48b3b2e5810130d4f2a689c0fcf1b09e729f30');
+  assert.throws(()=>restoreTreeFocusReplaySource(readFileSync(replayFile,'utf8')+'\n// drift'));
   t.diagnostic(JSON.stringify({stagedSources:1067,stagedProofs:392,stagedFindings:200,stagedTracks:67,completePredecessorsRecovered:true,liveWrites:false,canonicalPublished:false}));
 });
 test('pending Tree findings keep authoring and public core failure scopes separate',async()=>{

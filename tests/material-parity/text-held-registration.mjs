@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { createTreeFocusPriorRead, restoreTreeFocusRegistry, restoreTreeFocusSelection } from './tree-focus-registration.mjs';
 import { createEditingContextReviewReader } from './editing-context-review-source.mjs';
 import { joinTextHeldEvidence,textHeldPredecessor } from '../../scripts/join-material-text-held-evidence.mjs';
 
@@ -34,6 +35,7 @@ export function prepareTextHeldProducer(source,read){
   text=once(text,sourceAnchor,sourceAnchor+sourcePrefix);return once(text,proofAnchor,proofAnchor+proofPrefix);
 }
 export function restoreTextHeldProducer(source){
+  if(source.toString().includes('"scripts/audit-material-tree-pointer-tabstop.mjs"'))source=restoreTreeFocusRegistry(source,'producer');
   let text=source.toString().replaceAll('\r\n','\n');
   text=once(text,sourceAnchor+sourcePrefix,sourceAnchor);text=once(text,proofAnchor+proofPrefix,proofAnchor);
   assert.equal(hash(text),textHeldProducerPrior);return text;
@@ -57,6 +59,7 @@ export function prepareTextHeldSelection(source,kind){
   assert.equal(hash(text),selectionPrior[kind]);for(const [a,b]of selectionTransitions(kind))text=once(text,a,b);return text;
 }
 export function restoreTextHeldSelection(source,kind){
+  if(source.toString().includes('--tree-focus'))source=restoreTreeFocusSelection(source,kind);
   assert.ok(['launcher','runner'].includes(kind));let text=source.toString().replaceAll('\r\n','\n');
   for(const [a,b]of selectionTransitions(kind).toReversed())text=once(text,b,a);
   assert.equal(hash(text),selectionPrior[kind]);return text;
@@ -92,6 +95,7 @@ const intermediateSources={
   runner:['34f44830880417b629269d5782131dd9c84c149103b52628ae227573f5c9a005','d6b7a4f8704689f5e1a44b0b45795c43913aca48181eefd12179c125856e8bb9'],
 };
 export function createTextHeldPriorRead({root,read}){
+  read=createTreeFocusPriorRead({root,read});
   const files=new Map([
     ['tests/material-parity/input-equivalence-audit.mjs',{kind:'producer',prior:textHeldProducerPrior}],
     ['scripts/export-material-input-audit-current-ancestry.mjs',{kind:'launcher',prior:selectionPrior.launcher}],
