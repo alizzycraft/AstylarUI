@@ -8,6 +8,24 @@ import { materialInteractionCases } from './benchmark.config.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
+test('supplementary Timepicker staged reader recovers exact historical tests and validates all dependencies',async t=>{
+  const {createTimepickerProgrammaticFocusPriorRead:priorRead,createTimepickerProgrammaticFocusReviewReader:createReader}=await import('../../scripts/join-material-timepicker-programmatic-focus.mjs');
+  const root=process.cwd(),prior=priorRead({root,read:readFileSync});
+  for(const [file,sha]of [
+    ['tests/material-parity/focus-action-scope.spec.mjs','20b1abea5c4ec7b2bab6f2fad7fb3af6080fb2c1c05ff1106a2695ff716d7676'],
+    ['tests/material-parity/sort-arrow-geometry.spec.mjs','8accd5980a5984603ed7256990ada1322d10b5040b34ff77829cc4715c5b34cb']]){
+    assert.equal(hash(prior(file)),sha);assert.equal(hash(prior(file,'utf8')),sha);
+    const raw=readFileSync(file);assert.throws(()=>priorRead({root,read:()=>Buffer.concat([raw,Buffer.from('\n// drift')])})(file));
+    const restored=prior(file);assert.equal(hash(priorRead({root,read:()=>restored})(file)),sha);
+  }
+  const reader=await createReader({root,read:readFileSync});
+  const {loadCaseObligationReview}=await import('../../scripts/audit-findings-store.mjs');
+  const relative=reader.file.slice(root.length+1).replaceAll('\\','/');
+  const loaded=loadCaseObligationReview(relative,reader.sha256,reader.review.groups.map(g=>g.case),{root,read:reader.read});
+  assert.equal(loaded.cases.length,2311);assert.equal(loaded.inspectionComplete,false);assert.equal(loaded.currentRenderingAccepted,false);
+  t.diagnostic(JSON.stringify({review:reader.sha256,authenticatedDependencies:loaded.evidenceFingerprints.length,restoredTestSources:2,cases:2311,stagedOnly:true,canonicalUnchanged:true}));
+});
+
 test('supplementary Timepicker focus join preserves the complete accepted predecessor and rejects forged evidence',async t=>{
   const generation='7a22e84a0034a5c887cc7a0d8c68ac68b269dfd7a9d414d9f57a71c2d86e42f1';
   const bytes=readFileSync(`artifacts/material-parity/working-audit/${generation}/index.json`);

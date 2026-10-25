@@ -4,6 +4,30 @@
 
 ### Current next action and publication status
 
+October25 Timepicker supplementary reader now authenticates the complete existing
+review through the original dependency validator:18439 dependencies/2311 cases,
+1/1 pass,0skip,129852.8433ms in
+`artifacts/material-parity/timepicker-programmatic-focus-staged-reader-20261025.log`.
+It composes the existing Sort/Tree readers with exactly two whole-source test
+restorations. Focus-scope source4d79ebd4 restores20b1abea by removing only three
+supplementary tests/import;Sort source730fd78e restores8accd598 by reversing only
+the pinned-baseline edit. Complete hashes guard both directions;unknown drift
+rejects and already-historical input is idempotent. No old receipt is rewritten.
+
+The successor review is now
+`ef9d31ce6f077ca57c548c3cd86f63d3a5558d1a609740467ccd73e0a682473c`:
+the earlier1949 digest is historical because its self-receipted join producer
+gained this reconciliation logic. The observed report/action and eight children
+are unchanged. Four remaining focused conservation/action/exclusion tests pass
+4/4,0skip,13496.4693ms in
+`artifacts/material-parity/timepicker-programmatic-focus-reconciled-controls-20261025.log`.
+This is a verified in-memory reader,not live producer/proof registration,physical
+full proposal or canonical publication. Accepted7a22 and all2311 partial/current-
+unverified dispositions remain. Freeze this evidence;batch any later source/proof
+registration with other coherent findings instead of another immediate full export.
+Next inspect a distinct missing text/picker action boundary using the accepted
+remaining requirements;do not repeat programmatic focus or its completed loader.
+
 October25 supplementary Timepicker DOM-focus join is verified IN MEMORY as
 `1949a8c8f54ce18c8b20b249d851e5b69ba5c47fd0cb8dd34e954ea7ad7c782a`,
 from accepted review8554f8ef. The existing join pattern adds precisely eight
