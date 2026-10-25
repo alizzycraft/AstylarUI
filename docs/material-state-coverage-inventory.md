@@ -4,6 +4,21 @@
 
 ### Current next action and publication status
 
+October25 complete retained Sort arrow-presence census authenticates120 trees/
+60 cases without recapture. All8 hover contexts have native arrow opacity.54
+but NO candidate arrow. All12 static controls hide both;the other40 focus/held/
+activated contexts author one candidate arrow with matching opacity and expected
+asc/desc data. Current Sort branch gates arrow presence on state.open||focused,
+not hover. Pending fixture-sort-hover-arrow-omitted is a separate application
+state/presence defect,not the triangulation or a projection diagnosis. Retained
+native opacity is not a raw event timeline or complete paint/current-code proof.
+Both focused Sort tests pass2/2,exit0,3377.4146ms. No new browser/artifact or
+renderer/fixture change. Both pending Sort findings remain outside1070-style
+publication claims:live registry is still1067/392/200/67 and canonical8848 is
+historical. Next consolidate the bounded Sort findings without broad recapture;
+fresh current paint still needs safe browser headroom and original source
+provenance remains unproven. No case is promoted to complete.
+
 October25 next Sort input-mapping question reveals a NEW pending plugin vector
 geometry defect,not a cursor/keyboard recapture. Authenticated originalab42dbec
 light/DPR1 focus and activate trees retain one SVG path (viewBox0 -960 960 960,

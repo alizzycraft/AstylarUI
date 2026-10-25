@@ -8,6 +8,30 @@ import {PNG} from 'pngjs';
 import {evaluateFocusedRaster} from './focused-raster-metrics.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
+test('all retained Sort hover contexts omit the candidate arrow despite visible native opacity',t=>{
+  const bytes=readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(bytes),'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report=JSON.parse(bytes);let cases=0,hover=0,hidden=0,present=0;const observations=[];
+  for(const [kind,rows]of [['static',report.results],['interaction',report.interactions]])for(const row of rows.filter(r=>r.family==='sort')){
+    cases++;const trees={};for(const side of ['reference','astylar']){const q=row.inputTrees[side],b=readFileSync(q.file);assert.equal(hash(b),q.sha256);trees[side]=JSON.parse(b);}
+    const svg=trees.reference.nodes.filter(n=>n.type==='svg');assert.equal(svg.length,1);
+    const owner=trees.reference.nodes.find(n=>n.key===svg[0].parent);assert.ok(owner);
+    const opacity=Number(trees.reference.styles[owner.style].opacity),arrows=trees.astylar.nodes.filter(n=>n.authored?.id==='sort-arrow');
+    if(kind==='static'){assert.equal(opacity,0);assert.equal(arrows.length,0);hidden++;}
+    else if(row.state==='hover'){assert.equal(opacity,.54);assert.equal(arrows.length,0);hover++;
+      observations.push({case:`interaction:sort@${row.profile}/${row.viewport.id}/hover`,nativeOpacity:opacity,candidateArrowCount:0,evidence:row.inputTrees});}
+    else{assert.ok(['focus','held','activate','activate-leave','activate-twice'].includes(row.state));assert.equal(arrows.length,1);
+      assert.equal(arrows[0].authored.data.opacity,opacity);assert.equal(arrows[0].authored.data.direction,row.state==='activate-twice'?'desc':'asc');present++;}
+  }
+  assert.deepEqual({cases,hover,hidden,present},{cases:60,hover:8,hidden:12,present:40});
+  const f='examples/material-showcase/src/app/astylar.component.ts',source=readFileSync(f,'utf8'),tree=ts.createSourceFile(f,source,99,true,ts.ScriptKind.TS);let branch;
+  const visit=n=>{if(ts.isIfStatement(n)&&n.expression.getText(tree)==="family === 'sort'")branch=n;ts.forEachChild(n,visit);};visit(tree);assert.ok(branch);
+  assert.match(branch.getText(tree),/state\.open \|\| focused \? \[\{/);
+  assert.equal(/hoveredId/.test(branch.getText(tree)),false);
+  t.diagnostic(JSON.stringify({id:'fixture-sort-hover-arrow-omitted',classification:'application-plugin-authoring-defect',
+    owner:'showcase Sort arrow presence/state translation',counts:{cases,hover,hidden,present},observations,
+    boundary:'Retained native opacity versus authored candidate presence;current source gate agrees. Not raw hover timing,animation,paint,current served-code equality or whole-case closure.'}));
+});
 test('Sort arrow bounds conceal extra filled area and overlapping current plugin triangles',t=>{
   const file='artifacts/material-parity/current-full-20261005/latest-report.json',bytes=readFileSync(file);
   assert.equal(hash(bytes),'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
