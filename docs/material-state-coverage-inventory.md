@@ -4,6 +4,33 @@
 
 ### Current next action and publication status
 
+October25 Tree actual-DOM followup closes the authored-versus-native-property
+uncertainty for ONE light/desktop-DPR1 configured activate context. Capture and
+independent verifier both exit0 (1 case/5 paired boundaries),browser155.0.8059.85;
+report tree-pointer-tabstop-20261025/latest-report.json SHA256
+117f3f9e1813a5b83bc1d545eb3e5dc69262cc58eaafac9d116402fe00f722a9.
+After the real pointer click,both active owners are Projects (tree-item-1).
+Native attributes AND DOM properties are[-1,0,-1];candidate actual DOM is
+[0,-1,-1],matching its fixed authored input. Thus core is not observed dropping
+or changing the requested tab indices here. Candidate pointer-focus delivery to
+Projects must not be called a lost-focus or mis-hit failure from this evidence.
+
+Disclosed supplementary Tab then Shift+Tab gives native BODY -> Projects,but
+candidate Documents -> Documents. The captured label tab-out names an action,
+not a successful candidate exit. This is observed traversal divergence under
+UNEQUAL inputs,not a general equal-input core traversal diagnosis or all24 DOM
+contexts. Three focused tests now pass3/3,0skip,exit0;keep tree-tabstop-actual-dom-
+integration-20261025 log/stderr and original capture/verify pairs. Frozen1060/383/
+198/65 and all partial/current-unverified cases preserve;no new canonical export.
+
+Publication diagnostic correction:both earlier failing uploads explicitly forced
+HTTP/1.1. Git2.50.0.windows.1 has no stored http.version setting (client negotiation),
+and an explicit HTTP/2 read succeeds with remote still3b8e4000. This does not
+prove upload success,but leaves normal negotiated HTTPS untested;do not describe
+all Git access as broken or require new SSH trust without testing that distinction.
+No persistent config/credential/trust changes. A single normal negotiated push
+after this commit is the next bounded publication check,not an identical retry.
+
 October25 next shared-control question answers Tree tab-stop state without a
 new capture. All52 configured retained Tree cases/104 paired tree receipts
 authenticate against originalab42dbec/e01ef9dc. In24 held/activate/activate-leave

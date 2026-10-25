@@ -18,6 +18,13 @@ pointer/keyboard tab-stop transitions and other contexts before complete semanti
 or case acceptance. This delta is outside frozen1060/383/198/65 and authorizes
 no fixture or renderer implementation during the audit.
 
+The subsequent one-context raw-DOM probe confirms the candidate mirror retains
+the requested fixed tab indices while both sides really focus Projects after
+the pointer click. Tab then Shift+Tab returns native focus to Projects but leaves
+candidate focus on Documents. Keep this observed consequence under unequal inputs
+separate from a general core traversal claim;it does not cover all24 actual DOM
+contexts. Retained report117f3f9e and tree-tabstop-inputs.spec.mjs preserve scope.
+
 ## October25 held-input extension of the existing gesture track
 
 Track1 below remains the owner;do not create a separate Material input fix.

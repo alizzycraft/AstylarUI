@@ -71,3 +71,37 @@ test('current and initial tree authoring keep the first tab stop independently o
   }
   // Source introduction,not historical browser execution or a first-bad bisect.
 });
+
+test('one actual Tree DOM context preserves fixed requested tab stops and divergent traversal',t=>{
+  const file='artifacts/material-parity/tree-pointer-tabstop-20261025/latest-report.json',bytes=readFileSync(file);
+  assert.equal(hash(bytes),'117f3f9e1813a5b83bc1d545eb3e5dc69262cc58eaafac9d116402fe00f722a9');
+  const report=JSON.parse(bytes);assert.equal(report.results.length,1);const row=report.results[0];
+  assert.equal(row.family,'tree');assert.equal(row.profile,'light');assert.equal(row.viewport.deviceScaleFactor,1);assert.equal(row.state,'activate');
+  const manifest=report.capture.checkpointManifest;assert.equal(hash(readFileSync(manifest.file)),manifest.sha256);
+  const verifyBytes=readFileSync('artifacts/material-parity/tree-pointer-tabstop-verify-20261025.log');
+  const verification=JSON.parse(verifyBytes.toString(verifyBytes[0]===255?'utf16le':'utf8').replace(/^\ufeff/,''));
+  assert.equal(verification.reportSha256,hash(bytes));assert.equal(verification.cases,1);assert.equal(verification.pairedBoundaries,5);
+  const observations={};
+  for(const side of ['reference','astylar']){
+    const data=row[side];assert.deepEqual(data.runtime.errors,[]);
+    assert.deepEqual(data.observations.map(o=>o.boundary),['before','after-action','settled','tab-out','shift-tab-return']);
+    for(const [index,o]of data.observations.entries()){
+      assert.deepEqual(o.tabStops.map(n=>n.id),ids);
+      for(const n of o.tabStops)assert.equal(String(n.tabIndex),n.attribute);
+      assert.deepEqual(o.tabStops.map(n=>n.tabIndex),side==='reference'&&index>0?[-1,0,-1]:[0,-1,-1]);
+    }
+    for(const o of data.observations.slice(1,3))assert.equal(o.active.logicalId,'tree-item-1');
+    const last=data.observations.at(-1),keys=last.events.filter(e=>e.type==='keydown');
+    assert.deepEqual(keys.map(e=>e.key),['Tab','Shift','Tab']);assert.ok(keys.every(e=>e.trusted));
+    assert.equal(last.events.filter(e=>e.type==='pointerdown'&&e.trusted).length,1);
+    assert.equal(last.events.filter(e=>e.type==='pointerup'&&e.trusted).length,1);
+    observations[side]=data.observations.map(o=>({boundary:o.boundary,active:o.active,tabStops:o.tabStops}));
+  }
+  assert.equal(row.reference.observations[3].active.tag,'BODY');
+  assert.equal(row.reference.observations[4].active.logicalId,'tree-item-1');
+  assert.equal(row.astylar.observations[3].active.logicalId,'tree-item-0');
+  assert.equal(row.astylar.observations[4].active.logicalId,'tree-item-0');
+  assert.equal(report.inputEquivalent,false);assert.equal(report.renderingEquivalent,false);
+  t.diagnostic(JSON.stringify({report:{file,sha256:hash(bytes)},observations,
+    boundary:'One actual retained-build light/DPR1 native-DOM context. Pointer focuses Projects on both;candidate DOM matches fixed authored tab stops,not native roving state. Tab/Shift+Tab differ under unequal inputs;not proof of a general core traversal defect,all24 actual-DOM contexts,held focus,paint,current full library or case closure. tab-out is a recorded action label,not evidence that candidate actually left.'}));
+});

@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep tree-pointer-tabstop-20261025 and its provenance/capture/verify log pairs,
+plus tree-tabstop-actual-dom-integration-20261025 log/stderr. One raw-DOM context
+and disclosed Tab/Shift+Tab supplement,report SHA256
+117f3f9e1813a5b83bc1d545eb3e5dc69262cc58eaafac9d116402fe00f722a9.
+It supplements,not replaces,the52-case original attribute proof. tab-out is an
+action label;candidate does not actually exit there. No original evidence removed.
+
 Keep tree-tabstop-inputs-20261025 and tree-tabstop-inputs-verified-20261025 log/
 stderr pairs. They authenticate the same52 original cases/104 tree receipts,
 with24 tab-stop input differences and28 controls. No browser run or new screenshots
