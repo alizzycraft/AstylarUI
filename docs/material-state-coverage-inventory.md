@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October25 staged focus/selection launcher/reader routing is verified. Explicit
+`--focus-selection` selects exact ef9d31ce;default and every older supplement
+preserve their complete dry-run arguments,and mixed flags reject. Actual runner
+declarations await the async factory before reading applicability.read;async and
+older synchronous controls pass. Complete four producer/policy/runner/launcher
+bytes restore. Fast check passes1/1,7676.6521ms in
+`focus-selection-staged-routing-20261025.log`. One coherent full staged check
+passes1/1,0skip,136014.0934ms in
+`focus-selection-staged-full-reader-20261025.log`,authenticating18439 dependencies
+and2311 partial/current-rendering-unverified cases. No physical full proposal,
+live registry/selector application or canonical export.
+
+PRE-APPLICATION SHARED-ENTRY GAP remains:direct restoreTextHeldProducer on the
+new1077-source staged producer fails1-versus2 exact-anchor restoration,whereas
+raw1070 remains the accepted predecessor. Evidence:
+`artifacts/material-parity/focus-selection-shared-entry-preflight-20261025.log`,
+exit1. This is not a reason to repeat the passing case-reader or captures.
+Next update the owning shared Tree restoration to strip the exact focus/selection
+stage BEFORE its existing Sort stage,including selection routes;prove complete
+shared-helper/source conservation and direct shared-entry controls before live
+application. Preserve the initial failing log. Staged counts1077/407/203/70 and
+accepted7a22/case statuses are unchanged. No renderer or fixture fix authorized.
+
 October25 coherent focus/selection registry batch is prepared IN MEMORY only:
 1077 sources/407 proof declarations/203 findings/70 implementation tracks.
 It adds seven source paths,nine proofs,the single public Tab-selection finding

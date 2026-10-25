@@ -1,6 +1,7 @@
 // Pending bounded audit finding;not live registry or canonical acceptance.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import path from 'node:path';
 export const publicTabSelectionFinding=Object.freeze({
   id:'core-native-tab-selection-overwritten-by-control-sync',
   classification:'confirmed-core-renderer-defect',
@@ -72,4 +73,45 @@ export function restoreFocusSelectionAuditRegistry(bytes,kind){
   assert.ok(Object.hasOwn(registryPrior,kind));let source=bytes.toString().replaceAll('\r\n','\n');
   for(const [anchor,prefix]of additions[kind].toReversed())source=once(source,anchor+prefix,anchor);
   assert.equal(hash(source),registryPrior[kind]);return source;
+}
+
+export const focusSelectionReview='ef9d31ce6f077ca57c548c3cd86f63d3a5558d1a609740467ccd73e0a682473c';
+const selectionPrior={runner:'3eca9c8cc977ca99a05f039b8a1a1d6a47e7edd325af0bd3e15db606194f07ca',launcher:'3dc88f081af3b239d59d85a915a62495c9344cf2fa04ed98e3eafd52577bdf70'};
+const selectionChanges=kind=>kind==='launcher'?[
+  ["const sortArrow = rawRequested.includes('--sort-arrow');","const focusSelection = rawRequested.includes('--focus-selection');\nassert.ok(!focusSelection || rawRequested.every(argument => ['--focus-selection', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\nconst sortArrow = rawRequested.includes('--sort-arrow');"],
+  ['const requested = rawRequested.filter(',"const requested = rawRequested.filter(argument => argument !== '--focus-selection').filter("],
+  ['|--sort-arrow]','|--sort-arrow|--focus-selection]'],
+  ['for (const [name, relative] of Object.entries(inputs)) {',`if (focusSelection) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${focusSelectionReview}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+  ['treeFocus || sortArrow)','treeFocus || sortArrow || focusSelection)'],
+  ["if (requested.includes('--dry-run'))",`if (focusSelection) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${focusSelectionReview}';\nif (requested.includes('--dry-run'))`],
+]:[
+  ["import { sortArrowReview, createSortArrowReviewReader } from '../tests/material-parity/sort-arrow-findings.mjs';","import { sortArrowReview, createSortArrowReviewReader } from '../tests/material-parity/sort-arrow-findings.mjs';\nimport { focusSelectionReview, createFocusSelectionAuditReviewReader } from '../tests/material-parity/public-tab-selection-finding.mjs';"],
+  ['const applicability=sortArrowReaderFactory?.','const focusSelectionReaderFactory = options.caseObligationReviewSha256===focusSelectionReview ? createFocusSelectionAuditReviewReader : sortArrowReaderFactory;\n    const applicability=await focusSelectionReaderFactory?.'],
+];
+export function prepareFocusSelectionAuditSelection(bytes,kind){
+  assert.ok(Object.hasOwn(selectionPrior,kind));let source=bytes.toString().replaceAll('\r\n','\n');assert.equal(hash(source),selectionPrior[kind]);
+  for(const [before,after]of selectionChanges(kind))source=once(source,before,after);return source;
+}
+export function restoreFocusSelectionAuditSelection(bytes,kind){
+  assert.ok(Object.hasOwn(selectionPrior,kind));let source=bytes.toString().replaceAll('\r\n','\n');
+  for(const [before,after]of selectionChanges(kind).toReversed())source=once(source,after,before);
+  assert.equal(hash(source),selectionPrior[kind]);return source;
+}
+export async function createFocusSelectionAuditReviewReader({root,read,reviewSha256}){
+  assert.equal(reviewSha256,focusSelectionReview,'Only exact supplementary focus/selection review selects this reader');
+  const kinds=new Map(Object.entries({
+    'tests/material-parity/input-equivalence-audit.mjs':'producer','tests/material-parity/input-equivalence-policy.mjs':'policy',
+    'scripts/run-material-input-audit.mjs':'runner','scripts/export-material-input-audit-current-ancestry.mjs':'launcher',
+  }).map(([file,kind])=>[path.resolve(root,file),kind]));
+  const priorRead=(name,options)=>{
+    const kind=kinds.get(path.resolve(root,name));if(!kind)return read(name,options);
+    const source=read(name).toString().replaceAll('\r\n','\n');
+    const prior=hash(source)===(registryPrior[kind]??selectionPrior[kind])?source:
+      Object.hasOwn(registryPrior,kind)?restoreFocusSelectionAuditRegistry(source,kind):restoreFocusSelectionAuditSelection(source,kind);
+    const encoding=typeof options==='string'?options:options?.encoding;return encoding?Buffer.from(prior).toString(encoding):Buffer.from(prior);
+  };
+  const {createTimepickerProgrammaticFocusReviewReader}=await import('../../scripts/join-material-timepicker-programmatic-focus.mjs');
+  const reader=await createTimepickerProgrammaticFocusReviewReader({root,read:priorRead});assert.equal(reader.sha256,reviewSha256);
+  return {...reader,sourceApplicability:{mode:'exact-focus-selection-partial-review',restoredRegistrySelectionSources:4,
+    predecessorApplicability:reader.sourceApplicability,boundary:'Exact whole-source registry/selection plus historical test restorations only;not canonical publication,original Material cause,current rendering or case closure.'}};
 }

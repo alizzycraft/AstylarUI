@@ -32,6 +32,41 @@ test('Focus selection staged registry preserves every accepted source proof find
   const run=f=>validate([f],{sourceFindings:[f]},process.cwd(),path,existsSync,createHash,readFileSync);
   assert.deepEqual(run(finding),[]);assert.throws(()=>run({...finding,evidence:{report:finding.evidence[0]}}));
   assert.ok(run({...finding,evidence:[{...finding.evidence[0],sha256:'0'.repeat(64)}]}).length);
+  const api=await import('./public-tab-selection-finding.mjs'),root=process.cwd();
+  const entries=[['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy'],['scripts/run-material-input-audit.mjs','runner'],['scripts/export-material-input-audit-current-ancestry.mjs','launcher']];
+  for(const [file,kind]of entries.slice(2)){
+    raw[kind]=readFileSync(file,'utf8').replaceAll('\r\n','\n');staged[kind]=api.prepareFocusSelectionAuditSelection(raw[kind],kind);
+    assert.equal(api.restoreFocusSelectionAuditSelection(staged[kind],kind),raw[kind]);
+    assert.throws(()=>api.restoreFocusSelectionAuditSelection(staged[kind]+'\n// drift',kind));
+  }
+  const launcherRoot="const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');";
+  const {spawnSync}=await import('node:child_process');
+  const launch=(source,flags)=>spawnSync(process.execPath,['--input-type=module','-','--dry-run',...flags],{input:source.replace(launcherRoot,`const root = ${JSON.stringify(root)};`),encoding:'utf8',windowsHide:true});
+  const selected=launch(staged.launcher,['--focus-selection']);assert.equal(selected.status,0,selected.stderr);
+  assert.ok(JSON.parse(selected.stdout).args.includes('--case-obligation-review-sha256='+api.focusSelectionReview));
+  assert.deepEqual(JSON.parse(launch(staged.launcher,[]).stdout),JSON.parse(launch(raw.launcher,[]).stdout));
+  for(const flag of [...raw.launcher.matchAll(/rawRequested\.includes\('(--[^']+)'\)/g)].map(m=>m[1])){
+    const a=launch(raw.launcher,[flag]),b=launch(staged.launcher,[flag]);assert.equal(a.status,0,a.stderr);assert.equal(b.status,0,b.stderr);assert.deepEqual(JSON.parse(a.stdout),JSON.parse(b.stdout));assert.notEqual(launch(staged.launcher,['--focus-selection',flag]).status,0);
+  }
+  const runnerTree=ts.createSourceFile('runner.mjs',staged.runner,99,true,ts.ScriptKind.JS),variables={};assert.equal(runnerTree.parseDiagnostics.length,0);
+  const visit=n=>{if(ts.isVariableDeclaration(n)&&['focusSelectionReaderFactory','applicability'].includes(n.name.getText(runnerTree)))variables[n.name.getText(runnerTree)]=n.getText(runnerTree);ts.forEachChild(n,visit);};visit(runnerTree);
+  assert.ok(variables.applicability.includes('await '));
+  const choose=new Function('options','focusSelectionReview','createFocusSelectionAuditReviewReader','sortArrowReaderFactory','root','auditReadFileSync',
+    'return (async()=>{const '+variables.focusSelectionReaderFactory+';const '+variables.applicability+';return applicability?.read;})();');
+  const freshRead=()=>{},oldRead=()=>{},fresh=async()=>({read:freshRead}),previous=()=>({read:oldRead});
+  assert.equal(await choose({caseObligationReviewSha256:api.focusSelectionReview},api.focusSelectionReview,fresh,previous,root,readFileSync),freshRead);
+  assert.equal(await choose({caseObligationReviewSha256:'0'.repeat(64)},api.focusSelectionReview,fresh,previous,root,readFileSync),oldRead);
+  const stages=new Map(entries.map(([file,kind])=>[path.resolve(root,file),Buffer.from(staged[kind])]));
+  const read=(file,options)=>{const bytes=stages.get(path.resolve(root,file));if(!bytes)return readFileSync(file,options);const encoding=typeof options==='string'?options:options?.encoding;return encoding?bytes.toString(encoding):Buffer.from(bytes);};
+  await assert.rejects(()=>api.createFocusSelectionAuditReviewReader({root,read,reviewSha256:'0'.repeat(64)}));
+  if(process.env.ASTYLAR_AUDIT_FOCUS_SELECTION_FULL==='1'){
+    const reader=await api.createFocusSelectionAuditReviewReader({root,read,reviewSha256:api.focusSelectionReview});
+    const {loadCaseObligationReview}=await import('../../scripts/audit-findings-store.mjs');
+    const file=reader.file.slice(root.length+1).replaceAll('\\','/');
+    const loaded=loadCaseObligationReview(file,api.focusSelectionReview,reader.review.groups.map(g=>g.case),{root,read:reader.read});
+    assert.equal(loaded.cases.length,2311);assert.equal(loaded.inspectionComplete,false);assert.equal(loaded.currentRenderingAccepted,false);
+    t.diagnostic(JSON.stringify({review:api.focusSelectionReview,dependencies:loaded.evidenceFingerprints.length,restoredRegistrySelectionSources:4,stagedOnly:true}));
+  }
   t.diagnostic(JSON.stringify({stagedSources:1077,stagedProofs:407,stagedFindings:203,stagedTracks:70,completePredecessorRecovered:true,liveWrites:false,canonicalUnchanged:true}));
 });
 
