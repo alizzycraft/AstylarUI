@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep `text-held-event-order-20261025`,its provenance and capture/verify log pairs:
+one input/light/DPR1 causal witness,report SHA256
+7a1ec887eb360d636a43585e739155d41b011cb7e73589da902df7725a8e222c.
+It records public release before native release and focus-call stacks bound to
+checkpointed bundle instructions. This is failure evidence,not disposable scratch
+or a superseding capture of the16-context endpoint cohort. Stack instrumentation
+can affect timing;do not silently replace original uninstrumented observations.
+
 Keep the16-case `text-control-held-focus-20261025` capture,its provenance
 checkpoint and capture/verify log pairs. Report SHA256
 b4899d94b58f2aed5d7a51557b6461778e6a6a1a32749b6a616817c3618b3e2e.

@@ -4,6 +4,33 @@
 
 ### Current next action and publication status
 
+October25 one-case causal followup resolves the extra canvas handoff question:
+input/light/desktop-DPR1 trace records semantic INPUT focus followed by Babylon
+`_pointerBlurEvent` invoking `_onPointerUp`,then public input-control pointerup
+and click WHILE the native trace still has pointerdown/buttons1 and no native
+pointerup/cancel. Active INPUT at the endpoint therefore does not establish a
+surviving held transaction. Five focus-call stacks bind to exact checkpointed
+bundle instructions (Babylon down,core canvas focus,semantic INPUT focus,Babylon
+blur-induced up,semantic INPUT refocus). The blur handler zeros the device input
+before dispatch. This matches the already public-proven canvas-blur/device-release
+mechanism in material-button-held-update-root-cause.json;it is not the separate
+button delayed-native-focus finding. The immediate trigger here is semantic focus
+during this input hold;compatible-update causality is NOT inferred for this case.
+
+Reuse the immutable16-case driver via `audit-material-text-held-event-order.mjs`;
+one paired case only,read-only focus-call/event observations. Capture exits0 and
+independent --verify exits0 (1 case/3 paired boundaries). Report SHA256
+7a1ec887eb360d636a43585e739155d41b011cb7e73589da902df7725a8e222c,
+browser155.0.8059.85. Scope is this retained served build and instrumented action,
+not original October5 timing,current whole-library applicability,all16 causes or
+held paint. No renderer/fixture fix,new canonical definition or blanket case pass.
+The32 canvas blurs in the broader cohort remain observations,not16 traced causes.
+Existing original-boundary,16-context endpoints and one-case cause assertions
+pass3/3,0skip,exit0 (1987.1186ms),including changed-blur-caller rejection and
+complete loaded-bundle hash checks. Scoped diff check passes. Next reuse this
+specific core device/focus mechanism when reviewing held-state consequences;
+do not add fixture focus calls,delay offsets or a competing plugin input system.
+
 October25 held text-control gap now has direct supplementary evidence,without
 repeating216 configured focus actions. Existing direct-owner driver is reused
 through guarded `audit-material-text-control-held-focus.mjs`,selecting exactly16

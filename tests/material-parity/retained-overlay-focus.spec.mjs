@@ -85,6 +85,46 @@ test('supplementary text-control holds retain raw input owners without accepting
   assert.equal(contexts.size,16);assert.equal(canvasBlurs,32);
 });
 
+test('one traced text-input hold exposes blur-synthesized public release before native release',()=>{
+  const file='artifacts/material-parity/text-held-event-order-20261025/latest-report.json',bytes=readFileSync(file);
+  assert.equal(hash(bytes),'7a1ec887eb360d636a43585e739155d41b011cb7e73589da902df7725a8e222c');
+  const report=JSON.parse(bytes);assert.equal(report.results.length,1);
+  const row=report.results[0];assert.equal(row.family,'input');assert.equal(row.profile,'light');
+  assert.equal(row.viewport.deviceScaleFactor,1);assert.equal(row.state,'held');
+  const mb=readFileSync(report.capture.checkpointManifest.file);
+  assert.equal(hash(mb),report.capture.checkpointManifest.sha256);const manifest=JSON.parse(mb);
+  const bundles=new Map();
+  const frame=(stack,name,expected)=>{
+    const matches=[...stack.matchAll(/at ([^\n]+?) \(http:\/\/127\.0\.0\.1:\d+\/([^/:]+\.js):(\d+):(\d+)\)/g)].filter(m=>m[1]===name);
+    assert.equal(matches.length,1);const m=matches[0];
+    if(!bundles.has(m[2])){
+      const b=readFileSync('examples/material-showcase/dist/material-showcase/browser/'+m[2]);
+      assert.equal(hash(b),manifest.provenance.browserFiles.find(r=>r.file===m[2]).sha256);
+      bundles.set(m[2],b.toString().split('\n'));
+    }
+    const lines=bundles.get(m[2]),line=Number(m[3]);assert.ok(line>0&&line<=lines.length);
+    assert.match(lines[line-1],expected);return {lines,line};
+  };
+  for(const sample of row.astylar.observations.slice(1)){
+    assert.equal(sample.events.filter(e=>e.type==='pointerdown'&&e.trusted&&e.buttons===1).length,1);
+    assert.equal(sample.events.filter(e=>['pointerup','pointercancel'].includes(e.type)).length,0);
+    assert.deepEqual(sample.publicEvents.filter(e=>['pointerdown','pointerup','click'].includes(e.type)).map(e=>[e.type,e.targetId]),
+      [['pointerdown','input-control'],['pointerup','input-control'],['click','input-control']]);
+    assert.equal(sample.active.tag,'INPUT');assert.equal(sample.active.logicalId,'input-control');
+    assert.equal(Object.hasOwn(sample.interaction,'pressedElementId'),false);
+    const calls=sample.focusCalls;assert.deepEqual(calls.map(c=>c.tag),['CANVAS','CANVAS','INPUT','CANVAS','INPUT']);
+    frame(calls[0].stack,'_InputManager._onPointerDown',/elementToAttachTo\.focus\(\)/);
+    frame(calls[1].stack,'AstylarInteractionRuntime.handlePointer',/this\.canvas\?\.focus\(\)/);
+    frame(calls[2].stack,'_AstylarSemanticBridge.syncFocus',/node\.focus\(/);
+    frame(calls[3].stack,'_InputManager._onPointerUp',/elementToAttachTo\.focus\(\)/);
+    const blur=frame(calls[3].stack,'HTMLCanvasElement._pointerBlurEvent',/this\._onInputChanged\(DeviceType\.Mouse/);
+    assert.match(blur.lines.slice(blur.line-3,blur.line).join('\n'),/pointer\[inputIndex\] = 0/);
+    frame(calls[4].stack,'_AstylarSemanticBridge.syncFocus',/node\.focus\(/);
+    assert.throws(()=>frame(calls[3].stack.replace('HTMLCanvasElement._pointerBlurEvent','unknownCaller'),'HTMLCanvasElement._pointerBlurEvent',/./));
+  }
+  assert.equal(report.inputEquivalent,false);assert.equal(report.renderingEquivalent,false);
+});
+
 test('current overlay authoring has distinct menu, sheet and dialog focus requests', async t => {
   // Execute the actual authoring methods with a minimal surface boundary.
   // This diagnoses authored requests, not browser scheduling or core behavior.
