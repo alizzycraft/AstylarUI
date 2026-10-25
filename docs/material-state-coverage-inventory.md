@@ -4,6 +4,26 @@
 
 ### Current next action and publication status
 
+October25 remaining Tab-exit applicability gap is narrowed without recapture.
+The existing causal-trace assertion now authenticates the installed bridge input
+receipt7c892095 and compares COMPLETE current connectInteractions,queueFocusSync,
+syncFocus methods after TypeScript erasure and trivia removal only. All tokens
+match. Current complete bridge source SHA256
+1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725;
+method token hashes c02df8cd/56edacd1/f6690da5 are printed by the focused proof.
+Changing the canvas tabindex assignment from-1 to0 is explicitly rejected by
+the comparison,so meaningful behavior is not normalized away. Focused existing
+test passes1/1,exit0,992.5509ms (assertion580.2575ms).
+
+This establishes current-source applicability of those THREE methods only.
+Caller scheduling,whole-library equivalence,fresh current browser rendering,
+historical introduction and other contexts remain unproven. Do not promote any
+case/current-rendering flag or rerun the settled browser pair/full loader for
+this assertion-only extension. The existing registered proof title is unchanged;
+the next coherent export must fingerprint its strengthened source. Live counts
+1067/392/200/67 and accepted historical8848 remain distinct. No new artifacts,
+renderer/fixture changes or canonical generation.
+
 October25 Tree batch is now LIVE REGISTERED:1067 sources/392 proof declarations/
 200 findings/67 implementation tracks. Actual --tree-focus --dry-run selects
 exact6ea59073;default/older selections remain conserved. Full prior1060/383/198/65

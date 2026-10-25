@@ -129,7 +129,7 @@ test('Tree partial evidence join conserves its exact predecessor and all remaini
     authenticatedDependencies:loaded.evidenceFingerprints.length,stagedRegistry:true,
     canonicalPublished:false,currentRenderingAccepted:false,boundary:'Partial input-property evidence only;all parent dispositions and remaining work preserve.'}));
 });
-test('one equal-input Tab-exit trace binds pointer-move canvas tab restoration and semantic refocus',()=>{
+test('one equal-input Tab-exit trace binds pointer-move canvas tab restoration and semantic refocus',t=>{
   const bytes=readFileSync('artifacts/material-parity/public-tree-tab-exit-trace-20261025/latest-report.json');
   assert.equal(hash(bytes),'6ec16965fabd291c2bda981beaecdab35beeb31e060b5ec82648d1dba8a0500f');
   const report=JSON.parse(bytes);assert.equal(hash(readFileSync('scripts/audit-public-tree-tab-exit-trace.mjs')),report.scriptSha256);
@@ -153,8 +153,24 @@ test('one equal-input Tab-exit trace binds pointer-move canvas tab restoration a
     assert.match(line,op===last?/node\.focus/:op===writes[1]?/canvas\.tabIndex = -1/:/canvas\.tabIndex = engine\.canvasTabIndex/);
   }
   assert.equal(row.reference.observations.at(-1).active,'BODY');assert.equal(obs.at(-1).active,'item-0');
+  const installed=report.inputs.find(r=>r.file.endsWith('/lib/astylar-semantic-bridge.js'));assert.ok(installed);
+  const currentFile='src/lib/astylar-semantic-bridge.ts',current=readFileSync(currentFile,'utf8'),captured=readFileSync(installed.file,'utf8');
+  assert.equal(hash(captured),installed.sha256);
+  const method=(source,name)=>{const tree=ts.createSourceFile('proof.ts',source,99,true),rows=[];
+    const visit=n=>{if(ts.isMethodDeclaration(n)&&n.name.getText(tree)===name)rows.push(n.getText(tree));ts.forEachChild(n,visit);};visit(tree);assert.equal(rows.length,1);return rows[0];};
+  const tokens=source=>{const scanner=ts.createScanner(99,true,ts.LanguageVariant.Standard,source),out=[];
+    while(scanner.scan()!==ts.SyntaxKind.EndOfFileToken)out.push(scanner.getTokenText());return out;};
+  const compiled=(source,name)=>method(ts.transpileModule('class Proof{'+method(source,name)+'}',{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None,removeComments:true}}).outputText,name);
+  const applicability=[];
+  for(const name of ['connectInteractions','queueFocusSync','syncFocus']){
+    const a=tokens(compiled(current,name)),b=tokens(method(captured,name));assert.deepEqual(a,b);
+    applicability.push({method:name,tokenSha256:hash(JSON.stringify(a))});
+  }
+  assert.notDeepEqual(tokens(compiled(current.replace('this.canvas.tabIndex = -1','this.canvas.tabIndex = 0'),'connectInteractions')),tokens(method(captured,'connectInteractions')));
+  t.diagnostic(JSON.stringify({sourceApplicability:{current:{file:currentFile,sha256:hash(current)},installed,methods:applicability},
+    boundary:'Complete method token equality after TypeScript erasure and trivia removal only;not entire library equality,fresh browser rendering,caller scheduling,history bisect or case closure.'}));
   // Exact installed-package causal trace, corroborated by the uninstrumented pair below.
-  // No library fix,all-context claim,current-source equivalence or full rendering acceptance.
+  // No library fix,all-context claim,whole-library equivalence or full rendering acceptance.
 });
 test('equal-input public fixed-tabstop probe distinguishes forward traversal from backward canvas reentry',()=>{
   const file='artifacts/material-parity/public-tree-fixed-tabstop-corrected-20261025/latest-report.json',bytes=readFileSync(file);
