@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { editingContextSources,editingContextProofRows,prepareEditingContextProducer,restoreEditingContextProducer,createEditingContextPriorRead,editingContextPlanDelta,prepareEditingContextSelection,restoreEditingContextSelection } from './editing-context-registration.mjs';
+import { editingContextSources,editingContextProofRows,prepareEditingContextProducer,restoreEditingContextProducer,createEditingContextPriorRead,editingContextPlanDelta,prepareEditingContextSelection,restoreEditingContextSelection,restoreEditingLegacySource } from './editing-context-registration.mjs';
 
 const inventory=source=>{
   const ast=ts.createSourceFile('producer.mjs',source,99,true,ts.ScriptKind.JS);assert.equal(ast.parseDiagnostics.length,0);const result={sources:[],proofs:[]};
@@ -60,4 +60,8 @@ test('Editing registration binds unique literal and parameterized proof declarat
   const stagedFiles=new Map([['scripts/export-material-input-audit-current-ancestry.mjs',staged],['scripts/run-material-input-audit.mjs',stagedRunner]].map(([f,s])=>[path.resolve(f),Buffer.from(s)]));
   const read=(name,options)=>stagedFiles.get(path.resolve(name))??readFileSync(name,options),historical=createEditingContextPriorRead({root:process.cwd(),read});
   for(const [file,bytes]of stagedFiles){assert.equal(historical(file,'utf8'),file.endsWith('current-ancestry.mjs')?launcher:runner);stagedFiles.set(file,Buffer.concat([bytes,Buffer.from('\n// drift')]));assert.throws(()=>historical(file));stagedFiles.set(file,bytes);}
+  for(const [file,kind]of [['tests/material-parity/divider-owner-context-registration.mjs','registration'],['tests/material-parity/divider-owner-context-registration.spec.mjs','proof']]){
+    const absolute=path.resolve(file),bytes=readFileSync(file);assert.equal(historical(file,'utf8'),restoreEditingLegacySource(bytes,kind));
+    stagedFiles.set(absolute,Buffer.concat([bytes,Buffer.from('\n// drift')]));assert.throws(()=>historical(file));stagedFiles.delete(absolute);
+  }
 });

@@ -61,15 +61,24 @@ export function restoreEditingContextProducer(source,read){
 export function createEditingContextPriorRead({root,read}){
   const producer=path.resolve(root,'tests/material-parity/input-equivalence-audit.mjs');
   const selections=new Map([['launcher','scripts/export-material-input-audit-current-ancestry.mjs'],['runner','scripts/run-material-input-audit.mjs']].map(([kind,file])=>[path.resolve(root,file),kind]));
+  const legacy=new Map([['registration','tests/material-parity/divider-owner-context-registration.mjs'],['proof','tests/material-parity/divider-owner-context-registration.spec.mjs']].map(([kind,file])=>[path.resolve(root,file),kind]));
   return (name,options)=>{
-    const resolved=path.resolve(root,name),kind=selections.get(resolved);
-    if(resolved!==producer&&!kind)return read(name,options);
+    const resolved=path.resolve(root,name),kind=selections.get(resolved),oldKind=legacy.get(resolved);
+    if(resolved!==producer&&!kind&&!oldKind)return read(name,options);
     const bytes=read(name),normalized=bytes.toString().replaceAll('\r\n','\n');
-    const expected=kind?editingSelectionPrior[kind]:editingProducerPrior;
-    const prior=hash(normalized)===expected?normalized:kind?restoreEditingContextSelection(bytes,kind):restoreEditingContextProducer(bytes,f=>read(path.resolve(root,f)));
+    const expected=oldKind?editingLegacyPrior[oldKind]:kind?editingSelectionPrior[kind]:editingProducerPrior;
+    const prior=hash(normalized)===expected?normalized:oldKind?restoreEditingLegacySource(bytes,oldKind):kind?restoreEditingContextSelection(bytes,kind):restoreEditingContextProducer(bytes,f=>read(path.resolve(root,f)));
     assert.equal(hash(prior),expected);
     const encoding=typeof options==='string'?options:options?.encoding;return encoding?Buffer.from(prior).toString(encoding):Buffer.from(prior);
   };
+}
+const editingLegacyPrior=Object.freeze({registration:'73c933562cf3ba381cb258632b88b41059bcf1db2dc58f7320d4e10592b480b4',proof:'035e13aab28532b8e832992c1027ab15d340193d5940df46af5917e0a67380e7'});
+export function restoreEditingLegacySource(source,kind){
+  let text=source.toString().replaceAll('\r\n','\n');
+  text=once(text,"import { createEditingContextPriorRead } from './editing-context-registration.mjs';\n",'');
+  if(kind==='registration')text=once(text,'export function createDividerOwnerContextPriorRead({root,read}){\n  read=createEditingContextPriorRead({root,read});\n','export function createDividerOwnerContextPriorRead({root,read}){\n');
+  else{assert.equal(kind,'proof');text=once(text,"assert.equal(createEditingContextPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8'),staged,", "assert.equal(bytes.toString().replaceAll('\\r\\n','\\n'),staged,");}
+  assert.equal(hash(text),editingLegacyPrior[kind]);return text;
 }
 export const editingSelectionPrior=Object.freeze({launcher:'5168a9b9165fdae234bd90b1db314923a385bbca52b39f536d649dcac30ce955',runner:'34f44830880417b629269d5782131dd9c84c149103b52628ae227573f5c9a005'});
 const selectedReview='043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd';

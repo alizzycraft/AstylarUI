@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { createEditingContextPriorRead } from './editing-context-registration.mjs';
 import { createDividerOwnerContextHistoricalRead,createDividerOwnerContextReviewReader,dividerOwnerContextReview } from './divider-owner-context-review-source.mjs';
 import { createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
 import { dividerOwnerContextSources,dividerOwnerContextProofRows,prepareDividerOwnerContextProducer,restoreDividerOwnerContextProducer,
@@ -22,7 +23,7 @@ const inventory=source=>{
 test('Divider context staged producer conserves all1028 sources and353 proofs without writing production',()=>{
   const file='tests/material-parity/input-equivalence-audit.mjs',bytes=readFileSync(file),before=conservedRead(file,'utf8').replaceAll('\r\n','\n');
   const staged=prepareDividerOwnerContextProducer(before,readFileSync),old=inventory(before),next=inventory(staged);
-  assert.equal(bytes.toString().replaceAll('\r\n','\n'),staged,'Live producer must equal verified complete additive registration');
+  assert.equal(createEditingContextPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8'),staged,'Live producer must equal verified complete additive registration');
   assert.equal(old.sources.length,1028);assert.equal(old.proofs.length,353);assert.equal(next.sources.length,1041);assert.equal(next.proofs.length,365);
   assert.equal(new Set(next.sources).size,1041);assert.deepEqual(next.sources.slice(13),old.sources);assert.deepEqual(next.proofs.slice(12),old.proofs);
   assert.deepEqual(next.sources.slice(0,13),dividerOwnerContextSources);

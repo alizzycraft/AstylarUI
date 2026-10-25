@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import path from 'node:path';
 import { publicBlockAlignmentFindings } from './public-block-alignment-findings.mjs';
+import { createEditingContextPriorRead } from './editing-context-registration.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export const dividerOwnerRegistrationPrior=Object.freeze({producer:'d791949cfe8a3821d76250379e0c68795759d2f88650ad3414ceeaa7dbd52b17',policy:'cbf641365e8ab55748befc3e59c283e30eadab314519c8f9fbf7f5647f4a7b30'});
@@ -99,6 +100,7 @@ export function restoreDividerOwnerContextMenuRegistration(source){
   assert.equal(hash(text),'6d36eb153c21a9c66ec6b6ef3004d80aa4fa1d5de74bd2a055bb651d9ac1bb48');return text;
 }
 export function createDividerOwnerContextPriorRead({root,read}){
+  read=createEditingContextPriorRead({root,read});
   const transitions=new Map([
     ['tests/material-parity/input-equivalence-audit.mjs',{prior:dividerOwnerRegistrationPrior.producer,restore:b=>restoreDividerOwnerContextProducer(b,f=>read(path.resolve(root,f)))}],
     ['tests/material-parity/input-equivalence-policy.mjs',{prior:dividerOwnerRegistrationPrior.policy,restore:restoreDividerOwnerContextPolicy}],

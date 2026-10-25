@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Direct historical-consumer prerequisite reconciled before live switch. Shared
+Divider prior-read entry now composes the exact editing boundary;its owning
+producer assertion compares the precisely recovered prior producer,not an
+either-version/count waiver. Complete prior shared-helper SHA73c93356 and owning
+proof SHA035e13aa recover through two exact edits;unrecognized drift rejects.
+Historical read scope is now FIVE known paths:producer,launcher,runner,shared
+Divider registration helper and its owning proof. No global fs patch or arbitrary
+source restoration. These TWO existing registered sources changed and must be
+explicitly included in the next source-conservation reconciliation.
+
+Older owning suite passes5/5,0skip,exit0,70155.8528ms(includes its complete
+reader-chain check). New focused registration suite passes2/2,exit0,
+5162.0795ms,including whole prior legacy-file recovery and corrupt-edit rejection.
+No renderer,fixture,live producer/selection switch or new browser run. Earlier
+coherent stage result remains historical to its then-current helper inputs;
+verify the combined live boundary once at the next actual switch milestone,
+not by repeatedly rerunning unchanged inventory/dependency checks for prose.
+
 Coherent STAGED editing batch now passes14/14,0skip,exit0,117367.694ms,stderr
 empty. Command:node --max-old-space-size=8192 --test --test-concurrency=1 on
 divider-original-crop-provenance,ordinary-wrapping-request-path,
