@@ -66,6 +66,27 @@
           "file": "artifacts/material-parity/divider-live-baseline-copy-diagnostic-20261019.log",
           "sha256": "7a23e92dcfb69b3dc4f5af360d87a446725ed0b6b6e9df47058a046abd6041bc"
         },
+        "projectedGeometryModel": {
+          "scope": "Retained October19 live light/desktop diagnostic only,not original October5 geometry or current rendering. Algebraic baseline location under the recorded axis-aligned full-UV,identity-matrix,invertY canvas convention;not a GPU sampling or glyph-ink measurement.",
+          "formula": "min(projected.y) + draw.y * (max(projected.y)-min(projected.y)) / textureSize.height",
+          "observations": [
+            {
+              "id": "divider-above",
+              "nativeBaselineCssY": 212.078125,
+              "modeledCandidateBaselineCssY": 211.7699737548828,
+              "candidateMinusNativeCssPx": -0.3081512451171875
+            },
+            {
+              "id": "divider-below",
+              "nativeBaselineCssY": 264.078125,
+              "modeledCandidateBaselineCssY": 263.7699890136719,
+              "candidateMinusNativeCssPx": -0.308135986328125
+            }
+          ],
+          "originalCaseCauseConfirmed": false,
+          "gpuSamplingVerified": false,
+          "anonymousLineBoxCorrespondenceAccepted": false
+        },
         "globalBaselineEqualityAccepted": false,
         "originalAnonymousStrutCorrespondenceAccepted": false
       },

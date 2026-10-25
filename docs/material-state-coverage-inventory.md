@@ -4,6 +4,27 @@
 
 ### Current next action and publication status
 
+October25 retained-baseline geometry question answered without recapture:the
+authenticated October19 live-copy diagnostic (`7a23e92d` full SHA in the exact
+requirement review) retains projected vertices,UVs,texture size/matrix,invertY,
+identity canvas transforms and the live one-hop `[0,0]` copy. Existing requirement
+proof now checks those preconditions and derives only the recorded light/desktop
+axis-aligned baseline model. Native Above/Below baseline Y212.078125/264.078125
+versus modeled candidate211.7699737548828/263.7699890136719 gives deltas
+-0.3081512451171875/-0.308135986328125 CSSpx. Local baseline offset15 agrees;
+projected top placement differs. Thus missing local baseline metrics is not the
+explanation of this diagnostic's modeled displacement. This is NOT original
+October5 anonymous-strut correspondence,a GPU/ink observation,an equal-input core
+diagnosis or current rendering acceptance. Do not calibrate a fixture offset from
+these numbers. All parent remaining lists and partial/unverified flags preserve.
+Evidence/reduction lives in the existing exact-case requirement JSON and existing
+crop-provenance spec;no new framework,large export or capture. Focused exact
+requirement test passes1/1,0skip,exit0 (3357.909ms);the complete existing suite
+subsequently passes5/5 with dot reporter,exit0,and scoped diff check passes.
+Next distinguish known unequal
+paragraph placement inputs from an equal-input placement failure using existing
+owner attribution;do not repeat local-baseline or font-readiness captures.
+
 October25 publication attempt for verified canonical commit `4b37d857` failed:
 the existing HTTPS push session18057 terminated1 with `RPC failed; HTTP 408
 curl 22`,unexpected sideband disconnect and remote hangup. Its trailing

@@ -131,6 +131,30 @@ test('Exact Divider requirement review reconciles crop provenance without cleari
     }
   }
   assert.equal(baseline.globalBaselineEqualityAccepted,false);assert.equal(baseline.originalAnonymousStrutCorrespondenceAccepted,false);
+  const model=baseline.projectedGeometryModel;
+  assert.match(model.scope,/not original October5 geometry or current rendering/);
+  assert.equal(model.originalCaseCauseConfirmed,false);assert.equal(model.gpuSamplingVerified,false);
+  assert.equal(model.anonymousLineBoxCorrespondenceAccepted,false);
+  const referenceLight=liveBaseline.results.find(r=>r.side==='reference'&&r.profile==='light');
+  const candidateLight=liveBaseline.results.find(r=>r.side==='astylar'&&r.profile==='light');
+  assert.equal(model.observations.length,2);
+  for(const result of model.observations){
+    const target=referenceLight.observation.native.find(r=>r.id===result.id);
+    const live=candidateLight.observation.live.find(r=>r.id===result.id),draw=live.draws[0];
+    assert.equal(live.invertY,true);assert.deepEqual(live.uvs,[0,0,1,0,1,1,0,1]);
+    assert.deepEqual(live.textureMatrix,[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1]);
+    assert.equal(draw.transform.isIdentity,true);assert.equal(draw.baseline,'alphabetic');
+    assert.deepEqual(live.copies,[{source:draw.canvasId,destination:live.canvasId,arguments:[0,0]}]);
+    assert.equal(draw.height,live.textureSize.height);
+    const ys=live.projected.map(p=>p.y),top=Math.min(...ys),bottom=Math.max(...ys);
+    assert.equal(new Set(ys).size,2);assert.equal(new Set(live.projected.map(p=>p.x)).size,2);
+    assert.equal(bottom-top,live.textDimensions.height);
+    const projected=top+draw.y*(bottom-top)/live.textureSize.height;
+    assert.equal(result.nativeBaselineCssY,target.baselineCssY);
+    assert.equal(result.modeledCandidateBaselineCssY,projected);
+    assert.equal(result.candidateMinusNativeCssPx,projected-target.baselineCssY);
+    assert.notEqual(result.candidateMinusNativeCssPx,0,'Matching local offsets do not establish matching projected baselines');
+  }
   const currentness=parent.obligations.sourceCurrentness;
   let receiptCount=0;
   const authenticate=value=>{
