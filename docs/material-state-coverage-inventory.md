@@ -4,6 +4,16 @@
 
 ### Current next action and publication status
 
+October25 publication attempt for verified canonical commit `4b37d857` failed:
+the existing HTTPS push session18057 terminated1 with `RPC failed; HTTP 408
+curl 22`,unexpected sideband disconnect and remote hangup. Its trailing
+`Everything up-to-date` is not publication evidence:independent remote lookup
+session29913 exits0 and still reports `3b8e400053aa3ca8db77ffc425b569533f4fd1d1`.
+Read connectivity therefore works,but this large upload timed out. No credential,
+SSH trust,Git configuration or evidence deletion was attempted. Local canonical
+acceptance below remains valid;remote publication is outstanding. D:free after
+commit was589692928 bytes. Do not rebuild the canonical payload to retry transport.
+
 October25 accepted editing-context milestone: generation
 `8848ae5b1ca0b18bc04116ebdd1eb2c360b7497a298e69fca9578df4a1b2b420`,index
 `3a73b61ec4e00539a62f17cf96f75c12bb29a74ae202a882ffdb2c55d73a118b`.
