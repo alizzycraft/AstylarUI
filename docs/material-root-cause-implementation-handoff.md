@@ -1,5 +1,23 @@
 # Material audit: evidence-led implementation priorities
 
+## Pending Tree tab-stop input delta,October25
+
+Restore reference-equivalent composite focus/tab-stop state through supported
+input semantics,not mesh focus,paint offsets or a plugin-owned input engine.
+The52-case retained-tree proof finds24 pointer endpoints where native generated
+tabindex moves to Projects while candidate authored input remains fixed on
+Documents;28 initial/focus/hover controls match. Candidate focused CSS class alone
+does not update the authored tab stop. Current and initial2f440115 branches both
+reproduce this literal first-index rule,so do not blame the later text wrapper.
+This is a pending application-input finding,not a new core projection defect or
+candidate native-DOM property measurement. See tree-tabstop-inputs.spec.mjs and
+the current ledger. Keep distinct from the existing component typography and
+keyboard-handler findings;do not broaden the nine-family keyboard evidence.
+No expansion control is authored in this leaf-only fixture. Verify raw owner,
+pointer/keyboard tab-stop transitions and other contexts before complete semantic
+or case acceptance. This delta is outside frozen1060/383/198/65 and authorizes
+no fixture or renderer implementation during the audit.
+
 ## October25 held-input extension of the existing gesture track
 
 Track1 below remains the owner;do not create a separate Material input fix.

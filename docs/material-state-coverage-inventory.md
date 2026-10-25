@@ -4,6 +4,35 @@
 
 ### Current next action and publication status
 
+October25 next shared-control question answers Tree tab-stop state without a
+new capture. All52 configured retained Tree cases/104 paired tree receipts
+authenticate against originalab42dbec/e01ef9dc. In24 held/activate/activate-leave
+contexts native runtime DOM tabindex is[-1,0,-1] (Projects),while candidate authored
+input remains[0,-1,-1] (Documents),even though its focused class is on Projects.
+All28 static/focus/hover controls match[0,-1,-1]. Normalized report focus says
+tree-primary on both sides in all24 differing contexts and cannot prove leaf
+identity. Candidate native-DOM tabIndex itself is NOT measured by this proof.
+
+Pending finding:fixture-tree-tabstop-remains-first-after-pointer-focus,
+application-plugin-authoring-defect;first divergence is fixed candidate tab-stop
+input before core projection. Actual current and initial2f440115 tree branches
+execute with each of three focused IDs and retain the first tab stop. This
+predates the later text wrapper compensation;source introduction is not runtime
+bisect. Three leaf nodes/no expanded attribute preserve the already established
+inapplicability of expansion here;existing keyboard navigation evidence is not
+recaptured or widened from its separate nine-family source finding.
+
+New bounded existing-infrastructure proof tree-tabstop-inputs.spec.mjs passes2/2,
+0skip,exit0;keep tree-tabstop-inputs-20261025 and tree-tabstop-inputs-verified-
+20261025 log/stderr pairs. Verified run1872.1148ms,stdout SHA256
+6082b94a68fb85ceb79ba163b581564b52dcd9bc1bce4dca946fd215590d2fde.
+It covers an input property,not52 complete inspections,raw hit targets,all keys,
+paint or current-code acceptance. All case flags stay
+partial. This standalone pending finding is outside frozen1060/383/198/65;no
+producer/policy/selector/export change. Next reconcile actual pointer-focus owner
+and tab traversal using existing exact evidence if available,not another keyboard
+navigation or expansion capture. Do not change fixture styles to hide the gap.
+
 October25 held-control batch is now LIVE REGISTERED at1060 sources/383 proofs,
 198 findings/65 plan tracks. Explicit --text-held selects exact45d3fb07 and its
 bounded reader;default and all older supplement argument results preserve.

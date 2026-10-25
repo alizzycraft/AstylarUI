@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep tree-tabstop-inputs-20261025 and tree-tabstop-inputs-verified-20261025 log/
+stderr pairs. They authenticate the same52 original cases/104 tree receipts,
+with24 tab-stop input differences and28 controls. No browser run or new screenshots
+were created. Original report/trees and initial Git source remain required inputs;
+these attribute observations do not replace original visual/focus failures.
+
 Keep text-held-live-registration-integration-20261025 log/stderr:actual live
 reader validates18402 receipts/2311 cases,1/1 passing,complete predecessor recovery.
 Live1060/383 registration is not a new canonical package or current rendering.
