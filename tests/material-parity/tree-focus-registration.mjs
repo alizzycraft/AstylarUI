@@ -41,7 +41,10 @@ const sourcePrefix=treeFocusSources.map(f=>'    '+JSON.stringify(f)+',\n').join(
 const proofPrefix=treeFocusProofTitles.map(title=>'    proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp('+JSON.stringify("test\\('"+escape(title)+"'")+'),\n      '+JSON.stringify(title)+', "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),\n').join('');
 const planPrefix=actions.map(a=>'    '+JSON.stringify(a)+',\n').join('');
 const patterns=[String.raw`tabindex: index === 0 \? 0 : -1`,String.raw`this\.canvas\.tabIndex = -1`];
-const definitionPrefix=treeFocusFindings.map((f,i)=>'  Object.freeze('+JSON.stringify({...f,pattern:patterns[i],justification:f.observation.firstDivergence+' '+f.boundary},null,2)+'),\n').join('');
+const legacyDefinitionPrefix=treeFocusFindings.map((f,i)=>'  Object.freeze('+JSON.stringify({...f,pattern:patterns[i],justification:f.observation.firstDivergence+' '+f.boundary},null,2)+'),\n').join('');
+const definitionPrefix=treeFocusFindings.map((f,i)=>'  Object.freeze('+JSON.stringify({...f,
+  evidence:f.evidence?Object.values(f.evidence):[f.publicReproduction,f.causalTrace],
+  ...(f.evidence?{evidenceDetails:f.evidence}:{}),pattern:patterns[i],justification:f.observation.firstDivergence+' '+f.boundary},null,2)+'),\n').join('');
 const once=(s,a,b)=>{assert.equal(s.split(a).length,2);return s.replace(a,b);};
 export function prepareTreeFocusRegistry(bytes,kind,read){
   assert.ok(Object.hasOwn(prior,kind));let text=bytes.toString().replaceAll('\r\n','\n');assert.equal(hash(text),prior[kind]);
@@ -55,7 +58,7 @@ export function prepareTreeFocusRegistry(bytes,kind,read){
 export function restoreTreeFocusRegistry(bytes,kind){
   if(bytes.toString().includes('fixture-sort-hover-arrow-omitted')||bytes.toString().includes('"scripts/join-material-sort-arrow-evidence.mjs"'))bytes=restoreSortArrowRegistry(bytes,kind);
   assert.ok(Object.hasOwn(prior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
-  if(kind==='policy')text=once(text,definitionAnchor+definitionPrefix,definitionAnchor);
+  if(kind==='policy')text=once(text,definitionAnchor+(text.includes(definitionAnchor+definitionPrefix)?definitionPrefix:legacyDefinitionPrefix),definitionAnchor);
   else{for(const [anchor,prefix]of [[sourceAnchor,sourcePrefix],[proofAnchor,proofPrefix],[planAnchor,planPrefix]])text=once(text,anchor+prefix,anchor);}
   assert.equal(hash(text),prior[kind]);return text;
 }

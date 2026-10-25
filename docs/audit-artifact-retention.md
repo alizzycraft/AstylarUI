@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep sort-canonical-export-20261025.log:the initial Sort export fails at the
+source-diagnostic receipt-array contract before canonical writes. Keep the
+receipt-contract-correction and receipt-corrected-reader logs (2/2 and1/1),
+sort-pre-export-8848-20261025 backup,and authenticated predecessor-section
+receipts. The old selected-metadata extract is now token-authenticated as noted
+in the ledger;retain it for the pending conservation milestone. No failed run,
+original capture or accepted8848 generation is superseded by this correction.
+
 Keep sort-live-registration-integration-20261025.log (15/15),
 sort-prior-held-registration-20261025.log (1/1) and
 sort-shared-replay-preflight-20261025.log (2/2),alongside the staged Sort reader

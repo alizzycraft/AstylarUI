@@ -1,5 +1,15 @@
 # Efficient Material input-audit workflow
 
+October25 Sort export retry prerequisite:the initial run failed before writes
+because new finding evidence objects violated the existing receipt-array
+contract. Registration is corrected without weakening the validator. Its exact
+source-diagnostic block now has focused positive/malformed/hash controls;these
+and older Tree conservation pass2/2,and corrected18404-dependency replay passes.
+Use a fresh sort-receipt-corrected log for one retry. Preserve the failed log and
+accepted8848. Authenticated80-section predecessor receipts and five selected
+metadata sections are reusable as pinned in the ledger;do not decode the old
+2.37GB package again merely for those values. No acceptance gate is waived.
+
 October25 Sort batch is live1070 sources/398 proofs/202 findings/69 tracks;
 explicit --sort-arrow selects8554f8ef. Combined Sort/Tree integration passes15/15
 and actual-source review loading authenticates18404 dependencies/2311 partial,

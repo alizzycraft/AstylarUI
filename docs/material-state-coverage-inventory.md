@@ -4,6 +4,41 @@
 
 ### Current next action and publication status
 
+October25 first Sort canonical export FAILED before writing canonical files:
+sort-canonical-export-20261025.log retains TypeError at the real validator's
+source-diagnostic loop (`definition.evidence is not iterable`). New Sort and
+Tree registration had copied named diagnostic evidence objects into a field
+whose existing contract is an array of file/SHA256 receipts. Fifteen registration
+checks did not exercise that validator block;their earlier green result was NOT
+export validation. No renderer defect or original observation is implicated.
+
+Registration now supplies receipt arrays for all four findings,keeps named
+details separately,and includes the core Tree public reproduction/trace receipts.
+Exact legacy policy reversal remains available;the corrected Tree-stage policy
+hash is747498030c70667fa30ff0b4137312231af24d6709ce7ca9465bb23c5efe1910.
+Focused tests execute the ACTUAL source-diagnostic validator block,authenticate
+the four findings,and reject object evidence and changed hashes. This plus older
+Tree conservation passes2/2,6097.9304ms in sort-receipt-contract-correction-20261025.log.
+Corrected18404-dependency reader passes1/1,123071.4516ms in
+sort-receipt-corrected-reader-20261025.log. Census remains1070/398/202/69.
+Use one fresh sort-receipt-corrected canonical export retry,not the failed log;
+accepted8848 remains untouched and all final gates stay open.
+
+Predecessor conservation preparation is reusable:direct complete compressed/
+decoded authentication and80 section token receipts pass in
+sort-predecessor-section-receipts-verified-20261025.log,complete file SHA256
+f1d7886242f53ffb280b3909121b627f746c103b497ed6b9c24449d580c83e21.
+They equal the previous editing report's current receipts. Existing3.6MB
+editing-replay-selected-metadata-20261025.log (SHA256
+e8eb6c8cc0f74462015f96c3eed0892298807d46942454bcbd30a5ca1a486b6a)
+has five sections independently authenticated against those token receipts:
+sourceFingerprints,summary,sourceFindings,focusedProofs,implementationPlan.
+Reuse its `current.sections` as8848 predecessor metadata,not its older `previous`.
+No second full predecessor decode is needed. All logs use artifacts/material-parity.
+An exploratory source-census command's output handle was not retained;do not
+claim its result or rerun it in parallel with export. Candidate conservation
+must use the actual exported inventories. No case/rendering acceptance changed.
+
 October25 Sort batch is LIVE registered at1070 sources/398 proof declarations/
 202 findings/69 implementation tracks. Explicit --sort-arrow selects8554f8ef;
 default/older selections conserve and mixed flags reject. Complete prior

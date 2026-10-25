@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {spawnSync} from 'node:child_process';
@@ -38,6 +38,22 @@ test('Sort staged registry preserves all existing sources proofs findings and pl
   const oldPolicy=arrays(before.policy).definitions,newPolicy=arrays(staged.policy).definitions;
   assert.equal(oldPolicy.length,200);assert.equal(newPolicy.length,202);assert.deepEqual(newPolicy.slice(2),oldPolicy);
   for(const entry of newPolicy.slice(0,2)){const f=new Function('return '+entry)();assert.equal([...readFileSync(f.file,'utf8').matchAll(new RegExp(f.pattern,'g'))].length,1);assert.ok(f.justification);}
+  // Execute the actual validator's source-diagnostic block, not a parallel
+  // schema invented by registration tests. The failed full export reached this
+  // contract only after the expensive unrelated collectors/validators.
+  const {sourceAuditDefinitions}=await import('./input-equivalence-policy.mjs');
+  for(const f of sourceAuditDefinitions.filter(f=>f.evidence)){
+    assert.ok(Array.isArray(f.evidence),f.id);for(const r of f.evidence){assert.equal(typeof r.file,'string');assert.match(r.sha256,/^[a-f0-9]{64}$/);}
+  }
+  const selected=sourceAuditDefinitions.slice(0,4);assert.equal(selected.length,4);assert.ok(selected.every(f=>Array.isArray(f.evidence)&&f.evidence.length));
+  const validator=ts.createSourceFile('audit.mjs',before.producer,99,true,ts.ScriptKind.JS).statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text==='validateMaterialInputAudit');
+  const block=validator.body.statements.find(n=>ts.isForOfStatement(n)&&n.expression.getText().startsWith('sourceAuditDefinitions.filter'));
+  assert.ok(block);const validate=new Function('sourceAuditDefinitions','report','root','path','existsSync','createHash','readFileSync','const errors=[];'+block.getText()+';return errors;');
+  const run=definitions=>validate(definitions,{sourceFindings:definitions},process.cwd(),path,existsSync,createHash,readFileSync);
+  assert.deepEqual(run(selected),[]);
+  assert.throws(()=>run([{...selected[0],evidence:{report:selected[0].evidence[0]}}]),TypeError);
+  const changed={...selected[0],evidence:[{...selected[0].evidence[0],sha256:'0'.repeat(64)}]};
+  assert.ok(run([changed]).some(error=>error.includes('receipt missing, changed or outside root')));
   const {restoreTextHeldProducer,restoreTextHeldSelection}=await import('./text-held-registration.mjs');
   assert.equal(restoreTextHeldProducer(staged.producer),restoreTextHeldProducer(before.producer));
   const {createTreeFocusPriorRead}=await import('./tree-focus-registration.mjs');

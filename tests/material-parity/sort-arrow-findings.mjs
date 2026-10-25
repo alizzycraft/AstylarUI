@@ -40,7 +40,7 @@ export const sortArrowFindings=Object.freeze([
 
 // Prepare the existing registry in memory before touching any live source or
 // historical reader. Whole-predecessor guards prohibit marker-only replay.
-const registryPrior={producer:'eb07363c7e36b1c94b29e0f0d03ef5534dfeea496f35c210f9e0391b41406ef7',policy:'417d36eb37b97da5be73522d1c1cc19fac4477050c44351b7729d14cd0d7bbce'};
+const registryPrior={producer:'eb07363c7e36b1c94b29e0f0d03ef5534dfeea496f35c210f9e0391b41406ef7',policy:'747498030c70667fa30ff0b4137312231af24d6709ce7ca9465bb23c5efe1910'};
 const digest=s=>createHash('sha256').update(s).digest('hex');
 export const sortArrowSources=Object.freeze([
   'scripts/join-material-sort-arrow-evidence.mjs',
@@ -57,8 +57,13 @@ export const sortArrowProofTitles=Object.freeze([
 ]);
 const escape=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 const actions=sortArrowFindings.map(f=>({priority:2.2,rootCause:f.owner,action:f.action+' '+f.boundary}));
+const legacyPolicyPrefix=sortArrowFindings.map(f=>'  Object.freeze('+JSON.stringify({...f,justification:f.observation.firstDivergence+' '+f.boundary},null,2)+'),\n').join('');
+const policyPrefix=sortArrowFindings.map(f=>'  Object.freeze('+JSON.stringify({...f,
+  evidence:[...Object.values(f.evidence).filter(r=>r&&typeof r==='object'&&r.file),
+    ...(f.evidence.currentPluginSha256?[{file:f.file,sha256:f.evidence.currentPluginSha256}]:[])],
+  evidenceDetails:f.evidence,justification:f.observation.firstDivergence+' '+f.boundary},null,2)+'),\n').join('');
 const additions={
-  policy:[['export const sourceAuditDefinitions = Object.freeze([\n',sortArrowFindings.map(f=>'  Object.freeze('+JSON.stringify({...f,justification:f.observation.firstDivergence+' '+f.boundary},null,2)+'),\n').join('')]],
+  policy:[['export const sourceAuditDefinitions = Object.freeze([\n',policyPrefix]],
   producer:[
     ['function sourceFingerprints(root) {\n  const files = [\n',sortArrowSources.map(f=>'    '+JSON.stringify(f)+',\n').join('')],
     ['function focusedProofInventory(root) {\n  return [\n',sortArrowProofTitles.map(title=>'    proof(root, "tests/material-parity/sort-arrow-geometry.spec.mjs", new RegExp('+JSON.stringify("test\\('"+escape(title)+"'")+'),\n      '+JSON.stringify(title)+', "Bounded retained Sort presence and vector/pixel evidence;not fresh current rendering or complete case acceptance."),\n').join('')],
@@ -77,6 +82,10 @@ export function prepareSortArrowRegistry(bytes,kind,read){
 }
 export function restoreSortArrowRegistry(bytes,kind){
   assert.ok(Object.hasOwn(registryPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
+  if(kind==='policy'&&text.includes('export const sourceAuditDefinitions = Object.freeze([\n'+legacyPolicyPrefix)){
+    text=once(text,'export const sourceAuditDefinitions = Object.freeze([\n'+legacyPolicyPrefix,'export const sourceAuditDefinitions = Object.freeze([\n');
+    assert.equal(digest(text),'417d36eb37b97da5be73522d1c1cc19fac4477050c44351b7729d14cd0d7bbce');return text;
+  }
   for(const [anchor,prefix]of additions[kind])text=once(text,anchor+prefix,anchor);
   assert.equal(digest(text),registryPrior[kind]);return text;
 }
@@ -110,7 +119,7 @@ export function createSortArrowPriorRead({root,read}){
   return(name,options)=>{
     const kind=kinds.get(path.resolve(root,name));if(!kind)return read(name,options);
     const bytes=read(name),text=bytes.toString().replaceAll('\r\n','\n');
-    const restored=digest(text)===(registryPrior[kind]??selectionPrior[kind])?text:Object.hasOwn(registryPrior,kind)?restoreSortArrowRegistry(bytes,kind):restoreSortArrowSelection(bytes,kind);
+    const restored=digest(text)===(registryPrior[kind]??selectionPrior[kind])||(kind==='policy'&&digest(text)==='417d36eb37b97da5be73522d1c1cc19fac4477050c44351b7729d14cd0d7bbce')?text:Object.hasOwn(registryPrior,kind)?restoreSortArrowRegistry(bytes,kind):restoreSortArrowSelection(bytes,kind);
     const encoding=typeof options==='string'?options:options?.encoding;return encoding?Buffer.from(restored).toString(encoding):Buffer.from(restored);
   };
 }

@@ -131,15 +131,21 @@ export const sourceAuditDefinitions = Object.freeze([
     "astylar": "All eight hover trees omit sort-arrow entirely.",
     "firstDivergence": "Candidate conditional authoring before plugin rendering or projection."
   },
-  "evidence": {
+  "evidence": [
+    {
+      "file": "artifacts/material-parity/current-full-20261005/latest-report.json",
+      "sha256": "ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62"
+    }
+  ],
+  "focusedProof": "tests/material-parity/sort-arrow-geometry.spec.mjs",
+  "action": "Match native hover/focus/activation arrow presence through authored state;do not add renderer offsets or duplicate input routing.",
+  "boundary": "Retained input presence and current source/history only;not raw hover timing,animation,paint,current served build or whole-case closure.",
+  "evidenceDetails": {
     "report": {
       "file": "artifacts/material-parity/current-full-20261005/latest-report.json",
       "sha256": "ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62"
     }
   },
-  "focusedProof": "tests/material-parity/sort-arrow-geometry.spec.mjs",
-  "action": "Match native hover/focus/activation arrow presence through authored state;do not add renderer offsets or duplicate input routing.",
-  "boundary": "Retained input presence and current source/history only;not raw hover timing,animation,paint,current served build or whole-case closure.",
   "justification": "Candidate conditional authoring before plugin rendering or projection. Retained input presence and current source/history only;not raw hover timing,animation,paint,current served build or whole-case closure."
 }),
   Object.freeze({
@@ -178,13 +184,16 @@ export const sourceAuditDefinitions = Object.freeze([
     ],
     "firstDivergence": "Current plugin triangles differ from the retained native SVG path despite equal bounds."
   },
-  "evidence": {
-    "report": {
+  "evidence": [
+    {
       "file": "artifacts/material-parity/current-full-20261005/latest-report.json",
       "sha256": "ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62"
     },
-    "currentPluginSha256": "dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e"
-  },
+    {
+      "file": "examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts",
+      "sha256": "dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e"
+    }
+  ],
   "retainedPaint": {
     "states": [
       "focus",
@@ -222,6 +231,13 @@ export const sourceAuditDefinitions = Object.freeze([
   "focusedProof": "tests/material-parity/sort-arrow-geometry.spec.mjs",
   "action": "Preserve native path and dimensions with faithful nonoverlapping vector geometry;do not retune scale,offset,color or opacity to hide the mismatch.",
   "boundary": "Current geometry and source history plus two retained local observations. Captured-plugin linkage and fresh current raster remain unverified;not all-context paint or case closure.",
+  "evidenceDetails": {
+    "report": {
+      "file": "artifacts/material-parity/current-full-20261005/latest-report.json",
+      "sha256": "ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62"
+    },
+    "currentPluginSha256": "dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e"
+  },
   "justification": "Current plugin triangles differ from the retained native SVG path despite equal bounds. Current geometry and source history plus two retained local observations. Captured-plugin linkage and fresh current raster remain unverified;not all-context paint or case closure."
 }),
   Object.freeze({
@@ -239,7 +255,20 @@ export const sourceAuditDefinitions = Object.freeze([
     "astylar": "Documents remains tabindex=0 even while Projects has focused class and actual native focus.",
     "firstDivergence": "Authored candidate tab-stop input,not projection or a mirror dropping the requested values."
   },
-  "evidence": {
+  "evidence": [
+    {
+      "file": "artifacts/material-parity/current-full-20261005/latest-report.json",
+      "sha256": "ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62"
+    },
+    {
+      "file": "artifacts/material-parity/tree-pointer-tabstop-20261025/latest-report.json",
+      "sha256": "117f3f9e1813a5b83bc1d545eb3e5dc69262cc58eaafac9d116402fe00f722a9"
+    }
+  ],
+  "focusedProof": "tests/material-parity/tree-tabstop-inputs.spec.mjs",
+  "action": "Restore equivalent roving tab-stop inputs through public semantics;do not compensate in layout or implement a plugin input engine.",
+  "boundary": "52 retained input properties,one actual native-DOM context. Not complete keyboard,paint,current-source or case acceptance.",
+  "evidenceDetails": {
     "original": {
       "file": "artifacts/material-parity/current-full-20261005/latest-report.json",
       "sha256": "ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62"
@@ -249,9 +278,6 @@ export const sourceAuditDefinitions = Object.freeze([
       "sha256": "117f3f9e1813a5b83bc1d545eb3e5dc69262cc58eaafac9d116402fe00f722a9"
     }
   },
-  "focusedProof": "tests/material-parity/tree-tabstop-inputs.spec.mjs",
-  "action": "Restore equivalent roving tab-stop inputs through public semantics;do not compensate in layout or implement a plugin input engine.",
-  "boundary": "52 retained input properties,one actual native-DOM context. Not complete keyboard,paint,current-source or case acceptance.",
   "pattern": "tabindex: index === 0 \\? 0 : -1",
   "justification": "Authored candidate tab-stop input,not projection or a mirror dropping the requested values. 52 retained input properties,one actual native-DOM context. Not complete keyboard,paint,current-source or case acceptance."
 }),
@@ -281,6 +307,16 @@ export const sourceAuditDefinitions = Object.freeze([
   "focusedProof": "tests/material-parity/tree-tabstop-inputs.spec.mjs: one equal-input Tab-exit trace binds pointer-move canvas tab restoration and semantic refocus",
   "action": "Coordinate core/Babylon canvas tab ownership while preserving pointer/selection focus and genuine modal containment;verify forward/backward exit without replacing native Tab navigation.",
   "boundary": "Equal-input public installed-package reproduction and corroborating instrumented pair,not all Material cases,current-source equivalence,history bisect,paint or final acceptance.",
+  "evidence": [
+    {
+      "file": "artifacts/material-parity/public-tree-fixed-tabstop-corrected-20261025/latest-report.json",
+      "sha256": "ca76ab4262dbca4cac62ff4d21cbca7fd5ddbd4d5af33d51f824bba66e3163e6"
+    },
+    {
+      "file": "artifacts/material-parity/public-tree-tab-exit-trace-20261025/latest-report.json",
+      "sha256": "6ec16965fabd291c2bda981beaecdab35beeb31e060b5ec82648d1dba8a0500f"
+    }
+  ],
   "pattern": "this\\.canvas\\.tabIndex = -1",
   "justification": "Semantic connect excludes canvas with tabindex=-1;Babylon pointer move overwrites tabindex to engine value1. Equal-input public installed-package reproduction and corroborating instrumented pair,not all Material cases,current-source equivalence,history bisect,paint or final acceptance."
 }),
