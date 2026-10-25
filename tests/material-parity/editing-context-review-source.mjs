@@ -2,11 +2,13 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { createDividerOwnerContextReviewReader,dividerOwnerContextReview } from './divider-owner-context-review-source.mjs';
 import { joinEditingContextEvidence } from '../../scripts/join-material-editing-context-evidence.mjs';
+import { createEditingContextPriorRead } from './editing-context-registration.mjs';
 
 export const editingContextReview='043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd';
 export function createEditingContextReviewReader({root,read,reviewSha256}){
   assert.equal(reviewSha256,editingContextReview,'Only exact editing-context successor selects this reader');
-  const prior=createDividerOwnerContextReviewReader({root,read,reviewSha256:dividerOwnerContextReview});
+  const priorRead=createEditingContextPriorRead({root,read});
+  const prior=createDividerOwnerContextReviewReader({root,read:priorRead,reviewSha256:dividerOwnerContextReview});
   const parent=JSON.parse(prior.read(path.resolve(root,`artifacts/material-parity/working-audit/proposals/${dividerOwnerContextReview}.json`))).review;
   const joined=joinEditingContextEvidence(parent,file=>read(path.resolve(root,file)));
   assert.equal(joined.sha256,editingContextReview);

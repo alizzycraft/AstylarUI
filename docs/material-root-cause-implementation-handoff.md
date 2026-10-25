@@ -2,6 +2,10 @@
 
 ## Pending plan delta — block alignment, October25
 
+The reversible editing-context registration helper now stages these two entries
+into a65-track generated plan while preserving all63 prior entries. This is
+verified in memory only;the live generated plan still has63 tracks.
+
 The current generated63-track implementation plan has no block `align-content`
 track. The live registered198-finding registry includes these two findings,so
 the implementation handoff requires the following delta. This is future work,

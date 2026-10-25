@@ -9,6 +9,22 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Staged registration now includes the missing two block-alignment implementation
+tracks:65 generated tracks conserve all63 prior entries and preserve root-cause/
+equal-input safeguards. Live producer still has63 tracks. New exact producer-only
+historical read boundary recovers full1041/365 producer from staged1055/378 plus
+plan delta,accepts the unchanged prior bytes,and rejects unexpected appended drift.
+Buffer/string/options encodings and unrelated-file pass-through are tested.
+Editing successor reader now composes this boundary before existing f812 reader;
+no other historical path is restored or new source change globally waived.
+
+Existing focused registration suite passes2/2,exit0,1113.9539ms;whole prior
+producer recovery and exact old/new plan conservation pass. No live switch,
+capture or repeated full dependency run for these staged transformations. Next
+coherent selection/integration check must exercise the staged producer through
+the successor reader before live registration/publication;current pointers and
+all acceptance criteria remain unchanged.
+
 Editing-source registration is now STAGED and reversible,not applied to live
 producer. Delta includes13 standalone code paths(the prior11 plus registration
 helper/spec) and the small Divider requirement JSON:14 total source/evidence
