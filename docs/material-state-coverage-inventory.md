@@ -4,6 +4,22 @@
 
 ### Current next action and publication status
 
+October25 publication is remote-verified atd44599dd477de1428cd0beb6f7b4be0a1f554c60
+on codex/material-audit-alignment-integration. The Sort historical-baseline test
+now pins8848/index3a73 directly instead of requiring mutable current.json to stay
+old. Targeted conservation passes1/1,0skip,18364.6032ms in
+`artifacts/material-parity/sort-historical-baseline-anchor-20261025.log`,while
+current.json points to7a22. Same60 cases/62 children/two paint cases and all
+predecessor/remaining-work assertions preserve. No observation/criterion changed.
+Explicit post-package source transition for
+`tests/material-parity/sort-arrow-geometry.spec.mjs`:
+8accd5980a5984603ed7256990ada1322d10b5040b34ff77829cc4715c5b34cb ->
+730fd78e51d52171e979150c0219552f37304c31f2baf0880602e236cdd46033.
+Published7a22 remains authenticated evidence for its frozen source,not byte-equal
+to this edited test. Reconcile this bounded transition at the next justified
+integration milestone;do not launch another canonical export solely for it.
+Next resume exact-case requirement gaps;all2311 cases and final gates remain open.
+
 October25 Sort/Tree/held evidence batch is now accepted LOCALLY as generation
 `7a22e84a0034a5c887cc7a0d8c68ac68b269dfd7a9d414d9f57a71c2d86e42f1`,
 index `0d9f52fae32e7783dc7dbb6bc08587fe6a0b01b1e3bf0ff94b9c4b6b08837850`.

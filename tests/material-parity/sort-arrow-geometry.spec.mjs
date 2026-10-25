@@ -101,8 +101,8 @@ test('Sort staged selection and reader preserve older routes and authenticate th
   t.diagnostic(JSON.stringify({review:api.sortArrowReview,authenticatedDependencies:loaded.evidenceFingerprints.length,restoredSourcePaths:4,stagedOnly:true,canonicalPublished:false}));
 });
 test('Sort arrow partial join conserves the complete Tree predecessor and all remaining work',async t=>{
-  const base='artifacts/material-parity/working-audit',pointer=JSON.parse(readFileSync(base+'/current.json'));
-  assert.equal(pointer.generation,'8848ae5b1ca0b18bc04116ebdd1eb2c360b7497a298e69fca9578df4a1b2b420');
+  const base='artifacts/material-parity/working-audit',pointer={generation:'8848ae5b1ca0b18bc04116ebdd1eb2c360b7497a298e69fca9578df4a1b2b420',indexSha256:'3a73b61ec4e00539a62f17cf96f75c12bb29a74ae202a882ffdb2c55d73a118b'};
+  // Authenticate the retained predecessor, independently of the mutable current pointer.
   const bytes=readFileSync(`${base}/${pointer.generation}/index.json`);assert.equal(hash(bytes),pointer.indexSha256);
   const coverage=JSON.parse(bytes).metadata.coverage.inspectionEvidence;
   const accepted={kind:'case-obligation-coverage-extension',status:'proposal-not-canonical',scope:coverage.scope,groups:coverage.cases};
