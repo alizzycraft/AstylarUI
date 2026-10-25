@@ -4,6 +4,24 @@
 
 ### Current next action and publication status
 
+October25 Tree explicit selection is prepared in memory and passes the existing
+registry test1/1,exit0,4761.8917ms (test4357.3775ms). --tree-focus selects exact
+6ea59073 only;default and EVERY older rawRequested supplement dry-run object are
+unchanged. Every mixed Tree/older supplement rejects. Exporter AST selector
+chooses createTreeFocusReviewReader only for that exact digest and delegates all
+other IDs to the previous factory. Current launcher/exporter are not yet edited.
+
+The bounded Tree prior reader now recovers FOUR complete source paths:producer,
+policy,launcher,exporter. Each exact staged source recovers its complete live
+predecessor;appended unknown drift rejects independently for all four. Earlier
+two-path integration remains its historical validated scope,not evidence that
+new selectors are live or that shared replay already understands this batch.
+Next check shared historical replay entry points before applying live writes.
+Do not rerun full receipt replay merely for this selection metadata;the coherent
+live milestone still needs proportional integration. Counts1067/392/200/67 stay
+staged;live1060/383/198/65,accepted8848,all2311 partial flags and final gates
+preserve. No capture,large proposal,canonical generation or renderer/fixture fix.
+
 October25 Tree registry preparation and exact-reader integration pass2/2,0skip,
 exit0,94405.6788ms. Staging only:complete live1060 sources/383 proofs/198
 definitions/65 plans conserve under seven/nine/two/two additions,producing

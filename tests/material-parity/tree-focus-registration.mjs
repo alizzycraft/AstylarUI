@@ -58,17 +58,41 @@ export function restoreTreeFocusRegistry(bytes,kind){
   assert.equal(hash(text),prior[kind]);return text;
 }
 export const treeFocusReview='6ea59073771388cec874ad6985e38823f68d1d72ab7c37d72cb61c5e11a0e411';
+const selectionPrior={launcher:'7af19a4f6ba2dcaa46b40b4faf67a6aad773ebe15f9e4f05ffd89a854bcd805d',runner:'d98689c7cef5015894a8ccf6a382c956798f08cf9c911b604ceb929a7228a89a'};
+const selectionTransitions=kind=>kind==='launcher'?[
+  ["const textHeld = rawRequested.includes('--text-held');","const treeFocus = rawRequested.includes('--tree-focus');\nassert.ok(!treeFocus || rawRequested.every(argument => ['--tree-focus', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\nconst textHeld = rawRequested.includes('--text-held');"],
+  ['const requested = rawRequested.filter(',"const requested = rawRequested.filter(argument => argument !== '--tree-focus').filter("],
+  ['|--text-held]','|--text-held|--tree-focus]'],
+  ['for (const [name, relative] of Object.entries(inputs)) {',`if (treeFocus) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${treeFocusReview}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+  ['editingContext || textHeld)','editingContext || textHeld || treeFocus)'],
+  ["if (requested.includes('--dry-run'))",`if (treeFocus) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${treeFocusReview}';\nif (requested.includes('--dry-run'))`],
+]:[
+  ["import { textHeldReview, createTextHeldReviewReader } from '../tests/material-parity/text-held-registration.mjs';","import { textHeldReview, createTextHeldReviewReader } from '../tests/material-parity/text-held-registration.mjs';\nimport { treeFocusReview, createTreeFocusReviewReader } from '../tests/material-parity/tree-focus-registration.mjs';"],
+  ['const applicability=textHeldReaderFactory?.','const treeFocusReaderFactory = options.caseObligationReviewSha256===treeFocusReview ? createTreeFocusReviewReader : textHeldReaderFactory;\n    const applicability=treeFocusReaderFactory?.'],
+];
+export function prepareTreeFocusSelection(bytes,kind){
+  assert.ok(Object.hasOwn(selectionPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');assert.equal(hash(text),selectionPrior[kind]);
+  for(const [a,b]of selectionTransitions(kind))text=once(text,a,b);return text;
+}
+export function restoreTreeFocusSelection(bytes,kind){
+  assert.ok(Object.hasOwn(selectionPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
+  for(const [a,b]of selectionTransitions(kind).toReversed())text=once(text,b,a);assert.equal(hash(text),selectionPrior[kind]);return text;
+}
+export function createTreeFocusPriorRead({root,read}){
+  const paths=new Map([['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy'],
+    ['scripts/export-material-input-audit-current-ancestry.mjs','launcher'],['scripts/run-material-input-audit.mjs','runner']].map(([f,k])=>[path.resolve(root,f),k]));
+  return (name,options)=>{
+    const kind=paths.get(path.resolve(root,name));if(!kind)return read(name,options);
+    const bytes=read(name),text=bytes.toString().replaceAll('\r\n','\n');
+    if(hash(text)===(prior[kind]??selectionPrior[kind]))return read(name,options);
+    const restored=Object.hasOwn(prior,kind)?restoreTreeFocusRegistry(bytes,kind):restoreTreeFocusSelection(bytes,kind),encoding=typeof options==='string'?options:options?.encoding;
+    return encoding?Buffer.from(restored).toString(encoding):Buffer.from(restored);
+  };
+}
 export function createTreeFocusReviewReader({root,read,reviewSha256}){
   assert.equal(reviewSha256,treeFocusReview,'Only exact Tree partial review selects this reader');
   assert.equal(treeFocusPredecessor,textHeldReview);
-  const paths=new Map([['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy']].map(([f,k])=>[path.resolve(root,f),k]));
-  const priorRead=(name,options)=>{
-    const kind=paths.get(path.resolve(root,name));if(!kind)return read(name,options);
-    const bytes=read(name),text=bytes.toString().replaceAll('\r\n','\n');
-    if(hash(text)===prior[kind])return read(name,options);
-    const restored=restoreTreeFocusRegistry(bytes,kind),encoding=typeof options==='string'?options:options?.encoding;
-    return encoding?Buffer.from(restored).toString(encoding):Buffer.from(restored);
-  };
+  const priorRead=createTreeFocusPriorRead({root,read});
   const parentReader=createTextHeldReviewReader({root,read:priorRead,reviewSha256:textHeldReview});
   const parent=JSON.parse(parentReader.read(path.resolve(root,`artifacts/material-parity/working-audit/proposals/${textHeldReview}.json`))).review;
   const joined=joinTreeFocusEvidence(parent,f=>read(path.resolve(root,f)));assert.equal(joined.sha256,treeFocusReview);

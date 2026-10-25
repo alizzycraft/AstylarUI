@@ -9,7 +9,8 @@ import { materialInteractionCases,materialProfiles,materialViewports } from './b
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const ids=['tree-item-0','tree-item-1','tree-item-2'];
 test('Tree staged registry conserves every live source proof finding and plan without writes',async t=>{
-  const {prepareTreeFocusRegistry,restoreTreeFocusRegistry,treeFocusSources,treeFocusProofTitles}=await import('./tree-focus-registration.mjs');
+  const {prepareTreeFocusRegistry,restoreTreeFocusRegistry,treeFocusSources,treeFocusProofTitles,
+    prepareTreeFocusSelection,restoreTreeFocusSelection,createTreeFocusPriorRead,treeFocusReview}=await import('./tree-focus-registration.mjs');
   const producer='tests/material-parity/input-equivalence-audit.mjs',policy='tests/material-parity/input-equivalence-policy.mjs';
   const before=readFileSync(producer,'utf8').replaceAll('\r\n','\n'),oldPolicy=readFileSync(policy,'utf8').replaceAll('\r\n','\n');
   const staged=prepareTreeFocusRegistry(before,'producer',readFileSync),stagedPolicy=prepareTreeFocusRegistry(oldPolicy,'policy',readFileSync);
@@ -33,6 +34,31 @@ test('Tree staged registry conserves every live source proof finding and plan wi
   assert.throws(()=>restoreTreeFocusRegistry(stagedPolicy+'\n// drift','policy'));
   assert.throws(()=>prepareTreeFocusRegistry(before,'producer',()=>Buffer.alloc(0)));
   assert.equal(readFileSync(producer,'utf8').replaceAll('\r\n','\n'),before);assert.equal(readFileSync(policy,'utf8').replaceAll('\r\n','\n'),oldPolicy);
+  const {spawnSync}=await import('node:child_process'),path=await import('node:path');
+  const launcherFile='scripts/export-material-input-audit-current-ancestry.mjs',runnerFile='scripts/run-material-input-audit.mjs';
+  const launcher=readFileSync(launcherFile,'utf8').replaceAll('\r\n','\n'),runner=readFileSync(runnerFile,'utf8').replaceAll('\r\n','\n');
+  const selected=prepareTreeFocusSelection(launcher,'launcher'),selectedRunner=prepareTreeFocusSelection(runner,'runner');
+  assert.equal(restoreTreeFocusSelection(selected,'launcher'),launcher);assert.equal(restoreTreeFocusSelection(selectedRunner,'runner'),runner);
+  const rootLine="const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');";
+  const run=(s,flags)=>spawnSync(process.execPath,['--input-type=module','-','--dry-run',...flags],{input:s.replace(rootLine,`const root = ${JSON.stringify(process.cwd())};`),encoding:'utf8',windowsHide:true});
+  const fresh=run(selected,['--tree-focus']);assert.equal(fresh.status,0,fresh.stderr);
+  assert.ok(JSON.parse(fresh.stdout).args.includes('--case-obligation-review-sha256='+treeFocusReview));
+  assert.deepEqual(JSON.parse(run(selected,[]).stdout),JSON.parse(run(launcher,[]).stdout));
+  for(const flag of [...launcher.matchAll(/rawRequested\.includes\('(--[^']+)'\)/g)].map(m=>m[1])){
+    const a=run(launcher,[flag]),b=run(selected,[flag]);assert.equal(a.status,0,a.stderr);assert.equal(b.status,0,b.stderr);
+    assert.deepEqual(JSON.parse(a.stdout),JSON.parse(b.stdout));assert.notEqual(run(selected,['--tree-focus',flag]).status,0);
+  }
+  const runnerTree=ts.createSourceFile(runnerFile,selectedRunner,99,true,ts.ScriptKind.JS);assert.equal(runnerTree.parseDiagnostics.length,0);let selector;
+  const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(runnerTree)==='treeFocusReaderFactory')selector=n.initializer.getText(runnerTree);ts.forEachChild(n,visit);};visit(runnerTree);assert.ok(selector);
+  const choose=new Function('options','treeFocusReview','createTreeFocusReviewReader','textHeldReaderFactory','return '+selector),newReader=()=>{},oldReader=()=>{};
+  assert.equal(choose({caseObligationReviewSha256:treeFocusReview},treeFocusReview,newReader,oldReader),newReader);
+  assert.equal(choose({caseObligationReviewSha256:'0'.repeat(64)},treeFocusReview,newReader,oldReader),oldReader);
+  const stages=new Map([[producer,staged],[policy,stagedPolicy],[launcherFile,selected],[runnerFile,selectedRunner]].map(([f,s])=>[path.resolve(f),Buffer.from(s)]));
+  const read=(f,options)=>{const bytes=stages.get(path.resolve(f));return bytes?(typeof options==='string'?bytes.toString(options):Buffer.from(bytes)):readFileSync(f,options);};
+  const priorReader=createTreeFocusPriorRead({root:process.cwd(),read});
+  for(const [f,expected]of [[producer,before],[policy,oldPolicy],[launcherFile,launcher],[runnerFile,runner]]){
+    assert.equal(priorReader(f,'utf8'),expected);const original=stages.get(path.resolve(f));stages.set(path.resolve(f),Buffer.concat([original,Buffer.from('\n// drift')]));assert.throws(()=>priorReader(f));stages.set(path.resolve(f),original);
+  }
   t.diagnostic(JSON.stringify({stagedSources:1067,stagedProofs:392,stagedFindings:200,stagedTracks:67,completePredecessorsRecovered:true,liveWrites:false,canonicalPublished:false}));
 });
 test('pending Tree findings keep authoring and public core failure scopes separate',async()=>{
