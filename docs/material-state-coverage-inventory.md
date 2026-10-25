@@ -4,6 +4,32 @@
 
 ### Current next action and publication status
 
+October25 Tree-level shared replay now strips the exact focus/selection registry
+and selector stage before existing Sort/Tree restoration. Complete shared helper
+restores SHA256d6fbdca941896c58f162c47748792183fd218015dabd8cff628979fc4d222892;
+unknown drift rejects. Direct Text-held producer and owning Tree selector controls
+pass. Initial selector check incorrectly called the lower Text-held runner entry;
+owner-corrected check passes1/1,6758.664ms in
+`focus-selection-shared-entry-owner-verified-20261025.log`. Keep preceding
+`focus-selection-shared-entry-corrected-20261025.log` failure. Full staged reader
+with the corrected helper passes1/1,147481.9026ms in
+`focus-selection-shared-full-reader-20261025.log`:18439 dependencies/2311 cases.
+Prior Text-held/Tree registration controls pass2/2,10946.3571ms in
+`focus-selection-prior-registration-controls-20261025.log` (artifact root).
+
+One bounded LIVE application attempt then exposed the separate direct Sort
+entry bypass:initial four-test integration had2 passes/2 exact-anchor failures
+in `focus-selection-live-registration-initial-20261025.log`. The four newly
+applied producer/policy/runner/launcher files were restored through their exact
+guarded inverses;no unrelated edits removed. Recovered four-control run passes
+4/4,0skip,7601.6629ms in
+`focus-selection-live-attempt-restored-controls-20261025.log`.
+Live1070/398/202/69 and canonical7a22 are unchanged;1077/407/203/70 stays prepared.
+Next reconcile createSortArrowPriorRead's direct entry BEFORE Sort restoration
+and preserve its historical raw-test population,not just the nested Tree path.
+No repeat of completed captures or full export until that entry passes. This is
+in-scope audit replay integration,not a renderer/fixture change or case promotion.
+
 October25 staged focus/selection launcher/reader routing is verified. Explicit
 `--focus-selection` selects exact ef9d31ce;default and every older supplement
 preserve their complete dry-run arguments,and mixed flags reject. Actual runner

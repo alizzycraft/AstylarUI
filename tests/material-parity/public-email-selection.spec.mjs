@@ -59,6 +59,14 @@ test('Focus selection staged registry preserves every accepted source proof find
   const stages=new Map(entries.map(([file,kind])=>[path.resolve(root,file),Buffer.from(staged[kind])]));
   const read=(file,options)=>{const bytes=stages.get(path.resolve(root,file));if(!bytes)return readFileSync(file,options);const encoding=typeof options==='string'?options:options?.encoding;return encoding?bytes.toString(encoding):Buffer.from(bytes);};
   await assert.rejects(()=>api.createFocusSelectionAuditReviewReader({root,read,reviewSha256:'0'.repeat(64)}));
+  const sharedFile='tests/material-parity/tree-focus-registration.mjs',shared=readFileSync(sharedFile,'utf8').replaceAll('\r\n','\n'),oldShared=api.restoreFocusSelectionSharedSource(shared);
+  assert.equal(api.prepareFocusSelectionSharedSource(oldShared),shared);assert.equal(api.restoreFocusSelectionSharedSource(oldShared),oldShared);
+  assert.throws(()=>api.restoreFocusSelectionSharedSource(shared+'\n// drift'));
+  const {restoreTextHeldProducer}=await import('./text-held-registration.mjs');
+  assert.equal(restoreTextHeldProducer(staged.producer),restoreTextHeldProducer(raw.producer));
+  const {createTreeFocusPriorRead,restoreTreeFocusSelection}=await import('./tree-focus-registration.mjs');
+  for(const kind of ['runner','launcher'])assert.equal(restoreTreeFocusSelection(staged[kind],kind),restoreTreeFocusSelection(raw[kind],kind));
+  const historical=createTreeFocusPriorRead({root,read});assert.equal(historical(sharedFile,'utf8'),oldShared);
   if(process.env.ASTYLAR_AUDIT_FOCUS_SELECTION_FULL==='1'){
     const reader=await api.createFocusSelectionAuditReviewReader({root,read,reviewSha256:api.focusSelectionReview});
     const {loadCaseObligationReview}=await import('../../scripts/audit-findings-store.mjs');

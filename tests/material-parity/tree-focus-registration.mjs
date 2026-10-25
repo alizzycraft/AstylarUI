@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {treeFocusFindings} from './tree-focus-findings.mjs';
 import {restoreSortArrowRegistry,restoreSortArrowSelection} from './sort-arrow-findings.mjs';
+import {restoreFocusSelectionAuditRegistry,restoreFocusSelectionAuditSelection,restoreFocusSelectionSharedSource} from './public-tab-selection-finding.mjs';
 import path from 'node:path';
 import {createTextHeldReviewReader,textHeldReview} from './text-held-registration.mjs';
 import {joinTreeFocusEvidence,treeFocusPredecessor} from '../../scripts/join-material-tree-focus-evidence.mjs';
@@ -56,6 +57,7 @@ export function prepareTreeFocusRegistry(bytes,kind,read){
   return once(text,planAnchor,planAnchor+planPrefix);
 }
 export function restoreTreeFocusRegistry(bytes,kind){
+  if(bytes.toString().includes('core-native-tab-selection-overwritten-by-control-sync')||bytes.toString().includes('"scripts/audit-material-timepicker-programmatic-focus.mjs"'))bytes=restoreFocusSelectionAuditRegistry(bytes,kind);
   if(bytes.toString().includes('fixture-sort-hover-arrow-omitted')||bytes.toString().includes('"scripts/join-material-sort-arrow-evidence.mjs"'))bytes=restoreSortArrowRegistry(bytes,kind);
   assert.ok(Object.hasOwn(prior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
   if(kind==='policy')text=once(text,definitionAnchor+(text.includes(definitionAnchor+definitionPrefix)?definitionPrefix:legacyDefinitionPrefix),definitionAnchor);
@@ -80,6 +82,7 @@ export function prepareTreeFocusSelection(bytes,kind){
   for(const [a,b]of selectionTransitions(kind))text=once(text,a,b);return text;
 }
 export function restoreTreeFocusSelection(bytes,kind){
+  if(bytes.toString().includes('--focus-selection')||bytes.toString().includes('focusSelectionReaderFactory'))bytes=restoreFocusSelectionAuditSelection(bytes,kind);
   if(bytes.toString().includes('--sort-arrow')||bytes.toString().includes('sortArrowReaderFactory'))bytes=restoreSortArrowSelection(bytes,kind);
   assert.ok(Object.hasOwn(selectionPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
   for(const [a,b]of selectionTransitions(kind).toReversed())text=once(text,b,a);assert.equal(hash(text),selectionPrior[kind]);return text;
@@ -146,6 +149,9 @@ export function createTreeFocusPriorRead({root,read}){
     ['tests/material-parity/retained-overlay-focus.spec.mjs','held-proof'],['tests/material-parity/divider-owner-context-registration.spec.mjs','divider-proof'],
     ['tests/material-parity/editing-context-registration.mjs','editing-replay']].map(([f,k])=>[path.resolve(root,f),k]));
   return (name,options)=>{
+    if(path.resolve(root,name)===path.resolve(root,'tests/material-parity/tree-focus-registration.mjs')){
+      const source=restoreFocusSelectionSharedSource(read(name)),encoding=typeof options==='string'?options:options?.encoding;return encoding?Buffer.from(source).toString(encoding):Buffer.from(source);
+    }
     const kind=paths.get(path.resolve(root,name));if(!kind)return read(name,options);
     const bytes=read(name),text=bytes.toString().replaceAll('\r\n','\n');
     if(hash(text)===(kind==='editing-replay'?editingReplayPrior:kind==='divider-proof'?dividerProofPrior:kind==='held-proof'?heldProofPrior:kind==='pending'?pendingPrior:kind==='replay'?replayPrior:prior[kind]??selectionPrior[kind]))return read(name,options);

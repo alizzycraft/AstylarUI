@@ -97,6 +97,22 @@ export function restoreFocusSelectionAuditSelection(bytes,kind){
   for(const [before,after]of selectionChanges(kind).toReversed())source=once(source,after,before);
   assert.equal(hash(source),selectionPrior[kind]);return source;
 }
+const sharedPrior='d6fbdca941896c58f162c47748792183fd218015dabd8cff628979fc4d222892';
+const sharedChanges=[
+  ["import {restoreSortArrowRegistry,restoreSortArrowSelection} from './sort-arrow-findings.mjs';","import {restoreSortArrowRegistry,restoreSortArrowSelection} from './sort-arrow-findings.mjs';\nimport {restoreFocusSelectionAuditRegistry,restoreFocusSelectionAuditSelection,restoreFocusSelectionSharedSource} from './public-tab-selection-finding.mjs';"],
+  ['export function restoreTreeFocusRegistry(bytes,kind){',"export function restoreTreeFocusRegistry(bytes,kind){\n  if(bytes.toString().includes('core-native-tab-selection-overwritten-by-control-sync')||bytes.toString().includes('\"scripts/audit-material-timepicker-programmatic-focus.mjs\"'))bytes=restoreFocusSelectionAuditRegistry(bytes,kind);"],
+  ['export function restoreTreeFocusSelection(bytes,kind){',"export function restoreTreeFocusSelection(bytes,kind){\n  if(bytes.toString().includes('--focus-selection')||bytes.toString().includes('focusSelectionReaderFactory'))bytes=restoreFocusSelectionAuditSelection(bytes,kind);"],
+  ['  return (name,options)=>{\n    const kind=paths.get',"  return (name,options)=>{\n    if(path.resolve(root,name)===path.resolve(root,'tests/material-parity/tree-focus-registration.mjs')){\n      const source=restoreFocusSelectionSharedSource(read(name)),encoding=typeof options==='string'?options:options?.encoding;return encoding?Buffer.from(source).toString(encoding):Buffer.from(source);\n    }\n    const kind=paths.get"],
+];
+export function prepareFocusSelectionSharedSource(bytes){
+  let source=bytes.toString().replaceAll('\r\n','\n');assert.equal(hash(source),sharedPrior);
+  for(const [before,after]of sharedChanges)source=once(source,before,after);return source;
+}
+export function restoreFocusSelectionSharedSource(bytes){
+  let source=bytes.toString().replaceAll('\r\n','\n');if(hash(source)===sharedPrior)return source;
+  for(const [before,after]of sharedChanges.toReversed())source=once(source,after,before);
+  assert.equal(hash(source),sharedPrior,'Complete shared replay predecessor must recover');return source;
+}
 export async function createFocusSelectionAuditReviewReader({root,read,reviewSha256}){
   assert.equal(reviewSha256,focusSelectionReview,'Only exact supplementary focus/selection review selects this reader');
   const kinds=new Map(Object.entries({
