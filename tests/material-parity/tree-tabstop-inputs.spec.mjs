@@ -8,6 +8,39 @@ import { materialInteractionCases,materialProfiles,materialViewports } from './b
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const ids=['tree-item-0','tree-item-1','tree-item-2'];
+test('pending Tree findings keep authoring and public core failure scopes separate',async()=>{
+  const {treeFocusFindings:findings}=await import('./tree-focus-findings.mjs');
+  assert.equal(findings.length,2);assert.equal(new Set(findings.map(f=>f.id)).size,2);
+  assert.deepEqual(findings.map(f=>f.classification),['application-plugin-authoring-defect','confirmed-core-renderer-defect']);
+  assert.equal(findings[0].observation.cases,52);assert.equal(findings[0].observation.differingPointerCases,24);
+  assert.equal(findings[1].observation.pairs,1);assert.match(findings[1].introducedBy,/not yet established/);
+  for(const r of [findings[0].evidence.original,findings[0].evidence.oneActualDOMContext,findings[1].publicReproduction,findings[1].causalTrace])assert.equal(hash(readFileSync(r.file)),r.sha256);
+  assert.match(findings[1].boundary,/not all Material cases,current-source equivalence/);
+});
+test('Tree partial evidence join conserves its exact predecessor and all remaining case work',async t=>{
+  const path=await import('node:path');
+  const {createTextHeldReviewReader,textHeldReview}=await import('./text-held-registration.mjs');
+  const {joinTreeFocusEvidence,restoreTreeFocusEvidence,treeFocusPredecessor}=await import('../../scripts/join-material-tree-focus-evidence.mjs');
+  assert.equal(treeFocusPredecessor,textHeldReview);const root=process.cwd();
+  const reader=createTextHeldReviewReader({root,read:readFileSync,reviewSha256:textHeldReview});
+  const parent=JSON.parse(reader.read(path.resolve(root,`artifacts/material-parity/working-audit/proposals/${textHeldReview}.json`))).review;
+  const result=joinTreeFocusEvidence(parent);assert.equal(result.cases,52);assert.equal(result.addedChildren,53);
+  assert.deepEqual(restoreTreeFocusEvidence(result.review),parent);
+  assert.equal(result.review.groups.length,parent.groups.length);
+  let changed=0,failures=0;
+  for(let i=0;i<parent.groups.length;i++){
+    const a=parent.groups[i],b=result.review.groups[i];assert.equal(b.inspection,a.inspection);assert.equal(b.currentRendering,a.currentRendering);
+    if(a.family!=='tree'){assert.strictEqual(a,b);continue;}changed++;
+    for(const k of Object.keys(a.obligations)){
+      assert.equal(b.obligations[k].disposition,a.obligations[k].disposition);
+      assert.deepEqual(b.obligations[k].remaining,a.obligations[k].remaining);
+    }
+    if(b.obligations.inputStyleStructure.supplementaryTreeTabStopInputs.finding)failures++;
+  }
+  assert.equal(changed,52);assert.equal(failures,24);
+  t.diagnostic(JSON.stringify({predecessor:treeFocusPredecessor,review:result.sha256,cases:52,classifiedInputFailures:24,children:53,
+    canonicalPublished:false,currentRenderingAccepted:false,boundary:'Partial input-property evidence only;all parent dispositions and remaining work preserve.'}));
+});
 test('one equal-input Tab-exit trace binds pointer-move canvas tab restoration and semantic refocus',()=>{
   const bytes=readFileSync('artifacts/material-parity/public-tree-tab-exit-trace-20261025/latest-report.json');
   assert.equal(hash(bytes),'6ec16965fabd291c2bda981beaecdab35beeb31e060b5ec82648d1dba8a0500f');

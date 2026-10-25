@@ -4,6 +4,30 @@
 
 ### Current next action and publication status
 
+October25 Tree consolidation is a reversible pending partial review,not another
+capture or live policy change. join-material-tree-focus-evidence.mjs starts from
+exact45d3fb07,authenticates original52 Tree input-property records and the one
+raw-owner report,and adds53 children. Result review digest
+6ea59073771388cec874ad6985e38823f68d1d72ab7c37d72cb61c5e11a0e411.
+Integration passes1/1,exit0,66942.1878ms (test66263.8631ms):all52 cases retain
+their dispositions,remaining work and current-rendering flags;24 pointer input
+failures remain classified. Removing precisely the new children recovers the
+complete45d3fb07 predecessor. The result is virtual/in-memory;no large physical
+proposal or canonical generation was created. Do not repeat this parent replay
+for prose or claim that adding partial children fully inspects52 cases.
+
+Pending machine-readable tree-focus-findings.mjs holds two explicitly separate
+entries:fixture-tree-tabstop-remains-first-after-pointer-focus and
+core-pointer-move-restores-canvas-tabstop-and-recaptures-backward-exit. Their
+focused classification/receipt test passes1/1,exit0,535.9807ms. Core historical
+introduction remains unknown,current-source equality is not claimed,and general
+public evidence is not mapped as a substitute for every Material case. Both
+entries and the new sources/proofs remain outside live198 findings/1060 sources/
+383 proofs/65 tracks. Next integrate this bounded batch through the existing
+source/policy conservation and exact reader/selection mechanism;keep accepted
+canonical8848 historical until its normal publication gates. No renderer or
+fixture change. Upload/headroom prerequisites and all final gates remain open.
+
 October25 one-context causal trace answers the pending backward Tab-exit question.
 Public equal inputs and real pointer/Tab/Shift+Tab actions are unchanged;native
 focus and tabindex setters delegate unchanged and restore at disposal. Candidate
