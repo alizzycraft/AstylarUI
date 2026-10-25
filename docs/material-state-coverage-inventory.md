@@ -4,6 +4,34 @@
 
 ### Current next action and publication status
 
+October25 next Sort input-mapping question reveals a NEW pending plugin vector
+geometry defect,not a cursor/keyboard recapture. Authenticated originalab42dbec
+light/DPR1 focus and activate trees retain one SVG path (viewBox0 -960 960 960,
+24px render size) and candidate asc opacity.54/1,matching native arrow-owner
+opacity. Parsing the exact path into centered CSS space gives area49.08px².
+Executing current materialSortArrowTriangles yields five triangles with matching
+bounds but summed area64.48px² (not union area). Point(2,-1.5) is outside native
+fill but inside one candidate triangle;point(0,-2) is inside native fill but
+inside TWO candidate triangles. The existing Angular geometry check only asserts
+15 vertices,bounds and descending negation,and therefore misses this discrepancy.
+
+Pending ID:fixture-sort-arrow-triangulation-fills-notch-and-overdraws;
+application-plugin-authoring-defect,owner Material sort-arrow CSS-space vector
+paint geometry. First demonstrated divergence is current plugin geometry versus
+retained native path,not final projection. Current complete plugin source SHA256
+dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e.
+Focused sort-arrow-geometry.spec.mjs passes1/1,exit0,1563.1624ms
+(assertion1167.8092ms). Retained candidate data do NOT establish capture-time plugin
+source equivalence;GPU alpha blending,historical/current screenshot attribution,
+other contexts and whole-case acceptance remain unproven. No new browser run.
+
+The proof is a standalone pending addition,outside frozen1067/392/200/67. Do not
+change widths,offsets,styles or reference path to hide it. Next authenticate the
+captured plugin implementation if reusable evidence exists,and inspect history;
+only then decide whether another bounded raster check closes a real gap. Keep
+the separate Sort typography,focus-border and authored keyboard findings intact.
+No renderer/plugin implementation or canonical generation changed.
+
 October25 Tab-exit source-history question is bounded by executable ancestry
 checks,not another browser run. dbe4d8ed1becde19f8036bed8479c971b1e95c58
 introduces connectInteractions,queueFocusSync,syncFocus;its exact parent

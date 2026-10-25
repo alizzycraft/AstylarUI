@@ -1,5 +1,19 @@
 # Material audit: evidence-led implementation priorities
 
+## Pending Sort arrow vector input defect,October25
+
+The current plugin's five triangles do not reproduce the retained native SVG
+path despite matching bounds. Exact CSS-space witnesses in
+sort-arrow-geometry.spec.mjs show filled notch area outside the native path and
+double coverage inside it. Native polygon area49.08px² versus summed triangle
+area64.48px² is diagnostic,not a union-area or raster metric. Focus inputs use
+opacity.54,so overdraw may also affect blending,but that GPU effect is unproven.
+Future work must preserve the same native path,dimensions and CSS-space intent
+and use faithful nonoverlapping vector geometry;do not compensate with scale,
+offset,color or opacity changes. This is application-plugin paint ownership,
+not established core projection failure. Capture-time plugin equivalence,history
+and final raster verification remain open. Audit only;no fix is authorized here.
+
 ## Pending Tree tab-stop input delta,October25
 
 The followup causal trace now confirms the installed-package backward-exit
