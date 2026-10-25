@@ -4,6 +4,35 @@
 
 ### Current next action and publication status
 
+October25 Sort staged selection/reader integration now authenticates18404
+dependencies/2311 cases for exact8554f8ef,with explicit --sort-arrow prepared
+IN MEMORY only. Default and every older selection preserve;combined supplement
+flags and unknown review IDs reject. Four whole-source registry/selection
+reversals recover the exact Tree-stage inputs. Staged census is1070 sources/
+398 proofs/202 findings/69 tracks (one additional reader proof since the prior
+397 checkpoint). Live1067/392/200/67,actual launcher and canonical8848 preserve.
+
+Initial six-test run had5 passes/1 replay failure,not6/6:
+sort-staged-reader-integration-20261025.log. Tree replay tried to strip newer
+markers from already Editing-restored Divider proof035e13aa. Its exact known
+predecessor is now accepted idempotently;the regression derives those bytes
+through the owning inverse and rejects drift. A second fast attempt exposed an
+encoding-blind synthetic read callback,corrected without changing production
+evidence (sort-staged-reader-corrected-20261025.log). Targeted actual dependency
+check passes1/1,exit0,127765.6159ms in sort-staged-reader-verified-20261025.log;
+older Tree registry conservation passes1/1,5962.3034ms in
+sort-tree-replay-conservation-20261025.log. All logs are under
+artifacts/material-parity and retained;do not call the initial run wholly green.
+No new capture or physical full proposal. Next reconcile shared collector entry
+and live old-source assertions before applying the prepared registry/selector
+batch;do not rerun this unchanged18404-dependency check for prose. Current paint,
+capture-time plugin identity,case closure and all final gates remain open.
+
+Publication prerequisite is resolved for the preceding batch:normal HTTPS push
+completed and independent ls-remote matches791d2e2ea7f1f0e8dd03f210830676e6b8b7b137
+on codex/material-audit-alignment-integration. GitHub's93.71MB-file warning was
+nonfatal. This is Git publication,not a new canonical generation or audit pass.
+
 October25 resumed Sort integration:in-memory registry staging now conserves the
 complete live1067-source/392-proof/200-finding/67-track predecessor and proposes
 1070/397/202/69. The existing pending finding module owns preparation/reversal;

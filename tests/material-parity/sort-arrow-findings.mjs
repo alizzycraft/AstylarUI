@@ -1,6 +1,9 @@
 // Pending findings;the frozen live policy/source inventory is not changed here.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import path from 'node:path';
+import {createTreeFocusReviewReader,treeFocusReview} from './tree-focus-registration.mjs';
+import {joinSortArrowEvidence,sortArrowPredecessor} from '../../scripts/join-material-sort-arrow-evidence.mjs';
 const original={file:'artifacts/material-parity/current-full-20261005/latest-report.json',sha256:'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62'};
 export const sortArrowFindings=Object.freeze([
   Object.freeze({
@@ -45,6 +48,7 @@ export const sortArrowSources=Object.freeze([
   'tests/material-parity/sort-arrow-geometry.spec.mjs',
 ]);
 export const sortArrowProofTitles=Object.freeze([
+  'Sort staged selection and reader preserve older routes and authenticate the exact successor',
   'Sort staged registry preserves all existing sources proofs findings and plans',
   'Sort arrow partial join conserves the complete Tree predecessor and all remaining work',
   'pending Sort arrow findings preserve separate state and vector ownership',
@@ -75,4 +79,48 @@ export function restoreSortArrowRegistry(bytes,kind){
   assert.ok(Object.hasOwn(registryPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
   for(const [anchor,prefix]of additions[kind])text=once(text,anchor+prefix,anchor);
   assert.equal(digest(text),registryPrior[kind]);return text;
+}
+
+export const sortArrowReview='8554f8ef7d18ee02a80a409eddb7f96a1aad188983d124d49f9c9d556799f71e';
+const selectionPrior={launcher:'29bab606f3637f429f9bfa248001966100e48dd8ac8be8a20810606532a7a96c',runner:'9761500b238b1af13e030157af2c7414bc6091353fd96629bdcc75cc03c89127'};
+const selectionChanges=kind=>kind==='launcher'?[
+  ["const treeFocus = rawRequested.includes('--tree-focus');","const sortArrow = rawRequested.includes('--sort-arrow');\nassert.ok(!sortArrow || rawRequested.every(argument => ['--sort-arrow', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\nconst treeFocus = rawRequested.includes('--tree-focus');"],
+  ['const requested = rawRequested.filter(',"const requested = rawRequested.filter(argument => argument !== '--sort-arrow').filter("],
+  ['|--tree-focus]','|--tree-focus|--sort-arrow]'],
+  ['for (const [name, relative] of Object.entries(inputs)) {',`if (sortArrow) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${sortArrowReview}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+  ['textHeld || treeFocus)','textHeld || treeFocus || sortArrow)'],
+  ["if (requested.includes('--dry-run'))",`if (sortArrow) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${sortArrowReview}';\nif (requested.includes('--dry-run'))`],
+]:[
+  ["import { treeFocusReview, createTreeFocusReviewReader } from '../tests/material-parity/tree-focus-registration.mjs';","import { treeFocusReview, createTreeFocusReviewReader } from '../tests/material-parity/tree-focus-registration.mjs';\nimport { sortArrowReview, createSortArrowReviewReader } from '../tests/material-parity/sort-arrow-findings.mjs';"],
+  ['const applicability=treeFocusReaderFactory?.','const sortArrowReaderFactory = options.caseObligationReviewSha256===sortArrowReview ? createSortArrowReviewReader : treeFocusReaderFactory;\n    const applicability=sortArrowReaderFactory?.'],
+];
+export function prepareSortArrowSelection(bytes,kind){
+  assert.ok(Object.hasOwn(selectionPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');assert.equal(digest(text),selectionPrior[kind]);
+  for(const [a,b]of selectionChanges(kind))text=once(text,a,b);return text;
+}
+export function restoreSortArrowSelection(bytes,kind){
+  assert.ok(Object.hasOwn(selectionPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
+  for(const [a,b]of selectionChanges(kind).toReversed())text=once(text,b,a);assert.equal(digest(text),selectionPrior[kind]);return text;
+}
+export function createSortArrowPriorRead({root,read}){
+  const kinds=new Map(Object.entries({
+    'tests/material-parity/input-equivalence-audit.mjs':'producer','tests/material-parity/input-equivalence-policy.mjs':'policy',
+    'scripts/run-material-input-audit.mjs':'runner','scripts/export-material-input-audit-current-ancestry.mjs':'launcher',
+  }).map(([file,kind])=>[path.resolve(root,file),kind]));
+  return(name,options)=>{
+    const kind=kinds.get(path.resolve(root,name));if(!kind)return read(name,options);
+    const bytes=read(name),text=bytes.toString().replaceAll('\r\n','\n');
+    const restored=digest(text)===(registryPrior[kind]??selectionPrior[kind])?text:Object.hasOwn(registryPrior,kind)?restoreSortArrowRegistry(bytes,kind):restoreSortArrowSelection(bytes,kind);
+    const encoding=typeof options==='string'?options:options?.encoding;return encoding?Buffer.from(restored).toString(encoding):Buffer.from(restored);
+  };
+}
+export function createSortArrowReviewReader({root,read,reviewSha256}){
+  assert.equal(reviewSha256,sortArrowReview,'Only exact Sort partial review selects this reader');assert.equal(sortArrowPredecessor,treeFocusReview);
+  const prior=createTreeFocusReviewReader({root,read:createSortArrowPriorRead({root,read}),reviewSha256:treeFocusReview});
+  const parent=JSON.parse(prior.read(path.resolve(root,`artifacts/material-parity/working-audit/proposals/${treeFocusReview}.json`))).review;
+  const joined=joinSortArrowEvidence(parent,f=>read(path.resolve(root,f)));assert.equal(joined.sha256,sortArrowReview);
+  const file=path.resolve(root,`artifacts/material-parity/working-audit/proposals/${sortArrowReview}.json`),bytes=Buffer.from(JSON.stringify({status:'proposal-not-canonical',sha256:sortArrowReview,review:joined.review}));
+  return{read(name,options){if(path.resolve(root,name)!==file)return prior.read(name,options);const encoding=typeof options==='string'?options:options?.encoding;return encoding?bytes.toString(encoding):Buffer.from(bytes);},
+    sourceApplicability:{mode:'exact-sort-arrow-partial-review',reviewSha256,addedChildren:62,restoredSourcePaths:4,predecessorApplicability:prior.sourceApplicability,
+      boundary:'Four exact whole-source registry/selection restorations only. Historical rendering and capture-time plugin identity remain unverified;not canonical publication or case closure.'}};
 }

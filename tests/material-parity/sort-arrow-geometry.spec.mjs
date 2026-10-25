@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
+import {spawnSync} from 'node:child_process';
+import path from 'node:path';
 import ts from 'typescript';
 import {PNG} from 'pngjs';
 import {evaluateFocusedRaster} from './focused-raster-metrics.mjs';
@@ -35,7 +37,42 @@ test('Sort staged registry preserves all existing sources proofs findings and pl
   const oldPolicy=arrays(before.policy).definitions,newPolicy=arrays(staged.policy).definitions;
   assert.equal(oldPolicy.length,200);assert.equal(newPolicy.length,202);assert.deepEqual(newPolicy.slice(2),oldPolicy);
   for(const entry of newPolicy.slice(0,2)){const f=new Function('return '+entry)();assert.equal([...readFileSync(f.file,'utf8').matchAll(new RegExp(f.pattern,'g'))].length,1);assert.ok(f.justification);}
-  t.diagnostic(JSON.stringify({stagedSources:1070,stagedProofs:397,stagedFindings:202,stagedTracks:69,completePredecessorRecovered:true,liveWrites:false,readerReconciled:false,canonicalPublished:false}));
+  t.diagnostic(JSON.stringify({stagedSources:1070,stagedProofs:398,stagedFindings:202,stagedTracks:69,completePredecessorRecovered:true,liveWrites:false,readerReconciled:false,canonicalPublished:false}));
+});
+test('Sort staged selection and reader preserve older routes and authenticate the exact successor',async t=>{
+  const api=await import('./sort-arrow-findings.mjs'),root=process.cwd(),staged=new Map();
+  const entries=[['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy'],['scripts/run-material-input-audit.mjs','runner'],['scripts/export-material-input-audit-current-ancestry.mjs','launcher']];
+  for(const [file,kind]of entries){const bytes=readFileSync(file),prepare=['producer','policy'].includes(kind)?api.prepareSortArrowRegistry:api.prepareSortArrowSelection;
+    staged.set(path.resolve(file),Buffer.from(prepare(bytes,kind,readFileSync)));}
+  const read=(file,options)=>{const b=staged.get(path.resolve(file));if(!b)return readFileSync(file,options);const encoding=typeof options==='string'?options:options?.encoding;return encoding?b.toString(encoding):Buffer.from(b);};
+  const prior=api.createSortArrowPriorRead({root,read});for(const [file]of entries){assert.equal(prior(file,'utf8'),readFileSync(file,'utf8').replaceAll('\r\n','\n'));
+    const key=path.resolve(file),bytes=staged.get(key);staged.set(key,Buffer.concat([bytes,Buffer.from('\n// drift')]));assert.throws(()=>prior(file));staged.set(key,bytes);}
+  // Derive the intermediate through its owning inverse, then prove repeated
+  // Tree routing preserves it and still rejects unrecognized source drift.
+  const {restoreEditingLegacySource}=await import('./editing-context-registration.mjs');
+  const {createTreeFocusPriorRead}=await import('./tree-focus-registration.mjs');
+  const divider='tests/material-parity/divider-owner-context-registration.spec.mjs',restoredDivider=restoreEditingLegacySource(readFileSync(divider),'proof');
+  assert.equal(hash(restoredDivider),'035e13aab28532b8e832992c1027ab15d340193d5940df46af5917e0a67380e7');
+  const repeated=createTreeFocusPriorRead({root,read:(_file,encoding)=>encoding?restoredDivider:Buffer.from(restoredDivider)});assert.equal(repeated(divider,'utf8'),restoredDivider);
+  assert.throws(()=>createTreeFocusPriorRead({root,read:()=>Buffer.from(restoredDivider+'\n// drift')})(divider));
+  const launcherFile=entries[3][0],before=readFileSync(launcherFile,'utf8').replaceAll('\r\n','\n'),after=read(launcherFile,'utf8');
+  const rootLine="const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');";
+  const run=(source,flags)=>spawnSync(process.execPath,['--input-type=module','-','--dry-run',...flags],{input:source.replace(rootLine,`const root = ${JSON.stringify(root)};`),encoding:'utf8',windowsHide:true});
+  const selected=run(after,['--sort-arrow']);assert.equal(selected.status,0,selected.stderr);assert.ok(JSON.parse(selected.stdout).args.includes('--case-obligation-review-sha256='+api.sortArrowReview));
+  assert.deepEqual(JSON.parse(run(after,[]).stdout),JSON.parse(run(before,[]).stdout));
+  for(const flag of [...before.matchAll(/rawRequested\.includes\('(--[^']+)'\)/g)].map(m=>m[1])){
+    const a=run(before,[flag]),b=run(after,[flag]);assert.equal(a.status,0,a.stderr);assert.equal(b.status,0,b.stderr);assert.deepEqual(JSON.parse(a.stdout),JSON.parse(b.stdout));assert.notEqual(run(after,['--sort-arrow',flag]).status,0);}
+  const runner=ts.createSourceFile('runner.mjs',read(entries[2][0],'utf8'),99,true,ts.ScriptKind.JS);assert.equal(runner.parseDiagnostics.length,0);let selector;
+  const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(runner)==='sortArrowReaderFactory')selector=n.initializer.getText(runner);ts.forEachChild(n,visit);};visit(runner);assert.ok(selector);
+  const choose=new Function('options','sortArrowReview','createSortArrowReviewReader','treeFocusReaderFactory','return '+selector),fresh=()=>{},old=()=>{};
+  assert.equal(choose({caseObligationReviewSha256:api.sortArrowReview},api.sortArrowReview,fresh,old),fresh);assert.equal(choose({caseObligationReviewSha256:'0'.repeat(64)},api.sortArrowReview,fresh,old),old);
+  assert.throws(()=>api.createSortArrowReviewReader({root,read,reviewSha256:'0'.repeat(64)}));
+  const reader=api.createSortArrowReviewReader({root,read,reviewSha256:api.sortArrowReview}),file=`artifacts/material-parity/working-audit/proposals/${api.sortArrowReview}.json`;
+  const review=JSON.parse(reader.read(file)).review;assert.equal(hash(JSON.stringify(review)),api.sortArrowReview);
+  const {loadCaseObligationReview}=await import('../../scripts/audit-findings-store.mjs');
+  const loaded=loadCaseObligationReview(file,api.sortArrowReview,review.groups.map(g=>g.case),{root,read:reader.read});
+  assert.equal(loaded.cases.length,2311);assert.equal(loaded.inspectionComplete,false);assert.equal(loaded.currentRenderingAccepted,false);
+  t.diagnostic(JSON.stringify({review:api.sortArrowReview,authenticatedDependencies:loaded.evidenceFingerprints.length,restoredSourcePaths:4,stagedOnly:true,canonicalPublished:false}));
 });
 test('Sort arrow partial join conserves the complete Tree predecessor and all remaining work',async t=>{
   const base='artifacts/material-parity/working-audit',pointer=JSON.parse(readFileSync(base+'/current.json'));

@@ -113,6 +113,9 @@ export function restoreTreeFocusPendingSource(bytes){
   text=once(text,pendingExportHook,'');assert.equal(hash(text),pendingPrior);return text;
 }
 const inheritedStages={
+  // Editing-context replay can pass its fully restored Divider proof through
+  // this reader again. Accept that exact predecessor, never marker absence.
+  'divider-proof':['035e13aab28532b8e832992c1027ab15d340193d5940df46af5917e0a67380e7'],
   policy:['cbf641365e8ab55748befc3e59c283e30eadab314519c8f9fbf7f5647f4a7b30'],
   producer:['036c7e1d05923920d4c6ebacfc916ca8a759214bd45cb4c9b8f917d632b233b1','ec5be8ce8f6a47371e22b4c041abcc677013d9263834edc4a6ae4b94d07c906d','d791949cfe8a3821d76250379e0c68795759d2f88650ad3414ceeaa7dbd52b17'],
   launcher:['c6fa9144b52a28eba0d001b4a70f85b7c30fda3987df79a53f7b208c18989a82','5168a9b9165fdae234bd90b1db314923a385bbca52b39f536d649dcac30ce955','625e585f51d670cceb52a2eaa0600c70d6051d91c7c743bed1ad4e71f2f6673c'],
