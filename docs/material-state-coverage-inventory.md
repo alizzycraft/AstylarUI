@@ -4,6 +4,36 @@
 
 ### Current next action and publication status
 
+October25 implementation handoff consolidation:the direct text-input early-
+release witness extends existing gesture track1,not a duplicate new defect.
+Future core work must preserve native held focus AND gesture lifetime;blanket
+semantic-focus deferral,swallowing genuine cancel/release and plugin-owned
+transactions are excluded. Existing equal-input button/range proofs remain
+authoritative in their own scope. No new capture or renderer/fixture edit needed
+for this plan reconciliation;the existing three focused assertions already prove
+the bounded facts. Direct text holds are added to the future regression matrix.
+
+Source-fingerprint correction for the current working increment:the accepted
+generated report already registers divider-original-crop-provenance.spec.mjs
+(producer source entry plus five proof declarations). Its post-export geometric
+model assertions therefore change an INVENTORIED source,not wholly standalone
+inputs outside1055/378. Accepted8848 remains a validated historical snapshot;
+do not describe its source vector as equal to current working inputs. Reconcile
+that bounded spec change and its requirement JSON at the next coherent inventory/
+export milestone. New held-capture adapters/proofs also require explicit census
+review before canonical inclusion. No unchanged full export/check was rerun.
+Bounded source conservation now proves the complete accepted Divider proof
+recovers by removing only its31-line projected-model assertion block. Accepted
+normalized SHA9ca785898fa39aed4349afb5705ea5d782f10f7a8999dc3241be93dd49948f57
+matches the conserved export source entry;current is
+89891611696bbab5c8511793a34d97ea3406d081f4bf3b514e165e9e544e7745.
+The requirement JSON recovers completely after removing only its22-line model
+property:accepted dd5e4496fc416a0599007cedf6fb4edc74f0f6610055fdd1ddc8ab7bcc0b7bf1,
+current7a90b3708d6a48428c34602d5ca8824f7fb43502fa689aca99cae9673a7d174d.
+Both checks are read-only,LF-normalized whole-source comparisons to4b37d857;
+they do not overwrite receipts or imply current canonical equality. Prior
+requirement lists/classifications remain byte-conserved through those additions.
+
 October25 one-case causal followup resolves the extra canvas handoff question:
 input/light/desktop-DPR1 trace records semantic INPUT focus followed by Babylon
 `_pointerBlurEvent` invoking `_onPointerUp`,then public input-control pointerup

@@ -1,5 +1,32 @@
 # Material audit: evidence-led implementation priorities
 
+## October25 held-input extension of the existing gesture track
+
+Track1 below remains the owner;do not create a separate Material input fix.
+One retained-build input/light/desktop-DPR1 trace now establishes semantic INPUT
+focus -> canvas blur -> Babylon `_pointerBlurEvent` device release -> public
+`pointerup`/`click` before actual native release. Active INPUT at the sampled
+endpoint does not establish gesture continuity. Five focus-call stacks bind to
+authenticated served instructions;see `text-held-event-order-20261025` (report
+SHA2567a1ec887eb360d636a43585e739155d41b011cb7e73589da902df7725a8e222c)
+and the existing retained-overlay-focus assertions. The16-context raw-owner run
+only establishes focused endpoints and canvas handoffs;it is not16 causal traces.
+
+The immediate trigger is semantic focus during the text-control hold;do not
+claim a compatible update caused this particular trace. The earlier public
+button/range reductions remain the general equal-input proofs. Preserve their
+scope,original failures and the distinction from delayed-native-focus defects.
+
+The future core correction must preserve both native semantic focus and real
+gesture lifetime. Blanket deferral of native focus until release is not a
+solution to the independently proven held-focus discrepancy. Likewise,do not
+swallow genuine release/cancel,disable the semantic bridge,or make the plugin
+own a competing input transaction. Extend the existing acceptance matrix with
+direct text-input pointer holds,not just public reuse/rebuild updates;assert
+native and public event order,pressed identity,selection and held paint while
+retaining cancellation/removal/disable/capture/multiple-surface coverage. This
+is a future implementation dependency,not renderer-fix authorization in the audit.
+
 ## Pending plan delta — block alignment, October25
 
 The reversible editing-context registration now includes these two entries in
@@ -19638,6 +19665,11 @@ updates and multiple surfaces. Verify native events, public events, pressed
 identity and held paint at each boundary. Revisit the earlier pointer-focus
 finding (inventory item 17) with this evidence; simply removing its transaction
 guard could reproduce the proven premature release.
+
+The October25 direct text-input witness above shows why this invariant also
+needs coverage outside compatible-update actions. Correct native focus at a
+sampled endpoint is not acceptance when public release/click already occurred
+under a held native pointer. Keep the two focus/gesture requirements together.
 
 ## 2. Route release to the captured owner
 
