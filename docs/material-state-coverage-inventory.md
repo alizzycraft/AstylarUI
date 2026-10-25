@@ -9,6 +9,23 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Publication blocker resolved for committed local registration:one actual HTTPS
+push exits0 and independent ls-remote exactly matches local
+c498f80f5fc2ba601628c26fb71fda9ef314d396 on
+codex/material-audit-alignment-integration. GitHub's50MB recommendation warnings
+are nonfatal;all committed work throughc498f80f is now remote. The transfer took
+several minutes and pack/send counters advanced;do not conflate the earlier dry
+run or historical408 failures with this verified result. Retain publication log
+pair per retention ledger. No credentials/trust/configuration changed.
+
+D: free940068864 bytes,C:1692508160 at verification. Next planned canonical
+milestone can now proceed after write-headroom/baseline preservation checks:
+export exactregistered043361b0,conserve against accepted88be4d47,independent cold
+validation and isolated/accepted import. No completed source/root-cause/browser
+investigation needs restarting. Canonical and all inspection/current-rendering
+statuses remain unchanged until those gates pass;successful push is not audit
+completion or permission to alter renderer/fixtures.
+
 Editing-context batch is now LIVE LOCALLY:1055 unique existing source/evidence
 paths,378 proof declarations,198 findings and65 plan tracks. Explicit
 --editing-context selects exact043361b0 path/digest through actual launcher;

@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+October25 publication prerequisite changed:actual HTTPS push completed and an
+independent remote lookup matchesc498f80f on codex/material-audit-alignment-integration.
+GitHub large-file warnings were nonfatal. D: now has940068864 bytes free;the old
+transport/134MB-headroom blocker is historical,not a reason to repeat upload
+diagnostics. Proceed with one planned canonical export/conservation/cold/import
+milestone for registered043361b0,retaining accepted88be4d47 until every gate passes.
+Recheck actual space before writes;no evidence/Git cleanup or renderer fix implied.
+
 October25 editing-context batch is now LOCALLY REGISTERED at1055 sources/378
 proof declarations/198 findings and65 plan tracks. Explicit --editing-context
 selects043361b0;default and older selections preserve. Complete1041/365/63-plan

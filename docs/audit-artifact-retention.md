@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep editing-registration-publication-20261025 log/stderr pair:actual HTTPS
+push exits0 and independent remote lookup matchesc498f80f. Stdout empty;stderr
+1992 bytes,SHAcec9154c3935cfd5173468bd4819c9a7fcffd9f03ddcc2888724683af7d9556e.
+Large-file warnings do not negate the verified ref update. Earlier408 failures
+remain historical evidence,not current proof that transport is broken.
+
 Keep editing-live-registration-integration-20261025 and
 editing-live-registration-corrected-boundary-20261025 log/stderr pairs. First
 run18/19 with one unadapted raw-current runner assertion;full18397-dependency
