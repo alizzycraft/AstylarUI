@@ -1,5 +1,16 @@
 # Efficient Material input-audit workflow
 
+October25 editing-context batch is now LOCALLY REGISTERED at1055 sources/378
+proof declarations/198 findings and65 plan tracks. Explicit --editing-context
+selects043361b0;default and older selections preserve. Complete1041/365/63-plan
+predecessor and five exact old-source transitions recover. Initial19-test live
+integration had18 passes/one raw-versus-prior runner assertion failure;the exact
+correction passes the affected test plus two registration checks. Full18397-
+dependency/2311-case loader passed in that integration. Retain both logs;do not
+describe the initial run as19/19. This is not canonical publication or final
+acceptance;88be4d47 remains canonical and original gates stay open. Freeze the
+new coherent local batch rather than recapturing for metadata changes.
+
 Preserve equal rendering inputs and root-cause investigation. Do not compensate
 for renderer defects with different fixture styles. These workflow changes do not
 approve existing findings, finish the audit, or authorize renderer fixes.

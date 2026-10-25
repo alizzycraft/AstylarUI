@@ -77,7 +77,11 @@ export function restoreEditingLegacySource(source,kind){
   let text=source.toString().replaceAll('\r\n','\n');
   text=once(text,"import { createEditingContextPriorRead } from './editing-context-registration.mjs';\n",'');
   if(kind==='registration')text=once(text,'export function createDividerOwnerContextPriorRead({root,read}){\n  read=createEditingContextPriorRead({root,read});\n','export function createDividerOwnerContextPriorRead({root,read}){\n');
-  else{assert.equal(kind,'proof');text=once(text,"assert.equal(createEditingContextPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8'),staged,", "assert.equal(bytes.toString().replaceAll('\\r\\n','\\n'),staged,");}
+  else{
+    assert.equal(kind,'proof');text=once(text,"assert.equal(createEditingContextPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8'),staged,", "assert.equal(bytes.toString().replaceAll('\\r\\n','\\n'),staged,");
+    const expression="createEditingContextPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8')";assert.equal(text.split(expression).length,5);
+    text=text.replaceAll(expression,"readFileSync(file,'utf8').replaceAll('\\r\\n','\\n')");
+  }
   assert.equal(hash(text),editingLegacyPrior[kind]);return text;
 }
 export const editingSelectionPrior=Object.freeze({launcher:'5168a9b9165fdae234bd90b1db314923a385bbca52b39f536d649dcac30ce955',runner:'34f44830880417b629269d5782131dd9c84c149103b52628ae227573f5c9a005'});

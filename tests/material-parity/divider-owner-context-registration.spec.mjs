@@ -34,7 +34,7 @@ test('Divider context staged producer conserves all1028 sources and353 proofs wi
 });
 
 test('Divider context staged launcher selects exact review and preserves every older supplement',()=>{
-  const file='scripts/export-material-input-audit-current-ancestry.mjs',live=readFileSync(file,'utf8').replaceAll('\r\n','\n'),original=conservedRead(file,'utf8'),staged=prepareDividerOwnerContextSelection(original,'launcher');
+  const file='scripts/export-material-input-audit-current-ancestry.mjs',live=createEditingContextPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8'),original=conservedRead(file,'utf8'),staged=prepareDividerOwnerContextSelection(original,'launcher');
   assert.equal(live,staged);
   assert.equal(restoreDividerOwnerContextSelection(staged,'launcher'),original);
   const rootLine="const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');";
@@ -46,10 +46,10 @@ test('Divider context staged launcher selects exact review and preserves every o
     assert.notEqual(run(staged,['--divider-owner-context',flag]).status,0);const before=run(original,[flag]),after=run(staged,[flag]);assert.equal(before.status,0,before.stderr);assert.equal(after.status,0,after.stderr);assert.deepEqual(JSON.parse(after.stdout),JSON.parse(before.stdout));
   }
   assert.deepEqual(JSON.parse(run(staged,[]).stdout),JSON.parse(run(original,[]).stdout));
-  assert.throws(()=>restoreDividerOwnerContextSelection(staged+'\n// drift','launcher'));assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),live);
+  assert.throws(()=>restoreDividerOwnerContextSelection(staged+'\n// drift','launcher'));assert.equal(createEditingContextPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8'),live);
 });
 test('Divider context staged runner routes only exact digest to the new reader',()=>{
-  const file='scripts/run-material-input-audit.mjs',live=readFileSync(file,'utf8').replaceAll('\r\n','\n'),original=conservedRead(file,'utf8'),staged=prepareDividerOwnerContextSelection(original,'runner');
+  const file='scripts/run-material-input-audit.mjs',live=createEditingContextPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8'),original=conservedRead(file,'utf8'),staged=prepareDividerOwnerContextSelection(original,'runner');
   assert.equal(live,staged);
   assert.equal(restoreDividerOwnerContextSelection(staged,'runner'),original);
   const ast=ts.createSourceFile(file,staged,99,true,ts.ScriptKind.JS);assert.equal(ast.parseDiagnostics.length,0);let selector;
@@ -57,7 +57,7 @@ test('Divider context staged runner routes only exact digest to the new reader',
   const choose=new Function('options','dividerOwnerContextReview','createDividerOwnerContextReviewReader','menuSelectReaderFactory','return '+selector),next=()=>{},prior=()=>{};
   assert.equal(choose({caseObligationReviewSha256:dividerOwnerContextReview},dividerOwnerContextReview,next,prior),next);
   assert.equal(choose({caseObligationReviewSha256:'0'.repeat(64)},dividerOwnerContextReview,next,prior),prior);
-  assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),live);
+  assert.equal(createEditingContextPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8'),live);
 });
 
 test('Divider context reader restores only staged producer and policy and rejects unknown selection',()=>{

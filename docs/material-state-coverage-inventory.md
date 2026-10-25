@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Editing-context batch is now LIVE LOCALLY:1055 unique existing source/evidence
+paths,378 proof declarations,198 findings and65 plan tracks. Explicit
+--editing-context selects exact043361b0 path/digest through actual launcher;
+default/older invocations preserve. Complete1041/365/63-plan predecessor and
+five exact old-source transitions recover. No renderer/fixture/case-status edit.
+Canonical88be4d47 remains authoritative;local registration is NOT publication.
+
+Live integration ran19 tests:18 passed,one older runner test's FINAL raw-current
+comparison still expected prior bytes. Full18397-receipt/2311-case loader passed.
+The remaining assertion now uses the same exact recovered prior boundary as
+its initial comparison;whole old proof SHA035e13aa still recovers. Focused retry
+passes two registration tests plus affected runner test,stderr empty. Keep both
+editing-live-registration-integration-20261025 and
+editing-live-registration-corrected-boundary-20261025 pairs. Do not call initial
+run19/19 or repeat expensive unaffected dependency proof for this assertion-only
+correction:exact source restoration is checked. Unfiltered final gates remain.
+
+Freeze this coherent local batch. Pending publication/conservation/cold/import
+still needs viable headroom/transport. The small Divider requirement record is
+fingerprinted but is not itself a whole-case closure or joined replacement of
+parent dispositions. All2311 cases remain partial/current-rendering unverified.
+
 Direct historical-consumer prerequisite reconciled before live switch. Shared
 Divider prior-read entry now composes the exact editing boundary;its owning
 producer assertion compares the precisely recovered prior producer,not an

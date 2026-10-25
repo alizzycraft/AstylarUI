@@ -2,16 +2,15 @@
 
 ## Pending plan delta — block alignment, October25
 
-The reversible editing-context registration helper now stages these two entries
-into a65-track generated plan while preserving all63 prior entries. This is
-verified in memory only;the live generated plan still has63 tracks.
+The reversible editing-context registration now includes these two entries in
+the local65-track generated plan while preserving all63 prior entries. This
+local registration is verified;canonical publication remains pending.
 
-The current generated63-track implementation plan has no block `align-content`
-track. The live registered198-finding registry includes these two findings,so
-the implementation handoff requires the following delta. This is future work,
-not authorization to implement within this audit. Preserve the frozen1041-source/
-365-proof producer batch;merge this delta into the generated plan at the next
-coherent source-reconciled integration,not through an unrecorded producer edit.
+The prior63-track implementation plan lacked block `align-content` tracks.
+The local198-finding registry and65-track plan now include both findings and
+their implementation ordering. This is future implementation work,not authority
+to fix renderer or fixtures within the audit. Preserve the verified1055-source/
+378-proof local batch;canonical publication still requires its original gates.
 
 Before removing paragraph-flow compensations,and after containing-block/used-size
 ownership is correct,repair these separate core CSS-space rules:

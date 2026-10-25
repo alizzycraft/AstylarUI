@@ -7,14 +7,15 @@ import { dividerOwnerContextReview } from './divider-owner-context-review-source
 import { createEditingContextReviewReader,editingContextReview } from './editing-context-review-source.mjs';
 import { joinEditingContextEvidence,restoreEditingContextEvidence } from '../../scripts/join-material-editing-context-evidence.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
-import { prepareEditingContextProducer,prepareEditingContextSelection } from './editing-context-registration.mjs';
+import { prepareEditingContextProducer,prepareEditingContextSelection,createEditingContextPriorRead } from './editing-context-registration.mjs';
 
 test('Editing context join conserves complete parent and limits new evidence to 56 exact cases',t=>{
   assert.throws(()=>createEditingContextReviewReader({root:process.cwd(),read:readFileSync,reviewSha256:'0'.repeat(64)}));
+  const priorRead=createEditingContextPriorRead({root:process.cwd(),read:readFileSync});
   const staged=new Map([
-    ['tests/material-parity/input-equivalence-audit.mjs',prepareEditingContextProducer(readFileSync('tests/material-parity/input-equivalence-audit.mjs'),readFileSync)],
-    ['scripts/export-material-input-audit-current-ancestry.mjs',prepareEditingContextSelection(readFileSync('scripts/export-material-input-audit-current-ancestry.mjs'),'launcher')],
-    ['scripts/run-material-input-audit.mjs',prepareEditingContextSelection(readFileSync('scripts/run-material-input-audit.mjs'),'runner')],
+    ['tests/material-parity/input-equivalence-audit.mjs',prepareEditingContextProducer(priorRead('tests/material-parity/input-equivalence-audit.mjs'),readFileSync)],
+    ['scripts/export-material-input-audit-current-ancestry.mjs',prepareEditingContextSelection(priorRead('scripts/export-material-input-audit-current-ancestry.mjs'),'launcher')],
+    ['scripts/run-material-input-audit.mjs',prepareEditingContextSelection(priorRead('scripts/run-material-input-audit.mjs'),'runner')],
   ].map(([file,source])=>[path.resolve(file),Buffer.from(source)]));
   const stagedRead=(file,options)=>{
     const bytes=staged.get(path.resolve(file));if(!bytes)return readFileSync(file,options);

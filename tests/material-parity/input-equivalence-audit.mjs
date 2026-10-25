@@ -8922,6 +8922,20 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/audit-material-disabled-control-remaining-contexts.mjs",
+    "scripts/audit-material-disabled-select-focused-contexts.mjs",
+    "scripts/audit-material-disabled-select-focused-key.mjs",
+    "scripts/audit-material-select-readonly-focus-contexts.mjs",
+    "scripts/join-material-editing-context-evidence.mjs",
+    "tests/material-parity/disabled-select-keyboard-guard.spec.mjs",
+    "tests/material-parity/divider-original-crop-provenance.spec.mjs",
+    "tests/material-parity/ordinary-wrapping-request-path.spec.mjs",
+    "tests/material-parity/select-readonly-focus-contexts.spec.mjs",
+    "tests/material-parity/editing-context-evidence-join.spec.mjs",
+    "tests/material-parity/editing-context-review-source.mjs",
+    "tests/material-parity/editing-context-registration.mjs",
+    "tests/material-parity/editing-context-registration.spec.mjs",
+    "docs/evidence/material-divider-light-desktop-requirement-review.json",
     "scripts/audit-material-divider-heading-boxes.mjs",
     "scripts/audit-material-divider-heading-ua.mjs",
     "scripts/join-material-divider-outside-owner-evidence.mjs",
@@ -9970,6 +9984,32 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/disabled-select-keyboard-guard.spec.mjs", new RegExp("test\\('Captured native Select disabled guard rejects keyboard delegation before reading event'"),
+      "Captured native Select disabled guard rejects keyboard delegation before reading event", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/disabled-select-keyboard-guard.spec.mjs", new RegExp("test\\(`Focused disabled Select retains value through trusted x without pointer blur \\(\\$\\{count\\} contexts\\)`"),
+      "`Focused disabled Select retains value through trusted x without pointer blur (${count} contexts)`", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/disabled-select-keyboard-guard.spec.mjs", new RegExp("test\\('Disabled text-control supplements cover the exact 48 configured contexts without borrowed Select behavior'"),
+      "Disabled text-control supplements cover the exact 48 configured contexts without borrowed Select behavior", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/divider-original-crop-provenance.spec.mjs", new RegExp("test\\('Original Divider light desktop crops are unique exact screenshot regions'"),
+      "Original Divider light desktop crops are unique exact screenshot regions", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/divider-original-crop-provenance.spec.mjs", new RegExp("test\\('Exact Divider requirement review reconciles crop provenance without clearing other gaps'"),
+      "Exact Divider requirement review reconciles crop provenance without clearing other gaps", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/divider-original-crop-provenance.spec.mjs", new RegExp("test\\('Original light desktop separator paints both unequal requested inks over identical footprints'"),
+      "Original light desktop separator paints both unequal requested inks over identical footprints", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/divider-original-crop-provenance.spec.mjs", new RegExp("test\\('Text paint hypothesis review preserves fresh-control scope and suspected classification'"),
+      "Text paint hypothesis review preserves fresh-control scope and suspected classification", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/divider-original-crop-provenance.spec.mjs", new RegExp("test\\('Scoped lifetime review distinguishes actual remount witnesses from late-work acceptance'"),
+      "Scoped lifetime review distinguishes actual remount witnesses from late-work acceptance", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/ordinary-wrapping-request-path.spec.mjs", new RegExp("test\\('Ordinary wrapping request path preserves parsed override and cache boundaries'"),
+      "Ordinary wrapping request path preserves parsed override and cache boundaries", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/select-readonly-focus-contexts.spec.mjs", new RegExp("test\\('All eight retained Select focus contexts expose readonly mutation before application selection'"),
+      "All eight retained Select focus contexts expose readonly mutation before application selection", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/editing-context-evidence-join.spec.mjs", new RegExp("test\\('Editing context join conserves complete parent and limits new evidence to 56 exact cases'"),
+      "Editing context join conserves complete parent and limits new evidence to 56 exact cases", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/editing-context-registration.spec.mjs", new RegExp("test\\('Staged editing registration conserves complete 1041-source 365-proof producer'"),
+      "Staged editing registration conserves complete 1041-source 365-proof producer", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
+    proof(root, "tests/material-parity/editing-context-registration.spec.mjs", new RegExp("test\\('Editing registration binds unique literal and parameterized proof declarations'"),
+      "Editing registration binds unique literal and parameterized proof declarations", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
     proof(root, "tests/material-parity/divider-outside-owner-evidence.spec.mjs", new RegExp("test\\('outside-scalar Divider owner evidence joins only exact property/context records and conserves all parent gaps'"),
       "outside-scalar Divider owner evidence joins only exact property/context records and conserves all parent gaps", "Bounded retained owner inputs,desktop-DPR1 cursor observations and general public alignment reductions. Not whole-case closure,current rendering or transfer of public center failure to Material cases."),
     proof(root, "tests/material-parity/divider-owner-cursors.spec.mjs", new RegExp("test\\('Divider outside-owner cursor evidence preserves exact points and retained asset receipts'"),
@@ -10711,6 +10751,8 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
+    {"priority":3.05,"rootCause":"Block align-content omission resolves to stretch instead of normal","action":"Resolve omitted block align-content as CSS normal at the owning defaults/layout boundary. Preserve the native normal/stretch margin-collapse distinction and flex/grid behavior;do not globally alias the keywords or retune Material paragraph heights. Reuse the existing public block-alignment reduction before removing flow substitutions."},
+    {"priority":3.06,"rootCause":"Explicit block align-content center is ignored before projection","action":"Honor explicit center in CSS-space content layout after containing-block and used-size ownership. Retain native55px versus candidate20px failing child-placement evidence at DPR1/2 and normal/stretch controls. Extend auto sizing,overflow,margin collapse,nesting and updates before general support claims. Remove fixture offsets only after original equivalent declarations pass;do not change world projection or replace layout in plugins."},
     { priority: -.05, rootCause: 'Unbounded root paint depth crosses the viewport-dependent camera', action: 'Correct shared core stacking-depth allocation and final camera clipping without changing CSS z-index intent,layout or fractional geometry. Current equal-input public controls preserve CSS/projected boxes but high-z1000 at240px places meshZ250 behind cameraZ207.8461 and loses all2880 pane pixels;three low-z/tall controls paint. Preserve ordering across root and nested contexts and extend negative/large z-index,resize,DPR and update coverage before accepting a general correction. Keep separate Material connected-overlay/flow authoring and absent-popup endpoints explicit. Do not lower fixture z-index,move overlays,or duplicate camera/depth calculations in plugins. Reassess and remove historical compensations only after the general renderer contract is proved.' },
     { priority: -.1, rootCause: 'Equivalent document updates detach inspected nodes from retained renderer ancestry', action: 'Verify the core inspection query-context repair through fresh/update/semantic-only/structural-selector and packed-consumer tests, then recapture affected evidence before accepting resolved-style attributions. The correction uses the existing core resolver with current-document ancestry and remapped pseudo sources, restores live rendering ancestry, and preserves visual reuse. Do not use fixture-side selector matching, rewrite old captures, force all updates to rebuild, or substitute retained glyph color for resolved inputs. Actual interaction and raster behavior remain separate verification obligations.' },
     { priority: 0, rootCause: 'Diagnostic declarations are not fully resolved typography', action: 'Complete trustworthy input-stage coverage before accepting the audit. The existing core retained-text stage and inherited-typography reduction now expose font size and line height independently of declarations; preserve that separation and extend missing control/plugin/anonymous-text mappings and current pseudo-state paint provenance. Do not add a competing inheritance algorithm to the showcase or infer resolved values from projected geometry.' },

@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep editing-live-registration-integration-20261025 and
+editing-live-registration-corrected-boundary-20261025 log/stderr pairs. First
+run18/19 with one unadapted raw-current runner assertion;full18397-dependency
+loader passes. Exact boundary correction passes affected runner test and two
+registration tests;both stderr files empty. Preserve the failed run,not replace
+it with a claimed all-green full rerun. No new browser artifacts or large export.
+
 Keep editing-staged-coherent-integration-20261025 log/stderr pair:14/14 checks,
 three staged transitions,18397 receipt dependencies/2311 cases. No large proposal
 or live producer written. This is the coherent staged milestone;do not recapture

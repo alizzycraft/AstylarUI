@@ -16,8 +16,9 @@ const inventory=source=>{
   }return result;
 };
 test('Staged editing registration conserves complete 1041-source 365-proof producer',()=>{
-  const file='tests/material-parity/input-equivalence-audit.mjs',bytes=readFileSync(file),before=bytes.toString().replaceAll('\r\n','\n');
+  const file='tests/material-parity/input-equivalence-audit.mjs',bytes=readFileSync(file),before=createEditingContextPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8');
   const staged=prepareEditingContextProducer(before,readFileSync),old=inventory(before),next=inventory(staged);
+  assert.equal(bytes.toString().replaceAll('\r\n','\n'),staged,'Live producer must equal the complete verified registration');
   assert.equal(old.sources.length,1041);assert.equal(old.proofs.length,365);
   assert.equal(next.sources.length,1055);assert.equal(next.proofs.length,378);assert.equal(new Set(next.sources).size,1055);
   assert.deepEqual(next.sources.slice(14),old.sources);assert.deepEqual(next.proofs.slice(13),old.proofs);assert.deepEqual(next.sources.slice(0,14),editingContextSources);
@@ -41,8 +42,10 @@ test('Editing registration binds unique literal and parameterized proof declarat
   for(const r of rows)assert.equal([...readFileSync(r.file,'utf8').matchAll(new RegExp(r.pattern,'g'))].length,1);
   for(const f of editingContextSources)assert.ok(readFileSync(f).length>0);
   assert.equal(rows.filter(r=>r.title.includes('${count}')).length,1);
-  const launcher=readFileSync('scripts/export-material-input-audit-current-ancestry.mjs','utf8').replaceAll('\r\n','\n');
+  const priorRead=createEditingContextPriorRead({root:process.cwd(),read:readFileSync});
+  const launcher=priorRead('scripts/export-material-input-audit-current-ancestry.mjs','utf8');
   const staged=prepareEditingContextSelection(launcher,'launcher');assert.equal(restoreEditingContextSelection(staged,'launcher'),launcher);
+  assert.equal(readFileSync('scripts/export-material-input-audit-current-ancestry.mjs','utf8').replaceAll('\r\n','\n'),staged);
   const rootLine="const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');";
   const run=(s,flags)=>spawnSync(process.execPath,['--input-type=module','-','--dry-run',...flags],{input:s.replace(rootLine,`const root = ${JSON.stringify(process.cwd())};`),encoding:'utf8',windowsHide:true});
   const next=run(staged,['--editing-context']);assert.equal(next.status,0,next.stderr);
@@ -51,7 +54,8 @@ test('Editing registration binds unique literal and parameterized proof declarat
   const flags=[...launcher.matchAll(/rawRequested\.includes\('(--[^']+)'\)/g)].map(m=>m[1]);
   for(const flag of flags){const a=run(launcher,[flag]),b=run(staged,[flag]);assert.equal(a.status,0,a.stderr);assert.equal(b.status,0,b.stderr);assert.deepEqual(JSON.parse(b.stdout),JSON.parse(a.stdout));assert.notEqual(run(staged,['--editing-context',flag]).status,0);}
   assert.deepEqual(JSON.parse(run(staged,[]).stdout),JSON.parse(run(launcher,[]).stdout));
-  const runner=readFileSync('scripts/run-material-input-audit.mjs','utf8').replaceAll('\r\n','\n'),stagedRunner=prepareEditingContextSelection(runner,'runner');
+  const runner=priorRead('scripts/run-material-input-audit.mjs','utf8'),stagedRunner=prepareEditingContextSelection(runner,'runner');
+  assert.equal(readFileSync('scripts/run-material-input-audit.mjs','utf8').replaceAll('\r\n','\n'),stagedRunner);
   assert.equal(restoreEditingContextSelection(stagedRunner,'runner'),runner);
   const ast=ts.createSourceFile('runner',stagedRunner,99,true,ts.ScriptKind.JS);assert.equal(ast.parseDiagnostics.length,0);let selector;
   const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(ast)==='editingReaderFactory')selector=n.initializer.getText(ast);ts.forEachChild(n,visit);};visit(ast);assert.ok(selector);
