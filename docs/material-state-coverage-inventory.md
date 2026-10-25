@@ -41,8 +41,18 @@ The pinned original report exposes installedDependencies as a64-character digest
 not an application-source/bundle receipt;its root contains only report/summary.
 No direct capture-time plugin-source equality was established from those records.
 This is a specific provenance limitation,not proof that no other retained receipt
-exists. Before a new raster run,check whether the needed capture-time source can
-be authenticated from already indexed evidence. Keep
+exists. Bounded reuse check:material-sort-focus-structure.json is explicitly bound
+to the DIFFERENT b07ef154 current-ancestry capture,and material-sort-focus-placement
+contains its60-case placement observations,not a source/bundle provenance record.
+Neither supplies the missing application-bundle linkage for originalab42dbec.
+Do not relabel that separate evidence as October5 capture-time plugin equality.
+Source-history equality alone cannot identify what a potentially stale served
+build actually executed. A new capture cannot retroactively repair that missing
+link either. Next decisive question is CURRENT plugin raster impact:use one
+isolated public plugin paint pair at the native path's own dimensions,with opaque
+and.54 opacity controls,and inspect the demonstrated notch/overlap witnesses.
+Keep it separate from original-case provenance and full Material acceptance.
+No new browser capture or artifact was produced by this provenance check. Keep
 the separate Sort typography,focus-border and authored keyboard findings intact.
 No renderer/plugin implementation or canonical generation changed.
 
