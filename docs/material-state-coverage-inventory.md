@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October25 staged explicit selection/read boundary passes5/5,0skip,exit0
+(99547.269ms),including the full18402-receipt/2311-case loader through the new
+exact45d3fb07 reader. Existing default and every older supplement retain identical
+dry-run arguments;mixing --text-held with another supplement rejects. Runner
+selection chooses the new reader for exact45d3 only and preserves prior fallback.
+Five complete source transitions recover (producer,launcher,runner,Divider proof
+and requirement JSON),and unexpected drift rejects. Keep
+text-held-staged-selection-integration-20261025 log/stderr (stderr empty).
+All work is still in-memory staging;no live exporter/producer or canonical write.
+
+One decisive pre-application check identifies the remaining shared-entry gap:
+restorePendingEvidenceProducer(current producer) succeeds (1121529 restored bytes),
+but passing the staged1060/383 producer directly rejects `1 !== 2`. New explicit
+reader success is therefore insufficient to apply this batch:older collector
+entry points still need exact newest-stage stripping before their historical
+restoration. Correct that shared instrumentation boundary with whole-predecessor
+and drift guards first;do not run a full export to rediscover it. This is a
+specific incomplete integration step,not a renderer defect or audit completion.
+
 October25 held-batch source/proof census is STAGED ONLY. The existing producer
 still has1055 sources/378 proof declarations/65 plan entries. Guarded registration
 adds exactly five existing/new evidence-owner paths and five explicit held-batch

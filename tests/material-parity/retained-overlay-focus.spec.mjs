@@ -1,14 +1,15 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { execFileSync,spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { gunzipSync } from 'node:zlib';
 import { chromium } from 'playwright-core';
 import path from 'node:path';
 import { joinTextHeldEvidence,restoreTextHeldEvidence,textHeldPredecessor } from '../../scripts/join-material-text-held-evidence.mjs';
-import { prepareTextHeldProducer,restoreTextHeldProducer,textHeldSources,textHeldProofTitles } from './text-held-registration.mjs';
+import { prepareTextHeldProducer,restoreTextHeldProducer,textHeldSources,textHeldProofTitles,
+  prepareTextHeldSelection,restoreTextHeldSelection,createTextHeldPriorRead,createTextHeldReviewReader,textHeldReview } from './text-held-registration.mjs';
 
 // Diagnose the retained harness, not a requirement that a future harness keep
 // this defect. Git source was compared with the capture-pinned working bytes,
@@ -147,31 +148,21 @@ test('Text held obligation join conserves the accepted review and validates exis
   assert.equal(changed,16);assert.equal(causes,1);
   const corrupt=(f,...args)=>f.endsWith('text-control-held-focus-20261025/latest-report.json')?Buffer.from('{}'):readFileSync(f,...args);
   assert.throws(()=>joinTextHeldEvidence(parent,corrupt));assert.throws(()=>joinTextHeldEvidence(joined.review));
-  // Explicitly bound post-export proof additions are historical reads only.
-  // No captured source,installed renderer or working file is overwritten.
-  const overlays=new Map();
-  for(const [file,current]of [
-    ['tests/material-parity/divider-original-crop-provenance.spec.mjs','89891611696bbab5c8511793a34d97ea3406d081f4bf3b514e165e9e544e7745'],
-    ['docs/evidence/material-divider-light-desktop-requirement-review.json','7a90b3708d6a48428c34602d5ca8824f7fb43502fa689aca99cae9673a7d174d'],
-  ]){
-    assert.equal(hash(readFileSync(file,'utf8').replaceAll('\r\n','\n')),current);
-    overlays.set(path.resolve(file),execFileSync('git',['show','4b37d857:'+file],{maxBuffer:2e6}));
-  }
-  const historicalRead=(file,options)=>{
-    const b=overlays.get(path.resolve(file));if(!b)return readFileSync(file,options);
+  const staged=new Map([
+    ['tests/material-parity/input-equivalence-audit.mjs',prepareTextHeldProducer(readFileSync('tests/material-parity/input-equivalence-audit.mjs'),readFileSync)],
+    ...['launcher','runner'].map((kind,i)=>{const file=['scripts/export-material-input-audit-current-ancestry.mjs','scripts/run-material-input-audit.mjs'][i];return [file,prepareTextHeldSelection(readFileSync(file),kind)];}),
+  ].map(([file,source])=>[path.resolve(file),Buffer.from(source)]));
+  const stagedRead=(file,options)=>{
+    const b=staged.get(path.resolve(file));if(!b)return readFileSync(file,options);
     const encoding=typeof options==='string'?options:options?.encoding;return encoding?b.toString(encoding):Buffer.from(b);
   };
-  const {createEditingContextReviewReader}=await import('./editing-context-review-source.mjs');
-  const reader=createEditingContextReviewReader({root:process.cwd(),read:historicalRead,reviewSha256:textHeldPredecessor});
+  assert.throws(()=>createTextHeldReviewReader({root:process.cwd(),read:stagedRead,reviewSha256:'0'.repeat(64)}));
+  const reader=createTextHeldReviewReader({root:process.cwd(),read:stagedRead,reviewSha256:textHeldReview});
   const file=`${base}/proposals/${joined.sha256}.json`;
-  const envelope=Buffer.from(JSON.stringify({status:'proposal-not-canonical',sha256:joined.sha256,review:joined.review}));
-  const read=(name,options)=>{
-    if(path.resolve(name)!==path.resolve(file))return reader.read(name,options);
-    const encoding=typeof options==='string'?options:options?.encoding;return encoding?envelope.toString(encoding):Buffer.from(envelope);
-  };
   const {loadCaseObligationReview}=await import('../../scripts/audit-findings-store.mjs');
-  const loaded=loadCaseObligationReview(file,joined.sha256,parent.groups.map(g=>g.case),{root:process.cwd(),read});
+  const loaded=loadCaseObligationReview(file,joined.sha256,parent.groups.map(g=>g.case),{root:process.cwd(),read:reader.read});
   assert.equal(loaded.cases.length,2311);assert.equal(loaded.inspectionComplete,false);assert.equal(loaded.currentRenderingAccepted,false);
+  assert.equal(reader.sourceApplicability.addedChildren,33);assert.equal(reader.sourceApplicability.reviewSha256,joined.sha256);
   t.diagnostic(JSON.stringify({reviewSha256:joined.sha256,modifiedCases:16,addedChildren:33,causeCases:1,
     dependencies:loaded.evidenceFingerprints.length,completePredecessorRecovered:true,physicalProposalWritten:false,canonicalPublished:false}));
 });
@@ -199,6 +190,34 @@ test('Text held registration conserves all accepted sources and proofs without l
   const missing=(f,...args)=>f.endsWith('audit-material-text-held-event-order.mjs')?Buffer.alloc(0):readFileSync(f,...args);
   assert.throws(()=>prepareTextHeldProducer(before,missing));
   assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),before);
+  const launcherFile='scripts/export-material-input-audit-current-ancestry.mjs',runnerFile='scripts/run-material-input-audit.mjs';
+  const launcher=readFileSync(launcherFile,'utf8').replaceAll('\r\n','\n'),runner=readFileSync(runnerFile,'utf8').replaceAll('\r\n','\n');
+  const selected=prepareTextHeldSelection(launcher,'launcher'),selectedRunner=prepareTextHeldSelection(runner,'runner');
+  assert.equal(restoreTextHeldSelection(selected,'launcher'),launcher);assert.equal(restoreTextHeldSelection(selectedRunner,'runner'),runner);
+  const rootLine="const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');";
+  const run=(s,flags)=>spawnSync(process.execPath,['--input-type=module','-','--dry-run',...flags],{input:s.replace(rootLine,`const root = ${JSON.stringify(process.cwd())};`),encoding:'utf8',windowsHide:true});
+  const fresh=run(selected,['--text-held']);assert.equal(fresh.status,0,fresh.stderr);
+  assert.ok(JSON.parse(fresh.stdout).args.includes('--case-obligation-review-sha256='+textHeldReview));
+  assert.deepEqual(JSON.parse(run(selected,[]).stdout),JSON.parse(run(launcher,[]).stdout));
+  for(const flag of [...launcher.matchAll(/rawRequested\.includes\('(--[^']+)'\)/g)].map(m=>m[1])){
+    const a=run(launcher,[flag]),b=run(selected,[flag]);assert.equal(a.status,0,a.stderr);assert.equal(b.status,0,b.stderr);
+    assert.deepEqual(JSON.parse(a.stdout),JSON.parse(b.stdout));assert.notEqual(run(selected,['--text-held',flag]).status,0);
+  }
+  const runnerTree=ts.createSourceFile(runnerFile,selectedRunner,99,true,ts.ScriptKind.JS);assert.equal(runnerTree.parseDiagnostics.length,0);
+  let selector;const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(runnerTree)==='textHeldReaderFactory')selector=n.initializer.getText(runnerTree);ts.forEachChild(n,visit);};visit(runnerTree);assert.ok(selector);
+  const choose=new Function('options','textHeldReview','createTextHeldReviewReader','editingReaderFactory','return '+selector),newReader=()=>{},oldReader=()=>{};
+  assert.equal(choose({caseObligationReviewSha256:textHeldReview},textHeldReview,newReader,oldReader),newReader);
+  assert.equal(choose({caseObligationReviewSha256:'0'.repeat(64)},textHeldReview,newReader,oldReader),oldReader);
+  const stages=new Map([[file,staged],[launcherFile,selected],[runnerFile,selectedRunner]].map(([f,s])=>[path.resolve(f),Buffer.from(s)]));
+  const read=(f,options)=>stages.get(path.resolve(f))??readFileSync(f,options),prior=createTextHeldPriorRead({root:process.cwd(),read});
+  for(const [f,expected]of [[file,before],[launcherFile,launcher],[runnerFile,runner]]){
+    assert.equal(prior(f,'utf8'),expected);const old=stages.get(path.resolve(f));stages.set(path.resolve(f),Buffer.concat([old,Buffer.from('\n// drift')]));
+    assert.throws(()=>prior(f));stages.set(path.resolve(f),old);
+  }
+  for(const f of ['tests/material-parity/divider-original-crop-provenance.spec.mjs','docs/evidence/material-divider-light-desktop-requirement-review.json']){
+    assert.equal(prior(f,'utf8'),execFileSync('git',['show','4b37d857:'+f],{encoding:'utf8'}));
+    stages.set(path.resolve(f),Buffer.concat([readFileSync(f),Buffer.from('\n// drift')]));assert.throws(()=>prior(f));stages.delete(path.resolve(f));
+  }
 });
 
 test('current overlay authoring has distinct menu, sheet and dialog focus requests', async t => {

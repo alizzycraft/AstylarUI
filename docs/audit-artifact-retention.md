@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep text-held-staged-selection-integration-20261025 log/stderr:5/5 passing
+checks include18402 receipts through the exact staged successor reader,older
+selector conservation and whole-source drift rejection. This is not live source
+registration or canonical publication;shared historical collector entry stripping
+remains a separately demonstrated prerequisite. No physical proposal was written.
+
 Keep text-held-obligation-integration-20261025 log/stderr:existing full loader
 validates18402 receipts/2311 cases for in-memory successor45d3fb07,with complete
 043361b0 predecessor recovery. No large physical proposal was created. The
