@@ -8,6 +8,33 @@ import { materialInteractionCases,materialProfiles,materialViewports } from './b
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const ids=['tree-item-0','tree-item-1','tree-item-2'];
+test('one equal-input Tab-exit trace binds pointer-move canvas tab restoration and semantic refocus',()=>{
+  const bytes=readFileSync('artifacts/material-parity/public-tree-tab-exit-trace-20261025/latest-report.json');
+  assert.equal(hash(bytes),'6ec16965fabd291c2bda981beaecdab35beeb31e060b5ec82648d1dba8a0500f');
+  const report=JSON.parse(bytes);assert.equal(hash(readFileSync('scripts/audit-public-tree-tab-exit-trace.mjs')),report.scriptSha256);
+  for(const r of [report.inputSource,report.bundle,report.html,...report.inputs])assert.equal(hash(readFileSync(r.file)),r.sha256);
+  assert.deepEqual(report.errors,[]);assert.equal(report.results.length,1);
+  const row=report.results[0];assert.deepEqual(row.reference.site,row.astylar.site);
+  const obs=row.astylar.observations;assert.deepEqual(obs.map(o=>o.canvasTabIndex),[-1,1,1,1]);
+  const writes=obs[1].operations.filter(o=>o.operation==='canvas-tabindex');
+  assert.deepEqual(writes.map(o=>[o.before,o.value,o.after]),[[-1,1,1],[1,-1,-1],[-1,1,1]]);
+  assert.match(writes[0].stack,/WebDeviceInputSystem\._enableEvents/);
+  assert.match(writes[1].stack,/_AstylarSemanticBridge\.connectInteractions/);
+  assert.match(writes[2].stack,/_InputManager\._processPointerMove/);
+  assert.equal(obs[2].operations.length,7);assert.equal(obs[3].operations.length,8);
+  const last=obs[3].operations.at(-1);assert.equal(last.operation,'focus');
+  assert.deepEqual([last.owner,last.before,last.after],['item-0','CANVAS','item-0']);
+  assert.match(last.stack,/_AstylarSemanticBridge\.syncFocus/);
+  const bundle=readFileSync(report.bundle.file,'utf8').split('\n');
+  for(const op of [writes[1],writes[2],last]){
+    const location=op.stack.split('\n')[2].match(/audit\.js:(\d+):\d+/);assert.ok(location);
+    const line=bundle[Number(location[1])-1];
+    assert.match(line,op===last?/node\.focus/:op===writes[1]?/canvas\.tabIndex = -1/:/canvas\.tabIndex = engine\.canvasTabIndex/);
+  }
+  assert.equal(row.reference.observations.at(-1).active,'BODY');assert.equal(obs.at(-1).active,'item-0');
+  // Exact installed-package causal trace, corroborated by the uninstrumented pair below.
+  // No library fix,all-context claim,current-source equivalence or full rendering acceptance.
+});
 test('equal-input public fixed-tabstop probe distinguishes forward traversal from backward canvas reentry',()=>{
   const file='artifacts/material-parity/public-tree-fixed-tabstop-corrected-20261025/latest-report.json',bytes=readFileSync(file);
   assert.equal(hash(bytes),'ca76ab4262dbca4cac62ff4d21cbca7fd5ddbd4d5af33d51f824bba66e3163e6');

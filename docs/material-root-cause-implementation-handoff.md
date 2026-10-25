@@ -2,6 +2,18 @@
 
 ## Pending Tree tab-stop input delta,October25
 
+The followup causal trace now confirms the installed-package backward-exit
+mechanism:semantic connect sets canvas tabindex=-1,but Babylon pointer move
+overwrites it with engine.canvasTabIndex=1. Backward browser Tab reaches that
+implementation canvas;semantic syncFocus then reclaims item-0. Report6ec16965
+in public-tree-tab-exit-trace-20261025 binds setter/focus stacks to authenticated
+served instructions;the uninstrumented ca76ab42 pair reproduces the same outcome.
+Future correction belongs at core/Babylon input ownership,not a Tree offset,
+plugin keyboard engine or replacement Tab algorithm. Preserve programmatic
+canvas focus for real pointer/selection ownership while keeping implementation
+canvas out of authored sequential navigation;verify both forward/backward exit
+and genuine modal containment. This is audit evidence,not authorization to fix.
+
 Separate equal-input public reduction now finds a backward Tab-exit failure:
 fixed[0,-1,-1] items on both sides,real pointer Projects -> Tab Documents on both,
 then Shift+Tab leaves native BODY but candidate CANVAS -> Documents. Corrected

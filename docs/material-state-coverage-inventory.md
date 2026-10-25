@@ -4,6 +4,34 @@
 
 ### Current next action and publication status
 
+October25 one-context causal trace answers the pending backward Tab-exit question.
+Public equal inputs and real pointer/Tab/Shift+Tab actions are unchanged;native
+focus and tabindex setters delegate unchanged and restore at disposal. Candidate
+canvas tabindex is-1 before pointer,then1 at every subsequent boundary. Recorded
+writes bind WebDeviceInputSystem initialization(-1->1),semantic connect(1->-1),
+and Babylon _InputManager._processPointerMove(-1->1). Shift+Tab then natively
+reaches CANVAS;the sole subsequent programmatic focus call is semantic syncFocus
+from CANVAS to item-0. Stack line numbers bind to authenticated served bundle
+instructions canvas.tabIndex=-1,canvas.tabIndex=engine.canvasTabIndex,node.focus.
+Thus the one-time semantic exclusion is overwritten by the rendering substrate,
+and focus synchronization recaptures the browser's backward exit. This is an
+observed core/Babylon input-ownership cause in this installed package,not a
+Material-only event handler defect. Uninstrumented equal-input failure ca76ab42
+corroborates the outcome;the trace is not its exact historical call timing.
+
+Trace report public-tree-tab-exit-trace-20261025/latest-report.json SHA256
+6ec16965fabd291c2bda981beaecdab35beeb31e060b5ec82648d1dba8a0500f.
+Capture and independent verifier pass(one pair/four boundaries,two mutation
+controls rejected);source receipts/served assets authenticate. Initial adapter
+dry-run passed but capture initialization first rejected an undefined chromium
+import before browser startup/output creation;adding the missing playwright-core
+resolution produced the successful capture. No failed capture was overwritten.
+Keep trace separate from the fixed-tabstop parent;neither frozen driver changed.
+Next consolidate these standalone Tree/input-ownership findings into the next
+coherent evidence batch,not more equivalent captures. Original remaining case
+requirements,1060/383 registration,8848 historical canonical and acceptance gates
+remain unchanged. No renderer/fixture repair or new large export authorized.
+
 October25 equal-input public Tree reduction now separates a SECOND failure from
 the Material authoring discrepancy. One package-root AstylarUI0.2.0 pair,Chrome
 155.0.8059.85,DPR1,uses identical three leaf items with fixed[0,-1,-1] tab stops,
