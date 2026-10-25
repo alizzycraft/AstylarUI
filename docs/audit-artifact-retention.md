@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep `public-email-selection-20261025` and `public-email-tab-entry-20261025`,
+their capture/verify logs and `public-email-selection-controls-20261025.log`.
+The former is a necessary passing control for the latter's four failing pairs;
+identical public application source/bundle/build inputs isolate the entry action.
+Their generated public fixture/bundle are reproducibility evidence,not disposable
+successful scratch. No screenshots or broad acceptance claimed for these runs.
+
 Keep `timepicker-programmatic-focus-20261025` and its `-provenance` sibling,
 capture/verify/regression logs:these preserve eight failing supplementary
 DOM-focus observations,16 paired trees/screenshots and their checkpoint provenance.

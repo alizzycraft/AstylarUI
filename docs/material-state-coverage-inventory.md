@@ -4,6 +4,37 @@
 
 ### Current next action and publication status
 
+October25 distinct text-editing cause question narrowed by equal-input public
+controls,no Material/plugin/callback/update. The retained email failure used
+Tab then typing,not explicit Ctrl+A. New package-root text/email pairs atDPR1/2
+in Chromium155.0.8059.85 compare these two entry actions. Explicit select-all
+replaces correctly in all four pairs;Tab entry fails in all four candidate pairs.
+Both experiments have identical generated application source,bundle and2515
+build inputs as well as identical authored SiteData/styles. After Tab,native
+text selection is[0,16],candidate[0,0] before typing. Native Z replaces the value;
+candidate prefixes Z. Email DOM endpoints stay null on both sides and are never
+invented. Therefore null endpoints are not a sufficient cause,and failure is not
+email-specific. Candidate native beforeinput/input are absent even in successful
+explicit-selection controls;matching final text is not event equivalence.
+
+Reports under `artifacts/material-parity/`:
+- `public-email-selection-20261025/latest-report.json`,SHA256
+  c5ee5295c582fe7506c21b3e3124cc357e4cac82785822dfa5294d36caa26683;
+- `public-email-tab-entry-20261025/latest-report.json`,SHA256
+  beb04e64610f8c4ef4d6b6298ff504874d4fc2e9fbafa2c8b507fc6488fbee3a.
+
+Both capture/verify log pairs retain their named prefixes. Each verifier rejects
+four forged controls. Focused `public-email-selection.spec.mjs` passes2/2,0skip,
+4771.0343ms (`public-email-selection-controls-20261025.log`),also authenticating
+the existing six current/installed keyboard/insertion owner records against
+these exact bundle inputs. This is a demonstrated public core Tab-entry
+selection/editing failure,not attribution to a specific selection setter or
+historical Material runtime. Versions:installed AstylarUI0.2.0,Angular20.3.31,
+Babylon8.56.2. No renderer fix,new canonical generation or case closure.
+Next capture one bounded Tab-entry selection/focus synchronization causal trace,
+preserving the native text endpoint and explicit-selection controls. Do not
+repeat either matrix or change inputType/fixture authoring to hide the failure.
+
 October25 Timepicker supplementary reader now authenticates the complete existing
 review through the original dependency validator:18439 dependencies/2311 cases,
 1/1 pass,0skip,129852.8433ms in
