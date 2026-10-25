@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep text-held-live-registration-integration-20261025 log/stderr:actual live
+reader validates18402 receipts/2311 cases,1/1 passing,complete predecessor recovery.
+Live1060/383 registration is not a new canonical package or current rendering.
+No physical full proposal was written. Retain accepted8848,all held-run originals,
+the initial replay failure and staged/live integration results until reference
+closure/publication handoff;none is disposable merely because registration passed.
+
 Keep text-held-replay-first-registration-failure-20261025.txt (initial5/6,direct
 legacy pending-helper hash mismatch),the shared-replay-registration log pair,
 and shared-replay-collectors log pair. Corrected retained suites pass6/6;new

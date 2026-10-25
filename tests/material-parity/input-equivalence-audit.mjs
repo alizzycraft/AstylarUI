@@ -8922,6 +8922,11 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/audit-material-text-control-held-focus.mjs",
+    "scripts/audit-material-text-held-event-order.mjs",
+    "scripts/join-material-text-held-evidence.mjs",
+    "tests/material-parity/retained-overlay-focus.spec.mjs",
+    "tests/material-parity/text-held-registration.mjs",
     "scripts/audit-material-disabled-control-remaining-contexts.mjs",
     "scripts/audit-material-disabled-select-focused-contexts.mjs",
     "scripts/audit-material-disabled-select-focused-key.mjs",
@@ -9984,6 +9989,16 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/retained-overlay-focus.spec.mjs", new RegExp("test\\('original text-input held rows retain post-release focus,not held-focus evidence'"),
+      "original text-input held rows retain post-release focus,not held-focus evidence", "Bounded original/retained held-control observations and one causal witness;not current rendering,equal inputs or whole-case closure."),
+    proof(root, "tests/material-parity/retained-overlay-focus.spec.mjs", new RegExp("test\\('supplementary text-control holds retain raw input owners without accepting event parity'"),
+      "supplementary text-control holds retain raw input owners without accepting event parity", "Bounded original/retained held-control observations and one causal witness;not current rendering,equal inputs or whole-case closure."),
+    proof(root, "tests/material-parity/retained-overlay-focus.spec.mjs", new RegExp("test\\('one traced text-input hold exposes blur-synthesized public release before native release'"),
+      "one traced text-input hold exposes blur-synthesized public release before native release", "Bounded original/retained held-control observations and one causal witness;not current rendering,equal inputs or whole-case closure."),
+    proof(root, "tests/material-parity/retained-overlay-focus.spec.mjs", new RegExp("test\\('Text held obligation join conserves the accepted review and validates existing full receipt rules'"),
+      "Text held obligation join conserves the accepted review and validates existing full receipt rules", "Bounded original/retained held-control observations and one causal witness;not current rendering,equal inputs or whole-case closure."),
+    proof(root, "tests/material-parity/retained-overlay-focus.spec.mjs", new RegExp("test\\('Text held registration conserves all accepted sources and proofs without live writes'"),
+      "Text held registration conserves all accepted sources and proofs without live writes", "Bounded original/retained held-control observations and one causal witness;not current rendering,equal inputs or whole-case closure."),
     proof(root, "tests/material-parity/disabled-select-keyboard-guard.spec.mjs", new RegExp("test\\('Captured native Select disabled guard rejects keyboard delegation before reading event'"),
       "Captured native Select disabled guard rejects keyboard delegation before reading event", "Bounded retained requirements,request paths,disabled/readonly context evidence and exact conservation. Parameterized source declarations are not runtime case counts;no whole-case/current-rendering acceptance."),
     proof(root, "tests/material-parity/disabled-select-keyboard-guard.spec.mjs", new RegExp("test\\(`Focused disabled Select retains value through trusted x without pointer blur \\(\\$\\{count\\} contexts\\)`"),

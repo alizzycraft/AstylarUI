@@ -149,16 +149,14 @@ test('Text held obligation join conserves the accepted review and validates exis
   assert.equal(changed,16);assert.equal(causes,1);
   const corrupt=(f,...args)=>f.endsWith('text-control-held-focus-20261025/latest-report.json')?Buffer.from('{}'):readFileSync(f,...args);
   assert.throws(()=>joinTextHeldEvidence(parent,corrupt));assert.throws(()=>joinTextHeldEvidence(joined.review));
+  const acceptedRead=createTextHeldPriorRead({root:process.cwd(),read:readFileSync});
   const staged=new Map([
-    ['tests/material-parity/input-equivalence-audit.mjs',prepareTextHeldProducer(readFileSync('tests/material-parity/input-equivalence-audit.mjs'),readFileSync)],
-    ...['launcher','runner'].map((kind,i)=>{const file=['scripts/export-material-input-audit-current-ancestry.mjs','scripts/run-material-input-audit.mjs'][i];return [file,prepareTextHeldSelection(readFileSync(file),kind)];}),
+    ['tests/material-parity/input-equivalence-audit.mjs',prepareTextHeldProducer(acceptedRead('tests/material-parity/input-equivalence-audit.mjs'),readFileSync)],
+    ...['launcher','runner'].map((kind,i)=>{const file=['scripts/export-material-input-audit-current-ancestry.mjs','scripts/run-material-input-audit.mjs'][i];return [file,prepareTextHeldSelection(acceptedRead(file),kind)];}),
   ].map(([file,source])=>[path.resolve(file),Buffer.from(source)]));
-  const stagedRead=(file,options)=>{
-    const b=staged.get(path.resolve(file));if(!b)return readFileSync(file,options);
-    const encoding=typeof options==='string'?options:options?.encoding;return encoding?b.toString(encoding):Buffer.from(b);
-  };
-  assert.throws(()=>createTextHeldReviewReader({root:process.cwd(),read:stagedRead,reviewSha256:'0'.repeat(64)}));
-  const reader=createTextHeldReviewReader({root:process.cwd(),read:stagedRead,reviewSha256:textHeldReview});
+  for(const [file,bytes]of staged)assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),bytes.toString(),'Live source must equal complete prepared registration');
+  assert.throws(()=>createTextHeldReviewReader({root:process.cwd(),read:readFileSync,reviewSha256:'0'.repeat(64)}));
+  const reader=createTextHeldReviewReader({root:process.cwd(),read:readFileSync,reviewSha256:textHeldReview});
   const file=`${base}/proposals/${joined.sha256}.json`;
   const {loadCaseObligationReview}=await import('../../scripts/audit-findings-store.mjs');
   const loaded=loadCaseObligationReview(file,joined.sha256,parent.groups.map(g=>g.case),{root:process.cwd(),read:reader.read});
@@ -169,8 +167,10 @@ test('Text held obligation join conserves the accepted review and validates exis
 });
 
 test('Text held registration conserves all accepted sources and proofs without live writes',()=>{
-  const file='tests/material-parity/input-equivalence-audit.mjs',before=readFileSync(file,'utf8').replaceAll('\r\n','\n');
+  const acceptedRead=createTextHeldPriorRead({root:process.cwd(),read:readFileSync});
+  const file='tests/material-parity/input-equivalence-audit.mjs',live=readFileSync(file,'utf8').replaceAll('\r\n','\n'),before=acceptedRead(file,'utf8');
   const staged=prepareTextHeldProducer(before,readFileSync);assert.equal(restoreTextHeldProducer(staged),before);
+  assert.equal(live,staged,'Live held registration must equal the complete verified source/proof delta');
   const inventory=source=>{
     const tree=ts.createSourceFile(file,source,99,true,ts.ScriptKind.JS);assert.equal(tree.parseDiagnostics.length,0);
     const list=name=>{
@@ -190,9 +190,9 @@ test('Text held registration conserves all accepted sources and proofs without l
   assert.throws(()=>prepareTextHeldProducer(before+'\n// unexpected drift',readFileSync));
   const missing=(f,...args)=>f.endsWith('audit-material-text-held-event-order.mjs')?Buffer.alloc(0):readFileSync(f,...args);
   assert.throws(()=>prepareTextHeldProducer(before,missing));
-  assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),before);
+  assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),live);
   const launcherFile='scripts/export-material-input-audit-current-ancestry.mjs',runnerFile='scripts/run-material-input-audit.mjs';
-  const launcher=readFileSync(launcherFile,'utf8').replaceAll('\r\n','\n'),runner=readFileSync(runnerFile,'utf8').replaceAll('\r\n','\n');
+  const launcher=acceptedRead(launcherFile,'utf8'),runner=acceptedRead(runnerFile,'utf8');
   const selected=prepareTextHeldSelection(launcher,'launcher'),selectedRunner=prepareTextHeldSelection(runner,'runner');
   assert.equal(restoreTextHeldSelection(selected,'launcher'),launcher);assert.equal(restoreTextHeldSelection(selectedRunner,'runner'),runner);
   const rootLine="const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');";
@@ -219,7 +219,7 @@ test('Text held registration conserves all accepted sources and proofs without l
     assert.equal(prior(f,'utf8'),execFileSync('git',['show','4b37d857:'+f],{encoding:'utf8'}));
     stages.set(path.resolve(f),Buffer.concat([readFileSync(f),Buffer.from('\n// drift')]));assert.throws(()=>prior(f));stages.delete(path.resolve(f));
   }
-  for(const f of ['tests/material-parity/pending-evidence-registration.mjs','tests/material-parity/editing-context-registration.mjs']){
+  for(const f of ['tests/material-parity/pending-evidence-registration.mjs','tests/material-parity/editing-context-registration.mjs','tests/material-parity/editing-context-registration.spec.mjs']){
     assert.equal(prior(f,'utf8'),execFileSync('git',['show','4b37d857:'+f],{encoding:'utf8'}));
     stages.set(path.resolve(f),Buffer.concat([readFileSync(f),Buffer.from('\n// drift')]));assert.throws(()=>prior(f));stages.delete(path.resolve(f));
   }

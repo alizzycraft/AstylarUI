@@ -9,6 +9,8 @@ import { spawnSync } from 'node:child_process';
 // default supplemental/line-box paths for this historical capture.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const rawRequested = process.argv.slice(2);
+const textHeld = rawRequested.includes('--text-held');
+assert.ok(!textHeld || rawRequested.every(argument => ['--text-held', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');
 const editingContext = rawRequested.includes('--editing-context');
 assert.ok(!editingContext || rawRequested.every(argument => ['--editing-context', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');
 const dividerOwnerContext = rawRequested.includes('--divider-owner-context');
@@ -46,9 +48,9 @@ assert.ok(!(expansionSemantics && (staticAx || cardInputs)), 'Choose one case-re
 assert.ok(!(stepperInputs && (staticAx || cardInputs || expansionSemantics)), 'Choose one case-review supplement');
 assert.ok(!(tabsMenuSheet && (staticAx || cardInputs || expansionSemantics || stepperInputs)), 'Choose one case-review supplement');
 assert.ok(!(staticSemanticInputs && (staticAx || cardInputs || expansionSemantics || stepperInputs || tabsMenuSheet)), 'Choose one case-review supplement');
-const requested = rawRequested.filter(argument => argument !== '--editing-context').filter(argument => argument !== '--divider-owner-context').filter(argument => argument !== '--menu-select-disabled').filter(argument => argument !== '--divider-owner-frame').filter(argument => argument !== '--divider-computed-paint').filter(argument => argument !== '--original-runner-recovery').filter(argument => argument !== '--slider-state-inputs').filter(argument => !['--static-ax', '--card-inputs', '--expansion-semantics', '--stepper-inputs', '--tabs-menu-sheet', '--static-semantic-inputs', '--popup-depth-inputs', '--scrollbar-paint', '--table-label-paint', '--radio-caret-paint', '--retained-focus', '--slider-hover-held'].includes(argument));
+const requested = rawRequested.filter(argument => argument !== '--text-held').filter(argument => argument !== '--editing-context').filter(argument => argument !== '--divider-owner-context').filter(argument => argument !== '--menu-select-disabled').filter(argument => argument !== '--divider-owner-frame').filter(argument => argument !== '--divider-computed-paint').filter(argument => argument !== '--original-runner-recovery').filter(argument => argument !== '--slider-state-inputs').filter(argument => !['--static-ax', '--card-inputs', '--expansion-semantics', '--stepper-inputs', '--tabs-menu-sheet', '--static-semantic-inputs', '--popup-depth-inputs', '--scrollbar-paint', '--table-label-paint', '--radio-caret-paint', '--retained-focus', '--slider-hover-held'].includes(argument));
 assert.ok(requested.length <= 1 && requested.every(a => ['--check', '--dry-run'].includes(a)),
-  'Usage: node scripts/export-material-input-audit-current-ancestry.mjs [--check|--dry-run] [--static-ax|--card-inputs|--expansion-semantics|--stepper-inputs|--tabs-menu-sheet|--static-semantic-inputs|--popup-depth-inputs|--scrollbar-paint|--table-label-paint|--radio-caret-paint|--retained-focus|--slider-hover-held|--slider-state-inputs|--original-runner-recovery|--divider-computed-paint|--divider-owner-frame|--menu-select-disabled|--divider-owner-context|--editing-context]');
+  'Usage: node scripts/export-material-input-audit-current-ancestry.mjs [--check|--dry-run] [--static-ax|--card-inputs|--expansion-semantics|--stepper-inputs|--tabs-menu-sheet|--static-semantic-inputs|--popup-depth-inputs|--scrollbar-paint|--table-label-paint|--radio-caret-paint|--retained-focus|--slider-hover-held|--slider-state-inputs|--original-runner-recovery|--divider-computed-paint|--divider-owner-frame|--menu-select-disabled|--divider-owner-context|--editing-context|--text-held]');
 const inputs = {
   'parity-report': 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
   'normal-line-box-report': 'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',
@@ -70,8 +72,9 @@ if (dividerOwnerFrame) inputs['case-obligation-review'] = 'artifacts/material-pa
 if (menuSelectDisabled) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/d00beaa884a5639f4294c5b81f4c49e1ec0c9cd1072fc77d4f7041fc6ff9bd3d.json';
 if (dividerOwnerContext) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/f812d8d9e169b51afd03ae43ea06f8b8ac69e6df5147f11589112919c6ef7083.json';
 if (editingContext) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd.json';
+if (textHeld) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/45d3fb0779cfa4d53137cfbc47225791634874026936b1abb5135222dee75588.json';
 for (const [name, relative] of Object.entries(inputs)) {
-  const retained = (originalRunnerRecovery || dividerComputedPaint || dividerOwnerFrame || menuSelectDisabled || dividerOwnerContext || editingContext) && name === 'case-obligation-review' ? 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json' : relative;
+  const retained = (originalRunnerRecovery || dividerComputedPaint || dividerOwnerFrame || menuSelectDisabled || dividerOwnerContext || editingContext || textHeld) && name === 'case-obligation-review' ? 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json' : relative;
   const stat = statSync(path.join(root, retained));
   assert.ok(name === 'supplemental-root' ? stat.isDirectory() : stat.isFile(), `Invalid ${name}: ${relative}`);
 }
@@ -92,6 +95,7 @@ if (dividerOwnerFrame) args[args.findIndex(argument => argument.startsWith('--ca
 if (menuSelectDisabled) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=d00beaa884a5639f4294c5b81f4c49e1ec0c9cd1072fc77d4f7041fc6ff9bd3d';
 if (dividerOwnerContext) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=f812d8d9e169b51afd03ae43ea06f8b8ac69e6df5147f11589112919c6ef7083';
 if (editingContext) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd';
+if (textHeld) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=45d3fb0779cfa4d53137cfbc47225791634874026936b1abb5135222dee75588';
 if (requested.includes('--dry-run')) console.log(JSON.stringify({ cwd: root, executable: process.execPath, args }, null, 2));
 else {
   // Forward the caller's cold/progress settings and preserve validation failure

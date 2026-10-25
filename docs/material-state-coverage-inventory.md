@@ -4,6 +4,35 @@
 
 ### Current next action and publication status
 
+October25 held-control batch is now LIVE REGISTERED at1060 sources/383 proofs,
+198 findings/65 plan tracks. Explicit --text-held selects exact45d3fb07 and its
+bounded reader;default and all older supplement argument results preserve.
+Complete prior1055/378 source/proof arrays and65 plans conserve. Eight exact
+whole-source transitions recover;the earlier editing registration assertions
+execute through the bounded old-stage read rather than weakening their original
+1055/378 checks. Unknown source drift and mixed selections reject.
+
+Verification after actual live application:retained suites6/6;four focused
+original/endpoint/cause/registration assertions4/4,0skip,exit0 (6534.3693ms).
+Actual --text-held --dry-run selects the exact review/file. Existing full loader
+then passes1/1,0skip,exit0 (96405.805ms) through actual live source reads,validating
+18402 receipts/2311 cases and complete predecessor recovery. Keep
+text-held-live-registration-integration-20261025 log/stderr (stderr empty).
+The33 new children affect16 cases only,one causal witness;all2311 remain partial
+and currentRendering unverified. No physical proposal,canonical rewrite,renderer
+or fixture change. Freeze this coherent batch;do not repeat captures/collectors
+or full dependency replay for metadata edits.
+
+Publication remains separate. Strict existing SSH probe exits1:No ED25519 host
+key is known for github.com;host verification fails. Existing known-host lookup
+for [ssh.github.com]:443 returns0 lines;no configured alias was found. No trust,
+credential or Git configuration changes. Earlier HTTPS uploads failed408/reset,
+while read lookup worked. D:free569913344,C:free540475392 bytes after integration.
+Accepted canonical8848 is historical,not equal to this live source vector. Do
+not start another large generation until a justified conservation/cold/import
+milestone has safe headroom and a viable publication route. Other exact-case audit
+work can proceed from frozen valid evidence;original final gates remain required.
+
 October25 shared historical replay prerequisite is corrected. The common pending
 producer restorer strips the exact held stage before earlier Menu/owner stages;
 current and staged1060/383 producers both recover whole historical SHA

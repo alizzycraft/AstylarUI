@@ -72,6 +72,13 @@ const replayTransitions=[
   ['tests/material-parity/editing-context-registration.mjs','58340f250b90007b9d28c68d779348f7ae5c6b4f028a07b7ad06e6914cb4e570',
     "import { createTextHeldPriorRead, restoreTextHeldReplaySource } from './text-held-registration.mjs';\n",
     ['  read=createTextHeldPriorRead({root,read});\n',"  if(kind==='pending-replay')source=restoreTextHeldReplaySource(source,'pending');\n"]],
+  ['tests/material-parity/editing-context-registration.spec.mjs','e1b7c9fde25a827ee33c012052569418a0766ff4a52ff18ab18afc603c8f9980',
+    "import { createTextHeldPriorRead } from './text-held-registration.mjs';\n",
+    ['\nconst readEditingStage=createTextHeldPriorRead({root:process.cwd(),read:readFileSync});\n'],[
+      ["readEditingStage(file,'utf8')","bytes.toString().replaceAll('\\r\\n','\\n')"],
+      ["readEditingStage('scripts/export-material-input-audit-current-ancestry.mjs','utf8')","readFileSync('scripts/export-material-input-audit-current-ancestry.mjs','utf8').replaceAll('\\r\\n','\\n')"],
+      ["readEditingStage('scripts/run-material-input-audit.mjs','utf8')","readFileSync('scripts/run-material-input-audit.mjs','utf8').replaceAll('\\r\\n','\\n')"],
+    ]],
 ];
 export function restoreTextHeldReplaySource(source,kind){
   assert.ok(['pending','editing'].includes(kind));const entry=replayTransitions[kind==='pending'?0:1];
@@ -90,7 +97,7 @@ export function createTextHeldPriorRead({root,read}){
     ['scripts/export-material-input-audit-current-ancestry.mjs',{kind:'launcher',prior:selectionPrior.launcher}],
     ['scripts/run-material-input-audit.mjs',{kind:'runner',prior:selectionPrior.runner}],
     ...proofTransitions.map(([file,current,prior,start,end])=>[file,{kind:'proof',current,prior,start,end}]),
-    ...replayTransitions.map(([file,prior,importLine,hooks])=>[file,{kind:'replay',prior,importLine,hooks}]),
+    ...replayTransitions.map(([file,prior,importLine,hooks,edits=[]])=>[file,{kind:'replay',prior,importLine,hooks,edits}]),
   ].map(([file,value])=>[path.resolve(root,file),value]));
   return (name,options)=>{
     const entry=files.get(path.resolve(root,name));if(!entry)return read(name,options);
@@ -101,6 +108,7 @@ export function createTextHeldPriorRead({root,read}){
       assert.ok(start>=0&&end>start);text=text.slice(0,start)+text.slice(end);
     }else if(entry.kind==='replay'){
       text=once(text,entry.importLine,'');for(const hook of entry.hooks)text=once(text,hook,'');
+      for(const [a,b]of entry.edits)text=once(text,a,b);
     }else text=entry.kind==='producer'?restoreTextHeldProducer(text):restoreTextHeldSelection(text,entry.kind);
     assert.equal(hash(text),entry.prior);const encoding=typeof options==='string'?options:options?.encoding;
     return encoding?Buffer.from(text).toString(encoding):Buffer.from(text);
@@ -117,5 +125,5 @@ export function createTextHeldReviewReader({root,read,reviewSha256}){
   return {read(name,options){if(path.resolve(root,name)!==file)return prior.read(name,options);
     const encoding=typeof options==='string'?options:options?.encoding;return encoding?bytes.toString(encoding):Buffer.from(bytes);},
     sourceApplicability:{mode:'exact-held-text-controls',reviewSha256,addedChildren:33,predecessorApplicability:prior.sourceApplicability,
-      boundary:'Explicit in-memory supplement;seven whole-source-bound inventory,selection,proof and replay transitions only. Not canonical/current rendering or case closure.'}};
+      boundary:'Explicit in-memory supplement;eight whole-source-bound inventory,selection,proof and replay transitions only. Not canonical/current rendering or case closure.'}};
 }

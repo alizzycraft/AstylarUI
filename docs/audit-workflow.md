@@ -1,5 +1,17 @@
 # Efficient Material input-audit workflow
 
+October25 held-control batch is live registered1060/383 with explicit --text-held
+selecting45d3fb07. Actual live-reader integration validates18402 receipts/2311
+partial,current-rendering-unverified cases;old selectors and complete1055/378
+inventories conserve. Freeze it. Accepted canonical8848 remains historical until
+the existing export/conservation/cold/import milestone,not current-source equality.
+Do not recapture settled held-owner/one-case causal evidence or rerun full loader
+for prose. Shared replay stripping and eight bounded source transitions are now
+verified;older staged/pending paragraphs below are historical checkpoints.
+Publication requires a viable upload route and safe headroom;strict SSH found no
+trusted GitHub host key and made no trust changes. No new large generation is
+justified solely by this status update. Original acceptance gates stay intact.
+
 October25 editing-context milestone is accepted locally as8848ae5b/index3a73b61e,
 after corrected export,complete section/source/receipt conservation,independent
 cold comparison and verified isolated/accepted imports. Current inventory is
