@@ -4,6 +4,23 @@
 
 ### Current next action and publication status
 
+October25 resumed Sort integration:in-memory registry staging now conserves the
+complete live1067-source/392-proof/200-finding/67-track predecessor and proposes
+1070/397/202/69. The existing pending finding module owns preparation/reversal;
+no additional framework or physical full proposal was created. Whole-source
+hash guards reject drift,double registration and missing proof sources. Every
+old inventory/definition/plan entry remains byte-identical after the additions.
+Complete sort-arrow-geometry.spec.mjs passes5/5,exit0,20928.6699ms;log:
+artifacts/material-parity/sort-staged-registry-20261025.log. This includes the
+existing62-child coverage join,not just synthetic registry checks. Live registry,
+selectors,readers and canonical8848 are UNCHANGED. Next reconcile this staged
+addition through existing historical readers and explicit selection before live
+registration;do not repeat the retained census/raster sampling for bookkeeping.
+All2311 cases remain partial/current-rendering unverified. Fresh current paint
+and original capture-time plugin linkage remain unproven. Latest space preflight
+observed C:8621502464/D:13753700352 bytes free;the earlier disk blocker is no
+longer current,but space must be rechecked before large writes.
+
 October25 complete retained Sort arrow-presence census authenticates120 trees/
 60 cases without recapture. All8 hover contexts have native arrow opacity.54
 but NO candidate arrow. All12 static controls hide both;the other40 focus/held/

@@ -1,4 +1,6 @@
 // Pending findings;the frozen live policy/source inventory is not changed here.
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 const original={file:'artifacts/material-parity/current-full-20261005/latest-report.json',sha256:'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62'};
 export const sortArrowFindings=Object.freeze([
   Object.freeze({
@@ -32,3 +34,45 @@ export const sortArrowFindings=Object.freeze([
     boundary:'Current geometry and source history plus two retained local observations. Captured-plugin linkage and fresh current raster remain unverified;not all-context paint or case closure.'
   })
 ]);
+
+// Prepare the existing registry in memory before touching any live source or
+// historical reader. Whole-predecessor guards prohibit marker-only replay.
+const registryPrior={producer:'eb07363c7e36b1c94b29e0f0d03ef5534dfeea496f35c210f9e0391b41406ef7',policy:'417d36eb37b97da5be73522d1c1cc19fac4477050c44351b7729d14cd0d7bbce'};
+const digest=s=>createHash('sha256').update(s).digest('hex');
+export const sortArrowSources=Object.freeze([
+  'scripts/join-material-sort-arrow-evidence.mjs',
+  'tests/material-parity/sort-arrow-findings.mjs',
+  'tests/material-parity/sort-arrow-geometry.spec.mjs',
+]);
+export const sortArrowProofTitles=Object.freeze([
+  'Sort staged registry preserves all existing sources proofs findings and plans',
+  'Sort arrow partial join conserves the complete Tree predecessor and all remaining work',
+  'pending Sort arrow findings preserve separate state and vector ownership',
+  'all retained Sort hover contexts omit the candidate arrow despite visible native opacity',
+  'Sort arrow bounds conceal extra filled area and overlapping current plugin triangles',
+]);
+const escape=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const actions=sortArrowFindings.map(f=>({priority:2.2,rootCause:f.owner,action:f.action+' '+f.boundary}));
+const additions={
+  policy:[['export const sourceAuditDefinitions = Object.freeze([\n',sortArrowFindings.map(f=>'  Object.freeze('+JSON.stringify({...f,justification:f.observation.firstDivergence+' '+f.boundary},null,2)+'),\n').join('')]],
+  producer:[
+    ['function sourceFingerprints(root) {\n  const files = [\n',sortArrowSources.map(f=>'    '+JSON.stringify(f)+',\n').join('')],
+    ['function focusedProofInventory(root) {\n  return [\n',sortArrowProofTitles.map(title=>'    proof(root, "tests/material-parity/sort-arrow-geometry.spec.mjs", new RegExp('+JSON.stringify("test\\('"+escape(title)+"'")+'),\n      '+JSON.stringify(title)+', "Bounded retained Sort presence and vector/pixel evidence;not fresh current rendering or complete case acceptance."),\n').join('')],
+    ['function implementationPlan() {\n  return [\n',actions.map(a=>'    '+JSON.stringify(a)+',\n').join('')],
+  ],
+};
+const once=(s,a,b)=>{assert.equal(s.split(a).length,2);return s.replace(a,b);};
+export function prepareSortArrowRegistry(bytes,kind,read){
+  assert.ok(Object.hasOwn(registryPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');assert.equal(digest(text),registryPrior[kind]);
+  if(kind==='producer'){
+    for(const file of sortArrowSources){assert.ok(read(file).length>0);assert.equal(text.includes(JSON.stringify(file)),false);}
+    const proof=read('tests/material-parity/sort-arrow-geometry.spec.mjs').toString();
+    for(const title of sortArrowProofTitles)assert.equal([...proof.matchAll(new RegExp("test\\('"+escape(title)+"'",'g'))].length,1);
+  }
+  for(const [anchor,prefix]of additions[kind])text=once(text,anchor,anchor+prefix);return text;
+}
+export function restoreSortArrowRegistry(bytes,kind){
+  assert.ok(Object.hasOwn(registryPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
+  for(const [anchor,prefix]of additions[kind])text=once(text,anchor+prefix,anchor);
+  assert.equal(digest(text),registryPrior[kind]);return text;
+}

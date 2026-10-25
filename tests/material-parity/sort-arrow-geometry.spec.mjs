@@ -8,6 +8,35 @@ import {PNG} from 'pngjs';
 import {evaluateFocusedRaster} from './focused-raster-metrics.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
+test('Sort staged registry preserves all existing sources proofs findings and plans',async t=>{
+  const {prepareSortArrowRegistry:prepare,restoreSortArrowRegistry:restore,sortArrowSources,sortArrowProofTitles}=await import('./sort-arrow-findings.mjs');
+  const files={producer:'tests/material-parity/input-equivalence-audit.mjs',policy:'tests/material-parity/input-equivalence-policy.mjs'},before={},staged={};
+  for(const [kind,file]of Object.entries(files)){
+    before[kind]=readFileSync(file,'utf8').replaceAll('\r\n','\n');staged[kind]=prepare(before[kind],kind,readFileSync);
+    assert.equal(restore(staged[kind],kind),before[kind]);
+    assert.throws(()=>prepare(before[kind]+'\n// drift',kind,readFileSync));
+    assert.throws(()=>restore(staged[kind]+'\n// drift',kind));
+    assert.throws(()=>prepare(staged[kind],kind,readFileSync));
+    assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),before[kind]);
+  }
+  assert.throws(()=>prepare(before.producer,'producer',()=>Buffer.alloc(0)));
+  const arrays=source=>{const tree=ts.createSourceFile('registry.mjs',source,99,true,ts.ScriptKind.JS);assert.equal(tree.parseDiagnostics.length,0);
+    const result={};for(const name of ['sourceFingerprints','focusedProofInventory','implementationPlan']){
+      const fn=tree.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text===name);if(!fn)continue;
+      let array;const visit=n=>{if(!array&&ts.isArrayLiteralExpression(n))array=n;ts.forEachChild(n,visit);};visit(fn);result[name]=array.elements.map(n=>n.getText(tree));
+    }
+    const declaration=tree.statements.flatMap(n=>ts.isVariableStatement(n)?[...n.declarationList.declarations]:[]).find(n=>n.name.getText(tree)==='sourceAuditDefinitions');
+    if(declaration)result.definitions=declaration.initializer.arguments[0].elements.map(n=>n.getText(tree));return result;};
+  const old=arrays(before.producer),next=arrays(staged.producer);
+  for(const [key,added,total]of [['sourceFingerprints',sortArrowSources.length,1067],['focusedProofInventory',sortArrowProofTitles.length,392],['implementationPlan',2,67]]){
+    assert.equal(old[key].length,total);assert.equal(next[key].length,total+added);assert.deepEqual(next[key].slice(added),old[key]);
+  }
+  assert.equal(new Set(next.sourceFingerprints).size,1070);
+  const oldPolicy=arrays(before.policy).definitions,newPolicy=arrays(staged.policy).definitions;
+  assert.equal(oldPolicy.length,200);assert.equal(newPolicy.length,202);assert.deepEqual(newPolicy.slice(2),oldPolicy);
+  for(const entry of newPolicy.slice(0,2)){const f=new Function('return '+entry)();assert.equal([...readFileSync(f.file,'utf8').matchAll(new RegExp(f.pattern,'g'))].length,1);assert.ok(f.justification);}
+  t.diagnostic(JSON.stringify({stagedSources:1070,stagedProofs:397,stagedFindings:202,stagedTracks:69,completePredecessorRecovered:true,liveWrites:false,readerReconciled:false,canonicalPublished:false}));
+});
 test('Sort arrow partial join conserves the complete Tree predecessor and all remaining work',async t=>{
   const base='artifacts/material-parity/working-audit',pointer=JSON.parse(readFileSync(base+'/current.json'));
   assert.equal(pointer.generation,'8848ae5b1ca0b18bc04116ebdd1eb2c360b7497a298e69fca9578df4a1b2b420');
