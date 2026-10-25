@@ -16,6 +16,13 @@ while replacing the text glyph;the e4ca3db4 CSS-coordinate API refactor preserve
 the same vertices. Historical reference/runtime and capture-time plugin equality
 remain unproven,as does final raster impact. Audit only;no fix is authorized here.
 
+Retained focus/activate PNGs now reproduce their complete pinned local metrics.
+The candidate notch paints where reference stays background;opaque stem ink
+matches,while focus stem color fits double rather than single.54 coverage.
+These are historical local observations consistent with the geometry model,
+not proof of captured plugin identity or fresh current output. New browser
+capture is deferred for critically low C:space;do not label that check passed.
+
 ## Pending Tree tab-stop input delta,October25
 
 The followup causal trace now confirms the installed-package backward-exit

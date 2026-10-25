@@ -52,7 +52,25 @@ link either. Next decisive question is CURRENT plugin raster impact:use one
 isolated public plugin paint pair at the native path's own dimensions,with opaque
 and.54 opacity controls,and inspect the demonstrated notch/overlap witnesses.
 Keep it separate from original-case provenance and full Material acceptance.
-No new browser capture or artifact was produced by this provenance check. Keep
+
+October25 paint preflight observed C:10334208 bytes free,D:498987008;new browser
+startup was therefore deferred and the user was asked to free C:space. No profile,
+capture bundle or screenshot was created. Existing focus/activate local PNGs are
+instead reusable:their complete evaluateFocusedRaster results EXACTLY reproduce
+the pinned original report,including zero phase shift. Four existing PNG byte
+hashes are now pinned at audit time in the same pending geometry proof;this is
+not a claim that October5 recorded those cryptographic receipts.
+
+Direct unwarped crop pixel(114,15):focus native[129,126,131],candidate[75,72,78];
+opaque activate BOTH[29,27,32]. Against shared background[246,241,249],focus values
+fit single.54 versus double.7884 coverage within.006 estimated alpha. Pixel(112,16)
+is background on native in BOTH states,but candidate[187,183,190]/[137,134,140].
+Thus retained local paint differs in the demonstrated region and opaque ink-color
+control agrees. This corroborates,but does not causally prove,historical plugin
+overdraw:served-plugin identity and subpixel/paint contributors remain unproven.
+The strengthened existing test passes1/1,exit0,2138.1528ms (assertion1645.0398ms).
+Fresh CURRENT plugin raster impact stays deferred,not silently replaced by these
+historical pixels. Current case/rendering flags preserve. Keep
 the separate Sort typography,focus-border and authored keyboard findings intact.
 No renderer/plugin implementation or canonical generation changed.
 

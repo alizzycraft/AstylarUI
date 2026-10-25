@@ -4,6 +4,8 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import ts from 'typescript';
+import {PNG} from 'pngjs';
+import {evaluateFocusedRaster} from './focused-raster-metrics.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 test('Sort arrow bounds conceal extra filled area and overlapping current plugin triangles',t=>{
@@ -66,6 +68,25 @@ test('Sort arrow bounds conceal extra filled area and overlapping current plugin
   assert.match(oldComponent,/id: 'sort-arrow', class: 'sort-arrow', textContent: state\.open && state\.sortDirection === 'desc' \? '↓' : '↑'/);
   assert.match(newComponent,/type: 'showcase\.material:sort-arrow' as const/);
   assert.equal(typeof report.captureProvenance.installedDependencies,'string');
+  const rasterHashes={focus:{reference:'811cf77777b732c2c3470a623c1074159f348eb6bed0a29e9b86152dcf6aca2f',astylar:'928b374f2f2470653c0c2bdf0e12fe93b9bccc62d890150965536a56893a603e'},
+    activate:{reference:'377516f4a20733938c9a81d872e3325dbdae9fd6e7ff879325d69cca54e85fec',astylar:'0df80abafbdf7f3701fdf61234c333092781d2b03cebe9f7f2b45b785db67c67'}};
+  const rasterObservations=[];
+  const pixel=(p,x,y)=>[...p.data.slice((y*p.width+x)*4,(y*p.width+x)*4+4)];
+  for(const row of rows){const images={},receipts={};
+    for(const side of ['reference','astylar']){const file=`artifacts/material-parity/current-full-20261005/interactions/sort/light/desktop-dpr1/${row.state}/sort-primary-raster-${side}.png`,bytes=readFileSync(file);
+      assert.equal(hash(bytes),rasterHashes[row.state][side]);images[side]=PNG.sync.read(bytes);receipts[side]={file,sha256:hash(bytes)};}
+    const {id,...recorded}=row.focusedRasters.find(r=>r.id==='sort-primary');assert.equal(id,'sort-primary');
+    assert.deepEqual(evaluateFocusedRaster(images.reference,images.astylar),recorded);
+    assert.deepEqual(recorded.phaseOffset,{x:0,y:0});
+    const background=pixel(images.reference,0,0),nativeStem=pixel(images.reference,114,15),candidateStem=pixel(images.astylar,114,15);
+    assert.deepEqual(pixel(images.astylar,0,0),background);
+    assert.deepEqual(pixel(images.reference,112,16),background);assert.notDeepEqual(pixel(images.astylar,112,16),background);
+    if(row.state==='activate'){assert.deepEqual(nativeStem,[29,27,32,255]);assert.deepEqual(candidateStem,nativeStem);}
+    else{const estimate=c=>background.slice(0,3).reduce((sum,b,i)=>sum+(b-c[i])/(b-[29,27,32][i]),0)/3;
+      assert.ok(Math.abs(estimate(nativeStem)-.54)<.006);assert.ok(Math.abs(estimate(candidateStem)-(1-(1-.54)**2))<.006);}
+    rasterObservations.push({state:row.state,receipts,background,nativeStem,candidateStem,
+      nativeNotch:pixel(images.reference,112,16),candidateNotch:pixel(images.astylar,112,16)});
+  }
   t.diagnostic(JSON.stringify({cases:rows.map(r=>`interaction:sort@light/desktop-dpr1/${r.state}`),source:{file:pluginFile,sha256:hash(source)},nativeArea,triangleArea,
     id:'fixture-sort-arrow-triangulation-fills-notch-and-overdraws',
     witnesses:[{point:{x:2,y:-1.5},nativeFilled:false,candidateTriangles:1},{point:{x:0,y:-2},nativeFilled:true,candidateTriangles:2}],
@@ -73,5 +94,6 @@ test('Sort arrow bounds conceal extra filled area and overlapping current plugin
     classification:'application-plugin-authoring-defect',owner:'Material sort-arrow CSS-space vector paint geometry',
     history:{introduction,parent,cssBoundary,initialSourceSha256:hash(initial),boundarySourceSha256:hash(boundary),
       topologyPreserved:true,boundary:'Initial world-scaled function evaluated at unit scale only;not historical projection or browser execution. The CSS-boundary revision preserves identical CSS vertices.'},
-    boundary:'Two retained native/authored inputs versus executed current plugin geometry only. Not captured-plugin source equivalence,GPU alpha composition,all contexts,current browser rendering or whole-case closure.'}));
+    rasterObservations,
+    boundary:'Two retained inputs and audit-pinned existing PNGs with exact metric replay versus current plugin geometry. Pixel observations fit single/double alpha coverage but do not prove capture-time plugin identity or historical GPU cause. Not current browser rendering,all contexts or whole-case closure.'}));
 });
