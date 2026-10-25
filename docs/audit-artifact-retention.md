@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep the16-case `text-control-held-focus-20261025` capture,its provenance
+checkpoint and capture/verify log pairs. Report SHA256
+b4899d94b58f2aed5d7a51557b6461778e6a6a1a32749b6a616817c3618b3e2e.
+The raw-owner observations are held;trees/screenshots are AFTER explicit release.
+This run closes a demonstrated raw held-owner evidence gap,not duplicate scratch
+or a replacement for original October5 failures. Retain its guarded driver and
+original base-source receipt with the existing focused regression assertions.
+
 October25 accepted editing-context generation8848ae5b retains the original failed
 `editing-canonical-export-20261025` logs,corrected export/cold logs,and bounded
 section/leaf/metadata/coverage/addition conservation outputs. Accepted index SHA

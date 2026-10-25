@@ -4,6 +4,31 @@
 
 ### Current next action and publication status
 
+October25 held text-control gap now has direct supplementary evidence,without
+repeating216 configured focus actions. Existing direct-owner driver is reused
+through guarded `audit-material-text-control-held-focus.mjs`,selecting exactly16
+input/form-field held contexts (four themes,DPR1/2). Original driver/action/styles
+are unchanged;three raw observations precede explicit release. The later trees
+and screenshots are explicitly post-release,not held-paint evidence. Capture
+session68266 exits0;independent `--verify` exits0,16 cases/48 paired boundaries,
+checkpoint/source/runtime receipts valid. Report SHA256
+b4899d94b58f2aed5d7a51557b6461778e6a6a1a32749b6a616817c3618b3e2e,
+browser155.0.8059.85,retained served build (not whole-library current acceptance).
+
+All32 after-pointerdown/held-settled endpoint pairs have actual INPUT active,
+equal to their direct target and within the intended host,on both sides. Every
+sample has one trusted pointerdown/buttons1 and no pointerup/cancel. Native has
+no blur;candidate records32 CANVAS blurs across16 cases,no INPUT blur. Thus the
+separate public button delayed-native-focus defect must not be transferred to
+these text-control endpoints. Extra canvas focus handoffs remain observed and
+unattributed;no complete event/default-action equivalence inferred. Other paint,
+input/history/currentness obligations and all partial case flags remain open.
+Focused original-boundary plus new retained-result assertions pass2/2,0skip,
+exit0 (1971.1713ms);scoped diff check passes. No full canonical/browser gate
+is claimed from this diagnostic verification.
+Evidence stays outside frozen1055/378 inventories until a coherent integration;
+do not rebuild the canonical report merely to register this bounded result.
+
 October25 remaining-coverage prioritization uses accepted8848/index3a73,whose
 complete index hash was checked before reading its2311 case records. Pending
 evidence joins:activation1466,focus1587,localPaint949. Input has204 pending

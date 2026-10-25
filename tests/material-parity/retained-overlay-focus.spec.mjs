@@ -53,6 +53,38 @@ test('original text-input held rows retain post-release focus,not held-focus evi
     boundary:'Exact original input/form-field held records only. Screenshots precede release;focus reads follow release and non-focus gate accepts mismatched owners. Matching normalized post-release IDs do not establish held native focus,raw owner identity,default-action continuity or current rendering. No new renderer diagnosis or acceptance change.'}));
 });
 
+test('supplementary text-control holds retain raw input owners without accepting event parity',()=>{
+  const file='artifacts/material-parity/text-control-held-focus-20261025/latest-report.json';
+  const bytes=readFileSync(file);assert.equal(hash(bytes),'b4899d94b58f2aed5d7a51557b6461778e6a6a1a32749b6a616817c3618b3e2e');
+  const report=JSON.parse(bytes);assert.equal(report.results.length,16);
+  assert.equal(report.inputEquivalent,false);assert.equal(report.renderingEquivalent,false);
+  assert.match(report.scope,/Tree\/screenshot are AFTER explicit release,not held paint/);
+  const verificationBytes=readFileSync('artifacts/material-parity/text-control-held-focus-verify-20261025.log');
+  const verification=JSON.parse(verificationBytes.toString(verificationBytes[0]===255?'utf16le':'utf8').replace(/^\ufeff/,''));
+  assert.equal(verification.reportSha256,hash(bytes));assert.equal(verification.cases,16);
+  assert.equal(verification.pairedBoundaries,48);assert.equal(verification.observedNotParityAccepted,true);
+  const contexts=new Set();let canvasBlurs=0;
+  for(const row of report.results){
+    assert.ok(['input','form-field'].includes(row.family));assert.equal(row.state,'held');
+    contexts.add(`${row.family}/${row.profile}/${row.viewport.deviceScaleFactor}`);
+    for(const side of ['reference','astylar']){
+      assert.deepEqual(row[side].runtime.errors,[]);
+      for(const sample of row[side].observations.slice(1)){
+        assert.equal(sample.active.tag,'INPUT');assert.equal(sample.active.logicalId,row.family+'-control');
+        assert.equal(sample.activeEqualsTarget,true);assert.equal(sample.activeWithinHost,true);
+        const down=sample.events.filter(e=>e.type==='pointerdown');assert.equal(down.length,1);
+        assert.equal(down[0].trusted,true);assert.equal(down[0].buttons,1);
+        assert.equal(sample.events.filter(e=>['pointerup','pointercancel'].includes(e.type)).length,0);
+        assert.equal(sample.events.filter(e=>e.type==='blur'&&e.target.tag==='INPUT').length,0);
+      }
+      const blurs=row[side].observations.at(-1).events.filter(e=>e.type==='blur');
+      assert.equal(blurs.length,side==='reference'?0:2);
+      if(side==='astylar'){assert.ok(blurs.every(e=>e.target.tag==='CANVAS'));canvasBlurs+=blurs.length;}
+    }
+  }
+  assert.equal(contexts.size,16);assert.equal(canvasBlurs,32);
+});
+
 test('current overlay authoring has distinct menu, sheet and dialog focus requests', async t => {
   // Execute the actual authoring methods with a minimal surface boundary.
   // This diagnoses authored requests, not browser scheduling or core behavior.
