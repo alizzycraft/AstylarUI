@@ -69,6 +69,7 @@
         "projectedGeometryModel": {
           "scope": "Retained October19 live light/desktop diagnostic only,not original October5 geometry or current rendering. Algebraic baseline location under the recorded axis-aligned full-UV,identity-matrix,invertY canvas convention;not a GPU sampling or glyph-ink measurement.",
           "formula": "min(projected.y) + draw.y * (max(projected.y)-min(projected.y)) / textureSize.height",
+          "ownerPlacementReconciliation": "Each modeled mesh top agrees within one Float32 coordinate ULP with the already recorded absolute-paragraph/root-border prediction in the authenticated parent retainedInlinePlacementAttribution. This diagnostic does not expose a new generic baseline/projection failure;unequal authored paragraph placement remains the earlier divergence. Not original-case or equal-input causality acceptance.",
           "observations": [
             {
               "id": "divider-above",

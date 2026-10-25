@@ -154,7 +154,14 @@ test('Exact Divider requirement review reconciles crop provenance without cleari
     assert.equal(result.modeledCandidateBaselineCssY,projected);
     assert.equal(result.candidateMinusNativeCssPx,projected-target.baselineCssY);
     assert.notEqual(result.candidateMinusNativeCssPx,0,'Matching local offsets do not establish matching projected baselines');
+    const owner=structure.retainedInlinePlacementAttribution.observations.find(r=>r.id===result.id);
+    assert.ok(owner);assert.equal(owner.profile,'light');assert.equal(owner.viewport,'desktop');
+    assert.equal(owner.ownerInlineY,0);assert.equal(owner.measuredInlineHeight,live.textDimensions.height);
+    // A Float32-coordinate representation bound,not a new rendering tolerance.
+    const coordinateUlp=2**(Math.floor(Math.log2(Math.abs(owner.predictedTop)))-23);
+    assert.ok(Math.abs(top-owner.predictedTop)<=coordinateUlp);
   }
+  assert.match(model.ownerPlacementReconciliation,/does not expose a new generic baseline\/projection failure/);
   const currentness=parent.obligations.sourceCurrentness;
   let receiptCount=0;
   const authenticate=value=>{

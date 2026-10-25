@@ -4,6 +4,18 @@
 
 ### Current next action and publication status
 
+October25 placement reconciliation answers the next competing explanation:the
+modeled live text tops match the authenticated parent absolute-paragraph/root-
+border predictions within one Float32 coordinate ULP. Local draw offset agrees,
+so this later diagnostic does not reveal a new generic baseline/projection defect;
+the already classified unequal paragraph inputs precede the modeled displacement.
+The existing requirement proof now compares those exact retained rows. This is a
+floating-representation bound,not a parity tolerance or original anonymous-line-
+box acceptance. Keep original-case fractional geometry and complete formatting/
+paint/currentness obligations open;do not repeat this diagnostic or add an offset.
+Verification:existing exact requirement test passes1/1,0skip,exit0
+(2813.1239ms);scoped diff check passes. No browser/canonical rerun needed.
+
 October25 retained-baseline geometry question answered without recapture:the
 authenticated October19 live-copy diagnostic (`7a23e92d` full SHA in the exact
 requirement review) retains projected vertices,UVs,texture size/matrix,invertY,
