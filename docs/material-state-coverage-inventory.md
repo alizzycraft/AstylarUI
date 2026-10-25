@@ -9,6 +9,23 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Editing-source registration is now STAGED and reversible,not applied to live
+producer. Delta includes13 standalone code paths(the prior11 plus registration
+helper/spec) and the small Divider requirement JSON:14 total source/evidence
+paths and13 proof declarations. Staged inventory1055/378 exactly conserves all
+1041 prior sources/365 prior proof calls and recovers complete normalized producer
+SHAec5be8ce8f6a47371e22b4c041abcc677013d9263834edc4a6ae4b94d07c906d.
+Duplicate registration,unexpected drift and nonunique proof bindings reject.
+One parameterized test declaration has two runtime instances;proof inventory
+counts declarations,not cases. New helpers reuse existing additive-registration
+pattern and do not change scope,classifications or final gates.
+
+Command:node --test tests/material-parity/editing-context-registration.spec.mjs;
+2/2,0skip,exit0,970.3831ms. Live producer bytes remain unchanged. This is not a
+1055-path live registration claim. Next reconcile staged read/selection boundaries
+and pending plan delta coherently before any live producer switch;no repeated
+browser capture/full dependency run is justified by this successful inventory test.
+
 Exact043361b0 successor now has a named standalone reader at
 tests/material-parity/editing-context-review-source.mjs. It rejects unknown
 digests,builds from unchanged f812 predecessor,passes unrelated reads through
