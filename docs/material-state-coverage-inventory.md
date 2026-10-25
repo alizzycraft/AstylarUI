@@ -4,6 +4,24 @@
 
 ### Current next action and publication status
 
+October25 coherent focus/selection registry batch is prepared IN MEMORY only:
+1077 sources/407 proof declarations/203 findings/70 implementation tracks.
+It adds seven source paths,nine proofs,the single public Tab-selection finding
+and one owning implementation track. Every existing1070/398/202/69 entry and
+complete producer/policy byte sequence restores exactly;unknown drift,double
+registration and missing sources reject. The actual source-diagnostic validator
+block authenticates the new receipt array and rejects object/forged receipts.
+Existing public selection suite passes6/6,0skip,6700.0625ms in
+`artifacts/material-parity/focus-selection-staged-integration-20261025.log`;
+the initial focused registry/finding check passes2/2 in
+`focus-selection-staged-registry-20261025.log`. No live registry/source inventory,
+runner/launcher,canonical package or case disposition changed. Next integrate
+the staged registry with the verified supplementary Timepicker reader/selection,
+preserving all older routes and exact whole-source replay. Resolve async reader
+construction explicitly at the existing runner boundary;do not silently discard
+a Promise's read/sourceApplicability fields. Then run coherent dependency checks
+before live application;do not repeat captures or start a full export yet.
+
 October25 public Tab-entry first divergence is now demonstrated,not inferred
 from final values. One paired text/DPR1 trace reuses the EXACT uninstrumented
 bundle. Native and candidate both initially expose browser-created[0,16] at

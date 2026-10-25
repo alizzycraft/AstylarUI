@@ -7,6 +7,34 @@ import ts from 'typescript';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 
+test('Focus selection staged registry preserves every accepted source proof finding and plan',async t=>{
+  const {prepareFocusSelectionAuditRegistry:prepare,restoreFocusSelectionAuditRegistry:restore}=await import('./public-tab-selection-finding.mjs');
+  const raw={},staged={};for(const [kind,file]of Object.entries({producer:'tests/material-parity/input-equivalence-audit.mjs',policy:'tests/material-parity/input-equivalence-policy.mjs'})){
+    raw[kind]=readFileSync(file,'utf8').replaceAll('\r\n','\n');staged[kind]=prepare(raw[kind],kind,readFileSync);
+    assert.equal(restore(staged[kind],kind),raw[kind]);assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),raw[kind]);
+    assert.throws(()=>prepare(raw[kind]+'\n// drift',kind,readFileSync));assert.throws(()=>restore(staged[kind]+'\n// drift',kind));assert.throws(()=>prepare(staged[kind],kind,readFileSync));
+  }
+  assert.throws(()=>prepare(raw.producer,'producer',()=>Buffer.alloc(0)));
+  const arrays=source=>{const tree=ts.createSourceFile('registry.mjs',source,99,true,ts.ScriptKind.JS),out={};assert.equal(tree.parseDiagnostics.length,0);
+    for(const name of ['sourceFingerprints','focusedProofInventory','implementationPlan']){const fn=tree.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text===name);if(!fn)continue;let array;const visit=n=>{if(!array&&ts.isArrayLiteralExpression(n))array=n;ts.forEachChild(n,visit);};visit(fn);out[name]=array.elements.map(n=>n.getText(tree));}
+    const variable=tree.statements.flatMap(n=>ts.isVariableStatement(n)?[...n.declarationList.declarations]:[]).find(n=>n.name.getText(tree)==='sourceAuditDefinitions');if(variable)out.definitions=variable.initializer.arguments[0].elements.map(n=>n.getText(tree));return out;};
+  const before=arrays(raw.producer),after=arrays(staged.producer);
+  for(const [name,count,added]of [['sourceFingerprints',1070,7],['focusedProofInventory',398,9],['implementationPlan',69,1]]){
+    assert.equal(before[name].length,count);assert.equal(after[name].length,count+added);assert.deepEqual(after[name].slice(added),before[name]);
+  }
+  assert.equal(new Set(after.sourceFingerprints).size,1077);
+  const old=arrays(raw.policy).definitions,next=arrays(staged.policy).definitions;assert.equal(old.length,202);assert.equal(next.length,203);assert.deepEqual(next.slice(1),old);
+  const finding=new Function('return '+next[0])();assert.equal(finding.id,'core-native-tab-selection-overwritten-by-control-sync');assert.ok(Array.isArray(finding.evidence));
+  const tree=ts.createSourceFile('audit.mjs',raw.producer,99,true,ts.ScriptKind.JS),validator=tree.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text==='validateMaterialInputAudit');
+  const block=validator.body.statements.find(n=>ts.isForOfStatement(n)&&n.expression.getText().startsWith('sourceAuditDefinitions.filter'));
+  const {existsSync}=await import('node:fs'),{default:path}=await import('node:path');
+  const validate=new Function('sourceAuditDefinitions','report','root','path','existsSync','createHash','readFileSync','const errors=[];'+block.getText()+';return errors;');
+  const run=f=>validate([f],{sourceFindings:[f]},process.cwd(),path,existsSync,createHash,readFileSync);
+  assert.deepEqual(run(finding),[]);assert.throws(()=>run({...finding,evidence:{report:finding.evidence[0]}}));
+  assert.ok(run({...finding,evidence:[{...finding.evidence[0],sha256:'0'.repeat(64)}]}).length);
+  t.diagnostic(JSON.stringify({stagedSources:1077,stagedProofs:407,stagedFindings:203,stagedTracks:70,completePredecessorRecovered:true,liveWrites:false,canonicalUnchanged:true}));
+});
+
 test('pending public Tab-selection finding authenticates its bounded cause without promoting the audit',async()=>{
   const {publicTabSelectionFinding:f}=await import('./public-tab-selection-finding.mjs');
   assert.equal(f.classification,'confirmed-core-renderer-defect');

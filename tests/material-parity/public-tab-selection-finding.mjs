@@ -1,4 +1,6 @@
 // Pending bounded audit finding;not live registry or canonical acceptance.
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 export const publicTabSelectionFinding=Object.freeze({
   id:'core-native-tab-selection-overwritten-by-control-sync',
   classification:'confirmed-core-renderer-defect',
@@ -24,3 +26,50 @@ export const publicTabSelectionFinding=Object.freeze({
   recommendation:'Preserve browser-owned selection at the native-origin focus/control-sync boundary before managed editing consumes it. Keep scene-origin programmatic focus,pointer/directional selection,updates and unsupported selection APIs separate. Do not globally selectAll,patch Material callbacks,change input types or invent email endpoints.',
   boundary:'Core mechanism demonstrated for one public text Tab-entry trace with four text/email failing pairs and four explicit-selection controls. Not email-specific setter attribution,original Material runtime causality,all focus origins,IME/clipboard,raster,full current rendering or whole-case closure. No implementation fix authorized by this audit.',
 });
+
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const registryPrior={producer:'a78756e84226ba44a9a0fd782b3bef6ecc58a3335a6c42ced7b20e8735859d85',policy:'51c9f568e0d0f9078060c27ad876becb918624abeea79dc7febd0339ccb1d581'};
+export const focusSelectionAuditSources=Object.freeze([
+  'scripts/audit-material-timepicker-programmatic-focus.mjs',
+  'scripts/join-material-timepicker-programmatic-focus.mjs',
+  'scripts/audit-public-email-selection.mjs',
+  'scripts/audit-public-email-tab-entry.mjs',
+  'scripts/audit-public-tab-selection-trace.mjs',
+  'tests/material-parity/public-email-selection.spec.mjs',
+  'tests/material-parity/public-tab-selection-finding.mjs',
+]);
+export const focusSelectionAuditProofs=Object.freeze([
+  ['tests/material-parity/focus-action-scope.spec.mjs','supplementary Timepicker staged reader recovers exact historical tests and validates all dependencies'],
+  ['tests/material-parity/focus-action-scope.spec.mjs','supplementary Timepicker focus join preserves the complete accepted predecessor and rejects forged evidence'],
+  ['tests/material-parity/focus-action-scope.spec.mjs','supplementary Timepicker DOM focus opens only the candidate popup across eight retained contexts'],
+  ['tests/material-parity/public-email-selection.spec.mjs','Focus selection staged registry preserves every accepted source proof finding and plan'],
+  ['tests/material-parity/public-email-selection.spec.mjs','pending public Tab-selection finding authenticates its bounded cause without promoting the audit'],
+  ['tests/material-parity/public-email-selection.spec.mjs','public Tab trace observes native selection overwritten by queued semantic control sync'],
+  ['tests/material-parity/public-email-selection.spec.mjs','Tab selection trace binds complete current and installed selection-sync methods'],
+  ['tests/material-parity/public-email-selection.spec.mjs','public text and email Tab-entry failures separate initial selection from explicit replacement'],
+  ['tests/material-parity/public-email-selection.spec.mjs','public selection controls reuse authenticated installed keyboard-owner applicability'],
+]);
+const escape=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const finding={...publicTabSelectionFinding,justification:publicTabSelectionFinding.observation.causalTrace.firstDivergence+' '+publicTabSelectionFinding.boundary};
+const additions={
+  policy:[['export const sourceAuditDefinitions = Object.freeze([\n','  Object.freeze('+JSON.stringify(finding,null,2)+'),\n']],
+  producer:[
+    ['function sourceFingerprints(root) {\n  const files = [\n',focusSelectionAuditSources.map(f=>'    '+JSON.stringify(f)+',\n').join('')],
+    ['function focusedProofInventory(root) {\n  return [\n',focusSelectionAuditProofs.map(([file,title])=>'    proof(root, '+JSON.stringify(file)+', new RegExp('+JSON.stringify("test\\('"+escape(title)+"'")+'),\n      '+JSON.stringify(title)+', "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),\n').join('')],
+    ['function implementationPlan() {\n  return [\n','    '+JSON.stringify({priority:2.06,rootCause:publicTabSelectionFinding.owner,action:publicTabSelectionFinding.recommendation+' '+publicTabSelectionFinding.boundary})+',\n'],
+  ],
+};
+const once=(source,before,after)=>{assert.equal(source.split(before).length,2);return source.replace(before,after);};
+export function prepareFocusSelectionAuditRegistry(bytes,kind,read){
+  assert.ok(Object.hasOwn(registryPrior,kind));let source=bytes.toString().replaceAll('\r\n','\n');assert.equal(hash(source),registryPrior[kind]);
+  if(kind==='producer'){
+    for(const file of focusSelectionAuditSources){assert.ok(read(file).length>0);assert.equal(source.includes(JSON.stringify(file)),false);}
+    for(const [file,title]of focusSelectionAuditProofs)assert.equal([...read(file).toString().matchAll(new RegExp("test\\('"+escape(title)+"'",'g'))].length,1);
+  }
+  for(const [anchor,prefix]of additions[kind])source=once(source,anchor,anchor+prefix);return source;
+}
+export function restoreFocusSelectionAuditRegistry(bytes,kind){
+  assert.ok(Object.hasOwn(registryPrior,kind));let source=bytes.toString().replaceAll('\r\n','\n');
+  for(const [anchor,prefix]of additions[kind].toReversed())source=once(source,anchor+prefix,anchor);
+  assert.equal(hash(source),registryPrior[kind]);return source;
+}
