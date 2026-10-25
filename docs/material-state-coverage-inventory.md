@@ -4,6 +4,39 @@
 
 ### Current next action and publication status
 
+October25 public Tab-entry first divergence is now demonstrated,not inferred
+from final values. One paired text/DPR1 trace reuses the EXACT uninstrumented
+bundle. Native and candidate both initially expose browser-created[0,16] at
+focus/focusin capture. Candidate's first selection write changes it to[0,0]
+with setSelectionRange(0,0,"none");stack is AstylarSemanticBridge.applyControlState
+from syncControlStates inside the queued control-sync microtask. Native has no
+such write. After-Tab/after-type values,focus,selection and unchanged authored
+data match the uninstrumented failing pair. The competing explanation that the
+browser never selected the candidate text is contradicted by this observation.
+
+Trace `artifacts/material-parity/public-tab-selection-trace-20261025/latest-report.json`
+SHA256966276cd72bd0043b30e86923b67e130a0a8048831d43906db875e754b15f1dd;
+capture log `public-tab-selection-trace-capture-20261025.log`. The installed
+bridge/module bytes belong to the traced bundle's authenticated2515 inputs.
+Six complete current/installed methods agree:bridge handleFocusIn,
+queueControlStateSync,syncControlStates,applyControlState;AstylarRenderer mount
+and getLiveSemanticControlState. Initial suite had3/4 passes:the AST selector
+found two mount methods,not a renderer failure. Owner-qualified corrected suite
+passes4/4,0skip,5890.1059ms in
+`public-tab-selection-cause-owner-corrected-20261025.log` (artifact root).
+Initial `public-tab-selection-cause-20261025.log` remains retained.
+
+Pending machine-readable finding `core-native-tab-selection-overwritten-by-control-sync`
+lives in public-tab-selection-finding.mjs. Receipt/pattern/boundary check passes
+1/1,0skip,464.9464ms in `public-tab-selection-pending-finding-20261025.log`.
+Do not globally selectAll or change Material input types/callbacks. Preserve
+native-origin versus scene-origin selection ownership in a later general fix.
+Email-specific mechanism,other focus origins,IME/clipboard,original Material
+runtime attribution and full paint/current-code gates remain separate. No core
+fix,live finding registration,canonical count change or case closure. Next batch
+this bounded finding and existing Timepicker evidence through current registry/
+source reconciliation;do not repeat these controls or causal trace for metadata.
+
 October25 distinct text-editing cause question narrowed by equal-input public
 controls,no Material/plugin/callback/update. The retained email failure used
 Tab then typing,not explicit Ctrl+A. New package-root text/email pairs atDPR1/2

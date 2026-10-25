@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep `public-tab-selection-trace-20261025`,its capture log,the initial
+`public-tab-selection-cause-20261025.log` AST-selector failure,the owner-corrected
+suite log and pending-finding log. The trace references the retained uninstrumented
+public-email Tab-entry bundle;do not delete that bundle or its explicit-selection
+control. Prototype instrumentation is diagnostic evidence with checked endpoints,
+not an uninstrumented replacement capture or full timing/paint acceptance.
+
 Keep `public-email-selection-20261025` and `public-email-tab-entry-20261025`,
 their capture/verify logs and `public-email-selection-controls-20261025.log`.
 The former is a necessary passing control for the latter's four failing pairs;

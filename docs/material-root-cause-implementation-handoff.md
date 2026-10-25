@@ -1,5 +1,24 @@
 # Material audit: evidence-led implementation priorities
 
+## Pending native Tab selection ownership defect,October25
+
+`core-native-tab-selection-overwritten-by-control-sync` is demonstrated by a
+public package-root reduction without Material/plugin/callback/update. Four
+text/email Tab-entry pairs fail while four explicit-select-all controls pass
+using identical application source,bundle and2515 build inputs. One text/DPR1
+trace observes both sides initially selected[0,16],then candidate queued semantic
+control sync calls applyControlState/setSelectionRange(0,0,"none") before typing.
+Six complete current/installed methods bind the owning path. See current ledger
+and pending `tests/material-parity/public-tab-selection-finding.mjs` for receipts.
+
+Fix selection ownership at native-origin focus/control synchronization,not by
+forcing selectAll for every focus or patching Material value callbacks. Keep
+scene-origin focus,pointer/directional selection,unsupported email selection APIs,
+updates and event semantics independent. Preserve the demonstrated failing trace
+and passing explicit-selection control. This audit authorizes no implementation;
+other focus origins,email-specific mechanism,IME/clipboard,history and original
+Material/current whole-rendering acceptance remain unproved.
+
 October25 publication checkpoint:Sort/Tree/held batch is accepted locally as
 7a22e84a/index0d9f52fa after export,complete conservation,independent cold replay
 and verified imports. Exact logs and next actions are in the current coverage
