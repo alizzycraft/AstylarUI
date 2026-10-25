@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October25 export checkpoint: the original `--editing-context` export terminated
+with exit1 before `encode-canonical`/`write-canonical`. Preserve
+`artifacts/material-parity/editing-canonical-export-20261025.log` and its
+`.stderr.log`. It reports four invalid source bindings and259 unresolved scalar
+groups; this is a failed publication attempt,not new case/rendering acceptance.
+Accepted88be4d47 and its working-index pointer remain unchanged.
+
+Focused replay isolates alignment/font,text-align and LTR failures to
+`restorePendingEvidenceProducer` calling `restoreDividerOwnerFrameProducer`
+before removing newer registered prefixes (`Exact owner/frame inventory boundary
+required`,1 versus2). The reviewed-input collector reports mapping-source
+disabled-ink conservation failure; its underlying cause still needs explicit
+verification. A direct diagnostic proves that the existing authenticated
+`createMenuHistoricalRead` removes the newer registrations and lets the older
+pending restoration recover SHA256
+`0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1`;
+the raw current producer fails that same older restoration. Next correct the
+shared historical replay ordering with exact predecessor recovery and drift
+negative controls,then rerun the four focused collectors before any full export.
+Do not relax binding checks,replace historical receipts,or recapture browser
+evidence for this instrumentation failure. All2311 cases remain partial and
+current rendering unverified; all original acceptance gates remain open.
+
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
