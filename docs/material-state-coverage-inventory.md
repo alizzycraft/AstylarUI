@@ -4,6 +4,33 @@
 
 ### Current next action and publication status
 
+October25 next shared-action gap answered:the configured Timepicker focus action
+is a pointer click,and retained lifecycle focus-call traces are restoration after
+that click,not initiating programmatic-focus evidence. A supplementary probe now
+reuses the existing direct-owner/checkpoint/capture verifier with an explicitly
+recorded DOM input.focus() action on both sides. It does not change configured
+actions,Datepicker,fixtures or core. Eight exact desktop contexts cover all four
+profiles atDPR1/2 in Chromium155.0.8059.85 against the retained served build.
+Both inputs are unfocused/popups absent before;both inputs are focused after the
+action and settlement. Native popup stays absent;candidate popup is present in
+all eight. This extends the existing action-specific popup-state authoring
+finding,not a positioning failure,new core finding or blanket focus parity.
+
+Report `artifacts/material-parity/timepicker-programmatic-focus-20261025/latest-report.json`
+SHA256 `4d4a445de38fa7f562a05f3ed35cd014deee8afd39d260d9fc738c99b38a123f`.
+Capture and verify logs use `timepicker-programmatic-focus-capture-20261025.log`
+and `timepicker-programmatic-focus-verify-20261025.log` under the same artifact root.
+Existing focus-action-scope suite authenticates the report,executes the owning
+verifier and exact action recipe,and preserves the failure alongside prior
+248-programmatic/eight-pointer counts and40 exclusions:3/3 pass,0skip,
+3897.4979ms (`timepicker-programmatic-focus-regression-20261025.log`).
+No new canonical export or count promotion. New probe and changed scope test
+are post7a22 sources;source/export reconciliation remains due at the next coherent
+batch. Next join this exact supplementary action through existing case-obligation
+infrastructure without replacing the configured pointer action or clearing other
+focus/paint/currentness requirements. Public scene.focus(),mobile,restoration,
+Datepicker and final current-code gates remain separate;do not repeat this capture.
+
 October25 publication is remote-verified atd44599dd477de1428cd0beb6f7b4be0a1f554c60
 on codex/material-audit-alignment-integration. The Sort historical-baseline test
 now pins8848/index3a73 directly instead of requiring mutable current.json to stay

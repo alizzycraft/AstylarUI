@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep `timepicker-programmatic-focus-20261025` and its `-provenance` sibling,
+capture/verify/regression logs:these preserve eight failing supplementary
+DOM-focus observations,16 paired trees/screenshots and their checkpoint provenance.
+They are not disposable successful scratch or replacement configured-focus cases.
+No closure/removal authorized;see current ledger for report hash and scope.
+
 October25 accepted7a22e84a/index0d9f52fa retains the complete predecessor8848.
 Keep the successful corrected-export,cold-check,section/metadata/coverage/leaf/
 derived-receipt conservation and both import logs named in the current ledger,

@@ -3,9 +3,34 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 import ts from 'typescript';
+import {execFileSync} from 'node:child_process';
 import { materialInteractionCases } from './benchmark.config.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+
+test('supplementary Timepicker DOM focus opens only the candidate popup across eight retained contexts', () => {
+  const directory='artifacts/material-parity/timepicker-programmatic-focus-20261025';
+  const bytes=readFileSync(directory+'/latest-report.json');
+  assert.equal(hash(bytes),'4d4a445de38fa7f562a05f3ed35cd014deee8afd39d260d9fc738c99b38a123f');
+  const report=JSON.parse(bytes),script='scripts/audit-material-timepicker-programmatic-focus.mjs';
+  const verified=JSON.parse(execFileSync(process.execPath,[script,'--verify',directory],{encoding:'utf8'}));
+  assert.equal(verified.cases,8);assert.equal(verified.observedNotParityAccepted,true);
+  const recipe=JSON.parse(execFileSync(process.execPath,[script,'--dry-run'],{encoding:'utf8'}));
+  assert.equal(recipe.action,report.actionSource.executedAction.source);
+  assert.equal(recipe.actionSha256,report.actionSource.executedAction.sha256);
+  assert.equal(recipe.notConfiguredAction,true);assert.equal(recipe.noDatepicker,true);
+  assert.deepEqual(report.results.map(r=>`${r.profile}/${r.viewport.id}`),
+    ['light','dark','contrast','custom'].flatMap(p=>['desktop-dpr1','desktop-dpr2'].map(v=>`${p}/${v}`)));
+  for(const row of report.results)for(const side of ['reference','astylar']){
+    assert.equal(row.family,'timepicker');const observations=row[side].observations;
+    assert.deepEqual(observations.map(o=>o.action),Array(3).fill('supplementary-dom-programmatic-focus'));
+    assert.deepEqual(observations.map(o=>o.activeEqualsTarget),[false,true,true]);
+    assert.deepEqual(observations.map(o=>o.popupCount),side==='reference'?[0,0,0]:[0,1,1]);
+    assert.equal(observations.at(-1).active.logicalId,'timepicker-control');
+  }
+  // Preserves observed failure,not a passing parity requirement or a substitute
+  // for configured pointer actions,Tab,public scene focus or Datepicker behavior.
+});
 test('configured focus action scope is 248 programmatic requests and eight pointer clicks, never Tab', async () => {
   const file = 'artifacts/material-parity/configured-input-focus-boundaries-20261024/latest-report.json';
   const bytes = readFileSync(file); assert.equal(hash(bytes), '8e176417defd6d8bbd2f9276adc8d37828867fce006cf80b4a74e4034aa9d118');
