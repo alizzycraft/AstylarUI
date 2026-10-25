@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Coherent STAGED editing batch now passes14/14,0skip,exit0,117367.694ms,stderr
+empty. Command:node --max-old-space-size=8192 --test --test-concurrency=1 on
+divider-original-crop-provenance,ordinary-wrapping-request-path,
+disabled-select-keyboard-guard,select-readonly-focus-contexts,
+editing-context-registration and editing-context-evidence-join specs. Keep
+editing-staged-coherent-integration-20261025 pair. All THREE staged reads
+(1055/378/65-plan producer,launcher,runner) compose with exact043361b0 reader,
+recover complete parent and validate18397 receipts across2311 cases. Virtual
+proposal only;live producerWritten=false and physicalProposalWritten=false.
+
+Freeze this coherent staged boundary. Live registration still requires direct
+historical-consumer reconciliation(the old owning registration tests assert
+the current1041 producer),not merely switching three files because staged reads
+pass. Publication also remains blocked by the recorded headroom/transport issue.
+Current live1041/365/198 and canonical88be4d47 remain;do not claim staged counts
+as published or turn diagnostic passes into whole-case acceptance. No browser
+recapture/full dependency replay for prose or unchanged staging inputs.
+
 Staged selection is verified WITHOUT switching live files:explicit
 --editing-context routes exact043361b0 path/digest,conflicting supplement flags
 reject,and every older rawRequested flag/default invocation retains identical

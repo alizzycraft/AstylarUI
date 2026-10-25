@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Keep editing-staged-coherent-integration-20261025 log/stderr pair:14/14 checks,
+three staged transitions,18397 receipt dependencies/2311 cases. No large proposal
+or live producer written. This is the coherent staged milestone;do not recapture
+or repeat the full loader for subsequent documentation-only bookkeeping.
+
 Keep editing-context-explicit-reader-20261025 log/stderr pair:exact043361b0
 reader selection,unknown-digest rejection,unchanged unrelated evidence and full
 18397-dependency validation. No physical proposal written;stderr empty.

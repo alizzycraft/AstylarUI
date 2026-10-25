@@ -7,10 +7,20 @@ import { dividerOwnerContextReview } from './divider-owner-context-review-source
 import { createEditingContextReviewReader,editingContextReview } from './editing-context-review-source.mjs';
 import { joinEditingContextEvidence,restoreEditingContextEvidence } from '../../scripts/join-material-editing-context-evidence.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
+import { prepareEditingContextProducer,prepareEditingContextSelection } from './editing-context-registration.mjs';
 
 test('Editing context join conserves complete parent and limits new evidence to 56 exact cases',t=>{
   assert.throws(()=>createEditingContextReviewReader({root:process.cwd(),read:readFileSync,reviewSha256:'0'.repeat(64)}));
-  const reader=createEditingContextReviewReader({root:process.cwd(),read:readFileSync,reviewSha256:editingContextReview});
+  const staged=new Map([
+    ['tests/material-parity/input-equivalence-audit.mjs',prepareEditingContextProducer(readFileSync('tests/material-parity/input-equivalence-audit.mjs'),readFileSync)],
+    ['scripts/export-material-input-audit-current-ancestry.mjs',prepareEditingContextSelection(readFileSync('scripts/export-material-input-audit-current-ancestry.mjs'),'launcher')],
+    ['scripts/run-material-input-audit.mjs',prepareEditingContextSelection(readFileSync('scripts/run-material-input-audit.mjs'),'runner')],
+  ].map(([file,source])=>[path.resolve(file),Buffer.from(source)]));
+  const stagedRead=(file,options)=>{
+    const bytes=staged.get(path.resolve(file));if(!bytes)return readFileSync(file,options);
+    const encoding=typeof options==='string'?options:options?.encoding;return encoding?bytes.toString(encoding):Buffer.from(bytes);
+  };
+  const reader=createEditingContextReviewReader({root:process.cwd(),read:stagedRead,reviewSha256:editingContextReview});
   const selected=JSON.parse(reader.read(path.resolve(`artifacts/material-parity/working-audit/proposals/${editingContextReview}.json`))).review;
   const parent=restoreEditingContextEvidence(selected);
   const joined=joinEditingContextEvidence(parent);assert.equal(joined.addedChildren,56);
@@ -32,6 +42,6 @@ test('Editing context join conserves complete parent and limits new evidence to 
   assert.deepEqual(reader.read('docs/evidence/material-original-runner-e01.mjs.gz.b64'),readFileSync('docs/evidence/material-original-runner-e01.mjs.gz.b64'));
   assert.equal(reader.sourceApplicability.addedChildren,56);
   assert.equal(loaded.inspectionComplete,false);assert.equal(loaded.currentRenderingAccepted,false);assert.equal(loaded.cases.length,2311);
-  t.diagnostic(JSON.stringify({dependencyReceipts:loaded.evidenceFingerprints.length,physicalProposalWritten:false}));
+  t.diagnostic(JSON.stringify({dependencyReceipts:loaded.evidenceFingerprints.length,stagedTransitions:staged.size,physicalProposalWritten:false,liveProducerWritten:false}));
   t.diagnostic(JSON.stringify({reviewSha256:joined.sha256,parentSha256:createHash('sha256').update(JSON.stringify(parent)).digest('hex'),addedChildren:56,caseClosure:false,currentRenderingAccepted:false}));
 });
