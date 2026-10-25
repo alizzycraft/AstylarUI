@@ -9,6 +9,17 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact043361b0 successor now has a named standalone reader at
+tests/material-parity/editing-context-review-source.mjs. It rejects unknown
+digests,builds from unchanged f812 predecessor,passes unrelated reads through
+and serves only the exact virtual successor. No default runner/launcher selection
+changed. Owning conservation/dependency proof passes1/1,0skip,exit0,
+119273.5635ms,18397 receipts,2311 cases;stderr empty. Keep
+editing-context-explicit-reader-20261025 pair. The standalone code delta is now
+eleven paths,including this reader. Producer/proof inventory registration,
+publication and original final gates remain pending;no more full dependency
+replay is needed for documentation-only changes to this settled boundary.
+
 Editing-context successor043361b0 now passes the EXISTING complete dependency
 loader,not merely structural join checks:18397 authenticated receipts and2311
 exact configured cases. Parent recovery/duplicate/corruption checks remain in

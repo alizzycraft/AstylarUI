@@ -1,5 +1,9 @@
 # Audit artifact retention
 
+Keep editing-context-explicit-reader-20261025 log/stderr pair:exact043361b0
+reader selection,unknown-digest rejection,unchanged unrelated evidence and full
+18397-dependency validation. No physical proposal written;stderr empty.
+
 Keep editing-context-full-dependency-20261025 log/stderr pair:existing full
 case-obligation loader authenticates18397 receipt dependencies/2311 exact cases
 for in-memory043361b0. Stderr empty;no physical large proposal/export. This is
