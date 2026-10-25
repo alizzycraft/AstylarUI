@@ -9,6 +9,23 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Editing-context successor043361b0 now passes the EXISTING complete dependency
+loader,not merely structural join checks:18397 authenticated receipts and2311
+exact configured cases. Parent recovery/duplicate/corruption checks remain in
+the same owning test;inspectionComplete and currentRenderingAccepted are false.
+Virtual proposal bytes exist only in memory;no large198MB proposal written.
+Command:node --max-old-space-size=8192 --test
+tests/material-parity/editing-context-evidence-join.spec.mjs. Pass1/1,0skip,exit0,
+112105.0961ms,stderr empty;retain editing-context-full-dependency-20261025 pair.
+
+This completes dependency-loader validation for the56-child join. Still pending:
+coherent source/proof inventory registration(ten standalone code paths),explicit
+selection/source reconciliation,small Divider requirement record and generated
+plan delta integration,then publication/conservation/cold/import when headroom/
+transport permit. Do not rerun the just-passed dependency gate for prose edits or
+confuse it with canonical/current-rendering/full-case acceptance. Existing frozen
+1041/365/198 batch and canonical88be4d47 remain unchanged.
+
 New standalone editing-context join attaches bounded evidence to56 EXACT rows:
 48 disabled contexts and eight Select focus contexts. It authenticates four
 retained reports,manifests and paired outputs,checks exact configured membership,

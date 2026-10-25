@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Keep editing-context-full-dependency-20261025 log/stderr pair:existing full
+case-obligation loader authenticates18397 receipt dependencies/2311 exact cases
+for in-memory043361b0. Stderr empty;no physical large proposal/export. This is
+the dependency gate for the new join,not canonical publication or release proof.
+
 Keep editing-context-evidence-join-20261025 log/stderr pair:complete in-memory
 f812 predecessor recovery and56-child evidence join proof. No198MB successor
 proposal was written. Pending standalone review digest043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd
