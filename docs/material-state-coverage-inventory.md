@@ -28,9 +28,25 @@ branches reads hover state. Initial2f440115 has no separate arrow at all,so do
 not falsely date the current gate to the initial example. This remains source
 history,not historical runtime or reference-equivalence proof. Consolidated
 focused suite passes3/3,exit0,3639.541ms;no renderer or fixture changes. C:free
-3436544 bytes on the latest preflight;new browser work remains deferred. Next
-join these bounded partial observations to existing case records without
-promoting cases or generating another capture/framework.
+3436544 bytes on that preflight;new browser work remains deferred.
+
+The pending Sort partial join is now verified in memory:exact predecessor
+6ea59073 ->8554f8ef7d18ee02a80a409eddb7f96a1aad188983d124d49f9c9d556799f71e,
+adding60 input-presence/opacity children and only TWO local-paint children.
+join-material-sort-arrow-evidence.mjs authenticates120 trees,the original report
+and four PNGs;complete original local metrics replay. All2311 case flags and
+every disposition/remaining-work list preserve. Removing precisely62 children
+recovers the complete prior review;double application and forged PNG reject.
+Focused join test passes1/1,exit0,16117.7314ms (assertion15611.0712ms).
+
+The test reuses hash-verified accepted8848 index metadata plus the existing
+held/Tree joins to reconstruct the exact6ea predecessor,instead of rebuilding
+the entire historical source-reader chain. It does NOT claim a repeat of full
+18404-dependency validation,current-source equality or canonical publication.
+No large physical proposal was written. Next stage this bounded pending batch
+through existing source/policy/reader conservation;do not repeat its census or
+pixel sampling for bookkeeping. Live1067/392/200/67 and historical canonical8848
+preserve. Fresh current raster remains deferred;no case closure or repair.
 
 October25 next Sort input-mapping question reveals a NEW pending plugin vector
 geometry defect,not a cursor/keyboard recapture. Authenticated originalab42dbec

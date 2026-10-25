@@ -8,6 +8,28 @@ import {PNG} from 'pngjs';
 import {evaluateFocusedRaster} from './focused-raster-metrics.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
+test('Sort arrow partial join conserves the complete Tree predecessor and all remaining work',async t=>{
+  const base='artifacts/material-parity/working-audit',pointer=JSON.parse(readFileSync(base+'/current.json'));
+  assert.equal(pointer.generation,'8848ae5b1ca0b18bc04116ebdd1eb2c360b7497a298e69fca9578df4a1b2b420');
+  const bytes=readFileSync(`${base}/${pointer.generation}/index.json`);assert.equal(hash(bytes),pointer.indexSha256);
+  const coverage=JSON.parse(bytes).metadata.coverage.inspectionEvidence;
+  const accepted={kind:'case-obligation-coverage-extension',status:'proposal-not-canonical',scope:coverage.scope,groups:coverage.cases};
+  const {joinTextHeldEvidence}=await import('../../scripts/join-material-text-held-evidence.mjs');
+  const {joinTreeFocusEvidence}=await import('../../scripts/join-material-tree-focus-evidence.mjs');
+  const {joinSortArrowEvidence,restoreSortArrowEvidence,sortArrowPredecessor}=await import('../../scripts/join-material-sort-arrow-evidence.mjs');
+  const parent=joinTreeFocusEvidence(joinTextHeldEvidence(accepted).review).review;assert.equal(hash(JSON.stringify(parent)),sortArrowPredecessor);
+  const joined=joinSortArrowEvidence(parent);assert.equal(joined.cases,60);assert.equal(joined.addedChildren,62);
+  assert.deepEqual(restoreSortArrowEvidence(joined.review),parent);let changed=0,paint=0;
+  for(let i=0;i<parent.groups.length;i++){const a=parent.groups[i],b=joined.review.groups[i];
+    assert.equal(b.inspection,a.inspection);assert.equal(b.currentRendering,a.currentRendering);
+    for(const name of Object.keys(a.obligations)){assert.equal(b.obligations[name].disposition,a.obligations[name].disposition);assert.deepEqual(b.obligations[name].remaining,a.obligations[name].remaining);}
+    if(a!==b)changed++;paint+=Number(!!b.obligations.localPaint.supplementarySortArrowLocalPixels);
+  }
+  assert.equal(changed,60);assert.equal(paint,2);
+  assert.throws(()=>joinSortArrowEvidence(joined.review));
+  assert.throws(()=>joinSortArrowEvidence(parent,(file,...args)=>file.endsWith('focus/sort-primary-raster-astylar.png')?Buffer.from('forged'):readFileSync(file,...args)));
+  t.diagnostic(JSON.stringify({review:joined.sha256,predecessor:sortArrowPredecessor,cases:60,addedChildren:62,retainedPaintCases:2,completePredecessorRecovered:true,physicalProposalWritten:false,canonicalPublished:false,currentRenderingAccepted:false}));
+});
 test('pending Sort arrow findings preserve separate state and vector ownership',async()=>{
   const {sortArrowFindings:findings}=await import('./sort-arrow-findings.mjs');assert.equal(findings.length,2);
   assert.equal(new Set(findings.map(f=>f.id)).size,2);
