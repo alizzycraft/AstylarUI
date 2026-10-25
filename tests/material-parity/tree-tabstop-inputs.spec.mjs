@@ -12,7 +12,9 @@ test('Tree staged registry conserves every live source proof finding and plan wi
   const {prepareTreeFocusRegistry,restoreTreeFocusRegistry,treeFocusSources,treeFocusProofTitles,
     prepareTreeFocusSelection,restoreTreeFocusSelection,createTreeFocusPriorRead,treeFocusReview}=await import('./tree-focus-registration.mjs');
   const producer='tests/material-parity/input-equivalence-audit.mjs',policy='tests/material-parity/input-equivalence-policy.mjs';
-  const before=readFileSync(producer,'utf8').replaceAll('\r\n','\n'),oldPolicy=readFileSync(policy,'utf8').replaceAll('\r\n','\n');
+  const liveProducer=readFileSync(producer,'utf8').replaceAll('\r\n','\n'),livePolicy=readFileSync(policy,'utf8').replaceAll('\r\n','\n');
+  const readPrior=createTreeFocusPriorRead({root:process.cwd(),read:readFileSync});
+  const before=readPrior(producer,'utf8'),oldPolicy=readPrior(policy,'utf8');
   const staged=prepareTreeFocusRegistry(before,'producer',readFileSync),stagedPolicy=prepareTreeFocusRegistry(oldPolicy,'policy',readFileSync);
   assert.equal(restoreTreeFocusRegistry(staged,'producer'),before);assert.equal(restoreTreeFocusRegistry(stagedPolicy,'policy'),oldPolicy);
   const inventory=source=>{const tree=ts.createSourceFile(producer,source,99,true,ts.ScriptKind.JS);assert.equal(tree.parseDiagnostics.length,0);
@@ -33,10 +35,11 @@ test('Tree staged registry conserves every live source proof finding and plan wi
   assert.throws(()=>prepareTreeFocusRegistry(before+'\n// drift','producer',readFileSync));
   assert.throws(()=>restoreTreeFocusRegistry(stagedPolicy+'\n// drift','policy'));
   assert.throws(()=>prepareTreeFocusRegistry(before,'producer',()=>Buffer.alloc(0)));
-  assert.equal(readFileSync(producer,'utf8').replaceAll('\r\n','\n'),before);assert.equal(readFileSync(policy,'utf8').replaceAll('\r\n','\n'),oldPolicy);
+  assert.equal(readFileSync(producer,'utf8').replaceAll('\r\n','\n'),liveProducer);assert.equal(readFileSync(policy,'utf8').replaceAll('\r\n','\n'),livePolicy);
+  if(liveProducer!==before){assert.equal(liveProducer,staged);assert.equal(livePolicy,stagedPolicy);}
   const {spawnSync}=await import('node:child_process'),path=await import('node:path');
   const launcherFile='scripts/export-material-input-audit-current-ancestry.mjs',runnerFile='scripts/run-material-input-audit.mjs';
-  const launcher=readFileSync(launcherFile,'utf8').replaceAll('\r\n','\n'),runner=readFileSync(runnerFile,'utf8').replaceAll('\r\n','\n');
+  const launcher=readPrior(launcherFile,'utf8'),runner=readPrior(runnerFile,'utf8');
   const selected=prepareTreeFocusSelection(launcher,'launcher'),selectedRunner=prepareTreeFocusSelection(runner,'runner');
   assert.equal(restoreTreeFocusSelection(selected,'launcher'),launcher);assert.equal(restoreTreeFocusSelection(selectedRunner,'runner'),runner);
   const rootLine="const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');";
@@ -73,6 +76,14 @@ test('Tree staged registry conserves every live source proof finding and plan wi
   const pendingFile='tests/material-parity/pending-evidence-registration.mjs';
   assert.equal(hash(restoreTreeFocusPendingSource(readFileSync(pendingFile))),'2ecab5e23e19625604db60f59e9fd0dd659cb05c0bd9b41ebc2e0476ac17e8e7');
   assert.throws(()=>restoreTreeFocusPendingSource(readFileSync(pendingFile,'utf8')+'\n// drift'));
+  const {restoreTreeFocusHeldProof}=await import('./tree-focus-registration.mjs');
+  assert.equal(hash(restoreTreeFocusHeldProof(readFileSync('tests/material-parity/retained-overlay-focus.spec.mjs'))),'1567cecbfaaa02dc6ca3028213c9c42d33a05644eb141fea6e3b6b4ce8250dc1');
+  const {restoreTreeFocusDividerProof}=await import('./tree-focus-registration.mjs');
+  const dividerProof='tests/material-parity/divider-owner-context-registration.spec.mjs';
+  assert.equal(hash(restoreTreeFocusDividerProof(readFileSync(dividerProof))),'653231b57d60e6c358389250394d53e2d90fb2f9b20648cbb056f8465e28fa02');
+  assert.throws(()=>restoreTreeFocusDividerProof(readFileSync(dividerProof,'utf8')+'\n// drift'));
+  const {restoreTreeFocusEditingSource}=await import('./tree-focus-registration.mjs');
+  assert.equal(hash(restoreTreeFocusEditingSource(readFileSync('tests/material-parity/editing-context-registration.mjs'))),'15793066d47a31f940f8497270bb1c205100ee1e184f173ec7cd1bc450f0a8b4');
   t.diagnostic(JSON.stringify({stagedSources:1067,stagedProofs:392,stagedFindings:200,stagedTracks:67,completePredecessorsRecovered:true,liveWrites:false,canonicalPublished:false}));
 });
 test('pending Tree findings keep authoring and public core failure scopes separate',async()=>{
@@ -87,10 +98,11 @@ test('pending Tree findings keep authoring and public core failure scopes separa
 test('Tree partial evidence join conserves its exact predecessor and all remaining case work',async t=>{
   const path=await import('node:path');
   const {textHeldReview}=await import('./text-held-registration.mjs');
-  const {prepareTreeFocusRegistry,createTreeFocusReviewReader,treeFocusReview}=await import('./tree-focus-registration.mjs');
+  const {prepareTreeFocusRegistry,createTreeFocusReviewReader,treeFocusReview,createTreeFocusPriorRead}=await import('./tree-focus-registration.mjs');
   const {joinTreeFocusEvidence,restoreTreeFocusEvidence,treeFocusPredecessor}=await import('../../scripts/join-material-tree-focus-evidence.mjs');
   assert.equal(treeFocusPredecessor,textHeldReview);const root=process.cwd();
-  const staged=new Map([['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy']].map(([f,k])=>[path.resolve(root,f),Buffer.from(prepareTreeFocusRegistry(readFileSync(f),k,readFileSync))]));
+  const priorRead=createTreeFocusPriorRead({root,read:readFileSync});
+  const staged=new Map([['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy']].map(([f,k])=>[path.resolve(root,f),Buffer.from(prepareTreeFocusRegistry(priorRead(f),k,readFileSync))]));
   const read=(f,options)=>{const b=staged.get(path.resolve(root,f));if(!b)return readFileSync(f,options);const encoding=typeof options==='string'?options:options?.encoding;return encoding?b.toString(encoding):Buffer.from(b);};
   assert.throws(()=>createTreeFocusReviewReader({root,read,reviewSha256:'0'.repeat(64)}));
   const reader=createTreeFocusReviewReader({root,read,reviewSha256:treeFocusReview});

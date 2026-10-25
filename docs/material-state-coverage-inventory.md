@@ -4,6 +4,38 @@
 
 ### Current next action and publication status
 
+October25 Tree batch is now LIVE REGISTERED:1067 sources/392 proof declarations/
+200 findings/67 implementation tracks. Actual --tree-focus --dry-run selects
+exact6ea59073;default/older selections remain conserved. Full prior1060/383/198/65
+arrays and whole source bytes recover;two new finding IDs and two implementation
+actions remain distinct authoring versus core-input causes. No renderer or
+Material fixture edits were made. Accepted canonical8848 remains historical,
+not equal to this newer live source vector;no canonical export was attempted.
+
+Full Tree suite passes9/9,0skip,exit0,115050.928ms in
+tree-live-registration-integration-20261025.log (stderr empty). Its exact partial
+review loader authenticates18404 dependencies/2311 cases through prepared source
+bytes separately asserted equal to the actual live registry;the review remains
+53 added children/52 partially inspected input properties,not52 case closures.
+Held historical registration independently passes1/1,6230.4379ms. All2311 current
+rendering flags remain unverified and original final acceptance gates remain open.
+
+Live compatibility first found a raw-policy198-boundary assertion in Divider;
+after exact prior-policy comparison,its direct editing-proof restore also needed
+the same prior-source path. Original counts/hashes/assertions preserve through
+complete prior Divider proof653231b5 and editing helper15793066 recovery. Total
+newest prior-reader boundary is now NINE exact source paths. The focused Tree
+registry test authenticates these extra restored bytes;no full loader was repeated
+solely for this last metadata/snapshot extension. Keep the failed corrected-
+registration log (13/14,editing-proof hash failure) and original live output.
+Final tree-live-older-registration-verified-20261025 log passes14/14,exit0,
+11793.0914ms;only the previously expensive Divider full-review constructor was
+excluded,so this is not an unfiltered suite claim. Focused editing tests2/2 and
+Tree registry1/1 also pass. Next resume remaining exact-case requirements from
+the ledger;freeze this batch instead of recapturing Tree or repeatedly rerunning
+registration. Publication/export milestone still requires safe headroom and a
+viable Git upload;no credentials/trust/history changes or blind push retry.
+
 October25 BOTH pre-existing pending inventory failures are resolved without
 changing either test's expected hashes,counts or tampering assertions. Root
 cause:restoreOriginalRunnerExportSource sent newer Menu/owner/editing/held export

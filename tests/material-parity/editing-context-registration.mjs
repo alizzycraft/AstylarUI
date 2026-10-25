@@ -81,6 +81,7 @@ export function createEditingContextPriorRead({root,read}){
 }
 const editingLegacyPrior=Object.freeze({registration:'73c933562cf3ba381cb258632b88b41059bcf1db2dc58f7320d4e10592b480b4',proof:'035e13aab28532b8e832992c1027ab15d340193d5940df46af5917e0a67380e7','pending-replay':'521695641afcadbff787f41213270d305f189f30c4e06cef8d8453826fe06079','menu-proof':'2374097355dafef883d90e879a841adc5bc7cd7e6869df27b16f3fe82cf36920'});
 export function restoreEditingLegacySource(source,kind){
+  if(kind==='proof')source=createTextHeldPriorRead({root:process.cwd(),read:()=>source})('tests/material-parity/divider-owner-context-registration.spec.mjs');
   if(kind==='pending-replay')source=restoreTextHeldReplaySource(source,'pending');
   let text=source.toString().replaceAll('\r\n','\n');
   if(kind==='pending-replay'){

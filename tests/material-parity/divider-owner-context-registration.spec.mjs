@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import path from 'node:path';
+import { createTreeFocusPriorRead } from './tree-focus-registration.mjs';
 import { spawnSync } from 'node:child_process';
 import { createEditingContextPriorRead } from './editing-context-registration.mjs';
 import { createDividerOwnerContextHistoricalRead,createDividerOwnerContextReviewReader,dividerOwnerContextReview } from './divider-owner-context-review-source.mjs';
@@ -90,7 +91,7 @@ test('Divider context staged policy conserves all196 definitions and binds two d
   const file='tests/material-parity/input-equivalence-policy.mjs',bytes=readFileSync(file),before=conservedRead(file,'utf8').replaceAll('\r\n','\n');
   const definitions=s=>new Function(s.replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
   const staged=prepareDividerOwnerContextPolicy(before),old=definitions(before),next=definitions(staged);
-  assert.equal(bytes.toString().replaceAll('\r\n','\n'),staged,'Live policy must equal verified complete additive registration');
+  assert.equal(createTreeFocusPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8'),staged,'Live policy must equal verified complete additive registration');
   assert.equal(old.length,196);assert.equal(next.length,198);assert.deepEqual(next.slice(2),old);assert.deepEqual(next.slice(0,2),dividerOwnerContextFindingDefinitions);
   assert.equal(new Set(next.map(f=>f.id)).size,198);
   for(const f of next.slice(0,2)){

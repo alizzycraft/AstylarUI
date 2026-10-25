@@ -8922,6 +8922,13 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/audit-material-tree-pointer-tabstop.mjs",
+    "scripts/audit-public-tree-fixed-tabstop.mjs",
+    "scripts/audit-public-tree-tab-exit-trace.mjs",
+    "scripts/join-material-tree-focus-evidence.mjs",
+    "tests/material-parity/tree-focus-findings.mjs",
+    "tests/material-parity/tree-tabstop-inputs.spec.mjs",
+    "tests/material-parity/tree-focus-registration.mjs",
     "scripts/audit-material-text-control-held-focus.mjs",
     "scripts/audit-material-text-held-event-order.mjs",
     "scripts/join-material-text-held-evidence.mjs",
@@ -9989,6 +9996,24 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('pending Tree findings keep authoring and public core failure scopes separate'"),
+      "pending Tree findings keep authoring and public core failure scopes separate", "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('Tree partial evidence join conserves its exact predecessor and all remaining case work'"),
+      "Tree partial evidence join conserves its exact predecessor and all remaining case work", "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('one equal-input Tab-exit trace binds pointer-move canvas tab restoration and semantic refocus'"),
+      "one equal-input Tab-exit trace binds pointer-move canvas tab restoration and semantic refocus", "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('equal-input public fixed-tabstop probe distinguishes forward traversal from backward canvas reentry'"),
+      "equal-input public fixed-tabstop probe distinguishes forward traversal from backward canvas reentry", "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('current semantic Tab routing leaves nonmodal browser defaults intact unless authored handling cancels'"),
+      "current semantic Tab routing leaves nonmodal browser defaults intact unless authored handling cancels", "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('all retained tree pointer contexts expose fixed candidate tab stops behind normalized focus'"),
+      "all retained tree pointer contexts expose fixed candidate tab stops behind normalized focus", "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('current and initial tree authoring keep the first tab stop independently of focused leaf'"),
+      "current and initial tree authoring keep the first tab stop independently of focused leaf", "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('one actual Tree DOM context preserves fixed requested tab stops and divergent traversal'"),
+      "one actual Tree DOM context preserves fixed requested tab stops and divergent traversal", "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('Tree staged registry conserves every live source proof finding and plan without writes'"),
+      "Tree staged registry conserves every live source proof finding and plan without writes", "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),
     proof(root, "tests/material-parity/retained-overlay-focus.spec.mjs", new RegExp("test\\('original text-input held rows retain post-release focus,not held-focus evidence'"),
       "original text-input held rows retain post-release focus,not held-focus evidence", "Bounded original/retained held-control observations and one causal witness;not current rendering,equal inputs or whole-case closure."),
     proof(root, "tests/material-parity/retained-overlay-focus.spec.mjs", new RegExp("test\\('supplementary text-control holds retain raw input owners without accepting event parity'"),
@@ -10766,6 +10791,8 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
+    {"priority":0.15,"rootCause":"Babylon pointer move reintroduces canvas sequential focus and semantic sync recaptures backward exit","action":"Coordinate core/Babylon canvas tab ownership while preserving pointer/selection focus and genuine modal containment;verify forward/backward exit without replacing native Tab navigation. Preserve the uninstrumented equal-input pair and authenticated causal trace;historical introduction and broader contexts remain open."},
+    {"priority":2.1,"rootCause":"Tree authored roving tab stop remains fixed on the first item","action":"Restore equivalent roving tab-stop inputs through public semantics;do not compensate in layout or implement a plugin input engine. Preserve the independent core Tab-exit finding;do not confuse equivalent fixed-tabstop forward behavior with Material roving-state parity."},
     {"priority":3.05,"rootCause":"Block align-content omission resolves to stretch instead of normal","action":"Resolve omitted block align-content as CSS normal at the owning defaults/layout boundary. Preserve the native normal/stretch margin-collapse distinction and flex/grid behavior;do not globally alias the keywords or retune Material paragraph heights. Reuse the existing public block-alignment reduction before removing flow substitutions."},
     {"priority":3.06,"rootCause":"Explicit block align-content center is ignored before projection","action":"Honor explicit center in CSS-space content layout after containing-block and used-size ownership. Retain native55px versus candidate20px failing child-placement evidence at DPR1/2 and normal/stretch controls. Extend auto sizing,overflow,margin collapse,nesting and updates before general support claims. Remove fixture offsets only after original equivalent declarations pass;do not change world projection or replace layout in plugins."},
     { priority: -.05, rootCause: 'Unbounded root paint depth crosses the viewport-dependent camera', action: 'Correct shared core stacking-depth allocation and final camera clipping without changing CSS z-index intent,layout or fractional geometry. Current equal-input public controls preserve CSS/projected boxes but high-z1000 at240px places meshZ250 behind cameraZ207.8461 and loses all2880 pane pixels;three low-z/tall controls paint. Preserve ordering across root and nested contexts and extend negative/large z-index,resize,DPR and update coverage before accepting a general correction. Keep separate Material connected-overlay/flow authoring and absent-popup endpoints explicit. Do not lower fixture z-index,move overlays,or duplicate camera/depth calculations in plugins. Reassess and remove historical compensations only after the general renderer contract is proved.' },

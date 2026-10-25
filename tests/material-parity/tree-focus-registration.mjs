@@ -80,6 +80,28 @@ export function restoreTreeFocusSelection(bytes,kind){
 }
 const replayPrior='1421a151e00273dfdc1796af0a48b3b2e5810130d4f2a689c0fcf1b09e729f30';
 const pendingPrior='2ecab5e23e19625604db60f59e9fd0dd659cb05c0bd9b41ebc2e0476ac17e8e7';
+const heldProofPrior='1567cecbfaaa02dc6ca3028213c9c42d33a05644eb141fea6e3b6b4ce8250dc1';
+const dividerProofPrior='653231b57d60e6c358389250394d53e2d90fb2f9b20648cbb056f8465e28fa02';
+const editingReplayPrior='15793066d47a31f940f8497270bb1c205100ee1e184f173ec7cd1bc450f0a8b4';
+export function restoreTreeFocusEditingSource(bytes){
+  let text=bytes.toString().replaceAll('\r\n','\n');if(hash(text)===editingReplayPrior)return text;
+  text=once(text,"  if(kind==='proof')source=createTextHeldPriorRead({root:process.cwd(),read:()=>source})('tests/material-parity/divider-owner-context-registration.spec.mjs');\n",'');
+  assert.equal(hash(text),editingReplayPrior);return text;
+}
+export function restoreTreeFocusDividerProof(bytes){
+  let text=bytes.toString().replaceAll('\r\n','\n');if(hash(text)===dividerProofPrior)return text;
+  text=once(text,"import { createTreeFocusPriorRead } from './tree-focus-registration.mjs';\n",'');
+  text=once(text,"assert.equal(createTreeFocusPriorRead({root:process.cwd(),read:readFileSync})(file,'utf8'),staged,'Live policy", "assert.equal(bytes.toString().replaceAll('\\r\\n','\\n'),staged,'Live policy");
+  assert.equal(hash(text),dividerProofPrior);return text;
+}
+export function restoreTreeFocusHeldProof(bytes){
+  let text=bytes.toString().replaceAll('\r\n','\n');if(hash(text)===heldProofPrior)return text;
+  text=once(text,"import { createTreeFocusPriorRead } from './tree-focus-registration.mjs';\nconst readHeldStage=createTreeFocusPriorRead({root:process.cwd(),read:readFileSync});\n",'');
+  text=once(text,"readHeldStage(file,'utf8'),bytes.toString()","readFileSync(file,'utf8').replaceAll('\\r\\n','\\n'),bytes.toString()");
+  text=once(text,"live=readHeldStage(file,'utf8'),before=acceptedRead","live=readFileSync(file,'utf8').replaceAll('\\r\\n','\\n'),before=acceptedRead");
+  text=once(text,"assert.equal(readHeldStage(file,'utf8'),live);","assert.equal(readFileSync(file,'utf8').replaceAll('\\r\\n','\\n'),live);");
+  assert.equal(hash(text),heldProofPrior);return text;
+}
 const pendingExportHook=`  if(source.toString().includes(kind==='runner'?'menuSelectDisabledReview':'const menuSelectDisabled =')){
     const file=path.resolve(kind==='runner'?'scripts/run-material-input-audit.mjs':'scripts/export-material-input-audit-current-ancestry.mjs');
     const read=(name,options)=>path.resolve(name)===file?(typeof options==='string'?source.toString(options):Buffer.from(source)):readFileSync(name,options);
@@ -111,15 +133,17 @@ export function restoreTreeFocusReplaySource(bytes){
 export function createTreeFocusPriorRead({root,read}){
   const paths=new Map([['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy'],
     ['scripts/export-material-input-audit-current-ancestry.mjs','launcher'],['scripts/run-material-input-audit.mjs','runner'],
-    ['tests/material-parity/text-held-registration.mjs','replay'],['tests/material-parity/pending-evidence-registration.mjs','pending']].map(([f,k])=>[path.resolve(root,f),k]));
+    ['tests/material-parity/text-held-registration.mjs','replay'],['tests/material-parity/pending-evidence-registration.mjs','pending'],
+    ['tests/material-parity/retained-overlay-focus.spec.mjs','held-proof'],['tests/material-parity/divider-owner-context-registration.spec.mjs','divider-proof'],
+    ['tests/material-parity/editing-context-registration.mjs','editing-replay']].map(([f,k])=>[path.resolve(root,f),k]));
   return (name,options)=>{
     const kind=paths.get(path.resolve(root,name));if(!kind)return read(name,options);
     const bytes=read(name),text=bytes.toString().replaceAll('\r\n','\n');
-    if(hash(text)===(kind==='pending'?pendingPrior:kind==='replay'?replayPrior:prior[kind]??selectionPrior[kind]))return read(name,options);
+    if(hash(text)===(kind==='editing-replay'?editingReplayPrior:kind==='divider-proof'?dividerProofPrior:kind==='held-proof'?heldProofPrior:kind==='pending'?pendingPrior:kind==='replay'?replayPrior:prior[kind]??selectionPrior[kind]))return read(name,options);
     if(inheritedStages[kind]?.includes(hash(text)))return read(name,options);
     if(kind==='producer')assert.ok(text.includes('"scripts/audit-material-tree-pointer-tabstop.mjs"'),'Unexpected producer stage '+hash(text));
     if(kind==='policy')assert.ok(text.includes('core-pointer-move-restores-canvas-tabstop-and-recaptures-backward-exit'),'Unexpected policy stage '+hash(text));
-    const restored=kind==='pending'?restoreTreeFocusPendingSource(bytes):kind==='replay'?restoreTreeFocusReplaySource(bytes):Object.hasOwn(prior,kind)?restoreTreeFocusRegistry(bytes,kind):restoreTreeFocusSelection(bytes,kind),encoding=typeof options==='string'?options:options?.encoding;
+    const restored=kind==='editing-replay'?restoreTreeFocusEditingSource(bytes):kind==='divider-proof'?restoreTreeFocusDividerProof(bytes):kind==='held-proof'?restoreTreeFocusHeldProof(bytes):kind==='pending'?restoreTreeFocusPendingSource(bytes):kind==='replay'?restoreTreeFocusReplaySource(bytes):Object.hasOwn(prior,kind)?restoreTreeFocusRegistry(bytes,kind):restoreTreeFocusSelection(bytes,kind),encoding=typeof options==='string'?options:options?.encoding;
     return encoding?Buffer.from(restored).toString(encoding):Buffer.from(restored);
   };
 }
@@ -134,6 +158,6 @@ export function createTreeFocusReviewReader({root,read,reviewSha256}){
   const bytes=Buffer.from(JSON.stringify({status:'proposal-not-canonical',sha256:treeFocusReview,review:joined.review}));
   return{read(name,options){if(path.resolve(root,name)!==file)return parentReader.read(name,options);
     const encoding=typeof options==='string'?options:options?.encoding;return encoding?bytes.toString(encoding):Buffer.from(bytes);},
-    sourceApplicability:{mode:'exact-tree-tabstop-partial-review',reviewSha256,addedChildren:53,predecessorApplicability:parentReader.sourceApplicability,
-      boundary:'Two complete source-bound registry restorations only;all prior assertions and remaining case work preserve. Not canonical,current rendering or case closure.'}};
+    sourceApplicability:{mode:'exact-tree-tabstop-partial-review',reviewSha256,addedChildren:53,restoredSourcePaths:9,predecessorApplicability:parentReader.sourceApplicability,
+      boundary:'Nine exact whole-source-bound registry,selection,helper and proof restorations only;all prior assertions and remaining case work preserve. Not canonical,current rendering or case closure.'}};
 }
