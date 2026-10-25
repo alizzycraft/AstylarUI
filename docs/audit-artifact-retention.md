@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep text-held-obligation-integration-20261025 log/stderr:existing full loader
+validates18402 receipts/2311 cases for in-memory successor45d3fb07,with complete
+043361b0 predecessor recovery. No large physical proposal was created. The
+accepted compact index and immutable16-context/one-case reports remain its
+reusable inputs;this does not authorize deletion of their originals or failures.
+
 Keep `text-held-event-order-20261025`,its provenance and capture/verify log pairs:
 one input/light/DPR1 causal witness,report SHA256
 7a1ec887eb360d636a43585e739155d41b011cb7e73589da902df7725a8e222c.

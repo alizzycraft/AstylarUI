@@ -4,6 +4,27 @@
 
 ### Current next action and publication status
 
+October25 held-control evidence join is verified,not canonically published:
+in-memory successor45d3fb0779cfa4d53137cfbc47225791634874026936b1abb5135222dee75588
+preserves complete accepted043361b0 predecessor and adds33 bounded children to
+16 exact input/form-field held cases (16 activation observations,16 linked
+pointer-focus observations,one causal witness). Their32 pending obligation joins
+become partial in this successor only;all prior remaining lists,other obligations,
+2311 partial case flags and currentRendering=unverified preserve. This is not
+16 whole-case completions or16 causal diagnoses. Canonical8848 is unchanged.
+
+Existing loadCaseObligationReview validates18402 dependency receipts and all2311
+cases. The new existing-suite integration passes1/1,0skip,exit0 (93397.6104ms);
+keep text-held-obligation-integration-20261025 log/stderr (stderr empty). Exact
+whole-predecessor recovery,corrupt capture rejection,duplicate-join rejection,
+16-case scope and one-case cause assertions pass. No physical proposal or new
+canonical package was written. Use the authenticated accepted compact index for
+the parent;the owning historical reader binds prior receipts with only the two
+explicitly hash-bounded post-export proof/requirement overlays. No captured files
+or installed source were overwritten. Freeze this coherent result for the next
+source/proof census and explicit selector integration;do not rerun captures or
+the full receipt loader merely for prose. Other original acceptance gates remain.
+
 October25 implementation handoff consolidation:the direct text-input early-
 release witness extends existing gesture track1,not a duplicate new defect.
 Future core work must preserve native held focus AND gesture lifetime;blanket

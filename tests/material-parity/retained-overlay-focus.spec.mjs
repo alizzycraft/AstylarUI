@@ -6,6 +6,8 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { gunzipSync } from 'node:zlib';
 import { chromium } from 'playwright-core';
+import path from 'node:path';
+import { joinTextHeldEvidence,restoreTextHeldEvidence,textHeldPredecessor } from '../../scripts/join-material-text-held-evidence.mjs';
 
 // Diagnose the retained harness, not a requirement that a future harness keep
 // this defect. Git source was compared with the capture-pinned working bytes,
@@ -123,6 +125,54 @@ test('one traced text-input hold exposes blur-synthesized public release before 
     assert.throws(()=>frame(calls[3].stack.replace('HTMLCanvasElement._pointerBlurEvent','unknownCaller'),'HTMLCanvasElement._pointerBlurEvent',/./));
   }
   assert.equal(report.inputEquivalent,false);assert.equal(report.renderingEquivalent,false);
+});
+
+test('Text held obligation join conserves the accepted review and validates existing full receipt rules',async t=>{
+  const base='artifacts/material-parity/working-audit',pointer=JSON.parse(readFileSync(base+'/current.json'));
+  assert.equal(pointer.generation,'8848ae5b1ca0b18bc04116ebdd1eb2c360b7497a298e69fca9578df4a1b2b420');
+  const bytes=readFileSync(`${base}/${pointer.generation}/index.json`);assert.equal(hash(bytes),pointer.indexSha256);
+  const coverage=JSON.parse(bytes).metadata.coverage.inspectionEvidence;
+  const parent={kind:'case-obligation-coverage-extension',status:'proposal-not-canonical',scope:coverage.scope,groups:coverage.cases};
+  assert.equal(hash(JSON.stringify(parent)),textHeldPredecessor);
+  const joined=joinTextHeldEvidence(parent);assert.equal(joined.cases,16);assert.equal(joined.addedChildren,33);
+  assert.equal(hash(JSON.stringify(restoreTextHeldEvidence(joined.review))),textHeldPredecessor);
+  let changed=0,causes=0;
+  for(const [i,g]of joined.review.groups.entries()){
+    const p=parent.groups[i];assert.equal(g.case,p.case);assert.equal(g.inspection,p.inspection);assert.equal(g.currentRendering,p.currentRendering);
+    if(g===p)continue;changed++;
+    for(const name of Object.keys(p.obligations))assert.deepEqual(g.obligations[name].remaining,p.obligations[name].remaining);
+    causes+=Number(!!g.obligations.authoredActivation.supplementaryTextHeldReleaseCause);
+  }
+  assert.equal(changed,16);assert.equal(causes,1);
+  const corrupt=(f,...args)=>f.endsWith('text-control-held-focus-20261025/latest-report.json')?Buffer.from('{}'):readFileSync(f,...args);
+  assert.throws(()=>joinTextHeldEvidence(parent,corrupt));assert.throws(()=>joinTextHeldEvidence(joined.review));
+  // Explicitly bound post-export proof additions are historical reads only.
+  // No captured source,installed renderer or working file is overwritten.
+  const overlays=new Map();
+  for(const [file,current]of [
+    ['tests/material-parity/divider-original-crop-provenance.spec.mjs','89891611696bbab5c8511793a34d97ea3406d081f4bf3b514e165e9e544e7745'],
+    ['docs/evidence/material-divider-light-desktop-requirement-review.json','7a90b3708d6a48428c34602d5ca8824f7fb43502fa689aca99cae9673a7d174d'],
+  ]){
+    assert.equal(hash(readFileSync(file,'utf8').replaceAll('\r\n','\n')),current);
+    overlays.set(path.resolve(file),execFileSync('git',['show','4b37d857:'+file],{maxBuffer:2e6}));
+  }
+  const historicalRead=(file,options)=>{
+    const b=overlays.get(path.resolve(file));if(!b)return readFileSync(file,options);
+    const encoding=typeof options==='string'?options:options?.encoding;return encoding?b.toString(encoding):Buffer.from(b);
+  };
+  const {createEditingContextReviewReader}=await import('./editing-context-review-source.mjs');
+  const reader=createEditingContextReviewReader({root:process.cwd(),read:historicalRead,reviewSha256:textHeldPredecessor});
+  const file=`${base}/proposals/${joined.sha256}.json`;
+  const envelope=Buffer.from(JSON.stringify({status:'proposal-not-canonical',sha256:joined.sha256,review:joined.review}));
+  const read=(name,options)=>{
+    if(path.resolve(name)!==path.resolve(file))return reader.read(name,options);
+    const encoding=typeof options==='string'?options:options?.encoding;return encoding?envelope.toString(encoding):Buffer.from(envelope);
+  };
+  const {loadCaseObligationReview}=await import('../../scripts/audit-findings-store.mjs');
+  const loaded=loadCaseObligationReview(file,joined.sha256,parent.groups.map(g=>g.case),{root:process.cwd(),read});
+  assert.equal(loaded.cases.length,2311);assert.equal(loaded.inspectionComplete,false);assert.equal(loaded.currentRenderingAccepted,false);
+  t.diagnostic(JSON.stringify({reviewSha256:joined.sha256,modifiedCases:16,addedChildren:33,causeCases:1,
+    dependencies:loaded.evidenceFingerprints.length,completePredecessorRecovered:true,physicalProposalWritten:false,canonicalPublished:false}));
 });
 
 test('current overlay authoring has distinct menu, sheet and dialog focus requests', async t => {
