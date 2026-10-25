@@ -4,6 +4,36 @@
 
 ### Current next action and publication status
 
+October25 equal-input public Tree reduction now separates a SECOND failure from
+the Material authoring discrepancy. One package-root AstylarUI0.2.0 pair,Chrome
+155.0.8059.85,DPR1,uses identical three leaf items with fixed[0,-1,-1] tab stops,
+no application event handlers,no update or programmatic focus. Real pointer click
+focuses Projects on both;Tab moves to Documents on BOTH. Shift+Tab then leaves
+native focus on BODY,but candidate focus goes Documents -> CANVAS -> Documents.
+Thus the Material forward-Tab difference is reproducible from unequal inputs,
+while backward exit has an independent equal-input public failure. Do not merge
+those diagnoses or call current semantic-keydown source execution a browser pass.
+
+Corrected capture public-tree-fixed-tabstop-corrected-20261025/latest-report.json
+SHA256ca76ab4262dbca4cac62ff4d21cbca7fd5ddbd4d5af33d51f824bba66e3163e6;
+capture and independent --verify exit0,one pair,four boundaries,two forged-report
+controls rejected. Report authenticates2515 bundled input receipts and served
+document/script bytes. The first public-tree-fixed-tabstop-20261025 report remains
+failed instrumentation:it queried descendants of canvas,so semantic tabStops were
+empty. Original driver is recoverable at16384927;corrected driver queries document.
+Do not treat the failed verification as a renderer absence or overwrite that run.
+
+Pending core focus/tab-exit investigation:Babylon scene.inputManager.js
+_processPointerMove writes canvas.tabIndex=engine.canvasTabIndex (captured source
+SHA18245b7fa202883d17a5d9b4154dc7d35b70757090fc259df866d00f276ed349),
+whereas Astylar semantic connect sets canvas.tabIndex=-1. This is a causal
+hypothesis,not yet the captured first divergence:the probe records item indices
+and focus events,not canvas-index writes or refocus call stacks. Next decisive
+check is one instrumented equal-input context tracking canvas tabindex and focus
+call ownership,not another52-case Tree survey. Installed runtime/bridge hashes
+896ba0ff/7c892095 are recorded in the report;do not assert current-source equality.
+Frozen1060/383/198/65,canonical8848 and all2311 partial flags remain unchanged.
+
 October25 Tree routing followup distinguishes two current core paths rather than
 inferring a core defect from unequal tab-stop inputs. The semantic bridge calls
 handleSemanticKeyDown through astylar.ts;nonmodal semantic Tab dispatches the

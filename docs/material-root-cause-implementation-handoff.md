@@ -2,6 +2,17 @@
 
 ## Pending Tree tab-stop input delta,October25
 
+Separate equal-input public reduction now finds a backward Tab-exit failure:
+fixed[0,-1,-1] items on both sides,real pointer Projects -> Tab Documents on both,
+then Shift+Tab leaves native BODY but candidate CANVAS -> Documents. Corrected
+public-tree-fixed-tabstop report SHAca76ab4262dbca4cac62ff4d21cbca7fd5ddbd4d5af33d51f824bba66e3163e6
+and the focused Tree test retain this installed-package failure. No Material
+plugin or handlers participate. Keep separate from unequal Material roving input.
+Suspect Babylon pointer-move canvas tabindex restoration plus semantic refocus;
+trace actual canvas writes/focus call ownership before claiming that cause or
+implementing a fix. Current nonmodal semantic Tab keydown alone does not cancel
+the browser default;source-routing proof does not establish exit behavior.
+
 Restore reference-equivalent composite focus/tab-stop state through supported
 input semantics,not mesh focus,paint offsets or a plugin-owned input engine.
 The52-case retained-tree proof finds24 pointer endpoints where native generated

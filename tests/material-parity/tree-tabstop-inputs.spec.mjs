@@ -8,6 +8,29 @@ import { materialInteractionCases,materialProfiles,materialViewports } from './b
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const ids=['tree-item-0','tree-item-1','tree-item-2'];
+test('equal-input public fixed-tabstop probe distinguishes forward traversal from backward canvas reentry',()=>{
+  const file='artifacts/material-parity/public-tree-fixed-tabstop-corrected-20261025/latest-report.json',bytes=readFileSync(file);
+  assert.equal(hash(bytes),'ca76ab4262dbca4cac62ff4d21cbca7fd5ddbd4d5af33d51f824bba66e3163e6');
+  const report=JSON.parse(bytes);assert.equal(report.kind,'public-tree-fixed-tabstop');
+  assert.equal(hash(readFileSync('scripts/audit-public-tree-fixed-tabstop.mjs')),report.scriptSha256);
+  for(const receipt of [report.inputSource,report.bundle,report.html,...report.inputs])assert.equal(hash(readFileSync(receipt.file)),receipt.sha256);
+  assert.deepEqual(report.errors,[]);assert.equal(report.results.length,1);
+  const row=report.results[0];assert.deepEqual(row.reference.site,row.astylar.site);
+  for(const side of ['reference','astylar']){
+    const r=row[side];assert.equal(r.inputUnchanged,true);assert.deepEqual(r.diagnostics,[]);
+    assert.deepEqual(r.observations.map(o=>o.boundary),['before','pointer','tab','shift-tab']);
+    for(const o of r.observations)assert.deepEqual(o.tabStops.map(n=>[n.id,n.attribute,n.tabIndex]),[['item-0','0',0],['item-1','-1',-1],['item-2','-1',-1]]);
+    assert.deepEqual(r.observations.slice(0,3).map(o=>o.active),['BODY','item-1','item-0']);
+  }
+  assert.equal(row.reference.observations[3].active,'BODY');assert.equal(row.astylar.observations[3].active,'item-0');
+  const native=row.reference.observations[3].events,candidate=row.astylar.observations[3].events;
+  assert.deepEqual(candidate.filter(e=>e.type==='keydown').map(e=>e.key),['Tab','Shift','Tab']);
+  const lastTab=candidate.findLastIndex(e=>e.type==='keydown'&&e.key==='Tab');
+  assert.deepEqual(candidate.slice(lastTab).filter(e=>e.type==='focusin').map(e=>e.target),['CANVAS','item-0']);
+  assert.deepEqual(native.slice(native.findLastIndex(e=>e.type==='keydown'&&e.key==='Tab')).filter(e=>e.type==='focusin'),[]);
+  // Pending core focus/tab-exit failure in this installed package,not proof of its causal mechanism,
+  // all Material contexts,current source equivalence,paint or whole-case closure.
+});
 test('current semantic Tab routing leaves nonmodal browser defaults intact unless authored handling cancels',()=>{
   const file='src/lib/astylar-interaction-runtime.ts',source=readFileSync(file,'utf8');
   const tree=ts.createSourceFile(file,source,99,true,ts.ScriptKind.TS),methods=[];

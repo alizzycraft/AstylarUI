@@ -30,7 +30,7 @@ if(mode==='reference'){
 const events=[];for(const type of ['pointerdown','pointerup','keydown','keyup','focusin','focusout'])document.addEventListener(type,e=>events.push({type,key:e.key??null,trusted:e.isTrusted,target:e.target.dataset?.astylarId||e.target.id||e.target.tagName,defaultPrevented:e.defaultPrevented}),true);
 const settle=async()=>{await document.fonts.ready;if(surface)await surface.whenSettled();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));};
 await settle();
-window.roleFocusAudit={async sample(boundary){await settle();const a=document.activeElement;return{boundary,active:a?.dataset?.astylarId||a?.id||a?.tagName,tabStops:[...host.querySelectorAll('[role=treeitem]')].map(n=>({id:n.dataset.astylarId||n.id,attribute:n.getAttribute('tabindex'),tabIndex:n.tabIndex})),events:structuredClone(events)};},
+window.roleFocusAudit={async sample(boundary){await settle();const a=document.activeElement;return{boundary,active:a?.dataset?.astylarId||a?.id||a?.tagName,tabStops:[...document.querySelectorAll('[role=treeitem]')].map(n=>({id:n.dataset.astylarId||n.id,attribute:n.getAttribute('tabindex'),tabIndex:n.tabIndex})),events:structuredClone(events)};},
 run(){return{site,inputUnchanged:JSON.stringify(site)===authored,diagnostics:surface?surface.diagnostics.messages:[]};},dispose(){surface?.dispose();app?.destroy();}};`;
 const verification=`function verify(report){
  assert.equal(report.kind,'public-tree-fixed-tabstop');assert.equal(report.scriptSha256,hash(readFileSync(script)));
