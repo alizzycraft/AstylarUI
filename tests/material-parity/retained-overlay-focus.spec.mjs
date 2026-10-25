@@ -10,6 +10,7 @@ import path from 'node:path';
 import { joinTextHeldEvidence,restoreTextHeldEvidence,textHeldPredecessor } from '../../scripts/join-material-text-held-evidence.mjs';
 import { prepareTextHeldProducer,restoreTextHeldProducer,textHeldSources,textHeldProofTitles,
   prepareTextHeldSelection,restoreTextHeldSelection,createTextHeldPriorRead,createTextHeldReviewReader,textHeldReview } from './text-held-registration.mjs';
+import { restorePendingEvidenceProducer } from './pending-evidence-registration.mjs';
 
 // Diagnose the retained harness, not a requirement that a future harness keep
 // this defect. Git source was compared with the capture-pinned working bytes,
@@ -218,6 +219,14 @@ test('Text held registration conserves all accepted sources and proofs without l
     assert.equal(prior(f,'utf8'),execFileSync('git',['show','4b37d857:'+f],{encoding:'utf8'}));
     stages.set(path.resolve(f),Buffer.concat([readFileSync(f),Buffer.from('\n// drift')]));assert.throws(()=>prior(f));stages.delete(path.resolve(f));
   }
+  for(const f of ['tests/material-parity/pending-evidence-registration.mjs','tests/material-parity/editing-context-registration.mjs']){
+    assert.equal(prior(f,'utf8'),execFileSync('git',['show','4b37d857:'+f],{encoding:'utf8'}));
+    stages.set(path.resolve(f),Buffer.concat([readFileSync(f),Buffer.from('\n// drift')]));assert.throws(()=>prior(f));stages.delete(path.resolve(f));
+  }
+  const historicalHash='0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1';
+  assert.equal(hash(restorePendingEvidenceProducer(before)),historicalHash);
+  assert.equal(hash(restorePendingEvidenceProducer(staged)),historicalHash);
+  assert.throws(()=>restorePendingEvidenceProducer(staged+'\n// drift'));
 });
 
 test('current overlay authoring has distinct menu, sheet and dialog focus requests', async t => {

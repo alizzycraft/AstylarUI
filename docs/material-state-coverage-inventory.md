@@ -4,6 +4,34 @@
 
 ### Current next action and publication status
 
+October25 shared historical replay prerequisite is corrected. The common pending
+producer restorer strips the exact held stage before earlier Menu/owner stages;
+current and staged1060/383 producers both recover whole historical SHA
+0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1.
+The editing reader composes the same newest-stage boundary. Its direct legacy
+pending-helper restoration also strips the exact two latest helper additions
+before retaining its original52169564 hash guard. All seven source transitions
+and the explicitly allowed older intermediate vectors remain whole-hash bound;
+unknown drift rejects. No marker-only pass-through or receipt replacement added.
+
+Initial retained registration run was5/6:direct pending-replay caller still saw
+the new lines (actual813c42e8 versus expected52169564). Preserve
+text-held-replay-first-registration-failure-20261025.txt. After direct-boundary
+composition,the unchanged two retained suites pass6/6. New focused source/drift/
+shared-entry assertion passes1/1,exit0 (5475.2047ms);keep
+text-held-shared-replay-registration-20261025 log/stderr. All four affected
+collectors then bind259 groups/10196 observations with expected72/49/4/134 group
+counts and4016/2677/178/3325 observations. Collector command exits0;stderr empty;
+log text-held-shared-replay-collectors-20261025 SHA256
+a2f9af574537293cf3036547b673f456d73357058cf509b164a9e9db3ec3a774.
+These are affected collector checks,not a full canonical export or current render.
+
+Live inventory/launcher/runner remain1055/378 and unchanged. Only shared replay
+instrumentation is corrected;apply the staged source/selection batch after
+reconciling older direct live-source assertions. Do not repeat captured cases,
+the four settled collectors or full export for status edits. Canonical8848 remains
+historical with explicit pending source reconciliation;all2311 cases stay partial.
+
 October25 staged explicit selection/read boundary passes5/5,0skip,exit0
 (99547.269ms),including the full18402-receipt/2311-case loader through the new
 exact45d3fb07 reader. Existing default and every older supplement retain identical

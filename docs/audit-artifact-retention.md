@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep text-held-replay-first-registration-failure-20261025.txt (initial5/6,direct
+legacy pending-helper hash mismatch),the shared-replay-registration log pair,
+and shared-replay-collectors log pair. Corrected retained suites pass6/6;new
+regression passes1/1;all four affected collectors bind259 groups/10196 observations.
+Collector stdout SHA256a2f9af574537293cf3036547b673f456d73357058cf509b164a9e9db3ec3a774.
+The failure record is instrumentation evidence,not a new renderer/capture failure.
+No original capture or prior failing case was removed/repointed.
+
 Keep text-held-staged-selection-integration-20261025 log/stderr:5/5 passing
 checks include18402 receipts through the exact staged successor reader,older
 selector conservation and whole-source drift rejection. This is not live source

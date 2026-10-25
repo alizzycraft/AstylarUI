@@ -4,6 +4,7 @@ import path from 'node:path';
 import { readFileSync } from 'node:fs';
 import { createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
 import { restoreDividerOwnerFrameProducer } from './divider-owner-frame-registration.mjs';
+import { restoreTextHeldProducer } from './text-held-registration.mjs';
 
 export const pendingEvidenceSourceFiles = Object.freeze([
   "docs/evidence/material-original-runner-e01.mjs.gz.b64",
@@ -184,6 +185,7 @@ export function registerPendingEvidenceProducer(source) {
   return replaceOnce(text, proofAnchor, proofAnchor + proofAddition);
 }
 export function restorePendingEvidenceProducer(source) {
+  if (source.toString().includes('"scripts/audit-material-text-control-held-focus.mjs"')) source = restoreTextHeldProducer(source);
   if (source.toString().includes('"scripts/audit-material-menu-ax-contexts.mjs"')) {
     const file = path.resolve('tests/material-parity/input-equivalence-audit.mjs');
     const read = (name, options) => path.resolve(name) === file

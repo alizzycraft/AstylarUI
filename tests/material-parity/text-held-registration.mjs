@@ -65,20 +65,42 @@ const proofTransitions=[
   ['tests/material-parity/divider-original-crop-provenance.spec.mjs','89891611696bbab5c8511793a34d97ea3406d081f4bf3b514e165e9e544e7745','9ca785898fa39aed4349afb5705ea5d782f10f7a8999dc3241be93dd49948f57','  const model=baseline.projectedGeometryModel;','  const currentness=parent.obligations.sourceCurrentness;'],
   ['docs/evidence/material-divider-light-desktop-requirement-review.json','7a90b3708d6a48428c34602d5ca8824f7fb43502fa689aca99cae9673a7d174d','dd5e4496fc416a0599007cedf6fb4edc74f0f6610055fdd1ddc8ab7bcc0b7bf1','        "projectedGeometryModel": {','        "globalBaselineEqualityAccepted": false,'],
 ];
+const replayTransitions=[
+  ['tests/material-parity/pending-evidence-registration.mjs','638e41f56b35c7be24abd563b631cbc1c41345324814c041fa2f30078ad75d3c',
+    "import { restoreTextHeldProducer } from './text-held-registration.mjs';\n",
+    ['  if (source.toString().includes(\'"scripts/audit-material-text-control-held-focus.mjs"\')) source = restoreTextHeldProducer(source);\n']],
+  ['tests/material-parity/editing-context-registration.mjs','58340f250b90007b9d28c68d779348f7ae5c6b4f028a07b7ad06e6914cb4e570',
+    "import { createTextHeldPriorRead, restoreTextHeldReplaySource } from './text-held-registration.mjs';\n",
+    ['  read=createTextHeldPriorRead({root,read});\n',"  if(kind==='pending-replay')source=restoreTextHeldReplaySource(source,'pending');\n"]],
+];
+export function restoreTextHeldReplaySource(source,kind){
+  assert.ok(['pending','editing'].includes(kind));const entry=replayTransitions[kind==='pending'?0:1];
+  let text=source.toString().replaceAll('\r\n','\n');if(hash(text)===entry[1])return text;
+  text=once(text,entry[2],'');for(const hook of entry[3])text=once(text,hook,'');
+  assert.equal(hash(text),entry[1]);return text;
+}
+const intermediateSources={
+  producer:['ec5be8ce8f6a47371e22b4c041abcc677013d9263834edc4a6ae4b94d07c906d','d791949cfe8a3821d76250379e0c68795759d2f88650ad3414ceeaa7dbd52b17'],
+  launcher:['5168a9b9165fdae234bd90b1db314923a385bbca52b39f536d649dcac30ce955','625e585f51d670cceb52a2eaa0600c70d6051d91c7c743bed1ad4e71f2f6673c'],
+  runner:['34f44830880417b629269d5782131dd9c84c149103b52628ae227573f5c9a005','d6b7a4f8704689f5e1a44b0b45795c43913aca48181eefd12179c125856e8bb9'],
+};
 export function createTextHeldPriorRead({root,read}){
   const files=new Map([
     ['tests/material-parity/input-equivalence-audit.mjs',{kind:'producer',prior:textHeldProducerPrior}],
     ['scripts/export-material-input-audit-current-ancestry.mjs',{kind:'launcher',prior:selectionPrior.launcher}],
     ['scripts/run-material-input-audit.mjs',{kind:'runner',prior:selectionPrior.runner}],
     ...proofTransitions.map(([file,current,prior,start,end])=>[file,{kind:'proof',current,prior,start,end}]),
+    ...replayTransitions.map(([file,prior,importLine,hooks])=>[file,{kind:'replay',prior,importLine,hooks}]),
   ].map(([file,value])=>[path.resolve(root,file),value]));
   return (name,options)=>{
     const entry=files.get(path.resolve(root,name));if(!entry)return read(name,options);
     const bytes=read(name);let text=bytes.toString().replaceAll('\r\n','\n');
-    if(hash(text)===entry.prior)return read(name,options);
+    if(hash(text)===entry.prior||intermediateSources[entry.kind]?.includes(hash(text)))return read(name,options);
     if(entry.kind==='proof'){
       assert.equal(hash(text),entry.current);const start=text.indexOf(entry.start),end=text.indexOf(entry.end,start);
       assert.ok(start>=0&&end>start);text=text.slice(0,start)+text.slice(end);
+    }else if(entry.kind==='replay'){
+      text=once(text,entry.importLine,'');for(const hook of entry.hooks)text=once(text,hook,'');
     }else text=entry.kind==='producer'?restoreTextHeldProducer(text):restoreTextHeldSelection(text,entry.kind);
     assert.equal(hash(text),entry.prior);const encoding=typeof options==='string'?options:options?.encoding;
     return encoding?Buffer.from(text).toString(encoding):Buffer.from(text);
@@ -95,5 +117,5 @@ export function createTextHeldReviewReader({root,read,reviewSha256}){
   return {read(name,options){if(path.resolve(root,name)!==file)return prior.read(name,options);
     const encoding=typeof options==='string'?options:options?.encoding;return encoding?bytes.toString(encoding):Buffer.from(bytes);},
     sourceApplicability:{mode:'exact-held-text-controls',reviewSha256,addedChildren:33,predecessorApplicability:prior.sourceApplicability,
-      boundary:'Explicit in-memory supplement;two whole-hash-bound proof additions and staged inventory/selection restoration only. Not canonical/current rendering or case closure.'}};
+      boundary:'Explicit in-memory supplement;seven whole-source-bound inventory,selection,proof and replay transitions only. Not canonical/current rendering or case closure.'}};
 }

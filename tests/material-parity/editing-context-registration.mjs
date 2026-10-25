@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import path from 'node:path';
+import { createTextHeldPriorRead, restoreTextHeldReplaySource } from './text-held-registration.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export const editingProducerPrior='ec5be8ce8f6a47371e22b4c041abcc677013d9263834edc4a6ae4b94d07c906d';
@@ -59,6 +60,7 @@ export function restoreEditingContextProducer(source,read){
   assert.equal(hash(text),editingProducerPrior);return text;
 }
 export function createEditingContextPriorRead({root,read}){
+  read=createTextHeldPriorRead({root,read});
   const producer=path.resolve(root,'tests/material-parity/input-equivalence-audit.mjs');
   const selections=new Map([['launcher','scripts/export-material-input-audit-current-ancestry.mjs'],['runner','scripts/run-material-input-audit.mjs']].map(([kind,file])=>[path.resolve(root,file),kind]));
   const legacy=new Map([['registration','tests/material-parity/divider-owner-context-registration.mjs'],['proof','tests/material-parity/divider-owner-context-registration.spec.mjs'],['pending-replay','tests/material-parity/pending-evidence-registration.mjs'],['menu-proof','tests/material-parity/menu-select-disabled-registration.spec.mjs']].map(([kind,file])=>[path.resolve(root,file),kind]));
@@ -79,6 +81,7 @@ export function createEditingContextPriorRead({root,read}){
 }
 const editingLegacyPrior=Object.freeze({registration:'73c933562cf3ba381cb258632b88b41059bcf1db2dc58f7320d4e10592b480b4',proof:'035e13aab28532b8e832992c1027ab15d340193d5940df46af5917e0a67380e7','pending-replay':'521695641afcadbff787f41213270d305f189f30c4e06cef8d8453826fe06079','menu-proof':'2374097355dafef883d90e879a841adc5bc7cd7e6869df27b16f3fe82cf36920'});
 export function restoreEditingLegacySource(source,kind){
+  if(kind==='pending-replay')source=restoreTextHeldReplaySource(source,'pending');
   let text=source.toString().replaceAll('\r\n','\n');
   if(kind==='pending-replay'){
     text=once(text,"import { readFileSync } from 'node:fs';\nimport { createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';\n",'');
