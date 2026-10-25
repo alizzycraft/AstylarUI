@@ -4,6 +4,26 @@
 
 ### Current next action and publication status
 
+October25 Tree registry preparation and exact-reader integration pass2/2,0skip,
+exit0,94405.6788ms. Staging only:complete live1060 sources/383 proofs/198
+definitions/65 plans conserve under seven/nine/two/two additions,producing
+1067/392/200/67. Both full prior registry sources recover exactly;unknown drift,
+missing sources and altered predecessor bytes reject. Added policy patterns
+actually match their owning current source;all prior entries remain byte-for-byte
+in order. No live producer or policy bytes were written.
+
+Existing complete case-obligation loader accepts exact Tree review6ea59073
+through createTreeFocusReviewReader,authenticating18404 dependencies and all2311
+cases. Reader only restores the exact producer/policy additions before delegating
+to the held-control predecessor reader;unknown review IDs reject. It creates the
+53-child supplement in memory and preserves complete45d3fb07 recovery,all case
+dispositions and remaining-work lists. Integration test93041.7441ms;registry
+test572.0817ms. Freeze this staged batch;do not repeat the full loader for prose.
+Next wire explicit existing-launcher selection and verify older selector/shared
+replay compatibility before live registration. This is not source publication,
+canonical export,current rendering or inspection closure. Historical8848 and
+live1060/383/198/65 remain authoritative at their distinct boundaries.
+
 October25 Tree consolidation is a reversible pending partial review,not another
 capture or live policy change. join-material-tree-focus-evidence.mjs starts from
 exact45d3fb07,authenticates original52 Tree input-property records and the one
