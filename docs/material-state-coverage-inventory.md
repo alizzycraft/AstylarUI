@@ -4,6 +4,23 @@
 
 ### Current next action and publication status
 
+October25 held-batch source/proof census is STAGED ONLY. The existing producer
+still has1055 sources/378 proof declarations/65 plan entries. Guarded registration
+adds exactly five existing/new evidence-owner paths and five explicit held-batch
+proof declarations,targeting1060/383 while conserving every accepted source,
+proof and plan entry in order. Complete producer bytes restore to normalized
+036c7e1d05923920d4c6ebacfc916ca8a759214bd45cb4c9b8f917d632b233b1.
+Unexpected producer drift,duplicate/missing proof declarations and empty evidence
+sources reject. Existing focused registration assertion passes1/1,0skip,exit0
+(1257.3201ms). No live producer,launcher,runner or canonical package was changed.
+
+This does not select successor45d3fb07 for export yet. Next stage must provide an
+explicit bounded reader/launcher selection and reconcile the two inventoried
+Divider source changes before applying the batch. Keep current/default and all
+older selections unchanged;do not use a marker-only historical-read bypass or
+run a full export to discover an unregistered/stale source vector. The already
+verified18402-receipt successor need not be rebuilt for this staged census.
+
 October25 held-control evidence join is verified,not canonically published:
 in-memory successor45d3fb0779cfa4d53137cfbc47225791634874026936b1abb5135222dee75588
 preserves complete accepted043361b0 predecessor and adds33 bounded children to

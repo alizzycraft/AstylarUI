@@ -8,6 +8,7 @@ import { gunzipSync } from 'node:zlib';
 import { chromium } from 'playwright-core';
 import path from 'node:path';
 import { joinTextHeldEvidence,restoreTextHeldEvidence,textHeldPredecessor } from '../../scripts/join-material-text-held-evidence.mjs';
+import { prepareTextHeldProducer,restoreTextHeldProducer,textHeldSources,textHeldProofTitles } from './text-held-registration.mjs';
 
 // Diagnose the retained harness, not a requirement that a future harness keep
 // this defect. Git source was compared with the capture-pinned working bytes,
@@ -173,6 +174,31 @@ test('Text held obligation join conserves the accepted review and validates exis
   assert.equal(loaded.cases.length,2311);assert.equal(loaded.inspectionComplete,false);assert.equal(loaded.currentRenderingAccepted,false);
   t.diagnostic(JSON.stringify({reviewSha256:joined.sha256,modifiedCases:16,addedChildren:33,causeCases:1,
     dependencies:loaded.evidenceFingerprints.length,completePredecessorRecovered:true,physicalProposalWritten:false,canonicalPublished:false}));
+});
+
+test('Text held registration conserves all accepted sources and proofs without live writes',()=>{
+  const file='tests/material-parity/input-equivalence-audit.mjs',before=readFileSync(file,'utf8').replaceAll('\r\n','\n');
+  const staged=prepareTextHeldProducer(before,readFileSync);assert.equal(restoreTextHeldProducer(staged),before);
+  const inventory=source=>{
+    const tree=ts.createSourceFile(file,source,99,true,ts.ScriptKind.JS);assert.equal(tree.parseDiagnostics.length,0);
+    const list=name=>{
+      const f=tree.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text===name),arrays=[];
+      const visit=n=>{if(ts.isArrayLiteralExpression(n))arrays.push(n);ts.forEachChild(n,visit);};visit(f);
+      return arrays[0].elements.map(n=>n.getText(tree));
+    };
+    return {sources:list('sourceFingerprints'),proofs:list('focusedProofInventory'),plan:list('implementationPlan')};
+  };
+  const old=inventory(before),next=inventory(staged);
+  assert.equal(old.sources.length,1055);assert.equal(old.proofs.length,378);assert.equal(old.plan.length,65);
+  assert.equal(next.sources.length,1060);assert.equal(next.proofs.length,383);
+  assert.deepEqual(next.sources.slice(textHeldSources.length),old.sources);
+  assert.deepEqual(next.proofs.slice(textHeldProofTitles.length),old.proofs);assert.deepEqual(next.plan,old.plan);
+  assert.equal(new Set(next.sources).size,1060);
+  assert.throws(()=>restoreTextHeldProducer(staged+'\n// unexpected drift'));
+  assert.throws(()=>prepareTextHeldProducer(before+'\n// unexpected drift',readFileSync));
+  const missing=(f,...args)=>f.endsWith('audit-material-text-held-event-order.mjs')?Buffer.alloc(0):readFileSync(f,...args);
+  assert.throws(()=>prepareTextHeldProducer(before,missing));
+  assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),before);
 });
 
 test('current overlay authoring has distinct menu, sheet and dialog focus requests', async t => {
