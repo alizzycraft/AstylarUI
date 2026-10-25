@@ -1,5 +1,14 @@
 # Efficient Material input-audit workflow
 
+October25 editing-context milestone is accepted locally as8848ae5b/index3a73b61e,
+after corrected export,complete section/source/receipt conservation,independent
+cold comparison and verified isolated/accepted imports. Current inventory is
+1055 sources/378 proof declarations/198 findings/65 plan tracks. All2311 cases
+remain partial/current-rendering unverified. Resume remaining exact-case
+requirements from the current ledger;do not repeat the historical export failure,
+replay correction or registration checks below without changed dependencies.
+Original acceptance gates and equal-input contract remain unchanged.
+
 October25 export retry prerequisite: the initial editing-context export failed
 before canonical writes. Shared historical replay now composes newer registration
 stages;all four collectors bind259 groups,complete registration suites pass6/6,

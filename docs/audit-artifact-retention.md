@@ -1,5 +1,23 @@
 # Audit artifact retention
 
+October25 accepted editing-context generation8848ae5b retains the original failed
+`editing-canonical-export-20261025` logs,corrected export/cold logs,and bounded
+section/leaf/metadata/coverage/addition conservation outputs. Accepted index SHA
+3a73b61ec4e00539a62f17cf96f75c12bb29a74ae202a882ffdb2c55d73a118b.
+Keep `editing-pre-export-88be-20261025` and the isolated candidate store pending
+publication handoff/reference closure.85 closed index/shard files were LZX-
+compressed with every complete SHA256 unchanged and whole-store verification
+before/after.86 immutable generation files were hard-linked into the accepted
+store;existing import reuse verifies before pointer advancement and final whole-
+store verification passes. No original/failure capture or Git object removed.
+The per-file receipts are in `editing-replay-accepted-import-20261025.log`,SHA
+498ba1fa469f8cabdc831a34ef67cef8fa6014f0fab20fe94277f4929d6b02a4.
+Cold stdout SHA60e3712bbc72e89d1dc35c95109d219856d9e9f43953297fc88d2794010b8c8b;
+section comparison SHAba8308d04d58d13c1716073655e82c8c8a0862ca7ba440d3e3315465822334a3;
+leaf comparison SHA28513743ac700ee78cf7bafb143991279c69ad6a9fd2ea515691bd1086db4fab.
+All2311 cases remain partial/current-rendering unverified. Storage verification
+does not change audit criteria or establish rendering parity.
+
 Keep editing-registration-publication-20261025 log/stderr pair:actual HTTPS
 push exits0 and independent remote lookup matchesc498f80f. Stdout empty;stderr
 1992 bytes,SHAcec9154c3935cfd5173468bd4819c9a7fcffd9f03ddcc2888724683af7d9556e.

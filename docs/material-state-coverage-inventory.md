@@ -4,6 +4,39 @@
 
 ### Current next action and publication status
 
+October25 accepted editing-context milestone: generation
+`8848ae5b1ca0b18bc04116ebdd1eb2c360b7497a298e69fca9578df4a1b2b420`,index
+`3a73b61ec4e00539a62f17cf96f75c12bb29a74ae202a882ffdb2c55d73a118b`.
+Corrected export and independent cold `--editing-context --check` both exit0;
+cold replay has0 disk hits and authenticates19694 files/3427383741 bytes.
+Candidate retains80 sections:69 equal,11 reconciled. Five fixed-shape sections
+retain14085648 entries with147 provenance-only leaves;no original observation or
+classification changes. All193 findings,319 non-line proof fields and63 plan
+entries preserve;exact registered additions are65 sources,5 findings,59 proof
+declarations and2 plan tracks. All five changed prior source files recover
+their accepted hashes. Coverage conserves2467482 prior case leaves across2311
+cases and all17562 prior receipts;current receipts18397. No case is promoted.
+Accepted counts:1055 sources/378 proofs/198 findings/65 plan tracks,8483 scalar
+groups/39904 controls/389202 occurrences/0 unresolved scalar groups.
+
+Evidence under `artifacts/material-parity/`: `editing-replay-section-conservation-20261025.log`,
+`editing-replay-fixed-shape-leaves-20261025.log`,
+`editing-replay-metadata-conservation-20261025.log`,
+`editing-replay-registered-additions-20261025.log`,
+`editing-replay-coverage-conservation-20261025.log`,
+`editing-replay-cold-check-20261025.log` and
+`editing-replay-accepted-import-20261025.log` (with retained stderr pairs).
+Isolated and accepted whole-store verification pass.85 closed index/shard files
+retain complete hashes through LZX compression;86 immutable files are hard-linked
+into the accepted store,not duplicated. No original/failure evidence was deleted.
+Observed D:free675442688 bytes afterward. Canonical commit/publication follows.
+
+Next resume exact-case requirement closure from this accepted ledger,prioritizing
+shared uncovered obligations rather than replaying settled registration/captures.
+All2311 cases remain partial/current-rendering unverified. Original final
+acceptance gates remain open;this milestone is not completion or renderer-fix
+authorization. Older pending/retry paragraphs below are retained history.
+
 October25 replay-boundary integration is now verified. Exact intermediate
 Menu-stage producer/runner/launcher hashes pass through the newer editing reader;
 unknown drift still rejects. The two shared replay-correction files recover
