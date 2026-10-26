@@ -4,6 +4,30 @@
 
 ### Current next action and publication status
 
+October26 Chips alternate source/endpoint follow-up avoids repeating the existing
+342-case composite-state join in input-boundary-evidence.spec.mjs. Its existing
+76 Chips mappings already distinguish native descendant ARIA from candidate
+requested SiteData,not generated candidate semantic DOM. All eight alternate
+rows retain native false/false,candidate requested false/false and candidate
+store false/false;the two top-level semantic comparisons cover region/listbox,
+not individual option selection. These endpoints do not supply intermediate
+state or actual candidate descendant transport.
+
+Extended `chips-alternate-source-boundary.spec.mjs` executes authenticated
+original performInteraction/interactionTargetBox with explicit measurement,
+probe and settlement seams. Both modes request owner0,move/down/up,settle,
+then owner1,move/down/up. Native targets are first-child and nth-child2;
+candidate targets are chip-0/chip-1 with canvas-origin addition. Missing-original
+action recipe is no longer the blocker for these eight records. Test suite
+passes2/2,zero skips (1320.74ms). This is original recipe/centre arithmetic,
+not historical geometry,hit recipients,callbacks or original browser replay.
+No broad collector/export/capture rerun. Next determine whether retained
+candidate-generated descendant-state observations exist for this exact action;
+otherwise preserve that historical limit and scope a targeted current action
+capture rather than treating native/requested/store agreement as transport proof.
+The standalone two-proof extension remains outside canonical1085/412 pending a
+coherent coverage batch. No status,remaining list,renderer or fixture changed.
+
 October26 margin/visibility publication is remotely verified at
 `9ad18e1ee38fec2f818f6a881fe0c8ef2800ed7d` on
 `codex/material-audit-alignment-integration`. HTTPS push exited0;independent
