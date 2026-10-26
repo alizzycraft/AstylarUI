@@ -4,6 +4,27 @@
 
 ### Current next action and publication status
 
+October26 publication is remotely verified at
+`81852eb76c90eff6b05fa465af014dbe365409e3` on
+`codex/material-audit-alignment-integration`. Two HTTPS attempts failed
+(HTTP408/reset);a command-local157286400-byte request buffer succeeded,and a
+separate ls-remote matched. No credentials,SSH trust,saved Git config or history
+changed. GitHub's93.82MB canonical-file warning was nonfatal.
+
+Next bounded Divider input question separates an inactive recorded field from
+an invented default:all24 retained cases contain216 native authored owners with
+visibility=visible versus216 candidate owners with visibility absent;no matched
+visibility declarations. The24 structural root envelopes remain separate.
+`node --test tests/material-parity/divider-visible-input-boundary.spec.mjs`
+authenticates the originalab42 report and paired trees through the existing full-
+tree adapter,and rejects hidden/collapse,an invented candidate visible value and
+an added visibility rule. This adjacent focused proof is not yet registered in
+the canonical1077/407 population;no source receipt or case status was rewritten.
+It rules out a recorded hidden-state mismatch for these owners,not general CSS
+visibility support,implicit-default equivalence,generated paint or current output.
+Next inspect a materially active remaining owner-input/used-layout domain;do not
+repeat this bounded presence check or regenerate the canonical report for prose.
+
 October26 focus/selection milestone is ACCEPTED LOCALLY as generation
 `9332452005c3c779471c62e77c17d55650531c5385356854773ad56fb3e412ca`,
 index `9f6ca83f875fce1af1c7b8467e53e2f7d950a5bd05db40588d028f109c1871ed`.
