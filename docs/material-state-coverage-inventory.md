@@ -4,7 +4,7 @@
 
 ### Current next action and publication status
 
-October26 authenticated original dimension-owner execution now replays all48
+October26 authenticated original caller/dimension execution now replays all48
 retained Divider paragraph requests with their recorded parent box/style inputs.
 Original production measureTextContent returns null for these own-text-empty p
 wrappers;no text measurement is mocked. The only external default-provider stub
@@ -12,14 +12,23 @@ returns block display. Original calculateDimensions/parseMargin/helper methods
 execute unchanged from the original receipt-bound map. Every1em0 request returns
 margin top/bottom1 and zero sides;an explicit24px0 control returns24/0/24/0 while
 left/top/width/height stay identical. Requests are checked unchanged after replay.
-Thus font-relative parsing and top-margin omission are distinct mechanisms on
-these inputs,not a single em-only explanation. This is constrained method replay,
-not old-session runtime observation,complete caller/style preprocessing,UA-rule
-provenance or causal attribution across unequal native/candidate paragraph flow.
-Focused absolute-margin and visibility command passes4/4 (4019.9641ms).
+The entire original createElement prefix through calculateDimensions also runs
+unchanged with the captured resolver result. All48 styles retain object identity
+and exact serialized content at the handoff;caller output equals direct owner
+output. Captured p wrappers have no inline style. Recovery/plugin registration
+and pointer-observer boundaries are explicit no-op stubs,hover state is empty,
+and unexpected fallback defaults throw. This establishes no intervening margin
+conversion on that constrained handoff,not the historical resolver,plugin or
+hover runtime. Thus font-relative parsing and top-margin omission are distinct
+mechanisms on these inputs,not a single em-only explanation. This is constrained
+method replay,not old-session observation,UA-rule provenance or causal attribution
+across unequal native/candidate paragraph flow.
+Focused absolute-margin and visibility command passes4/4 (4112.8592ms).
 No fixture/core edits,new capture or canonical acceptance;all2311 cases remain
-partial/current-rendering unverified. Next bind the caller/style-result handoff
-only if needed for historical execution;do not repeat the parser/public matrix.
+partial/current-rendering unverified. This bounded handoff question is answered;
+next integrate the pending margin/visibility evidence with existing findings and
+source fingerprints as one batch. Do not repeat the parser/public matrix or
+expand this replay into a substitute historical browser session.
 
 October26 original executable-owner recovery:retained
 `artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/chunk-3JXWRYJY.js.map`

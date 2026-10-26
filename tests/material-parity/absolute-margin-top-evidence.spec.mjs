@@ -186,6 +186,32 @@ test('complete current absolute positioning and margin methods match captured in
   collect(originalTree);
   const Owner = new Function(`return class Owner {${methods.join('\n')}}`)();
   const owner = new Owner();
+  const creationIndex = originalMap.sources.findIndex(name => name.endsWith('/elements/element-creation.service.js'));
+  assert.ok(creationIndex >= 0);
+  const creationTree = ts.createSourceFile('creation.js', originalMap.sourcesContent[creationIndex], 99, true, ts.ScriptKind.JS);
+  const creators = [];
+  const findCreator = node => {
+    if (ts.isMethodDeclaration(node) && node.name.getText(creationTree) === 'createElement') creators.push(node);
+    else ts.forEachChild(node, findCreator);
+  };
+  findCreator(creationTree); assert.equal(creators.length, 1);
+  const statements = creators[0].body.statements;
+  const calculationIndex = statements.findIndex(statement => ts.isVariableStatement(statement) &&
+    statement.declarationList.declarations.some(declaration => declaration.name.getText(creationTree) === 'calculatedDimensions'));
+  assert.ok(calculationIndex > 0);
+  // Execute the entire original prefix, not a handwritten model of its merges.
+  // Stop before Babylon creation; external recovery/plugin/observer boundaries
+  // are explicit no-op stubs, while the resolver supplies the captured style.
+  const handoff = new Function('dom', 'render', 'element', 'parent', 'styles',
+    statements.slice(0, calculationIndex + 1).map(statement => statement.getText(creationTree)).join('\n') +
+    '\nreturn { style, calculatedDimensions };');
+  const caller = {
+    documentRecovery: { placeholderFor: () => null },
+    capabilityRegistry: { resolveElement: () => null },
+    interactionService: { ensurePointerObserver: () => {} },
+    styleDefaults: { getElementTypeDefaults: () => { throw Error('Unexpected style fallback'); } },
+    dimensionService: owner,
+  };
   const render = { actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } } };
   let replayed = 0;
   for (const row of [...original.results, ...original.interactions].filter(row => row.family === 'divider')) {
@@ -198,6 +224,7 @@ test('complete current absolute positioning and margin methods match captured in
       elementDimensions: new Map([[parent.name, { width: rootBox.width, height: rootBox.height,
         padding: owner.parsePadding(render, root.resolvedStyle, undefined) }]]),
       elementStyles: new Map([[parent.name, { normal: root.normalResolvedStyle }]]),
+      hoverStates: new Map(),
     } };
     for (const id of ['divider-above-row', 'divider-below-row']) {
       const paragraph = tree.nodes.find(node => node.authored?.id === id);
@@ -205,8 +232,16 @@ test('complete current absolute positioning and margin methods match captured in
       assert.ok(!paragraph.authored.textContent);
       assert.equal(paragraph.resolvedStyle.margin, '1em 0');
       const before = JSON.stringify(paragraph.resolvedStyle);
+      assert.equal(paragraph.authored.style, undefined);
+      const capturedStyle = structuredClone(paragraph.resolvedStyle);
+      const replayRender = { actions: { style: { ...render.actions.style,
+        findStyleForElement: element => { assert.equal(element, paragraph.authored); return capturedStyle; } } } };
+      const passed = handoff.call(caller, dom, replayRender, paragraph.authored, parent, []);
+      assert.equal(passed.style, capturedStyle);
+      assert.equal(JSON.stringify(passed.style), before);
       const actual = owner.calculateDimensions(dom, render, paragraph.authored,
         paragraph.resolvedStyle, parent, []);
+      assert.deepEqual(passed.calculatedDimensions, actual);
       assert.equal(JSON.stringify(paragraph.resolvedStyle), before);
       assert.deepEqual(actual.margin, { top: 1, right: 0, bottom: 1, left: 0 });
       const control = owner.calculateDimensions(dom, render, paragraph.authored,
