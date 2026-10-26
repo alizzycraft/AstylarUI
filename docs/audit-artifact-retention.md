@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+October26 accepted margin/visibility snapshotd6f07066 retains93324520 predecessor,
+margin-pre-export-9332-20261026 verified backup and all logs listed in the current
+ledger,including the interrupted export and failed retry1. Retain candidate
+metadata,complete leaf comparison and derived-receipt proof. Isolated/accepted
+stores share86 hard-linked immutable files;pathname sums overcount storage.
+Acceptance of this snapshot grants no evidence deletion or cleanup authority.
+
 October26 live margin/visibility registration retains the public absolute-margin
 failure directory and its original report,bundle,HTML,PNGs and capture-result
 record. Also retain chunk-3JXWRYJY.js and its map under

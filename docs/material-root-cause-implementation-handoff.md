@@ -1,5 +1,14 @@
 # Material audit: evidence-led implementation priorities
 
+October26 margin/visibility evidence is now canonicald6f07066/indexfa4603e4:
+1085 source paths/412 proof declarations/203 findings/70 implementation tracks.
+Corrected export,complete conservation,independent cold comparison(diskHits0)
+and isolated/accepted stores pass. Every prior case/coverage record is conserved;
+all2311 remain partial/current-rendering unverified. This settles publication
+applicability for the bounded evidence below,not the original unequal-input
+Material paragraph cause or complete audit. Resume remaining exact-case gaps;
+no renderer implementation or fixture compensation is authorized by this audit.
+
 October26 margin/visibility proofs are registered LIVE1085/412/203/70 with exact
 prior-source restoration and focused/integration checks. Canonical93324520 is
 still1077/407/203/70 until export/conservation/cold/import gates pass. The original

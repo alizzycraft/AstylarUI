@@ -1,8 +1,44 @@
 # Material comparison/state coverage inventory
 
-## Current audit pointer — October24
+## Current audit pointer — October26
 
 ### Current next action and publication status
+
+October26 margin/visibility snapshot is ACCEPTED locally as
+`d6f07066dc63e18c2046041d4a5e01b34e5cb57732f1c7d16251ba7b39c97dad`,
+index `fa4603e4df956ef219eab3d35f60b7e9e71a217231ae50e67b124793ab3a2a9c`.
+Counts1085 sources/412 proof declarations/203 findings/70 tracks;436 static and
+1875 interaction cases,8483 scalar groups,389202 occurrences and39904 controls.
+All2311 case inspection records remain partial/current-rendering unverified.
+Zero unresolved scalar attribution groups is NOT full inspection or parity.
+
+Corrected export TERMINAL0 in2845748.8428ms;independent cold check TERMINAL0 in
+8394187.6552ms with diskHits0,19809 files and3438310351 read/verification bytes.
+The candidate compressed98380655/decoded2369357498 bytes authenticate.73/80
+sections are token-identical;all prior source paths/findings/plans/summary and
+407 prior proof declarations are conserved (proof line changes only). Complete
+comparison of14085648 leaves/containers across five remaining sections proves
+unchanged membership/order/shape. All147 changed values recompute:98 direct
+producer receipts,48 control-proof hashes and one motion-report hash. Coverage
+is an unchanged section,not a newly inferred completion claim.
+
+Required logs under artifacts/material-parity:
+margin-direct-corrected-canonical-export-20261026.log;
+margin-independent-cold-20261026.log (SHAc82655b1357138518240268186cac7f745dec0d848c9590b116526681b3a5038);
+margin-candidate-sections-metadata-20261026.log (SHAd80a39c415f0b26f14d13fcbc384cb033522120063c49b6063f81b25f71b1a3e);
+margin-metadata-conservation-20261026.log;
+margin-fixed-section-leaves-20261026.log (SHA0929d4e414b76dd0665917f3e229d2d90100d11e26ce8d2890ac522dbf101722);
+margin-derived-receipts-20261026.log;
+margin-isolated-import-20261026.log;
+margin-prepared-store-links-20261026.log;
+margin-accepted-import-20261026.log.
+Isolated and accepted stores verify completely;86 immutable files are hard-linked.
+Existing importer advances the accepted pointer only after cold/conservation
+success;93324520 predecessor and margin-pre-export-9332-20261026 backup remain.
+Preserve interrupted and failed retry1 logs. Next publish this coherent snapshot,
+then resume remaining exact-case obligations from the ledger;do not repeat the
+settled margin mechanism,registration or milestone checks for prose. No renderer
+fix,fixture compensation,threshold change or original acceptance waiver.
 
 October26 export retry1 TERMINAL1 after2380715ms:four original-source bindings
 failed and259 resolved-style groups became unattributed. Canonical93324520 is

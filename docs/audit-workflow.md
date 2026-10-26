@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+October26 margin/visibility snapshotd6f07066/indexfa4603e4 is accepted locally:
+corrected export,complete section/metadata/receipt conservation,zero-disk-hit
+independent cold check and isolated/accepted imports pass. Counts1085/412/203/70.
+All2311 cases remain partial/current-rendering unverified. Preserve original and
+failure evidence;see current ledger for logs and next exact-case obligations.
+Do not repeat these milestone checks for documentation-only edits. Original
+scope,equal-input contract and final acceptance gates remain unchanged.
+
 October26 focus/selection snapshot93324520/index9f6ca83f is accepted locally:
 export,whole conservation,zero-disk-hit independent cold comparison and complete
 isolated/accepted stores pass. See current ledger for exact logs. All2311 cases
