@@ -4,6 +4,31 @@
 
 ### Current next action and publication status
 
+October26 margin/visibility publication is remotely verified at
+`9ad18e1ee38fec2f818f6a881fe0c8ef2800ed7d` on
+`codex/material-audit-alignment-integration`. HTTPS push exited0;independent
+ls-remote matches. GitHub's93.82MB file warning was nonfatal. Automatic Git
+packing finished before publication;no evidence or Git files were removed.
+
+Next coverage priority is unjoined interaction evidence,not another settled
+Divider source/pixel search. Focused question:do the eight retained Chips
+activate-alternate event/state fields witness correct alternate targets and
+state transitions? `node --test tests/material-parity/chips-alternate-source-boundary.spec.mjs`
+passes1/1,zero skips (1729.3655ms). It authenticates original runner e01ef9dc
+and original report ab42dbec,then executes the original two comparators.
+All four candidate selection combinations return the same unconditional
+state matches:true. Synthetic event controls changing leaf/value or adding an
+unrelated target preserve the recorded host-type comparison;removing clicks
+fails. These controls demonstrate discarded information,not recovered raw events.
+This closes comparator-source availability for this bounded question;older
+missing-original-source statements are historical. It does not prove actual
+targeting,intermediate transitions or endpoint selection. Next inspect separate
+retained semantic/tree endpoint records and original action/target recipe before
+deciding whether a supplementary capture is necessary. Existing eight cases stay
+evidence-join-pending;all2311 parent cases remain partial/current-unverified.
+The new standalone proof is not yet in canonical1085/412;batch its registration
+with the resulting coherent coverage evidence,not a full export for this note.
+
 October26 margin/visibility snapshot is ACCEPTED locally as
 `d6f07066dc63e18c2046041d4a5e01b34e5cb57732f1c7d16251ba7b39c97dad`,
 index `fa4603e4df956ef219eab3d35f60b7e9e71a217231ae50e67b124793ab3a2a9c`.
