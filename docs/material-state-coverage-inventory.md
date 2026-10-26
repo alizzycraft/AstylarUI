@@ -4,6 +4,23 @@
 
 ### Current next action and publication status
 
+October26 applicability boundary checked against authenticated original ab42dbec
+report and all24 paired Divider trees:48 reference paragraph owners are static
+with top:auto;48 candidate owners are absolute with explicit nonzero top and
+margin:1em0. The public absolute-top0 reduction therefore demonstrates a general
+core failure,not an equal-input reproduction of these original paragraphs.
+The extended absolute-margin-top-evidence.spec.mjs rejects invented absolute
+reference positioning,zero candidate top and removed candidate margins.
+Command `node --test tests/material-parity/absolute-margin-top-evidence.spec.mjs tests/material-parity/divider-visible-input-boundary.spec.mjs`
+passes4/4 (2881.8229ms). No new capture,normalization,case promotion or canonical
+registration. The existing retained inline-owner placement proof separately
+decomposes child top from authored paragraph top plus root border;it does not
+erase this earlier authoring difference. Next identify the remaining exact
+paragraph used-margin/flow attribution gap from existing source and history,
+rather than transferring the public failure to unequal original inputs.
+All2311 cases remain partial/current-rendering unverified;accepted93324520 and
+the original acceptance gates are unchanged.
+
 October26 remaining positioned-margin question yields bounded TOP-path evidence
 for existing `core-absolute-insets-ignore-margin-box`,not a new finding. Public
 equal-input reduction reuses the authenticated relative-margin runner58c335b8;

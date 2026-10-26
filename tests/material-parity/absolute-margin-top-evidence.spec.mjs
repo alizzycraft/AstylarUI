@@ -4,12 +4,59 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import ts from 'typescript';
+import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 
 const directory = 'artifacts/material-parity/public-absolute-margins-20261026';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const reportBytes = readFileSync(`${directory}/latest-report.json`);
 assert.equal(hash(reportBytes), '6e4d7b7807c1671e7716a2da46d4a3e61c9f0dd3f6011ce3e5ecb1e8717350fa');
 const report = JSON.parse(reportBytes);
+
+test('retained Divider paragraph positioning is not the equal-input absolute-top reduction', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(bytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const original = JSON.parse(bytes);
+  const cases = [...original.results, ...original.interactions].filter(row => row.family === 'divider');
+  assert.equal(cases.length, 24);
+  const inventory = collectFullTreeInventory(cases);
+  for (const key of ['gaps', 'resolvedStyleGaps', 'stateStyleGaps', 'errors'])
+    assert.deepEqual(inventory[key], []);
+  let referencePairs = 0, candidatePairs = 0;
+  const verify = (side, style) => {
+    if (side === 'reference') {
+      assert.equal(style.position, 'static');
+      assert.equal(style.top, 'auto');
+    } else {
+      assert.equal(style.position, 'absolute');
+      assert.equal(style.margin, '1em 0');
+      assert.ok(Object.hasOwn(style, 'top'));
+      assert.ok(Number.isFinite(parseFloat(style.top)));
+      assert.notEqual(parseFloat(style.top), 0);
+    }
+  };
+  for (const entry of inventory.cases) {
+    const variant = inventory.variants[entry.variant];
+    for (const id of ['divider-above', 'divider-below']) {
+      const leaf = variant.nodes.find(node => node.attributes?.id === id);
+      const paragraph = entry.side === 'reference'
+        ? variant.nodes.find(node => node.key === leaf.parent)
+        : variant.nodes.find(node => node.authored?.id === `${id}-row`);
+      const style = inventory.styles[paragraph.style].value;
+      verify(entry.side, style);
+      if (entry.side === 'reference') {
+        referencePairs++;
+        assert.throws(() => verify(entry.side, { ...style, position: 'absolute' }));
+      } else {
+        candidatePairs++;
+        assert.throws(() => verify(entry.side, { ...style, top: '0px' }));
+        assert.throws(() => verify(entry.side, { ...style, margin: '0' }));
+      }
+    }
+  }
+  assert.equal(referencePairs, 48); assert.equal(candidatePairs, 48);
+  // Matching candidate requests do not turn native normal flow into positioned
+  // layout or prove that the independent core failure caused the original gap.
+});
 
 function verifyObservations(value) {
   assert.equal(value.kind, 'public-absolute-margin-diagnostic');
