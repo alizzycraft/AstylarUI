@@ -1,5 +1,14 @@
 # Material audit: evidence-led implementation priorities
 
+October26 focus/selection evidence is accepted locally in snapshot93324520,
+with1077 sources/407 proof declarations/203 findings/70 implementation tracks.
+Independent cold replay,complete conservation and isolated/accepted imports pass;
+see current coverage ledger for exact receipts. The native Tab-selection finding
+below is registered evidence,not an implemented fix or original Material runtime
+attribution. All2311 cases remain partial/current-rendering unverified;original
+equal-input audit scope and final acceptance gates remain open. Publish this
+milestone before resuming remaining exact-case obligations.
+
 ## Pending native Tab selection ownership defect,October25
 
 `core-native-tab-selection-overwritten-by-control-sync` is demonstrated by a

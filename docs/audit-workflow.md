@@ -1,5 +1,12 @@
 # Efficient Material input-audit workflow
 
+October26 focus/selection snapshot93324520/index9f6ca83f is accepted locally:
+export,whole conservation,zero-disk-hit independent cold comparison and complete
+isolated/accepted stores pass. See current ledger for exact logs. All2311 cases
+remain partial/current-rendering unverified. Next publish,then resume remaining
+exact-case obligations;do not repeat settled milestone checks for prose. Earlier
+pending/retry entries are historical. Original scope and acceptance remain intact.
+
 October25 focus/selection export retry prerequisite is corrected:the initial
 attempt failed parsing await in a synchronous session callback before writes.
 Readers now stay synchronous;complete-runner Node syntax and rejecting Promise

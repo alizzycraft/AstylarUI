@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+October26 accepted focus/selection generation93324520 retains predecessor7a22,
+its verified backup,authenticated metadata extracts and all original/failure
+evidence. Keep the conservation/cold/import logs named in the current ledger,
+including the raw-byte fingerprint-check failure and corrected normalized check.
+Isolated/accepted stores share86 immutable hard-linked files;pathname-size sums
+overcount physical storage. This milestone authorizes no evidence deletion.
+
 Keep focus-selection shared-entry,owner-corrected,initial live-failure/restored
 and final verified integration logs named in the current ledger. No failed
 attempt is superseded by deleting it. Accepted7a22 and its authenticated selected

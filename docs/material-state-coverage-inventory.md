@@ -4,6 +4,46 @@
 
 ### Current next action and publication status
 
+October26 focus/selection milestone is ACCEPTED LOCALLY as generation
+`9332452005c3c779471c62e77c17d55650531c5385356854773ad56fb3e412ca`,
+index `9f6ca83f875fce1af1c7b8467e53e2f7d950a5bd05db40588d028f109c1871ed`.
+Counts:1077 source paths/407 proof declarations/203 findings/70 plan tracks.
+All2311 cases remain partial/current-rendering unverified;inputEquivalent=false.
+No renderer,plugin implementation,fixture,threshold or acceptance changes.
+
+Verification logs below are under `artifacts/material-parity/`:
+- `focus-selection-sync-canonical-export-20261025.log`:exit0,3539510.7788ms.
+- `focus-selection-independent-cold-20261026.log`:exit0,3438156.6722ms,
+  diskHits0,19809 files and3438307372 bytes read and reverified.
+- `focus-selection-candidate-sections-metadata-20261026.log`:whole compressed/
+  decoded authentication,80 section receipts and five selected metadata sections;
+  complete extract SHA256 `3c940ad3372de7cf0d7a75a0636a0062b4e64063836affe6a3d52bf24ddff100`.
+- `focus-selection-metadata-conservation-corrected-20261026.log`:all1077 current
+  LF-normalized source hashes match;1070 prior paths,202 complete findings,
+  398 non-line proof declarations and69 non-priority plan entries preserve.
+  Six shared prior sources recover exactly;the supplementary prior reader also
+  recovers both proof files,completing all eight changed prior source paths.
+  Preserve the initial metadata-conservation failure:it incorrectly used raw
+  bytes instead of the producer's established UTF8/CRLF-to-LF fingerprint rule.
+- `focus-selection-fixed-section-leaves-20261026.log` and
+  `focus-selection-derived-receipts-20261026.log`:five sections preserve all
+  14085648 compared leaves/containers;147 changed leaves reconcile as98 exact
+  module receipts,48 recomputed complete-row proof hashes and one report hash.
+- `focus-selection-coverage-conservation-20261026.log`:all2311 complete prior
+  case records and remaining tasks preserve after removing exactly eight
+  supplementary Timepicker children;18404 prior dependency receipts preserve.
+- `focus-selection-applicability-conservation-20261026.log`:synchronous reader
+  applicability exactly matches;all35 added dependency receipts authenticate.
+- `focus-selection-isolated-import-20261026.log` and
+  `focus-selection-accepted-import-20261026.log`:complete stores verify;86
+  immutable files hard-linked,accepted store verified before/after pointer move.
+
+All80 sections retain membership;69 are token-identical and11 are reconciled
+above. Prior7a22,its verified backup and original/failure evidence remain retained.
+Next commit/push this verified publication,then resume exact-case obligations.
+Do not repeat captures or these completed milestone gates for documentation.
+Earlier pending/retry paragraphs below are historical checkpoints.
+
 October25 first focus/selection exporter attempt FAILED immediately,before writes:
 `focus-selection-canonical-export-20261025.log` records SyntaxError at await
 inside the evidence-session's synchronous callback. The prior extracted routing
