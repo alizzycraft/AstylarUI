@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import ts from 'typescript';
+import {restoreDividerMarginRegistry} from './divider-margin-registration.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 
@@ -11,8 +12,8 @@ test('Focus selection staged registry preserves every accepted source proof find
   const {prepareFocusSelectionAuditRegistry:prepare,restoreFocusSelectionAuditRegistry:restore,createFocusSelectionAuditPriorRead:priorFactory}=await import('./public-tab-selection-finding.mjs');
   const acceptedRead=priorFactory({root:process.cwd(),read:readFileSync});
   const raw={},staged={};for(const [kind,file]of Object.entries({producer:'tests/material-parity/input-equivalence-audit.mjs',policy:'tests/material-parity/input-equivalence-policy.mjs'})){
-    const live=readFileSync(file,'utf8').replaceAll('\r\n','\n');raw[kind]=acceptedRead(file,'utf8');staged[kind]=prepare(raw[kind],kind,readFileSync);
-    assert.equal(restore(staged[kind],kind),raw[kind]);assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),live);if(live!==raw[kind])assert.equal(live,staged[kind]);
+    const rawLive=readFileSync(file,'utf8').replaceAll('\r\n','\n');const live=kind==='producer'?restoreDividerMarginRegistry(rawLive):rawLive;raw[kind]=acceptedRead(file,'utf8');staged[kind]=prepare(raw[kind],kind,readFileSync);
+    assert.equal(restore(staged[kind],kind),raw[kind]);assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),rawLive);if(live!==raw[kind])assert.equal(live,staged[kind]);
     assert.throws(()=>prepare(raw[kind]+'\n// drift',kind,readFileSync));assert.throws(()=>restore(staged[kind]+'\n// drift',kind));assert.throws(()=>prepare(staged[kind],kind,readFileSync));
   }
   assert.throws(()=>prepare(raw.producer,'producer',()=>Buffer.alloc(0)));

@@ -1,5 +1,13 @@
 # Material audit: evidence-led implementation priorities
 
+October26 margin/visibility proofs are registered LIVE1085/412/203/70 with exact
+prior-source restoration and focused/integration checks. Canonical93324520 is
+still1077/407/203/70 until export/conservation/cold/import gates pass. The original
+capture-bound caller/dimension replay receives all48 paragraph margin requests
+unchanged,parses1em as1 and leaves geometry unchanged under24px margin controls.
+This is constrained replay,not old-session execution or attribution across the
+unequal native normal-flow/candidate absolute inputs. No renderer fix authorized.
+
 October26 extension of existing `core-absolute-insets-ignore-margin-box`:
 eight public equal-input absolute top0 pairs(DPR1/2,16/24px own font,em/pixel)
 show native border-box top offsets16/24px versus candidate0. Pixel controls fail

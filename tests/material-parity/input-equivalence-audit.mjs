@@ -8922,6 +8922,14 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "tests/material-parity/divider-margin-registration.mjs",
+    "scripts/audit-public-absolute-margins.mjs",
+    "tests/material-parity/absolute-margin-top-evidence.spec.mjs",
+    "tests/material-parity/divider-visible-input-boundary.spec.mjs",
+    "artifacts/material-parity/public-absolute-margins-20261026/latest-report.json",
+    "artifacts/material-parity/public-absolute-margins-20261026/capture-result.txt",
+    "artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/chunk-3JXWRYJY.js",
+    "artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/chunk-3JXWRYJY.js.map",
     "scripts/audit-material-timepicker-programmatic-focus.mjs",
     "scripts/join-material-timepicker-programmatic-focus.mjs",
     "scripts/audit-public-email-selection.mjs",
@@ -10006,6 +10014,16 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/absolute-margin-top-evidence.spec.mjs", new RegExp("test\\('pending Divider margin registry preserves every accepted source and proof declaration'"),
+      "pending Divider margin registry preserves every accepted source and proof declaration", "Bounded original paragraph handoff/dimension replay, public absolute-margin failure and raw visibility omission;not equivalent Material flow,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/absolute-margin-top-evidence.spec.mjs", new RegExp("test\\('retained Divider paragraph positioning is not the equal-input absolute-top reduction'"),
+      "retained Divider paragraph positioning is not the equal-input absolute-top reduction", "Bounded original paragraph handoff/dimension replay, public absolute-margin failure and raw visibility omission;not equivalent Material flow,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/absolute-margin-top-evidence.spec.mjs", new RegExp("test\\('absolute top margin evidence preserves failing pixel controls and equal em requests'"),
+      "absolute top margin evidence preserves failing pixel controls and equal em requests", "Bounded original paragraph handoff/dimension replay, public absolute-margin failure and raw visibility omission;not equivalent Material flow,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/absolute-margin-top-evidence.spec.mjs", new RegExp("test\\('complete current absolute positioning and margin methods match captured installed owner'"),
+      "complete current absolute positioning and margin methods match captured installed owner", "Bounded original paragraph handoff/dimension replay, public absolute-margin failure and raw visibility omission;not equivalent Material flow,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/divider-visible-input-boundary.spec.mjs", new RegExp("test\\('retained Divider visible inputs stay distinct from omitted candidate visibility'"),
+      "retained Divider visible inputs stay distinct from omitted candidate visibility", "Bounded original paragraph handoff/dimension replay, public absolute-margin failure and raw visibility omission;not equivalent Material flow,current rendering or whole-case acceptance."),
     proof(root, "tests/material-parity/focus-action-scope.spec.mjs", new RegExp("test\\('supplementary Timepicker staged reader recovers exact historical tests and validates all dependencies'"),
       "supplementary Timepicker staged reader recovers exact historical tests and validates all dependencies", "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),
     proof(root, "tests/material-parity/focus-action-scope.spec.mjs", new RegExp("test\\('supplementary Timepicker focus join preserves the complete accepted predecessor and rejects forged evidence'"),

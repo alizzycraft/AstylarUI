@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+October26 live margin/visibility registration retains the public absolute-margin
+failure directory and its original report,bundle,HTML,PNGs and capture-result
+record. Also retain chunk-3JXWRYJY.js and its map under
+icon-fresh-producer-retained-build-20261016-browser:both match original October5
+capture receipts and now bind the paragraph dimension/caller replay. Directory
+date does not invalidate byte-identical original assets. No cleanup is authorized
+by registry integration;canonical93324520 and all prior/failure evidence remain.
+
 October26 accepted focus/selection generation93324520 retains predecessor7a22,
 its verified backup,authenticated metadata extracts and all original/failure
 evidence. Keep the conservation/cold/import logs named in the current ledger,

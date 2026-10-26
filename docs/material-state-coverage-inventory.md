@@ -4,19 +4,29 @@
 
 ### Current next action and publication status
 
-October26 margin/visibility registration is staged in the existing focused spec,
-not live or canonical. In-memory producer delta adds seven source dependencies
-and five exact executable test declarations:1077→1084 sources,407→412 proofs.
-All prior entries preserve exact order/text;removing only the two guarded insertion
-blocks recovers every producer byte,including findings and implementation plans.
-Every new file exists and every proof pattern matches exactly one named test.
-Focused command passes5/5 (4723.8902ms),without changing the live producer.
-Before applying this batch,extend the established historical reader restoration
-for the exact new producer delta and verify prior-source applicability. The
-current focus-selection reader restores an exact older producer hash;blindly
-editing the live registry would break that contract. Do not relax its hashes,
-run an export first or describe staged counts as accepted. Accepted93324520 stays
-1077/407/203/70;all2311 cases remain partial/current-rendering unverified.
+October26 margin/visibility batch is now LIVE1085 sources/412 proof declarations,
+with203 findings/70 tracks unchanged;canonical93324520 remains1077/407/203/70.
+The eighth new source is the bounded divider-margin-registration helper,which
+centralizes the previously staged insertion blocks and exact prior reconstruction.
+Removing only eight source/five proof additions recovers producer LF SHA58ef0225
+and all prior bytes/order. Exact old public-tab-selection and public-email proof
+sources also recover,with hashes0c676443/af6efcc9. Earlier seven-source staged
+counts are historical,not the live total. No case status or finding reclassified.
+
+The established focus-selection reader reverses only this delta before its
+existing earlier restorations. Nested already-restored generations pass unchanged
+to their own hash validators;both accepted-producer and new-producer unrelated
+drift are rejected through the real reader. All new dependencies/proof matches,
+whole shared-source reconstruction and prior registry/selection controls pass.
+Commands:the margin,visibility and public-email suites pass11/11;the neighboring
+focus-action-scope suite passes5/5 (126893.079ms),authenticating18439 dependencies
+and2311 partial cases with unchanged d47c41d3 review. These are focused/integration
+results,not a cold canonical replay or current-rendering acceptance. Initial
+shared-test insertion rejected an ambiguous anchor;the corrected bounded anchor
+preserves complete predecessor source. No capture or canonical payload written.
+Next perform one justified canonical export/conservation/cold/import milestone
+for this frozen batch,not another paragraph reproduction. All2311 cases remain
+partial/current-rendering unverified;original acceptance gates remain intact.
 
 October26 authenticated original caller/dimension execution now replays all48
 retained Divider paragraph requests with their recorded parent box/style inputs.

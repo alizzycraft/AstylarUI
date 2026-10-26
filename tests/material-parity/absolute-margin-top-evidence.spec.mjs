@@ -5,6 +5,9 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import ts from 'typescript';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { dividerMarginSources, prepareDividerMarginRegistry, restoreDividerMarginRegistry,
+  prepareDividerMarginSharedSource, restoreDividerMarginSharedSource, createDividerMarginPriorRead } from './divider-margin-registration.mjs';
+import { createFocusSelectionAuditPriorRead } from './public-tab-selection-finding.mjs';
 
 const directory = 'artifacts/material-parity/public-absolute-margins-20261026';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -14,36 +17,15 @@ const report = JSON.parse(reportBytes);
 
 test('pending Divider margin registry preserves every accepted source and proof declaration', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
-  const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const live = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const source = restoreDividerMarginRegistry(live);
   assert.equal(hash(source), '58ef02255929abc8ff050ec922de31f5120e2a038fec034e95e49c1052843527');
-  const sources = [
-    'scripts/audit-public-absolute-margins.mjs',
-    'tests/material-parity/absolute-margin-top-evidence.spec.mjs',
-    'tests/material-parity/divider-visible-input-boundary.spec.mjs',
-    `${directory}/latest-report.json`,
-    `${directory}/capture-result.txt`,
-    'artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/chunk-3JXWRYJY.js',
-    'artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/chunk-3JXWRYJY.js.map',
-  ];
-  const titles = [
-    ['tests/material-parity/absolute-margin-top-evidence.spec.mjs', 'pending Divider margin registry preserves every accepted source and proof declaration'],
-    ['tests/material-parity/absolute-margin-top-evidence.spec.mjs', 'retained Divider paragraph positioning is not the equal-input absolute-top reduction'],
-    ['tests/material-parity/absolute-margin-top-evidence.spec.mjs', 'absolute top margin evidence preserves failing pixel controls and equal em requests'],
-    ['tests/material-parity/absolute-margin-top-evidence.spec.mjs', 'complete current absolute positioning and margin methods match captured installed owner'],
-    ['tests/material-parity/divider-visible-input-boundary.spec.mjs', 'retained Divider visible inputs stay distinct from omitted candidate visibility'],
-  ];
-  const boundary = 'Bounded original paragraph handoff/dimension replay, public absolute-margin failure and raw visibility omission;not equivalent Material flow,current rendering or whole-case acceptance.';
-  const escape = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const additions = [
-    ['function sourceFingerprints(root) {\n  const files = [\n', sources.map(name => `    ${JSON.stringify(name)},\n`).join('')],
-    ['function focusedProofInventory(root) {\n  return [\n', titles.map(([name, title]) =>
-      `    proof(root, ${JSON.stringify(name)}, new RegExp(${JSON.stringify("test\\('" + escape(title) + "'")}),\n      ${JSON.stringify(title)}, ${JSON.stringify(boundary)}),\n`).join('')],
-  ];
-  const replaceOnce = (value, before, after) => {
-    assert.equal(value.split(before).length, 2); return value.replace(before, after);
-  };
-  let staged = source;
-  for (const [anchor, prefix] of additions) staged = replaceOnce(staged, anchor, anchor + prefix);
+  const staged = prepareDividerMarginRegistry(source);
+  assert.equal(restoreDividerMarginRegistry(staged), source);
+  if (live !== source) assert.equal(live, staged);
+  assert.throws(() => prepareDividerMarginRegistry(source + '\n// drift'));
+  assert.throws(() => restoreDividerMarginRegistry(staged + '\n// drift'));
+  assert.throws(() => prepareDividerMarginRegistry(staged));
   const arrays = value => {
     const tree = ts.createSourceFile(file, value, 99, true, ts.ScriptKind.JS), result = {};
     assert.equal(tree.parseDiagnostics.length, 0);
@@ -56,21 +38,42 @@ test('pending Divider margin registry preserves every accepted source and proof 
     return result;
   };
   const before = arrays(source), after = arrays(staged);
-  assert.equal(before.sourceFingerprints.length, 1077); assert.equal(after.sourceFingerprints.length, 1084);
+  assert.equal(before.sourceFingerprints.length, 1077); assert.equal(after.sourceFingerprints.length, 1085);
   assert.equal(before.focusedProofInventory.length, 407); assert.equal(after.focusedProofInventory.length, 412);
-  assert.deepEqual(after.sourceFingerprints.slice(7), before.sourceFingerprints);
+  assert.deepEqual(after.sourceFingerprints.slice(8), before.sourceFingerprints);
   assert.deepEqual(after.focusedProofInventory.slice(5), before.focusedProofInventory);
-  assert.equal(new Set(after.sourceFingerprints.map(value => new Function(`return ${value}`)())).size, 1084);
-  for (const name of sources) assert.ok(readFileSync(name).length > 0);
+  assert.equal(new Set(after.sourceFingerprints.map(value => new Function(`return ${value}`)())).size, 1085);
+  for (const name of dividerMarginSources) assert.ok(readFileSync(name).length > 0);
   const proof = (_root, name, pattern, title) => {
     assert.equal([...readFileSync(name, 'utf8').matchAll(new RegExp(pattern.source, 'g'))].length, 1, title);
     return title;
   };
   for (const declaration of after.focusedProofInventory.slice(0, 5))
     new Function('proof', 'root', `return ${declaration}`)(proof, process.cwd());
-  for (const [anchor, prefix] of additions.toReversed()) staged = replaceOnce(staged, anchor + prefix, anchor);
-  assert.equal(staged, source); // Every other byte, including findings and plans.
-  assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), source);
+  for (const name of ['tests/material-parity/public-tab-selection-finding.mjs', 'tests/material-parity/public-email-selection.spec.mjs']) {
+    const current = readFileSync(name, 'utf8').replaceAll('\r\n', '\n');
+    const prior = restoreDividerMarginSharedSource(current, name), next = prepareDividerMarginSharedSource(prior, name);
+    assert.equal(restoreDividerMarginSharedSource(next, name), prior);
+    if (current !== prior) assert.equal(current, next);
+    assert.throws(() => restoreDividerMarginSharedSource(next + '\n// drift', name));
+    assert.throws(() => prepareDividerMarginSharedSource(prior + '\n// drift', name));
+    const read = createDividerMarginPriorRead({ root: process.cwd(), read: (requested, options) => {
+      const value = path.resolve(requested) === path.resolve(file) ? staged : next;
+      return typeof options === 'string' ? value : Buffer.from(value);
+    } });
+    assert.equal(read(file, 'utf8'), source);
+    assert.equal(read(name, 'utf8'), prior);
+  }
+  // The established predecessor validator, not this delta adapter, owns older
+  // generations. Check nested reuse and rejection through that real path.
+  const historical = createFocusSelectionAuditPriorRead({ root: process.cwd(), read: readFileSync });
+  const nested = createFocusSelectionAuditPriorRead({ root: process.cwd(), read: historical });
+  assert.equal(nested(file, 'utf8'), historical(file, 'utf8'));
+  for (const value of [source, staged]) {
+    const dirtyRead = () => Buffer.from(value + '\n// unrelated drift');
+    assert.throws(() => createFocusSelectionAuditPriorRead({ root: process.cwd(), read: dirtyRead })(file));
+  }
+  assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), live);
 });
 
 test('retained Divider paragraph positioning is not the equal-input absolute-top reduction', () => {
