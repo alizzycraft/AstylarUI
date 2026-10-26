@@ -4,6 +4,34 @@
 
 ### Current next action and publication status
 
+October26 supplementary Chips alternate observation now supplies actual generated
+option attributes at mouse boundaries for all8 configured profile/DPR contexts.
+Existing focus/activation collector is reused by guarded adapter
+scripts/audit-material-chips-alternate.mjs;no fixture,renderer or action rewrite.
+Capture and existing --verify both exit0. Browser155.0.8059.85;report
+artifacts/material-parity/chips-alternate-observed-20261026/latest-report.json
+SHA0a24820940bba3c8d4f2b738d69a6105e1ef3fe62c6bf44cf94c73360db59cad.
+Retained served build and current readable action are checkpoint-bound,not a
+fresh whole-library build. Original and current complete performInteraction/
+interactionTargetBox bodies agree after line-ending normalization.
+
+On both sides stores progress true/true -> false/true -> false/false;actual
+generated DOM options agree at settled endpoints. Across96 paired-side mouse
+boundary snapshots,native option/store state differs14 times immediately after
+mouse-up;candidate differs0. Preserve these observations:extra awaited read-only
+snapshots affect timing,and native DOM lag is not classified as a defect. This
+closes supplementary descendant-transport observation absence,not historical
+hit/transition reconstruction,paint,full current-source applicability or parity.
+New focused suite3/3 passes and rejects missing options,wrong toggled owner and
+missing boundaries. Keep capture,verify and proof logs with the same prefix.
+Initial adapter attempt failed before browser launch with
+ERR_UNSUPPORTED_RESOLVE_REQUEST(playwright-core from data URL);normal-module
+dependency resolution corrected it before the successful capture. No original
+failure evidence or canonical package overwritten. Next batch these three
+bounded source/observation proofs into the existing exact-case evidence join,
+preserving all other obligations and the original2311-case acceptance gates.
+They remain outside canonical1085/412 until that coherent integration milestone.
+
 October26 Chips alternate source/endpoint follow-up avoids repeating the existing
 342-case composite-state join in input-boundary-evidence.spec.mjs. Its existing
 76 Chips mappings already distinguish native descendant ARIA from candidate

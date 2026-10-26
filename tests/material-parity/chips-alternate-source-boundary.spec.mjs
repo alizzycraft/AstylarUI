@@ -6,6 +6,60 @@ import { gunzipSync } from 'node:zlib';
 import ts from 'typescript';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+test('supplementary alternate capture observes generated options and preserves native DOM lag', () => {
+  const file = 'artifacts/material-parity/chips-alternate-observed-20261026/latest-report.json';
+  const bytes = readFileSync(file);
+  assert.equal(hash(bytes), '0a24820940bba3c8d4f2b738d69a6105e1ef3fe62c6bf44cf94c73360db59cad');
+  const report = JSON.parse(bytes);
+  assert.equal(hash(readFileSync(report.actionSource.file)), report.actionSource.sha256);
+  assert.equal(report.results.length, 8);
+  assert.equal(new Set(report.results.map(r => r.caseId)).size, 8);
+  const expectedStore = [[true,true], [true,true], [false,true], [false,true], [false,true], [false,false]];
+  const counts = { reference: 0, astylar: 0 };
+  const verify = (row, side) => {
+    const evidence = row[side];
+    assert.deepEqual(evidence.runtime.errors, []);
+    assert.deepEqual(evidence.actionTimeline.map(o => o.boundary),
+      ['mouse-move', 'mouse-down', 'mouse-up', 'mouse-move', 'mouse-down', 'mouse-up']);
+    const selected = observation => {
+      assert.deepEqual(observation.chipOptions.map(o => o.id), ['chip-0', 'chip-1']);
+      for (const option of observation.chipOptions) {
+        assert.equal(option.role, 'option');
+        assert.equal(typeof option.selected, 'boolean');
+      }
+      return observation.chipOptions.map(o => o.selected);
+    };
+    assert.deepEqual(selected(evidence.observations[0]), [true, true]);
+    assert.deepEqual(selected(evidence.observations.at(-1)), [false, false]);
+    for (const [i, observation] of evidence.actionTimeline.entries()) {
+      assert.deepEqual(observation.state.chipSelections, expectedStore[i]);
+      const dom = selected(observation);
+      if (side === 'reference' && [2, 5].includes(i)) {
+        assert.ok([JSON.stringify(expectedStore[i]), JSON.stringify(expectedStore[i - 1])].includes(JSON.stringify(dom)));
+      } else assert.deepEqual(dom, expectedStore[i]);
+      if (JSON.stringify(dom) !== JSON.stringify(expectedStore[i])) counts[side]++;
+    }
+  };
+  for (const row of report.results) for (const side of ['reference', 'astylar']) {
+    for (const receipt of [row[side].inputTree, row[side].screenshot])
+      assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    verify(row, side);
+  }
+  assert.deepEqual(counts, { reference: 14, astylar: 0 });
+  const missing = structuredClone(report.results[0]);
+  missing.astylar.actionTimeline[2].chipOptions.pop();
+  assert.throws(() => verify(missing, 'astylar'));
+  const swapped = structuredClone(report.results[0]);
+  swapped.astylar.actionTimeline[2].state.chipSelections = [true, false];
+  assert.throws(() => verify(swapped, 'astylar'));
+  const skipped = structuredClone(report.results[0]);
+  skipped.astylar.actionTimeline.splice(2, 1);
+  assert.throws(() => verify(skipped, 'astylar'));
+  console.log(JSON.stringify({ cases: 8, generatedOptionBoundaryObservations: 8 * 2 * 6,
+    sampledDomStoreDifferences: counts,
+    boundary: 'Supplementary served-build DOM option and store observations with added mouse-boundary reads. Native sampled lag is retained, not a timing defect or parity pass. No original historical hit replay, full current-library applicability, paint or case closure.' }));
+});
+
 test('original Chips alternate recipe selects both owners without certifying historical hits', async () => {
   const original = gunzipSync(Buffer.from(readFileSync(
     'docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8').replace(/\s/g, ''), 'base64'));
@@ -17,6 +71,12 @@ test('original Chips alternate recipe selects both owners without certifying his
     assert.equal(nodes.length, 1);
     return nodes[0].getText(ast);
   };
+  const current = ts.createSourceFile('current.mjs', readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8'), 99, true, ts.ScriptKind.JS);
+  for (const name of ['performInteraction', 'interactionTargetBox']) {
+    const nodes = current.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+    assert.equal(nodes.length, 1);
+    assert.equal(nodes[0].getText(current).replace(/\r\n/g, '\n'), extract(name).replace(/\r\n/g, '\n'));
+  }
   for (const mode of ['reference', 'astylar']) {
     const trace = [], boxes = [{ x: 10, y: 20, width: 30, height: 40 }, { x: 60, y: 20, width: 50, height: 40 }];
     const canvas = { x: 100, y: 200 };

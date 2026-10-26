@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Retain chips-alternate-observed-20261026 and its -provenance sibling,plus
+chips-alternate-observed-20261026.log, chips-alternate-observed-verify-20261026.log
+and chips-alternate-observed-proof-20261026.log. The paired trees/screenshots,
+generated-option mouse-boundary observations and sampled native DOM lag are
+unique supplementary evidence,not disposable successful scratch. Original
+October5 cases and their acceptance status are not replaced by this capture.
+
 October26 accepted margin/visibility snapshotd6f07066 retains93324520 predecessor,
 margin-pre-export-9332-20261026 verified backup and all logs listed in the current
 ledger,including the interrupted export and failed retry1. Retain candidate
