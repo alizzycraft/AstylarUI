@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October26 Chips canonical export is RUNNING,not accepted. Started from published
+74e9a874 with --chips-alternate,ASTYLAR_AUDIT_COLD=0 and progress enabled.
+Log:artifacts/material-parity/chips-canonical-export-20261026.log;session47481,
+launcherPID10588/runnerPID6848 observed live (start2026-10-26 17:38:21 local).
+Revalidate that same handle/process before waiting;do not duplicate the export.
+PowerShell NativeCommandError formatting around progress stderr is not a terminal
+export failure;the runner was verified live. Await its actual exit status.
+
+Pre-export backup chips-pre-export-d6f0-20261026 preserves all three canonical
+files with source/target SHA equality:manifest3385eade950c911b9506a01276d4a830f11be7ff33449c73a0b6e9a90bcfa009,
+payload d6f07066 (98380655 bytes),readable62af930b9ec06022228515418d507f64c2936e30b46330e566ae8b0d288a7497.
+C:3.62GiB/D:10.98GiB free before backup. Accepted pointer remains d6f07066.
+
+Pre-export source conservation exits0:all1085 original receipts recover,exactly
+seven old sources change and six are added. Log chips-pre-export-source-conservation-20261026.log,
+SHA bcbd3426455ceb443a0bb967073be56ef85df23def9f5c422a01ac4f1eb74b65.
+Reuse authenticated margin-candidate-sections-metadata-20261026.log (SHA d80a39c4,
+full hash below):its manifest equals the backup and all80 section receipts are
+already authenticated. Do not decode the old2.37GB package merely to recreate
+those values. Candidate section/coverage/conservation,cold verification and
+isolated/accepted import remain required after export completion. No new case
+or rendering acceptance and no browser captures in this preparation increment.
+
 October26 Chips alternate registration is LIVE at1091 sources/418 proofs;
 203 findings/70 implementation tracks are unchanged. Explicit --chips-alternate
 selects e17dff33;24 earlier choices preserve. All1085 prior sources and412 proof

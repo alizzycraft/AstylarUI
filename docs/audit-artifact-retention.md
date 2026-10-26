@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep chips-pre-export-d6f0-20261026 (three hash-verified canonical backup files),
+chips-pre-export-source-conservation-20261026.log and the in-flight
+chips-canonical-export-20261026.log. Accepted d6f07066 and authenticated prior
+section extract remain required until all candidate gates pass. The export's
+start is not acceptance or authority to delete any original/failure evidence.
+
 Retain chips-alternate-live-registration-20261026.log and
 chips-alternate-live-reader-20261026.log with the original Chips capture,
 provenance and earlier join/staging logs. They record8/8 compatibility checks
