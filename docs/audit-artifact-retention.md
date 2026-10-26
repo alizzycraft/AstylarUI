@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Retain chips-alternate-join-focused-20261026.log and
+chips-alternate-join-reader-20261026.log with the supplementary Chips capture.
+The e17dff33 proposal is reconstructed through the existing reader;no additional
+large review package was saved. Accepted d6f07066 and predecessor records remain.
+
 Retain chips-alternate-observed-20261026 and its -provenance sibling,plus
 chips-alternate-observed-20261026.log, chips-alternate-observed-verify-20261026.log
 and chips-alternate-observed-proof-20261026.log. The paired trees/screenshots,

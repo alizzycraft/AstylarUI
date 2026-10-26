@@ -4,6 +4,26 @@
 
 ### Current next action and publication status
 
+October26 Chips alternate observation join is dependency-validated as staged
+review e17dff3342e922de9febdd85402b433deb5872091f36cbb709d38de2327d6431.
+scripts/join-material-chips-alternate.mjs extends existing d47c41d3 review via
+the established reader chain;no duplicate saved review or replacement framework.
+Only8 authoredActivation dispositions move evidence-join-pending -> partial,
+with supplementary generated-option observations. All other obligations,
+remaining lists,2311 partial parent statuses and currentRendering=unverified
+preserve. Exact removal recovers the entire predecessor hash. Forged report,
+forged screenshot and duplicate application reject.
+
+Focused suite4/4 passes,zero skips (10396.2096ms),log
+artifacts/material-parity/chips-alternate-join-focused-20261026.log.
+Existing loadCaseObligationReview integration exits0,authenticates18474 receipt
+dependencies across all2311 cases;inspectionComplete=false and
+currentRenderingAccepted=false. Log:chips-alternate-join-reader-20261026.log.
+The accepted canonical d6f07066 remains unchanged at1085 sources/412 proofs;
+the staged e17dff33 join and four standalone assertions still require explicit
+source/proof registration and selector integration in the next coherent batch.
+Do not repeat this capture or successful full dependency validation for prose.
+
 October26 supplementary Chips alternate observation now supplies actual generated
 option attributes at mouse boundaries for all8 configured profile/DPR contexts.
 Existing focus/activation collector is reused by guarded adapter
