@@ -4,6 +4,35 @@
 
 ### Current next action and publication status
 
+October26 remaining positioned-margin question yields bounded TOP-path evidence
+for existing `core-absolute-insets-ignore-margin-box`,not a new finding. Public
+equal-input reduction reuses the authenticated relative-margin runner58c335b8;
+absolute child has top/left0,own16/24px font,1em0 versus pixel margins,padded
+block containing block andDPR1/2. All eight pairs retain equal SiteData and margin
+requests,zero runtime errors,native top offset16/24px and candidate0. Pixel
+controls also fail:unit parsing alone cannot explain the positioning failure.
+
+Capture `artifacts/material-parity/public-absolute-margins-20261026` preserves
+all failure screenshots,bundle,input receipts and complete report SHA256
+`6e4d7b7807c1671e7716a2da46d4a3e61c9f0dd3f6011ce3e5ecb1e8717350fa`.
+Original capture exits1 on its strict pixel top control;capture-result.txt records
+that outcome explicitly,not a claimed passing run. Separate command
+`node --test tests/material-parity/absolute-margin-top-evidence.spec.mjs`
+passes2/2:authenticates all build inputs/screenshots/served bundle,checks eight
+failures and rejects unequal-input,shifted-result and incomplete-matrix mutations.
+Complete current calculateDimensions,parseMargin and parsePositionLength method
+tokens match installed source bound to the captured bundle. The owner parses and
+returns margins but top-inset coordinate calculation omits margin contribution.
+Existing left/bottom positive/negative evidence remains separate and retained.
+
+Boundary:no original Material paragraph used-margin attribution,no inheritance,
+collapse,right/auto/overconstrained coverage,raster acceptance or renderer fix.
+This focused extension and the visibility proof are pending canonical registration;
+accepted93324520 remains1077/407/203/70 with2311 partial/current-unverified cases.
+Do not repeat the public capture to make the strict pixel control pass. Next
+reconcile this top-path evidence with the retained positioned paragraph source/
+insets before attributing original-case displacement;preserve unequal structure.
+
 October26 publication is remotely verified at
 `81852eb76c90eff6b05fa465af014dbe365409e3` on
 `codex/material-audit-alignment-integration`. Two HTTPS attempts failed

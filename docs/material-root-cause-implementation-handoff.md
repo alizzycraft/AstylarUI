@@ -1,5 +1,15 @@
 # Material audit: evidence-led implementation priorities
 
+October26 extension of existing `core-absolute-insets-ignore-margin-box`:
+eight public equal-input absolute top0 pairs(DPR1/2,16/24px own font,em/pixel)
+show native border-box top offsets16/24px versus candidate0. Pixel controls fail
+too;do not diagnose this solely as em parsing. Full current/installed dimension,
+margin-parser and position-length methods match captured bundle inputs. Top
+coordinate calculation omits the parsed margin,as the earlier independent left/
+bottom proof already demonstrated for those branches. Retained report/proofs are
+linked in the coverage ledger. No fix authorized;original Material paragraph,
+right/auto/overconstrained cases and complete coordinate behavior remain separate.
+
 October26 focus/selection evidence is accepted locally in snapshot93324520,
 with1077 sources/407 proof declarations/203 findings/70 implementation tracks.
 Independent cold replay,complete conservation and isolated/accepted imports pass;
