@@ -45,12 +45,18 @@ export function restoreDividerMarginRegistry(bytes) {
   assert.equal(hash(source), producerPrior, 'Exact pre-margin producer must recover');
   return source;
 }
+export function restoreDividerMarginRegistryIfPresent(bytes) {
+  const source = normalize(bytes);
+  return source.includes('    "tests/material-parity/divider-margin-registration.mjs",\n')
+    ? restoreDividerMarginRegistry(source) : source;
+}
 const shared = {
   'tests/material-parity/public-tab-selection-finding.mjs': {
     prior: '0c676443e5da07edf35bd68cdbc63108f3314f27e4ab2a353120011b4bf84455',
     changes: [
-      ["import path from 'node:path';", "import path from 'node:path';\nimport {createDividerMarginPriorRead} from './divider-margin-registration.mjs';"],
+      ["import path from 'node:path';", "import path from 'node:path';\nimport {createDividerMarginPriorRead,restoreDividerMarginRegistryIfPresent} from './divider-margin-registration.mjs';"],
       ['export function createFocusSelectionAuditPriorRead({root,read}){', 'export function createFocusSelectionAuditPriorRead({root,read}){\n  read=createDividerMarginPriorRead({root,read});'],
+      ['for(const [anchor,prefix]of additions[kind].toReversed())source=once(source,anchor+prefix,anchor);', "if(kind==='producer')source=restoreDividerMarginRegistryIfPresent(source);\n  for(const [anchor,prefix]of additions[kind].toReversed())source=once(source,anchor+prefix,anchor);"],
     ],
   },
   'tests/material-parity/public-email-selection.spec.mjs': {

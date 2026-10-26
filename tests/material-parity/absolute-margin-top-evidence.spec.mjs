@@ -7,7 +7,7 @@ import ts from 'typescript';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { dividerMarginSources, prepareDividerMarginRegistry, restoreDividerMarginRegistry,
   prepareDividerMarginSharedSource, restoreDividerMarginSharedSource, createDividerMarginPriorRead } from './divider-margin-registration.mjs';
-import { createFocusSelectionAuditPriorRead } from './public-tab-selection-finding.mjs';
+import { createFocusSelectionAuditPriorRead, restoreFocusSelectionAuditRegistry } from './public-tab-selection-finding.mjs';
 
 const directory = 'artifacts/material-parity/public-absolute-margins-20261026';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -69,6 +69,9 @@ test('pending Divider margin registry preserves every accepted source and proof 
   const historical = createFocusSelectionAuditPriorRead({ root: process.cwd(), read: readFileSync });
   const nested = createFocusSelectionAuditPriorRead({ root: process.cwd(), read: historical });
   assert.equal(nested(file, 'utf8'), historical(file, 'utf8'));
+  assert.equal(restoreFocusSelectionAuditRegistry(staged, 'producer'),
+    restoreFocusSelectionAuditRegistry(source, 'producer'));
+  assert.throws(() => restoreFocusSelectionAuditRegistry(staged + '\n// unrelated drift', 'producer'));
   for (const value of [source, staged]) {
     const dirtyRead = () => Buffer.from(value + '\n// unrelated drift');
     assert.throws(() => createFocusSelectionAuditPriorRead({ root: process.cwd(), read: dirtyRead })(file));

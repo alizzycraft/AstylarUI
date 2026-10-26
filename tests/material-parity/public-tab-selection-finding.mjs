@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
-import {createDividerMarginPriorRead} from './divider-margin-registration.mjs';
+import {createDividerMarginPriorRead,restoreDividerMarginRegistryIfPresent} from './divider-margin-registration.mjs';
 import {createTimepickerProgrammaticFocusReviewReader} from '../../scripts/join-material-timepicker-programmatic-focus.mjs';
 export const publicTabSelectionFinding=Object.freeze({
   id:'core-native-tab-selection-overwritten-by-control-sync',
@@ -73,6 +73,7 @@ export function prepareFocusSelectionAuditRegistry(bytes,kind,read){
 }
 export function restoreFocusSelectionAuditRegistry(bytes,kind){
   assert.ok(Object.hasOwn(registryPrior,kind));let source=bytes.toString().replaceAll('\r\n','\n');
+  if(kind==='producer')source=restoreDividerMarginRegistryIfPresent(source);
   for(const [anchor,prefix]of additions[kind].toReversed())source=once(source,anchor+prefix,anchor);
   assert.equal(hash(source),registryPrior[kind]);return source;
 }

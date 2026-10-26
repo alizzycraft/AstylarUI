@@ -4,6 +4,26 @@
 
 ### Current next action and publication status
 
+October26 export retry1 TERMINAL1 after2380715ms:four original-source bindings
+failed and259 resolved-style groups became unattributed. Canonical93324520 is
+unchanged. Preserve margin-canonical-export-retry1-20261026.log SHA87edc721232fd183172e79c07a4b0f0f10156f2fb962219c0d912061d09c217a.
+The initial export log has no terminal result;its handle and OS worker disappeared
+after join-case-obligations. That is distinct from retry1's demonstrated failure.
+
+Root cause:the older alignment/font,text-align,LTR and reviewed-input collectors
+invoke restoreFocusSelectionAuditRegistry directly through historical source
+projection,not only createFocusSelectionAuditPriorRead. The new delta adapter
+covered the latter entry point but not the former. Direct restoration now first
+reverses the same exact margin registry additions and verifies the complete
+predecessor hash. No source binding,classification or validator was relaxed.
+Focused real-reader/direct-entry and drift controls pass11/11. All four affected
+collectors now bind:4016observations/72groups,2677/49,178/4,and3325/134.
+These259 groups account for the failed export's missing classifications;full
+export validation remains required. Focused log margin-direct-binding-focused-
+20261026.log SHA4f3aa5bbd786cba87d39b5ece5b57d4a06072db449924f7bd1a79dcf902a037b.
+Next one fresh export after this verified correction,then conservation/cold/import.
+Do not repeat the public reproduction or accept the failed export.
+
 October26 margin/visibility batch is now LIVE1085 sources/412 proof declarations,
 with203 findings/70 tracks unchanged;canonical93324520 remains1077/407/203/70.
 The eighth new source is the bounded divider-margin-registration helper,which
