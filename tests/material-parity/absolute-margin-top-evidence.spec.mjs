@@ -174,4 +174,47 @@ test('complete current absolute positioning and margin methods match captured in
   assert.match(dimensions, /const margin = this\.parseMargin\(style\)/);
   assert.match(dimensions, /top = verticalOriginInset \+ this\.parsePositionLength\(/);
   assert.match(dimensions, /return \{ width, height, left, top, padding: layoutInsets, margin \}/);
+
+  // Execute the authenticated original dimension owner with recorded paragraph
+  // requests. This is a method replay, not a historical runtime observation.
+  const originalTree = ts.createSourceFile('original.js', originalOwner, 99, true, ts.ScriptKind.JS);
+  const methods = [];
+  const collect = node => {
+    if (ts.isMethodDeclaration(node)) methods.push(node.getText(originalTree));
+    else ts.forEachChild(node, collect);
+  };
+  collect(originalTree);
+  const Owner = new Function(`return class Owner {${methods.join('\n')}}`)();
+  const owner = new Owner();
+  const render = { actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } } };
+  let replayed = 0;
+  for (const row of [...original.results, ...original.interactions].filter(row => row.family === 'divider')) {
+    const receipt = row.inputTrees.astylar, bytes = readFileSync(receipt.file);
+    assert.equal(hash(bytes), receipt.sha256);
+    const tree = JSON.parse(bytes), root = tree.nodes.find(node => node.authored?.id === 'divider-root');
+    const rootBox = row.geometry.elements.find(element => element.id === 'divider-root').actual;
+    const parent = { name: root.authored.id };
+    const dom = { context: {
+      elementDimensions: new Map([[parent.name, { width: rootBox.width, height: rootBox.height,
+        padding: owner.parsePadding(render, root.resolvedStyle, undefined) }]]),
+      elementStyles: new Map([[parent.name, { normal: root.normalResolvedStyle }]]),
+    } };
+    for (const id of ['divider-above-row', 'divider-below-row']) {
+      const paragraph = tree.nodes.find(node => node.authored?.id === id);
+      assert.equal(paragraph.authored.type, 'p');
+      assert.ok(!paragraph.authored.textContent);
+      assert.equal(paragraph.resolvedStyle.margin, '1em 0');
+      const before = JSON.stringify(paragraph.resolvedStyle);
+      const actual = owner.calculateDimensions(dom, render, paragraph.authored,
+        paragraph.resolvedStyle, parent, []);
+      assert.equal(JSON.stringify(paragraph.resolvedStyle), before);
+      assert.deepEqual(actual.margin, { top: 1, right: 0, bottom: 1, left: 0 });
+      const control = owner.calculateDimensions(dom, render, paragraph.authored,
+        { ...paragraph.resolvedStyle, margin: '24px 0' }, parent, []);
+      assert.deepEqual(control.margin, { top: 24, right: 0, bottom: 24, left: 0 });
+      for (const key of ['left', 'top', 'width', 'height']) assert.equal(actual[key], control[key]);
+      replayed++;
+    }
+  }
+  assert.equal(replayed, 48);
 });
