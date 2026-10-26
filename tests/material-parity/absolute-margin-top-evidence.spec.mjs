@@ -116,6 +116,22 @@ test('complete current absolute positioning and margin methods match captured in
   assert.equal(installed.length, 1);
   const captured = readFileSync(installed[0].file, 'utf8');
   assert.equal(hash(captured), installed[0].sha256);
+  const originalBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(originalBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const original = JSON.parse(originalBytes);
+  const originalMapName = 'chunk-3JXWRYJY.js.map';
+  const originalMapRoot = 'artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser';
+  const originalMapBytes = readFileSync(`${originalMapRoot}/${originalMapName}`);
+  const originalMapReceipt = original.captureProvenance.browserFiles.find(row => row.file === originalMapName);
+  assert.equal(hash(originalMapBytes), originalMapReceipt.sha256);
+  const originalScriptName = originalMapName.slice(0, -4);
+  const originalScriptReceipt = original.captureProvenance.browserFiles.find(row => row.file === originalScriptName);
+  assert.equal(hash(readFileSync(`${originalMapRoot}/${originalScriptName}`)), originalScriptReceipt.sha256);
+  const originalMap = JSON.parse(originalMapBytes);
+  const originalOwners = originalMap.sources.map((name, index) => ({ name, index }))
+    .filter(row => row.name.endsWith('/elements/element-dimension.service.js'));
+  assert.equal(originalOwners.length, 1);
+  const originalOwner = originalMap.sourcesContent[originalOwners[0].index];
   const current = ts.transpileModule(readFileSync('src/app/services/dom/elements/element-dimension.service.ts', 'utf8'),
     { compilerOptions: { target: 99, module: 99, experimentalDecorators: true } }).outputText;
   const method = (source, name) => {
@@ -133,10 +149,27 @@ test('complete current absolute positioning and margin methods match captured in
       if (children.length) children.forEach(leaves);
       else if (node.getText(tree)) tokens.push(node.getText(tree));
     };
-    leaves(matches[0]); return { tokens, source: matches[0].getText(tree) };
+    const shape = node => {
+      if (ts.isParenthesizedExpression(node)) return shape(node.expression);
+      const children = [];
+      ts.forEachChild(node, child => { children.push(shape(child)); });
+      if (ts.isBlock(node) && children.length === 0) return [node.kind, []];
+      return children.length ? [node.kind, children] : [node.kind, node.getText(tree)];
+    };
+    leaves(matches[0]); return { tokens, source: matches[0].getText(tree), shape: shape(matches[0]) };
   };
-  for (const name of ['calculateDimensions', 'parseMargin', 'parsePositionLength'])
+  for (const name of ['calculateDimensions', 'parseMargin', 'parsePositionLength']) {
     assert.deepEqual(method(current, name).tokens, method(captured, name).tokens, name);
+    // Historical formatter changes comments, trailing commas and redundant
+    // parentheses. Compare the complete semantic AST, preserving operators,
+    // expression grouping, calls and all statements; retain strict token checks
+    // above for the current public-capture owner.
+    assert.equal(hash(JSON.stringify(method(current, name).shape)),
+      hash(JSON.stringify(method(originalOwner, name).shape)), `original capture ${name}`);
+  }
+  assert.notEqual(hash(JSON.stringify(method(originalOwner, 'calculateDimensions').shape)),
+    hash(JSON.stringify(method(originalOwner.replace('top = verticalOriginInset +', 'top = verticalOriginInset -'),
+      'calculateDimensions').shape)));
   const dimensions = method(current, 'calculateDimensions').source;
   assert.match(dimensions, /const margin = this\.parseMargin\(style\)/);
   assert.match(dimensions, /top = verticalOriginInset \+ this\.parsePositionLength\(/);

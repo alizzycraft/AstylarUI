@@ -4,6 +4,26 @@
 
 ### Current next action and publication status
 
+October26 original executable-owner recovery:retained
+`artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/chunk-3JXWRYJY.js.map`
+has SHA256 dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4,
+exactly the original ab42dbec report's map receipt. The associated JS also matches
+that original report's receipt;the directory date is not the applicability test.
+Complete original calculateDimensions,parseMargin and parsePositionLength semantic
+ASTs match current methods. Existing current/public-capture strict token binding
+remains unchanged. Initial historical token comparison failed on formatter-only
+comments,commas,parentheses;initial semantic comparison exposed whitespace in
+empty blocks. The corrected complete AST comparison excludes only parentheses
+nodes and empty-block whitespace while retaining expression grouping/operators,
+calls and statements;an altered top arithmetic operator is rejected.
+The same four focused tests pass4/4 (4531.7747ms). This closes original executable
+owner identity for these methods,not actual historical used-margin execution,
+browser UA provenance or equal-input Material causality. Original trees contain
+no layout snapshot;the later alignment snapshot has dimensions/padding but no
+used margins. Next trace the authenticated original method's actual caller/input
+path before claiming executed margins. No rebuild,capture or canonical change;
+all2311 cases remain partial/current-rendering unverified.
+
 October26 applicability boundary checked against authenticated original ab42dbec
 report and all24 paired Divider trees:48 reference paragraph owners are static
 with top:auto;48 candidate owners are absolute with explicit nonzero top and
