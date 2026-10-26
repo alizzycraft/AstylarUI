@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain chips-alternate-live-registration-20261026.log and
+chips-alternate-live-reader-20261026.log with the original Chips capture,
+provenance and earlier join/staging logs. They record8/8 compatibility checks
+and18474-dependency live reader validation. No capture,package or generation
+was created;accepted d6f07066 and all prior/failure evidence remain required.
+
 Retain chips-alternate-staged-registration-20261026.log with the existing Chips
 capture and join logs. It proves6/6 bounded staged-registration/evidence checks,
 not live registration or canonical export. No new screenshots,full review

@@ -1,7 +1,8 @@
-// Proposed registration only. Live selectors remain unchanged until shared
-// historical entry points have passed integration with this exact delta.
+// Bounded registration with exact reversals at shared historical entry points.
+// Registration does not imply canonical publication or whole-case acceptance.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
 
 export const chipsAlternateReview = 'e17dff3342e922de9febdd85402b433deb5872091f36cbb709d38de2327d6431';
 const prior = {
@@ -59,4 +60,79 @@ export function restoreChipsAlternateRegistration(bytes, kind) {
   for (const [before, after] of changes(kind).toReversed()) source = once(source, after, before);
   assert.equal(hash(source), prior[kind], 'Complete pre-Chips source must recover');
   return source;
+}
+export function restoreChipsAlternateRegistrationIfPresent(bytes, kind) {
+  const source = normalize(bytes);
+  const marker = { producer: '    "tests/material-parity/chips-alternate-registration.mjs",\n',
+    runner: '    const chipsAlternateReaderFactory = ', launcher: "const chipsAlternate = rawRequested.includes('--chips-alternate');" }[kind];
+  return marker && source.includes(marker) ? restoreChipsAlternateRegistration(source, kind) : source;
+}
+
+// Exact bounded changes to the shared direct entry points, not only the newest
+// reader wrapper. Old generations still go through their own full hash checks.
+const shared = {
+  'tests/material-parity/public-tab-selection-finding.mjs': {
+    prior: '8169ad96feed7f1d47337305526efacd1a36202e5038ef92b689f518e4938733',
+    changes: [
+      ["import path from 'node:path';", "import path from 'node:path';\nimport {createChipsAlternatePriorRead,restoreChipsAlternateRegistrationIfPresent} from './chips-alternate-registration.mjs';"],
+      ['export function restoreFocusSelectionAuditRegistry(bytes,kind){', 'export function restoreFocusSelectionAuditRegistry(bytes,kind){\n  bytes=restoreChipsAlternateRegistrationIfPresent(bytes,kind);'],
+      ['export function restoreFocusSelectionAuditSelection(bytes,kind){', 'export function restoreFocusSelectionAuditSelection(bytes,kind){\n  bytes=restoreChipsAlternateRegistrationIfPresent(bytes,kind);'],
+      ['export function createFocusSelectionAuditPriorRead({root,read}){', 'export function createFocusSelectionAuditPriorRead({root,read}){\n  read=createChipsAlternatePriorRead({root,read});'],
+    ],
+  },
+  'tests/material-parity/divider-margin-registration.mjs': {
+    prior: 'c8b2dd5406a2eb5aa3dc33f8d3e88a74243a38d1f8ff3b1d5f23f0d04a56b46e',
+    changes: [
+      ["import path from 'node:path';", "import path from 'node:path';\nimport {createChipsAlternatePriorRead,restoreChipsAlternateRegistrationIfPresent,restoreChipsAlternateSharedSourceIfPresent} from './chips-alternate-registration.mjs';"],
+      ['export function restoreDividerMarginRegistry(bytes) {', "export function restoreDividerMarginRegistry(bytes) {\n  bytes = restoreChipsAlternateRegistrationIfPresent(bytes, 'producer');"],
+      ['export function restoreDividerMarginSharedSource(bytes, file) {', 'export function restoreDividerMarginSharedSource(bytes, file) {\n  bytes = restoreChipsAlternateSharedSourceIfPresent(bytes, file);'],
+      ['export function createDividerMarginPriorRead({root, read}) {', 'export function createDividerMarginPriorRead({root, read}) {\n  read = createChipsAlternatePriorRead({root, read});'],
+    ],
+  },
+  'tests/material-parity/absolute-margin-top-evidence.spec.mjs': {
+    prior: '66f2dd350d456a5204c4a3a1fa9a6f0ec31d7cdd42b6b91aee6e73f084f5d83c',
+    changes: [
+      ["import ts from 'typescript';", "import ts from 'typescript';\nimport {createChipsAlternatePriorRead} from './chips-alternate-registration.mjs';"],
+      ["  const live = readFileSync(file, 'utf8').replaceAll('\\r\\n', '\\n');", "  const previousRead = createChipsAlternatePriorRead({root:process.cwd(),read:readFileSync});\n  const live = previousRead(file, 'utf8').replaceAll('\\r\\n', '\\n');"],
+      ["    const current = readFileSync(name, 'utf8').replaceAll('\\r\\n', '\\n');", "    const current = previousRead(name, 'utf8').replaceAll('\\r\\n', '\\n');"],
+      ["  assert.equal(readFileSync(file, 'utf8').replaceAll('\\r\\n', '\\n'), live);", "  assert.equal(previousRead(file, 'utf8').replaceAll('\\r\\n', '\\n'), live);"],
+    ],
+  },
+  'tests/material-parity/public-email-selection.spec.mjs': {
+    prior: '93f9404e2a38545947d2335c814ee57a5c22287716cbd054e8d47f681525a83f',
+    changes: [
+      ["import ts from 'typescript';", "import ts from 'typescript';\nimport {restoreChipsAlternateRegistrationIfPresent} from './chips-alternate-registration.mjs';"],
+      ["const live=readFileSync(file,'utf8').replaceAll('\\r\\n','\\n');raw[kind]=acceptedRead(file,'utf8');staged[kind]=api.prepareFocusSelectionAuditSelection", "const live=restoreChipsAlternateRegistrationIfPresent(readFileSync(file),kind);raw[kind]=acceptedRead(file,'utf8');staged[kind]=api.prepareFocusSelectionAuditSelection"],
+    ],
+  },
+};
+export const chipsAlternateSharedSources = Object.freeze(Object.keys(shared));
+const sharedAnchor = text => /^(import |export function )/.test(text) ? '\n' + text : text;
+export function prepareChipsAlternateSharedSource(bytes, file) {
+  const entry = shared[file]; assert.ok(entry);
+  let source = normalize(bytes); assert.equal(hash(source), entry.prior);
+  for (const [before, after] of entry.changes) source = once(source, sharedAnchor(before), sharedAnchor(after));
+  return source;
+}
+export function restoreChipsAlternateSharedSourceIfPresent(bytes, file) {
+  let source = normalize(bytes);
+  if (!source.includes("from './chips-alternate-registration.mjs';")) return source;
+  const entry = shared[file]; assert.ok(entry);
+  for (const [before, after] of entry.changes.toReversed()) source = once(source, sharedAnchor(after), sharedAnchor(before));
+  assert.equal(hash(source), entry.prior, 'Complete pre-Chips shared source must recover');
+  return source;
+}
+export function createChipsAlternatePriorRead({root, read}) {
+  const kinds = new Map(Object.entries({ 'tests/material-parity/input-equivalence-audit.mjs': 'producer',
+    'scripts/run-material-input-audit.mjs': 'runner', 'scripts/export-material-input-audit-current-ancestry.mjs': 'launcher' })
+    .map(([file, kind]) => [path.resolve(root, file), kind]));
+  const sharedFiles = new Map(chipsAlternateSharedSources.map(file => [path.resolve(root, file), file]));
+  return (name, options) => {
+    const absolute = path.resolve(root, name), kind = kinds.get(absolute), file = sharedFiles.get(absolute);
+    if (!kind && !file) return read(name, options);
+    const bytes = read(name), source = kind ? restoreChipsAlternateRegistrationIfPresent(bytes, kind)
+      : restoreChipsAlternateSharedSourceIfPresent(bytes, file);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? Buffer.from(source).toString(encoding) : Buffer.from(source);
+  };
 }

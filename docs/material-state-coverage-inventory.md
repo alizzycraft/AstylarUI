@@ -4,6 +4,32 @@
 
 ### Current next action and publication status
 
+October26 Chips alternate registration is LIVE at1091 sources/418 proofs;
+203 findings/70 implementation tracks are unchanged. Explicit --chips-alternate
+selects e17dff33;24 earlier choices preserve. All1085 prior sources and412 proof
+declarations conserve. Seven bounded old-source transitions (producer,runner,
+launcher and four shared sources) reverse to exact complete predecessor hashes.
+Direct focus/selection and Divider entry points now strip this authenticated
+delta before their existing historical validators;unrelated drift still rejects.
+
+Live compatibility checks8/8,zero skips,exit0 (14033.9071ms): Chips registration,
+Divider and focus/selection predecessors,Radio and Table selectors/inventories.
+Log:artifacts/material-parity/chips-alternate-live-registration-20261026.log.
+Actual launcher --chips-alternate --dry-run and complete runner node --check
+also pass. Full existing loadCaseObligationReview via actual live reader exits0:
+18474 dependencies,2311 cases,inspectionComplete=false,currentRenderingAccepted=false;
+diskHits0,18640 files/3352796500 bytes verified,292818.3574ms. Log:
+artifacts/material-parity/chips-alternate-live-reader-20261026.log. A tool wait
+connection timed out;the same live process was re-polled,not duplicated/restarted.
+Initial shared-patch preparation rejected nonunique anchors inside quoted replay
+strings before writes;line-boundary anchors resolved that ambiguity.
+
+Freeze this coherent batch for canonical export,complete conservation,independent
+cold verification and import. Accepted d6f07066 remains the previous canonical
+generation,not current-source equality. No browser recapture or repeated full
+dependency check is justified for prose. All2311 cases remain partial and
+current-rendering unverified;original scope and final acceptance gates stay open.
+
 October26 Chips registration is prepared and tested IN MEMORY ONLY. New bounded
 registration module adds six sources/six proof declarations (proposed1091/418),
 preserves all1085/412 prior entries and restores the exact whole producer,

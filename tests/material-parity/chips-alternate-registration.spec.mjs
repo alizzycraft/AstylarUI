@@ -7,7 +7,9 @@ import vm from 'node:vm';
 import ts from 'typescript';
 import { restoreFocusSelectionAuditRegistry, restoreFocusSelectionAuditSelection } from './public-tab-selection-finding.mjs';
 import { chipsAlternateReview, chipsAlternateSources, chipsAlternateProofs,
-  prepareChipsAlternateRegistration as prepare, restoreChipsAlternateRegistration as restore } from './chips-alternate-registration.mjs';
+  prepareChipsAlternateRegistration as prepare, restoreChipsAlternateRegistration as restore,
+  chipsAlternateSharedSources, prepareChipsAlternateSharedSource, restoreChipsAlternateSharedSourceIfPresent,
+  createChipsAlternatePriorRead, restoreChipsAlternateRegistrationIfPresent } from './chips-alternate-registration.mjs';
 
 const files = {
   producer: 'tests/material-parity/input-equivalence-audit.mjs',
@@ -17,14 +19,15 @@ const files = {
 const read = file => readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
 test('proposed Chips registration preserves complete source and proof inventories', () => {
   for (const [kind, file] of Object.entries(files)) {
-    const original = read(file), staged = prepare(original, kind);
+    const live = read(file), original = restoreChipsAlternateRegistrationIfPresent(live, kind), staged = prepare(original, kind);
+    assert.equal(live, staged, 'Live source must equal the bounded proposed delta');
     assert.equal(restore(staged, kind), original);
     assert.throws(() => prepare(original + '\n// drift', kind));
     assert.throws(() => restore(staged + '\n// drift', kind));
     assert.throws(() => prepare(staged, kind));
     const legacyRestore = kind === 'producer' ? restoreFocusSelectionAuditRegistry : restoreFocusSelectionAuditSelection;
     assert.doesNotThrow(() => legacyRestore(original, kind));
-    assert.throws(() => legacyRestore(staged, kind), 'Live integration still requires a newest-delta restoration entry');
+    assert.equal(legacyRestore(staged, kind), legacyRestore(original, kind), 'Direct legacy entry must restore the newest delta');
     const ast = ts.createSourceFile(file, staged, 99, true, ts.ScriptKind.JS);
     assert.deepEqual(ast.parseDiagnostics, []);
     if (kind === 'producer') {
@@ -54,12 +57,22 @@ test('proposed Chips registration preserves complete source and proof inventorie
       assert.deepEqual(after.focusedProofInventory.slice(0, 6).map(value =>
         new Function('proof', 'root', `return ${value}`)(proof, process.cwd())), chipsAlternateProofs);
     }
-    assert.equal(read(file), original, 'Staging must not write live sources');
+    assert.equal(read(file), live, 'Validation must not write live sources');
+  }
+  const previousRead = createChipsAlternatePriorRead({root:process.cwd(),read:readFileSync});
+  const nested = createChipsAlternatePriorRead({root:process.cwd(),read:previousRead});
+  for (const file of chipsAlternateSharedSources) {
+    const live = read(file), previous = restoreChipsAlternateSharedSourceIfPresent(live, file);
+    assert.equal(prepareChipsAlternateSharedSource(previous, file), live);
+    assert.equal(previousRead(file, 'utf8'), previous);
+    assert.equal(nested(file, 'utf8'), previous);
+    assert.throws(() => restoreChipsAlternateSharedSourceIfPresent(live + '\n// drift', file));
+    assert.throws(() => prepareChipsAlternateSharedSource(previous + '\n// drift', file));
   }
 });
 
 test('proposed Chips selector preserves old choices and rejects combined supplements', () => {
-  const original = read(files.launcher), staged = prepare(original, 'launcher');
+  const original = restoreChipsAlternateRegistrationIfPresent(read(files.launcher), 'launcher'), staged = prepare(original, 'launcher');
   const execute = (source, flags) => {
     const outputs = [];
     // Execute the complete launcher body with explicit filesystem/process seams.
@@ -81,13 +94,13 @@ test('proposed Chips selector preserves old choices and rejects combined supplem
   assert.ok(selected.args.some(argument => argument.includes(`${chipsAlternateReview}.json`)));
   for (const flag of oldFlags) assert.throws(() => execute(staged, ['--chips-alternate', flag, '--dry-run']));
   assert.throws(() => execute(staged, ['--chips-alternate', '--unknown', '--dry-run']));
-  const runner = prepare(read(files.runner), 'runner');
+  const runner = prepare(restoreChipsAlternateRegistrationIfPresent(read(files.runner), 'runner'), 'runner');
   const selection = runner.slice(runner.indexOf('    const chipsAlternateReaderFactory'), runner.indexOf('    assert.ok(!applicability'));
   for (const requested of [chipsAlternateReview, 'older-review']) {
     const context = { options: { caseObligationReviewSha256: requested }, chipsAlternateReview, root: process.cwd(),
       auditReadFileSync: readFileSync, createChipsAlternateReviewReader: () => 'chips', focusSelectionReaderFactory: () => 'older' };
     assert.equal(vm.runInNewContext(selection + '\napplicability;', context), requested === chipsAlternateReview ? 'chips' : 'older');
   }
-  console.log(JSON.stringify({ stagedOnly: true, preservedOldSelectors: oldFlags.length + 1,
+  console.log(JSON.stringify({ liveRegistrationVerified: true, preservedOldSelectors: oldFlags.length + 1,
     proposedSources: 1091, proposedProofs: 418, review: chipsAlternateReview }));
 });

@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import ts from 'typescript';
+import {restoreChipsAlternateRegistrationIfPresent} from './chips-alternate-registration.mjs';
 import {restoreDividerMarginRegistry} from './divider-margin-registration.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
@@ -37,7 +38,7 @@ test('Focus selection staged registry preserves every accepted source proof find
   const api=await import('./public-tab-selection-finding.mjs'),root=process.cwd();
   const entries=[['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy'],['scripts/run-material-input-audit.mjs','runner'],['scripts/export-material-input-audit-current-ancestry.mjs','launcher']];
   for(const [file,kind]of entries.slice(2)){
-    const live=readFileSync(file,'utf8').replaceAll('\r\n','\n');raw[kind]=acceptedRead(file,'utf8');staged[kind]=api.prepareFocusSelectionAuditSelection(raw[kind],kind);if(live!==raw[kind])assert.equal(live,staged[kind]);
+    const live=restoreChipsAlternateRegistrationIfPresent(readFileSync(file),kind);raw[kind]=acceptedRead(file,'utf8');staged[kind]=api.prepareFocusSelectionAuditSelection(raw[kind],kind);if(live!==raw[kind])assert.equal(live,staged[kind]);
     assert.equal(api.restoreFocusSelectionAuditSelection(staged[kind],kind),raw[kind]);
     assert.throws(()=>api.restoreFocusSelectionAuditSelection(staged[kind]+'\n// drift',kind));
   }

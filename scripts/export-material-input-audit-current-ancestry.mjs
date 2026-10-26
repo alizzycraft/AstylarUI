@@ -9,6 +9,8 @@ import { spawnSync } from 'node:child_process';
 // default supplemental/line-box paths for this historical capture.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const rawRequested = process.argv.slice(2);
+const chipsAlternate = rawRequested.includes('--chips-alternate');
+assert.ok(!chipsAlternate || rawRequested.every(argument => ['--chips-alternate', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');
 const focusSelection = rawRequested.includes('--focus-selection');
 assert.ok(!focusSelection || rawRequested.every(argument => ['--focus-selection', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');
 const sortArrow = rawRequested.includes('--sort-arrow');
@@ -54,9 +56,9 @@ assert.ok(!(expansionSemantics && (staticAx || cardInputs)), 'Choose one case-re
 assert.ok(!(stepperInputs && (staticAx || cardInputs || expansionSemantics)), 'Choose one case-review supplement');
 assert.ok(!(tabsMenuSheet && (staticAx || cardInputs || expansionSemantics || stepperInputs)), 'Choose one case-review supplement');
 assert.ok(!(staticSemanticInputs && (staticAx || cardInputs || expansionSemantics || stepperInputs || tabsMenuSheet)), 'Choose one case-review supplement');
-const requested = rawRequested.filter(argument => argument !== '--focus-selection').filter(argument => argument !== '--sort-arrow').filter(argument => argument !== '--tree-focus').filter(argument => argument !== '--text-held').filter(argument => argument !== '--editing-context').filter(argument => argument !== '--divider-owner-context').filter(argument => argument !== '--menu-select-disabled').filter(argument => argument !== '--divider-owner-frame').filter(argument => argument !== '--divider-computed-paint').filter(argument => argument !== '--original-runner-recovery').filter(argument => argument !== '--slider-state-inputs').filter(argument => !['--static-ax', '--card-inputs', '--expansion-semantics', '--stepper-inputs', '--tabs-menu-sheet', '--static-semantic-inputs', '--popup-depth-inputs', '--scrollbar-paint', '--table-label-paint', '--radio-caret-paint', '--retained-focus', '--slider-hover-held'].includes(argument));
+const requested = rawRequested.filter(argument => argument !== '--chips-alternate').filter(argument => argument !== '--focus-selection').filter(argument => argument !== '--sort-arrow').filter(argument => argument !== '--tree-focus').filter(argument => argument !== '--text-held').filter(argument => argument !== '--editing-context').filter(argument => argument !== '--divider-owner-context').filter(argument => argument !== '--menu-select-disabled').filter(argument => argument !== '--divider-owner-frame').filter(argument => argument !== '--divider-computed-paint').filter(argument => argument !== '--original-runner-recovery').filter(argument => argument !== '--slider-state-inputs').filter(argument => !['--static-ax', '--card-inputs', '--expansion-semantics', '--stepper-inputs', '--tabs-menu-sheet', '--static-semantic-inputs', '--popup-depth-inputs', '--scrollbar-paint', '--table-label-paint', '--radio-caret-paint', '--retained-focus', '--slider-hover-held'].includes(argument));
 assert.ok(requested.length <= 1 && requested.every(a => ['--check', '--dry-run'].includes(a)),
-  'Usage: node scripts/export-material-input-audit-current-ancestry.mjs [--check|--dry-run] [--static-ax|--card-inputs|--expansion-semantics|--stepper-inputs|--tabs-menu-sheet|--static-semantic-inputs|--popup-depth-inputs|--scrollbar-paint|--table-label-paint|--radio-caret-paint|--retained-focus|--slider-hover-held|--slider-state-inputs|--original-runner-recovery|--divider-computed-paint|--divider-owner-frame|--menu-select-disabled|--divider-owner-context|--editing-context|--text-held|--tree-focus|--sort-arrow|--focus-selection]');
+  'Usage: node scripts/export-material-input-audit-current-ancestry.mjs [--check|--dry-run] [--static-ax|--card-inputs|--expansion-semantics|--stepper-inputs|--tabs-menu-sheet|--static-semantic-inputs|--popup-depth-inputs|--scrollbar-paint|--table-label-paint|--radio-caret-paint|--retained-focus|--slider-hover-held|--slider-state-inputs|--original-runner-recovery|--divider-computed-paint|--divider-owner-frame|--menu-select-disabled|--divider-owner-context|--editing-context|--text-held|--tree-focus|--sort-arrow|--focus-selection|--chips-alternate]');
 const inputs = {
   'parity-report': 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
   'normal-line-box-report': 'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',
@@ -82,8 +84,9 @@ if (textHeld) inputs['case-obligation-review'] = 'artifacts/material-parity/work
 if (treeFocus) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/6ea59073771388cec874ad6985e38823f68d1d72ab7c37d72cb61c5e11a0e411.json';
 if (sortArrow) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/8554f8ef7d18ee02a80a409eddb7f96a1aad188983d124d49f9c9d556799f71e.json';
 if (focusSelection) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/d47c41d3d6ac4dff3632688a36e8e20e2ec631fe0c9feca1bc05a198f36d3bab.json';
+if (chipsAlternate) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/e17dff3342e922de9febdd85402b433deb5872091f36cbb709d38de2327d6431.json';
 for (const [name, relative] of Object.entries(inputs)) {
-  const retained = (originalRunnerRecovery || dividerComputedPaint || dividerOwnerFrame || menuSelectDisabled || dividerOwnerContext || editingContext || textHeld || treeFocus || sortArrow || focusSelection) && name === 'case-obligation-review' ? 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json' : relative;
+  const retained = (originalRunnerRecovery || dividerComputedPaint || dividerOwnerFrame || menuSelectDisabled || dividerOwnerContext || editingContext || textHeld || treeFocus || sortArrow || focusSelection || chipsAlternate) && name === 'case-obligation-review' ? 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json' : relative;
   const stat = statSync(path.join(root, retained));
   assert.ok(name === 'supplemental-root' ? stat.isDirectory() : stat.isFile(), `Invalid ${name}: ${relative}`);
 }
@@ -108,6 +111,7 @@ if (textHeld) args[args.findIndex(argument => argument.startsWith('--case-obliga
 if (treeFocus) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=6ea59073771388cec874ad6985e38823f68d1d72ab7c37d72cb61c5e11a0e411';
 if (sortArrow) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=8554f8ef7d18ee02a80a409eddb7f96a1aad188983d124d49f9c9d556799f71e';
 if (focusSelection) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=d47c41d3d6ac4dff3632688a36e8e20e2ec631fe0c9feca1bc05a198f36d3bab';
+if (chipsAlternate) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=e17dff3342e922de9febdd85402b433deb5872091f36cbb709d38de2327d6431';
 if (requested.includes('--dry-run')) console.log(JSON.stringify({ cwd: root, executable: process.execPath, args }, null, 2));
 else {
   // Forward the caller's cold/progress settings and preserve validation failure

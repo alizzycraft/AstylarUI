@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+October26 Chips alternate registration is live1091/418/203/70 with explicit
+--chips-alternate selectinge17dff33. Direct/nested historical restoration,
+complete inventory conservation and8 compatibility tests pass. Actual live
+reader authenticates18474 dependencies/2311 partial,current-unverified cases
+with diskHits0. Freeze for the next canonical export/conservation/cold/import
+milestone;accepted d6f07066 remains historical until those gates pass. Do not
+repeat captures or full dependency validation for metadata. Original gates apply.
+
 October26 margin/visibility snapshotd6f07066/indexfa4603e4 is accepted locally:
 corrected export,complete section/metadata/receipt conservation,zero-disk-hit
 independent cold check and isolated/accepted imports pass. Counts1085/412/203/70.

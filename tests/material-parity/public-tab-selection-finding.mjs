@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
+import {createChipsAlternatePriorRead,restoreChipsAlternateRegistrationIfPresent} from './chips-alternate-registration.mjs';
 import {createDividerMarginPriorRead,restoreDividerMarginRegistryIfPresent} from './divider-margin-registration.mjs';
 import {createTimepickerProgrammaticFocusReviewReader} from '../../scripts/join-material-timepicker-programmatic-focus.mjs';
 export const publicTabSelectionFinding=Object.freeze({
@@ -72,6 +73,7 @@ export function prepareFocusSelectionAuditRegistry(bytes,kind,read){
   for(const [anchor,prefix]of additions[kind])source=once(source,anchor,anchor+prefix);return source;
 }
 export function restoreFocusSelectionAuditRegistry(bytes,kind){
+  bytes=restoreChipsAlternateRegistrationIfPresent(bytes,kind);
   assert.ok(Object.hasOwn(registryPrior,kind));let source=bytes.toString().replaceAll('\r\n','\n');
   if(kind==='producer')source=restoreDividerMarginRegistryIfPresent(source);
   for(const [anchor,prefix]of additions[kind].toReversed())source=once(source,anchor+prefix,anchor);
@@ -97,6 +99,7 @@ export function prepareFocusSelectionAuditSelection(bytes,kind){
   for(const [before,after]of selectionChanges(kind))source=once(source,before,after);return source;
 }
 export function restoreFocusSelectionAuditSelection(bytes,kind){
+  bytes=restoreChipsAlternateRegistrationIfPresent(bytes,kind);
   assert.ok(Object.hasOwn(selectionPrior,kind));let source=bytes.toString().replaceAll('\r\n','\n');
   for(const [before,after]of selectionChanges(kind).toReversed())source=once(source,after,before);
   assert.equal(hash(source),selectionPrior[kind]);return source;
@@ -125,6 +128,7 @@ const sortSharedChanges=[
 export function prepareFocusSelectionSortSource(bytes){let source=bytes.toString().replaceAll('\r\n','\n');assert.equal(hash(source),sortSharedPrior);for(const [a,b]of sortSharedChanges)source=once(source,a,b);return source;}
 export function restoreFocusSelectionSortSource(bytes){let source=bytes.toString().replaceAll('\r\n','\n');if(hash(source)===sortSharedPrior)return source;for(const [a,b]of sortSharedChanges.toReversed())source=once(source,b,a);assert.equal(hash(source),sortSharedPrior);return source;}
 export function createFocusSelectionAuditPriorRead({root,read}){
+  read=createChipsAlternatePriorRead({root,read});
   read=createDividerMarginPriorRead({root,read});
   const kinds=new Map(Object.entries({
     'tests/material-parity/input-equivalence-audit.mjs':'producer','tests/material-parity/input-equivalence-policy.mjs':'policy',

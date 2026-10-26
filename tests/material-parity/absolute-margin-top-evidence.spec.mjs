@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import ts from 'typescript';
+import {createChipsAlternatePriorRead} from './chips-alternate-registration.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { dividerMarginSources, prepareDividerMarginRegistry, restoreDividerMarginRegistry,
   prepareDividerMarginSharedSource, restoreDividerMarginSharedSource, createDividerMarginPriorRead } from './divider-margin-registration.mjs';
@@ -17,7 +18,8 @@ const report = JSON.parse(reportBytes);
 
 test('pending Divider margin registry preserves every accepted source and proof declaration', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
-  const live = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previousRead = createChipsAlternatePriorRead({root:process.cwd(),read:readFileSync});
+  const live = previousRead(file, 'utf8').replaceAll('\r\n', '\n');
   const source = restoreDividerMarginRegistry(live);
   assert.equal(hash(source), '58ef02255929abc8ff050ec922de31f5120e2a038fec034e95e49c1052843527');
   const staged = prepareDividerMarginRegistry(source);
@@ -51,7 +53,7 @@ test('pending Divider margin registry preserves every accepted source and proof 
   for (const declaration of after.focusedProofInventory.slice(0, 5))
     new Function('proof', 'root', `return ${declaration}`)(proof, process.cwd());
   for (const name of ['tests/material-parity/public-tab-selection-finding.mjs', 'tests/material-parity/public-email-selection.spec.mjs']) {
-    const current = readFileSync(name, 'utf8').replaceAll('\r\n', '\n');
+    const current = previousRead(name, 'utf8').replaceAll('\r\n', '\n');
     const prior = restoreDividerMarginSharedSource(current, name), next = prepareDividerMarginSharedSource(prior, name);
     assert.equal(restoreDividerMarginSharedSource(next, name), prior);
     if (current !== prior) assert.equal(current, next);
@@ -76,7 +78,7 @@ test('pending Divider margin registry preserves every accepted source and proof 
     const dirtyRead = () => Buffer.from(value + '\n// unrelated drift');
     assert.throws(() => createFocusSelectionAuditPriorRead({ root: process.cwd(), read: dirtyRead })(file));
   }
-  assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), live);
+  assert.equal(previousRead(file, 'utf8').replaceAll('\r\n', '\n'), live);
 });
 
 test('retained Divider paragraph positioning is not the equal-input absolute-top reduction', () => {

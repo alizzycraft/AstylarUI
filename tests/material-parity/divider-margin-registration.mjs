@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import {createChipsAlternatePriorRead,restoreChipsAlternateRegistrationIfPresent,restoreChipsAlternateSharedSourceIfPresent} from './chips-alternate-registration.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalize = value => value.toString().replaceAll('\r\n', '\n');
@@ -39,6 +40,7 @@ export function prepareDividerMarginRegistry(bytes) {
   return source;
 }
 export function restoreDividerMarginRegistry(bytes) {
+  bytes = restoreChipsAlternateRegistrationIfPresent(bytes, 'producer');
   let source = normalize(bytes);
   if (hash(source) === producerPrior) return source;
   for (const [anchor, prefix] of additions.toReversed()) source = once(source, anchor + prefix, anchor);
@@ -75,6 +77,7 @@ export function prepareDividerMarginSharedSource(bytes, file) {
   return source;
 }
 export function restoreDividerMarginSharedSource(bytes, file) {
+  bytes = restoreChipsAlternateSharedSourceIfPresent(bytes, file);
   const entry = shared[file]; assert.ok(entry);
   let source = normalize(bytes); if (hash(source) === entry.prior) return source;
   for (const [before, after] of entry.changes.toReversed()) source = once(source, after, before);
@@ -82,6 +85,7 @@ export function restoreDividerMarginSharedSource(bytes, file) {
   return source;
 }
 export function createDividerMarginPriorRead({root, read}) {
+  read = createChipsAlternatePriorRead({root, read});
   const producer = path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs');
   const files = new Map(Object.keys(shared).map(file => [path.resolve(root, file), file]));
   return (name, options) => {

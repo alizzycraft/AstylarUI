@@ -8922,6 +8922,12 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/audit-material-chips-alternate.mjs",
+    "scripts/join-material-chips-alternate.mjs",
+    "tests/material-parity/chips-alternate-source-boundary.spec.mjs",
+    "tests/material-parity/chips-alternate-registration.mjs",
+    "tests/material-parity/chips-alternate-registration.spec.mjs",
+    "artifacts/material-parity/chips-alternate-observed-20261026/latest-report.json",
     "tests/material-parity/divider-margin-registration.mjs",
     "scripts/audit-public-absolute-margins.mjs",
     "tests/material-parity/absolute-margin-top-evidence.spec.mjs",
@@ -10014,6 +10020,18 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/chips-alternate-source-boundary.spec.mjs", new RegExp("test\\('Chips alternate join changes only eight activation obligations and restores the predecessor'"),
+      "Chips alternate join changes only eight activation obligations and restores the predecessor", "Supplementary retained-build generated-option transitions and original recipe/comparator limits; not original hit reconstruction, current-library rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/chips-alternate-source-boundary.spec.mjs", new RegExp("test\\('supplementary alternate capture observes generated options and preserves native DOM lag'"),
+      "supplementary alternate capture observes generated options and preserves native DOM lag", "Supplementary retained-build generated-option transitions and original recipe/comparator limits; not original hit reconstruction, current-library rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/chips-alternate-source-boundary.spec.mjs", new RegExp("test\\('original Chips alternate recipe selects both owners without certifying historical hits'"),
+      "original Chips alternate recipe selects both owners without certifying historical hits", "Supplementary retained-build generated-option transitions and original recipe/comparator limits; not original hit reconstruction, current-library rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/chips-alternate-source-boundary.spec.mjs", new RegExp("test\\('original Chips alternate comparator records are not target or state witnesses'"),
+      "original Chips alternate comparator records are not target or state witnesses", "Supplementary retained-build generated-option transitions and original recipe/comparator limits; not original hit reconstruction, current-library rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/chips-alternate-registration.spec.mjs", new RegExp("test\\('proposed Chips registration preserves complete source and proof inventories'"),
+      "proposed Chips registration preserves complete source and proof inventories", "Supplementary retained-build generated-option transitions and original recipe/comparator limits; not original hit reconstruction, current-library rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/chips-alternate-registration.spec.mjs", new RegExp("test\\('proposed Chips selector preserves old choices and rejects combined supplements'"),
+      "proposed Chips selector preserves old choices and rejects combined supplements", "Supplementary retained-build generated-option transitions and original recipe/comparator limits; not original hit reconstruction, current-library rendering or whole-case acceptance."),
     proof(root, "tests/material-parity/absolute-margin-top-evidence.spec.mjs", new RegExp("test\\('pending Divider margin registry preserves every accepted source and proof declaration'"),
       "pending Divider margin registry preserves every accepted source and proof declaration", "Bounded original paragraph handoff/dimension replay, public absolute-margin failure and raw visibility omission;not equivalent Material flow,current rendering or whole-case acceptance."),
     proof(root, "tests/material-parity/absolute-margin-top-evidence.spec.mjs", new RegExp("test\\('retained Divider paragraph positioning is not the equal-input absolute-top reduction'"),
