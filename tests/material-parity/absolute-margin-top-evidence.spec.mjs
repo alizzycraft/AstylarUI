@@ -12,6 +12,67 @@ const reportBytes = readFileSync(`${directory}/latest-report.json`);
 assert.equal(hash(reportBytes), '6e4d7b7807c1671e7716a2da46d4a3e61c9f0dd3f6011ce3e5ecb1e8717350fa');
 const report = JSON.parse(reportBytes);
 
+test('pending Divider margin registry preserves every accepted source and proof declaration', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  assert.equal(hash(source), '58ef02255929abc8ff050ec922de31f5120e2a038fec034e95e49c1052843527');
+  const sources = [
+    'scripts/audit-public-absolute-margins.mjs',
+    'tests/material-parity/absolute-margin-top-evidence.spec.mjs',
+    'tests/material-parity/divider-visible-input-boundary.spec.mjs',
+    `${directory}/latest-report.json`,
+    `${directory}/capture-result.txt`,
+    'artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/chunk-3JXWRYJY.js',
+    'artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/chunk-3JXWRYJY.js.map',
+  ];
+  const titles = [
+    ['tests/material-parity/absolute-margin-top-evidence.spec.mjs', 'pending Divider margin registry preserves every accepted source and proof declaration'],
+    ['tests/material-parity/absolute-margin-top-evidence.spec.mjs', 'retained Divider paragraph positioning is not the equal-input absolute-top reduction'],
+    ['tests/material-parity/absolute-margin-top-evidence.spec.mjs', 'absolute top margin evidence preserves failing pixel controls and equal em requests'],
+    ['tests/material-parity/absolute-margin-top-evidence.spec.mjs', 'complete current absolute positioning and margin methods match captured installed owner'],
+    ['tests/material-parity/divider-visible-input-boundary.spec.mjs', 'retained Divider visible inputs stay distinct from omitted candidate visibility'],
+  ];
+  const boundary = 'Bounded original paragraph handoff/dimension replay, public absolute-margin failure and raw visibility omission;not equivalent Material flow,current rendering or whole-case acceptance.';
+  const escape = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const additions = [
+    ['function sourceFingerprints(root) {\n  const files = [\n', sources.map(name => `    ${JSON.stringify(name)},\n`).join('')],
+    ['function focusedProofInventory(root) {\n  return [\n', titles.map(([name, title]) =>
+      `    proof(root, ${JSON.stringify(name)}, new RegExp(${JSON.stringify("test\\('" + escape(title) + "'")}),\n      ${JSON.stringify(title)}, ${JSON.stringify(boundary)}),\n`).join('')],
+  ];
+  const replaceOnce = (value, before, after) => {
+    assert.equal(value.split(before).length, 2); return value.replace(before, after);
+  };
+  let staged = source;
+  for (const [anchor, prefix] of additions) staged = replaceOnce(staged, anchor, anchor + prefix);
+  const arrays = value => {
+    const tree = ts.createSourceFile(file, value, 99, true, ts.ScriptKind.JS), result = {};
+    assert.equal(tree.parseDiagnostics.length, 0);
+    for (const name of ['sourceFingerprints', 'focusedProofInventory']) {
+      const fn = tree.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);
+      let array;
+      const find = node => { if (!array && ts.isArrayLiteralExpression(node)) array = node; ts.forEachChild(node, find); };
+      find(fn); result[name] = array.elements.map(node => node.getText(tree));
+    }
+    return result;
+  };
+  const before = arrays(source), after = arrays(staged);
+  assert.equal(before.sourceFingerprints.length, 1077); assert.equal(after.sourceFingerprints.length, 1084);
+  assert.equal(before.focusedProofInventory.length, 407); assert.equal(after.focusedProofInventory.length, 412);
+  assert.deepEqual(after.sourceFingerprints.slice(7), before.sourceFingerprints);
+  assert.deepEqual(after.focusedProofInventory.slice(5), before.focusedProofInventory);
+  assert.equal(new Set(after.sourceFingerprints.map(value => new Function(`return ${value}`)())).size, 1084);
+  for (const name of sources) assert.ok(readFileSync(name).length > 0);
+  const proof = (_root, name, pattern, title) => {
+    assert.equal([...readFileSync(name, 'utf8').matchAll(new RegExp(pattern.source, 'g'))].length, 1, title);
+    return title;
+  };
+  for (const declaration of after.focusedProofInventory.slice(0, 5))
+    new Function('proof', 'root', `return ${declaration}`)(proof, process.cwd());
+  for (const [anchor, prefix] of additions.toReversed()) staged = replaceOnce(staged, anchor + prefix, anchor);
+  assert.equal(staged, source); // Every other byte, including findings and plans.
+  assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), source);
+});
+
 test('retained Divider paragraph positioning is not the equal-input absolute-top reduction', () => {
   const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
   assert.equal(hash(bytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');

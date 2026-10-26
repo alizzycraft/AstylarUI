@@ -4,6 +4,20 @@
 
 ### Current next action and publication status
 
+October26 margin/visibility registration is staged in the existing focused spec,
+not live or canonical. In-memory producer delta adds seven source dependencies
+and five exact executable test declarations:1077→1084 sources,407→412 proofs.
+All prior entries preserve exact order/text;removing only the two guarded insertion
+blocks recovers every producer byte,including findings and implementation plans.
+Every new file exists and every proof pattern matches exactly one named test.
+Focused command passes5/5 (4723.8902ms),without changing the live producer.
+Before applying this batch,extend the established historical reader restoration
+for the exact new producer delta and verify prior-source applicability. The
+current focus-selection reader restores an exact older producer hash;blindly
+editing the live registry would break that contract. Do not relax its hashes,
+run an export first or describe staged counts as accepted. Accepted93324520 stays
+1077/407/203/70;all2311 cases remain partial/current-rendering unverified.
+
 October26 authenticated original caller/dimension execution now replays all48
 retained Divider paragraph requests with their recorded parent box/style inputs.
 Original production measureTextContent returns null for these own-text-empty p
