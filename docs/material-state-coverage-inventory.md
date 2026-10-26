@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October26 Chips registration is prepared and tested IN MEMORY ONLY. New bounded
+registration module adds six sources/six proof declarations (proposed1091/418),
+preserves all1085/412 prior entries and restores the exact whole producer,
+runner and launcher. All24 old selector choices preserve; explicit proposed
+--chips-alternate selects e17dff33, and combined/unknown options reject.
+Current live selectors and accepted d6f07066 are deliberately unchanged.
+
+Decisive compatibility check: existing direct focus/selection restorers accept
+the current sources but reject the staged Chips delta. Before enabling it,
+compose exact newest-delta restoration at those DIRECT entries and shared
+historical reads, then verify old collectors and the selected reader. A wrapper
+only around the newest reader is insufficient (see prior margin export failure).
+Do not run an export until that integration passes. No new capture is needed.
+
+Command: node --test tests/material-parity/chips-alternate-registration.spec.mjs
+tests/material-parity/chips-alternate-source-boundary.spec.mjs. Result6/6,
+zero skips,exit0,10917.1286ms;log artifacts/material-parity/
+chips-alternate-staged-registration-20261026.log. Initial isolated registration
+run failed2/2 due to test-only JSON parsing of single-quoted JS strings and an
+incomplete stat mock; corrected to JS literal evaluation and explicit directory
+mock. No production failure hidden. The staged join stays e17dff33;no change to
+eight-case evidence,2311 partial cases,current-rendering status or acceptance.
+
 October26 Chips alternate observation join is dependency-validated as staged
 review e17dff3342e922de9febdd85402b433deb5872091f36cbb709d38de2327d6431.
 scripts/join-material-chips-alternate.mjs extends existing d47c41d3 review via

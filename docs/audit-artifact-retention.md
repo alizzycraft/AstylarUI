@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Retain chips-alternate-staged-registration-20261026.log with the existing Chips
+capture and join logs. It proves6/6 bounded staged-registration/evidence checks,
+not live registration or canonical export. No new screenshots,full review
+package or generation was created;original and failure evidence remain.
+
 Retain chips-alternate-join-focused-20261026.log and
 chips-alternate-join-reader-20261026.log with the supplementary Chips capture.
 The e17dff33 proposal is reconstructed through the existing reader;no additional
