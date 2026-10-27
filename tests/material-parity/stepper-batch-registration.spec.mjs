@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync as readActualFileSync } from 'node:fs';
+import { createSnackbarHistoricalRead } from './snackbar-single-open-registration.mjs';
+const readFileSync = createSnackbarHistoricalRead({ root: process.cwd(), read: readActualFileSync });
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import vm from 'node:vm';

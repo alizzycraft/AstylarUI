@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { createSnackbarHistoricalRead, restoreSnackbarRegistrationIfPresent } from './snackbar-single-open-registration.mjs';
 import { stepperLabelWrapperFinding } from './stepper-label-wrapper-finding.mjs';
 import { createChipsAlternateReviewReader } from '../../scripts/join-material-chips-alternate.mjs';
 import { joinStepperLeave } from '../../scripts/join-material-stepper-leave.mjs';
@@ -127,6 +128,7 @@ export function restoreStepperBatchRegistry(bytes, kind) {
 }
 
 export function restoreStepperBatchRegistryIfPresent(bytes, kind) {
+  bytes = restoreSnackbarRegistrationIfPresent(bytes, kind);
   assert.ok(Object.hasOwn(prior, kind));
   const marker = { policy: stepperLabelWrapperFinding.id, producer: '"tests/material-parity/stepper-batch-registration.mjs",',
     runner: 'const stepperBatchReaderFactory = ', launcher: "const stepperBatch = rawRequested.includes('--stepper-batch');" }[kind];
@@ -134,6 +136,7 @@ export function restoreStepperBatchRegistryIfPresent(bytes, kind) {
   return source.includes(marker) ? (Object.hasOwn(selectionChanges, kind) ? restoreStepperBatchSelection(source, kind) : restoreStepperBatchRegistry(source, kind)) : source;
 }
 export function createStepperBatchPriorRead({ root, read }) {
+  read = createSnackbarHistoricalRead({ root, read });
   const files = new Map(Object.entries({
     'tests/material-parity/input-equivalence-policy.mjs': 'policy',
     'tests/material-parity/input-equivalence-audit.mjs': 'producer',

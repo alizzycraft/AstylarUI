@@ -8922,6 +8922,11 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/audit-material-snackbar-lifetime.mjs",
+    "scripts/join-material-snackbar-single-open.mjs",
+    "tests/material-parity/snackbar-single-open-registration.mjs",
+    "tests/material-parity/snackbar-single-open-registration.spec.mjs",
+    "artifacts/material-parity/snackbar-single-open-20261027/latest-report.json",
     "scripts/audit-material-stepper-leave.mjs",
     "scripts/join-material-stepper-leave.mjs",
     "tests/material-parity/stepper-leave-evidence.spec.mjs",
@@ -10028,6 +10033,13 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/snackbar-position-observation.spec.mjs", new RegExp("test\\('original snackbar auto-dismiss comparator does not witness the timed transition'"), "original snackbar auto-dismiss comparator does not witness the timed transition", "Retained supplementary visibility and historical evidence reconciliation; not exact expiry timing, current rendering, input equivalence or case closure."),
+    proof(root, "tests/material-parity/snackbar-position-observation.spec.mjs", new RegExp("test\\('supplementary single-open snackbar is present before expiry and absent afterwards'"), "supplementary single-open snackbar is present before expiry and absent afterwards", "Retained supplementary visibility and historical evidence reconciliation; not exact expiry timing, current rendering, input equivalence or case closure."),
+    proof(root, "tests/material-parity/snackbar-position-observation.spec.mjs", new RegExp("test\\('single-open coverage join preserves every other case and unresolved obligation'"), "single-open coverage join preserves every other case and unresolved obligation", "Retained supplementary visibility and historical evidence reconciliation; not exact expiry timing, current rendering, input equivalence or case closure."),
+    proof(root, "tests/material-parity/static-semantic-inputs.spec.mjs", new RegExp("test\\('October27 historical semantic population preserves every prior definition'"), "October27 historical semantic population preserves every prior definition", "Retained supplementary visibility and historical evidence reconciliation; not exact expiry timing, current rendering, input equivalence or case closure."),
+    proof(root, "tests/material-parity/snackbar-single-open-registration.spec.mjs", new RegExp("test\\('snackbar historical reader authenticates all five source transitions without changing live inputs'"), "snackbar historical reader authenticates all five source transitions without changing live inputs", "Retained supplementary visibility and historical evidence reconciliation; not exact expiry timing, current rendering, input equivalence or case closure."),
+    proof(root, "tests/material-parity/snackbar-single-open-registration.spec.mjs", new RegExp("test\\('staged snackbar registration preserves every accepted source and proof'"), "staged snackbar registration preserves every accepted source and proof", "Retained supplementary visibility and historical evidence reconciliation; not exact expiry timing, current rendering, input equivalence or case closure."),
+    proof(root, "tests/material-parity/snackbar-single-open-registration.spec.mjs", new RegExp("test\\('staged snackbar selector preserves older choices and rejects mixed supplements'"), "staged snackbar selector preserves older choices and rejects mixed supplements", "Retained supplementary visibility and historical evidence reconciliation; not exact expiry timing, current rendering, input equivalence or case closure."),
     proof(root, "tests/material-parity/stepper-leave-evidence.spec.mjs", new RegExp("test\\('Stepper leave capture authenticates actual tab observations without promoting authored endpoints'"), "Stepper leave capture authenticates actual tab observations without promoting authored endpoints", "Retained Stepper wrapper input mismatch and supplementary actual tab transitions; not core clipping, historical hit reconstruction, current-library rendering or case closure."),
     proof(root, "tests/material-parity/stepper-leave-evidence.spec.mjs", new RegExp("test\\('Stepper evidence rejects missing state, wrong identity, missing leave and forged event trust'"), "Stepper evidence rejects missing state, wrong identity, missing leave and forged event trust", "Retained Stepper wrapper input mismatch and supplementary actual tab transitions; not core clipping, historical hit reconstruction, current-library rendering or case closure."),
     proof(root, "tests/material-parity/stepper-leave-evidence.spec.mjs", new RegExp("test\\('Stepper join changes only eight activation obligations and restores the accepted predecessor'"), "Stepper join changes only eight activation obligations and restores the accepted predecessor", "Retained Stepper wrapper input mismatch and supplementary actual tab transitions; not core clipping, historical hit reconstruction, current-library rendering or case closure."),

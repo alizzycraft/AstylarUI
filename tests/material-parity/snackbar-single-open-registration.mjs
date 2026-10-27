@@ -79,6 +79,47 @@ export function restoreSnackbarSingleOpenRegistry(bytes) {
   }
   assert.equal(hash(source), producerPrior); return source;
 }
+const sharedEntries = {
+  'tests/material-parity/stepper-batch-registration.mjs': {
+    prior: '7c2857a98c0e3e1252034e2fd0fc28543ff0bfe53fdc40cf97aefdeaa41b9f26',
+    changes: [
+      ["import path from 'node:path';", "import path from 'node:path';\nimport { createSnackbarHistoricalRead, restoreSnackbarRegistrationIfPresent } from './snackbar-single-open-registration.mjs';"],
+      ['export function restoreStepperBatchRegistryIfPresent(bytes, kind) {', 'export function restoreStepperBatchRegistryIfPresent(bytes, kind) {\n  bytes = restoreSnackbarRegistrationIfPresent(bytes, kind);'],
+      ['export function createStepperBatchPriorRead({ root, read }) {', 'export function createStepperBatchPriorRead({ root, read }) {\n  read = createSnackbarHistoricalRead({ root, read });'],
+    ],
+  },
+  'tests/material-parity/stepper-batch-registration.spec.mjs': {
+    prior: 'be5b014cf0864f63a7c25b29ca7b0fc2756215c5dad2ba904390cde8fad22e0d',
+    changes: [["import { readFileSync } from 'node:fs';", "import { readFileSync as readActualFileSync } from 'node:fs';\nimport { createSnackbarHistoricalRead } from './snackbar-single-open-registration.mjs';\nconst readFileSync = createSnackbarHistoricalRead({ root: process.cwd(), read: readActualFileSync });"]],
+  },
+};
+export const snackbarSharedFiles = Object.freeze(Object.keys(sharedEntries));
+export function prepareSnackbarSharedSource(bytes, file) {
+  const entry = sharedEntries[file]; assert.ok(entry);
+  let source = normalize(bytes); assert.equal(hash(source), entry.prior);
+  for (const [before, after] of entry.changes) {
+    assert.equal(source.split('\n' + before).length, 2); source = source.replace('\n' + before, '\n' + after);
+  }
+  return source;
+}
+export function restoreSnackbarSharedSource(bytes, file) {
+  const entry = sharedEntries[file]; assert.ok(entry);
+  let source = normalize(bytes);
+  if (hash(source) === entry.prior) return source;
+  for (const [before, after] of entry.changes.toReversed()) {
+    assert.equal(source.split('\n' + after).length, 2); source = source.replace('\n' + after, '\n' + before);
+  }
+  assert.equal(hash(source), entry.prior); return source;
+}
+export function restoreSnackbarRegistrationIfPresent(bytes, kind) {
+  const source = normalize(bytes);
+  if (kind === 'policy') return source;
+  const marker = { producer: '"tests/material-parity/snackbar-single-open-registration.mjs",',
+    runner: 'const snackbarSingleOpenReaderFactory = ', launcher: "const snackbarSingleOpen = rawRequested.includes('--snackbar-single-open');" }[kind];
+  assert.ok(marker);
+  if (!source.includes(marker)) return source;
+  return kind === 'producer' ? restoreSnackbarSingleOpenRegistry(source) : restoreSnackbarSingleOpenSelection(source, kind);
+}
 export const snackbarHistoricalSources = Object.freeze([
   ['scripts/audit-material-snackbar-lifetime.mjs', 'ca8d9552d3dd819b43127a76c9d88fc746c2b2846d663c2312272fd2efc8327b', 'dab25c42bfad778b5d5b5dbd43b56cf87be52cdb255bfd199dfaee6c438c397e'],
   ['tests/material-parity/benchmark-config.spec.mjs', 'd4102f705bf61418286a18932697a5ab95a2e4bb507d237fe3b61bc6914c62ce', 'f383821eef926747bd1de6ce675a858e0a3f75ff170e3c00cce81a77427b86e7'],
@@ -91,9 +132,20 @@ export const snackbarHistoricalSources = Object.freeze([
 // Both endpoints are authenticated; unknown live edits fail closed.
 export function createSnackbarHistoricalRead({ root, read }) {
   const entries = new Map(snackbarHistoricalSources.map(row => [path.resolve(root, row[0]), row]));
+  const registries = new Map(Object.entries({
+    'tests/material-parity/input-equivalence-audit.mjs': 'producer',
+    'scripts/run-material-input-audit.mjs': 'runner',
+    'scripts/export-material-input-audit-current-ancestry.mjs': 'launcher',
+  }).map(([file, kind]) => [path.resolve(root, file), kind]));
   const recovered = new Map();
   return (name, options) => {
-    const entry = entries.get(path.resolve(root, name));
+    const absolute = path.resolve(root, name), entry = entries.get(absolute);
+    const kind = registries.get(absolute), shared = snackbarSharedFiles.find(file => path.resolve(root, file) === absolute);
+    if (kind || shared) {
+      const source = shared ? restoreSnackbarSharedSource(read(name), shared) : restoreSnackbarRegistrationIfPresent(read(name), kind);
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? Buffer.from(source).toString(encoding) : Buffer.from(source);
+    }
     if (!entry) return read(name, options);
     const [file, previous, current] = entry;
     const source = normalize(read(name));

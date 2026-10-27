@@ -4,6 +4,30 @@
 
 ### Current next action and publication status
 
+October27 snackbar batch is now installed locally at1104 sources/432 proofs;
+`--snackbar-single-open --dry-run` selects exactbcc94f3d without exporting.
+Shared Stepper entry points strip only the authenticated snackbar registry and
+selector additions; complete prior shared helper/test sources recover. Older
+Stepper/Chips tests consume their pinned historical inputs,while the new owning
+suite asserts that actual live registry/selector bytes equal preparation.
+Unknown source edits reject and repeated reader composition is idempotent.
+
+Verification: `node --test tests/material-parity/snackbar-single-open-registration.spec.mjs tests/material-parity/stepper-batch-registration.spec.mjs tests/material-parity/chips-alternate-registration.spec.mjs`
+passes7/7(exit0,2230.2409ms). The filtered `October27 historical semantic population|snackbar lifetime replacement binds|original snackbar auto-dismiss|supplementary single-open|single-open coverage join`
+run across static-semantic-inputs,benchmark-config,and snackbar-position-observation
+passes5/5(exit0,15711.1313ms). Scoped diff check passes. Initial shared-source
+preparation rejected an ambiguous quoted-code anchor; line-anchored preparation
+and negative controls now pass. Two installation patch attempts rejected
+overlapping hunk context before writes; consolidated hunks installed successfully.
+
+One installed-state full dependency replay is running in session67036. Poll that
+existing handle;do not repeat the pre-install18527-dependency pass or claim it as
+the installed-state result. No export/cold check/capture launched. Accepted
+canonicalcd84d26c and all2311 partial/current-unverified dispositions remain.
+Next collect this integration result,then choose a justified canonical milestone
+or remaining exact-case inspection without rerunning settled captures.
+
+
 October27 corrected snackbar dependency replay has finished successfully
 (session62946,exit0): expected reviewbcc94f3d,2311 cases,18527 authenticated
 dependencies,inspectionComplete=false,currentRenderingAccepted=false. This

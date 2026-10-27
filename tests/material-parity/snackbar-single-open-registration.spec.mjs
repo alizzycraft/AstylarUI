@@ -8,15 +8,17 @@ import vm from 'node:vm';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { createSnackbarHistoricalRead, snackbarHistoricalSources, prepareSnackbarSingleOpenRegistry,
   restoreSnackbarSingleOpenRegistry, snackbarSingleOpenSources, snackbarSingleOpenProofs,
-  prepareSnackbarSingleOpenSelection, restoreSnackbarSingleOpenSelection, snackbarSingleOpenReview } from './snackbar-single-open-registration.mjs';
+  prepareSnackbarSingleOpenSelection, restoreSnackbarSingleOpenSelection, snackbarSingleOpenReview,
+  prepareSnackbarSharedSource, restoreSnackbarSharedSource, snackbarSharedFiles, restoreSnackbarRegistrationIfPresent } from './snackbar-single-open-registration.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 test('staged snackbar selector preserves older choices and rejects mixed supplements', () => {
   const files = { runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' };
   const original = {}, staged = {};
   for (const [kind, file] of Object.entries(files)) {
-    original[kind] = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    original[kind] = restoreSnackbarRegistrationIfPresent(readFileSync(file), kind);
     staged[kind] = prepareSnackbarSingleOpenSelection(original[kind], kind);
+    assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), staged[kind]);
     assert.equal(restoreSnackbarSingleOpenSelection(staged[kind], kind), original[kind]);
     assert.equal(ts.createSourceFile(file, staged[kind], 99, true).parseDiagnostics.length, 0);
     assert.throws(() => prepareSnackbarSingleOpenSelection(original[kind] + '\n// drift', kind));
@@ -48,8 +50,10 @@ test('staged snackbar selector preserves older choices and rejects mixed supplem
 });
 test('staged snackbar registration preserves every accepted source and proof', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
-  const before = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const live = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const before = restoreSnackbarRegistrationIfPresent(live, 'producer');
   const staged = prepareSnackbarSingleOpenRegistry(before);
+  assert.equal(live, staged);
   assert.equal(restoreSnackbarSingleOpenRegistry(staged), before);
   const arrays = source => {
     const tree = ts.createSourceFile('producer.mjs', source, 99, true);
@@ -75,7 +79,7 @@ test('staged snackbar registration preserves every accepted source and proof', (
   assert.deepEqual(next.focusedProofInventory.slice(0, 7).map(text => new Function('proof', 'root', `return ${text}`)(proof, '.')), snackbarSingleOpenProofs);
   assert.throws(() => prepareSnackbarSingleOpenRegistry(before + '\n// drift'));
   assert.throws(() => restoreSnackbarSingleOpenRegistry(staged + '\n// drift'));
-  assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), before);
+  assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), live);
 });
 test('snackbar historical reader authenticates all five source transitions without changing live inputs', () => {
   const root = process.cwd(), read = createSnackbarHistoricalRead({ root, read: readFileSync });
@@ -95,4 +99,18 @@ test('snackbar historical reader authenticates all five source transitions witho
   }
   const untouched = 'scripts/join-material-snackbar-single-open.mjs';
   assert.deepEqual(read(untouched), readFileSync(untouched));
+  for (const file of snackbarSharedFiles) {
+    const before = restoreSnackbarSharedSource(readFileSync(file), file);
+    const staged = prepareSnackbarSharedSource(before, file);
+    assert.equal(restoreSnackbarSharedSource(staged, file), before);
+    assert.throws(() => restoreSnackbarSharedSource(staged + '\n// drift', file));
+    const sourceRead = (name, options) => {
+      if (path.resolve(root, name) !== path.resolve(root, file)) return readFileSync(name, options);
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? Buffer.from(staged).toString(encoding) : Buffer.from(staged);
+    };
+    const prior = createSnackbarHistoricalRead({ root, read: sourceRead });
+    const twice = createSnackbarHistoricalRead({ root, read: prior });
+    assert.equal(prior(file, 'utf8'), before); assert.equal(twice(file, 'utf8'), before);
+  }
 });
