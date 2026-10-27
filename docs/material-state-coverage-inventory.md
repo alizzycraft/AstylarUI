@@ -4,6 +4,19 @@
 
 ### Current next action and publication status
 
+October27 datepicker registration preflight is implemented in the existing
+prepare/restore pattern,not yet applied to the producer. It adds seven sources,
+seven focused proofs and one root-cause implementation track,conserving all1106
+prior sources,436 proofs and71 tracks exactly (planned1113/443/72). Source paths
+are unique,present,and each proof anchor resolves exactly once. Prepare/restore
+reject unrelated producer drift. A read-only historical source adapter verifies
+both known endpoints for policy and original-runner spec before recovering exact
+accepted83b9ad89 bytes;direct/nested readers,absolute paths and encodings pass,
+unknown edits reject,and disk bytes remain unchanged. Registration suite2/2 passes,
+0skip,exit0(1149.6059ms). No canonical export or accepted pointer changed. Next wire
+the verified registry/reader into the existing selector chain,run integrated source
+applicability/conservation checks,and only then perform the batch export gates.
+
 October27 datepicker opening join is implemented and verified,not yet selected
 by the canonical exporter. join-material-datepicker-opening.mjs authenticates
 the17 exact maintained case keys,report/checkpoint,34 trees/34 PNGs,trusted event
