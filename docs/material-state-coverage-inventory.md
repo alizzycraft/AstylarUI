@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October27 Stepper activate-leave observation closes a specific evidence question,
+not a case:the eight original paired trees agree on selection but candidate
+authored ariaSelected is not actual semantic DOM. The existing activate-only
+three-stage diagnostic cannot be transplanted to activate-leave. Reused the
+checkpoint-bound Chips collector through audit-material-stepper-leave.mjs with
+the maintained action unchanged and read-only tab observations. Capture exits0;
+independent --verify passes eight cases/24 paired outer boundaries. Report
+artifacts/material-parity/stepper-leave-observed-20261027/latest-report.json SHA
+f64114dd41acc3da0d1ac4691eaa710dbb03b17a0ab0cb1b57971bd901841b95.
+Browser155.0.8059.85,retained served build;not fresh current-library acceptance.
+Focused node --test tests/material-parity/stepper-leave-evidence.spec.mjs passes2/2,
+authenticating112 side/boundary snapshots,16 trees/16 screenshots and provenance;
+four malformed state/identity/leave/trust controls reject. All eight settle with
+Review selected/focused. Six native mouse-up samples precede the DOM selection
+update;extra awaited observation timing is not a demonstrated timing defect.
+Native trusted pointer events target Review text;candidate DOM targets CANVAS,
+which does not prove renderer-internal hit identity. Initial adapter dry-run
+failed an import-rewrite occurrence guard;corrected actual-call-only rewrite
+passes before the only browser capture. No renderer/fixture changes.
+Next reuse this evidence for the exact eight obligations in a coherent audit
+batch,retaining internal hit,paint,keyboard,lifetime and currentness limits.
+Canonical3252368b and all2311 partial/unverified case statuses remain unchanged.
+
 October27 Chips canonical milestone is ACCEPTED LOCALLY as generation
 3252368beb18426245167b716fe22c6af0d2c4ce8da283ef574f43b89cc686aa,
 index ff2b1a1d86fb00467f1673f6db0f4b98febc1c2f33b12d45f8c37057aee54cb5.

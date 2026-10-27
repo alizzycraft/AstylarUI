@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep stepper-leave-observed-20261027 and its -provenance sibling with the capture
+log. Its eight-case report f64114dd41acc3da0d1ac4691eaa710dbb03b17a0ab0cb1b57971bd901841b95,
+16 trees and16 screenshots support actual tab-state observations unavailable in
+the authored endpoint trees. They are required supplementary evidence,not scratch.
+Frozen collector and stepper-leave-evidence.spec.mjs authenticate this bounded
+claim;no canonical pointer or whole-case acceptance changed. No files deleted.
+
 October27 Chips candidate3252368b passed cold verification, complete conservation,
 isolated import and accepted import. Retain chips-independent-cold-20261027
 stdout/stderr, chips-isolated-import-20261027.log,
