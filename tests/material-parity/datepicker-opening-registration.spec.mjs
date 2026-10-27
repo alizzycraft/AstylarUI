@@ -4,9 +4,13 @@ import test from 'node:test';
 import ts from 'typescript';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import vm from 'node:vm';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import { prepareDatepickerOpeningRegistry, restoreDatepickerOpeningRegistry,
   datepickerOpeningSources, datepickerOpeningProofs, createDatepickerHistoricalRead,
-  datepickerHistoricalSources } from './datepicker-opening-registration.mjs';
+  datepickerHistoricalSources, prepareDatepickerOpeningSelection, restoreDatepickerOpeningSelection,
+  datepickerOpeningReview, restoreDatepickerOpeningPolicyIfPresent } from './datepicker-opening-registration.mjs';
+import { restoreStepperBatchRegistryIfPresent } from './stepper-batch-registration.mjs';
 
 test('datepicker registry preparation preserves every predecessor entry and rejects unrelated drift', () => {
   const bytes = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
@@ -42,6 +46,30 @@ test('datepicker registry preparation preserves every predecessor entry and reje
   assert.throws(() => prepareDatepickerOpeningRegistry(prior + '\n// unrelated drift'));
   assert.throws(() => restoreDatepickerOpeningRegistry(next + '\n// unrelated drift'));
   assert.deepEqual(readFileSync('tests/material-parity/input-equivalence-audit.mjs'), bytes);
+  for (const [kind, file] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
+    const live = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const old = restoreDatepickerOpeningSelection(live, kind);
+    assert.equal(prepareDatepickerOpeningSelection(old, kind), live);
+    assert.throws(() => restoreDatepickerOpeningSelection(live + '\n// drift', kind));
+    assert.deepEqual(ts.createSourceFile(file, live, 99, true).parseDiagnostics, []);
+    if (kind !== 'launcher') continue;
+    const execute = (source, flags) => {
+      const outputs = [];
+      vm.runInNewContext(source.replace(/^import .*;\n/gm, '').replaceAll('import.meta.url', 'moduleUrl'), {
+        assert, path, fileURLToPath, moduleUrl: pathToFileURL(path.resolve(file)).href,
+        statSync: () => ({ isFile: () => true, isDirectory: () => true }),
+        process: { argv: ['node', file, ...flags], execPath: 'node', env: {} },
+        spawnSync: () => { throw Error('No export in selector check'); }, console: { log: value => outputs.push(JSON.parse(value)) },
+      });
+      assert.equal(outputs.length, 1); return outputs[0];
+    };
+    const older = [...old.matchAll(/rawRequested\.includes\('(.*?)'\)/g)].map(m => m[1]);
+    for (const flags of [[], ...older.map(flag => [flag])]) assert.deepEqual(execute(live, [...flags, '--dry-run']), execute(old, [...flags, '--dry-run']));
+    const selected = execute(live, ['--datepicker-opening', '--dry-run']);
+    assert.ok(selected.args.includes(`--case-obligation-review-sha256=${datepickerOpeningReview}`));
+    assert.ok(selected.args.includes(`--case-obligation-review=artifacts/material-parity/working-audit/proposals/${datepickerOpeningReview}.json`));
+    for (const flag of [...older, '--unknown']) assert.throws(() => execute(live, ['--datepicker-opening', flag, '--dry-run']));
+  }
 });
 
 test('datepicker historical source reader authenticates both endpoints and rejects unknown edits', () => {
@@ -64,4 +92,11 @@ test('datepicker historical source reader authenticates both endpoints and rejec
   }
   const untouched = 'scripts/join-material-datepicker-opening.mjs';
   assert.deepEqual(reader(untouched), readFileSync(untouched));
+  const policy = readFileSync('tests/material-parity/input-equivalence-policy.mjs');
+  const oldPolicy = restoreDatepickerOpeningPolicyIfPresent(policy);
+  assert.equal(hash(oldPolicy), datepickerHistoricalSources[0][1]);
+  assert.equal(restoreDatepickerOpeningPolicyIfPresent(oldPolicy), oldPolicy);
+  assert.equal(restoreStepperBatchRegistryIfPresent(policy, 'policy'),
+    restoreStepperBatchRegistryIfPresent(oldPolicy, 'policy'), 'Direct historical collectors must recover the same prior policy');
+  assert.throws(() => restoreDatepickerOpeningPolicyIfPresent(policy.toString() + '\n// drift'));
 });

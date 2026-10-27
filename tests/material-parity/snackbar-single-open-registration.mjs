@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
-import { createDatepickerHistoricalRead, restoreDatepickerOpeningRegistry } from './datepicker-opening-registration.mjs';
+import { createDatepickerHistoricalRead, restoreDatepickerOpeningRegistry, restoreDatepickerOpeningSelection, restoreDatepickerOpeningPolicyIfPresent } from './datepicker-opening-registration.mjs';
 import { createStepperBatchReviewReader } from './stepper-batch-registration.mjs';
 import { joinSnackbarSingleOpen } from '../../scripts/join-material-snackbar-single-open.mjs';
 
@@ -119,6 +119,9 @@ export function restoreSnackbarSharedSource(bytes, file) {
   assert.equal(hash(source), entry.prior); return source;
 }
 export function restoreSnackbarRegistrationIfPresent(bytes, kind) {
+  if (kind === 'policy') bytes = restoreDatepickerOpeningPolicyIfPresent(bytes);
+  if ((kind === 'runner' && bytes.toString().includes('const datepickerOpeningReaderFactory = ')) ||
+    (kind === 'launcher' && bytes.toString().includes("const datepickerOpening = rawRequested.includes('--datepicker-opening');"))) bytes = restoreDatepickerOpeningSelection(bytes, kind);
   if (kind === 'producer' && bytes.toString().includes('"tests/material-parity/datepicker-opening-registration.mjs",')) bytes = restoreDatepickerOpeningRegistry(bytes);
   const source = normalize(bytes);
   if (kind === 'policy') return source;

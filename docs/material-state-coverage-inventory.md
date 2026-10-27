@@ -4,6 +4,19 @@
 
 ### Current next action and publication status
 
+October27 datepicker exporter selection is installed: --datepicker-opening
+selects joined reviewcd9631f0,with the existing complete review-reader path.
+Dry-run selects its exact path/hash. Every older selector remains unchanged;
+mixed/unknown selectors reject. Seven registration compatibility tests pass
+(3242.1698ms),including direct and nested historical policy restoration. The
+direct collector path had bypassed the read adapter and rejected the appended
+finding; it now authenticates/reverses only that exact policy transition before
+the older validator runs. This was a real integration correction,not relaxed
+hash validation. Full reader probe98493 was explicitly stopped as superseded
+after this failure was demonstrated;it had not completed and is not evidence
+of acceptance. No canonical files/pointers were changed. Next run the corrected
+complete reader/dependency validation,then the coherent canonical batch gates.
+
 October27 datepicker source/proof/plan registration is now live1113/443/72,
 with205 source-finding definitions. The exact prepared producer was installed;
 all1106/436/71 predecessors remain unchanged. The existing snackbar reader now
