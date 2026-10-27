@@ -8,11 +8,33 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { sourceAuditDefinitions as currentSourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { retainedStaticSemanticPopulation, staticSemanticPredecessor, restoreStaticSemanticPolicy, restoreStaticSemanticProducer } from './static-semantic-registration.mjs';
-import { restorePopupDepthTabsHelper } from './static-semantic-registration.mjs';
+import { restorePopupDepthTabsHelper, restoreRootDepthPolicy } from './static-semantic-registration.mjs';
 // Original assertions below inspect the exact retained191-definition population.
 const sourceAuditDefinitions = retainedStaticSemanticPopulation(currentSourceAuditDefinitions);
 const hash = b => createHash('sha256').update(b).digest('hex');
 const normalize = b => b.toString().replaceAll('\r\n', '\n');
+test('October27 historical semantic population preserves every prior definition', () => {
+  assert.equal(currentSourceAuditDefinitions.length, 204);
+  const before = structuredClone(currentSourceAuditDefinitions);
+  const historical = retainedStaticSemanticPopulation(currentSourceAuditDefinitions);
+  assert.deepEqual(currentSourceAuditDefinitions, before);
+  assert.equal(historical.length, 191);
+  assert.equal(hash(JSON.stringify(historical)), '13c86852010dbff5153a44c53756eff3c59344c66b5391b9a2b3f2430c22c064');
+  assert.deepEqual(historical, currentSourceAuditDefinitions.slice(11, -2));
+  for (const i of [0, 10, 11, 100, 203]) {
+    const changed = structuredClone(before); changed[i].id += '-drift';
+    assert.throws(() => retainedStaticSemanticPopulation(changed));
+  }
+  assert.throws(() => retainedStaticSemanticPopulation([...before, before.at(-1)]));
+  const reordered = structuredClone(before); [reordered[11], reordered[12]] = [reordered[12], reordered[11]];
+  assert.throws(() => retainedStaticSemanticPopulation(reordered));
+  const policy = fs.readFileSync('tests/material-parity/input-equivalence-policy.mjs', 'utf8');
+  const restored = restoreRootDepthPolicy(policy);
+  assert.equal(hash(restored), '85491fc1e6bb7a9d98f160bed17c2c90b8b75081d20f056a87135cb0635cdeec');
+  assert.throws(() => restoreRootDepthPolicy(policy + '\n// unexpected drift'));
+  assert.throws(() => restoreRootDepthPolicy(policy.replace('fixture-stepper-label-clipping-wrappers-omitted', 'forged-stepper')));
+});
+
 test('static semantic registration preserves180 findings and exact predecessor policy', () => {
   const id = 'af08f832c5cda7a625da5f6028929b8987b7a12ceae545dd6e10b90270861347';
   const review = JSON.parse(fs.readFileSync(`artifacts/material-parity/working-audit/proposals/${id}.json`)).review;

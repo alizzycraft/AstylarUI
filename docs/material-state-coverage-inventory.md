@@ -4,6 +4,28 @@
 
 ### Current next action and publication status
 
+October27 historical semantic adapter reconciliation: direct filtered benchmark
+initialization rejected the current204-definition registry against its retained
+193/192 predecessors. The adapter now authenticates the complete current registry
+(480341830b0dd3b4982e86aaf827313d9ce7385c2d5128078a5652f93c02e72f),
+removes only its11 known prepended additions, and authenticates the unchanged193
+predecessor (9943fcf0439d16163b547610002e214afb1086bedcdba83e0f5769050bb36a73).
+Policy-source reversal likewise authenticates the whole current file and exact
+prior source before the existing193-to191 restoration. Production retains all204
+findings; this is historical evidence reuse, not a relaxed population assertion.
+Mutation, insertion, reorder, source-drift and nonmutation controls pass.
+
+Verification: `node --test --test-name-pattern="October27 historical semantic population|snackbar lifetime replacement binds|original snackbar auto-dismiss|supplementary single-open" tests/material-parity/static-semantic-inputs.spec.mjs tests/material-parity/benchmark-config.spec.mjs tests/material-parity/snackbar-position-observation.spec.mjs`
+passes4/4 (exit0,3916.7924ms). The historical seven-boundary lifetime test now runs
+directly in its owning suite, alongside original-comparator-gap and supplementary
+single-open evidence checks. This is not a full-suite, canonical-currentness or
+rendering-parity pass. No renderer, fixture or acceptance changes. Include these
+two changed adapter/test source receipts in the pending coherent snackbar evidence
+batch; accepted Stepper canonical generation and all2311 partial dispositions
+remain unchanged. Next: reconcile supplementary coverage using existing machinery,
+without repeating captures or canonical export solely for this metadata update.
+
+
 October27 producer applicability is reconciled for the old lifetime callback:
 benchmark-config.spec.mjs pins current diagnostic SHAdab25c42 and obtains the
 complete prior producer from81762748,requiring captured SHAca8d9552. Only that

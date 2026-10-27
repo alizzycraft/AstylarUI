@@ -3,8 +3,15 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { restorePendingEvidenceProducer, restoreOriginalRunnerExportSource } from './pending-evidence-registration.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
-// Explicit historical population only. Production continues to use all193.
+// Explicit historical population only. Production retains the complete current registry.
 export function retainedStaticSemanticPopulation(current) {
+  // October27 additions prepend the unchanged accepted193 population.
+  // Authenticate both complete populations; never truncate an unknown registry.
+  if (current.length === 204) {
+    assert.equal(hash(JSON.stringify(current)), '480341830b0dd3b4982e86aaf827313d9ce7385c2d5128078a5652f93c02e72f');
+    current = current.slice(11);
+    assert.equal(hash(JSON.stringify(current)), '9943fcf0439d16163b547610002e214afb1086bedcdba83e0f5769050bb36a73');
+  }
   // Historical cohorts retain the complete accepted192-finding population.
   if(current.length===193){
     assert.equal(hash(JSON.stringify(current)),'9943fcf0439d16163b547610002e214afb1086bedcdba83e0f5769050bb36a73');
@@ -44,6 +51,15 @@ export function restoreScrollbarSupplementSuite(source) {
 }
 export function restoreRootDepthPolicy(source) {
   let text = source.toString().replaceAll('\r\n', '\n');
+  if (text.includes('fixture-stepper-label-clipping-wrappers-omitted')) {
+    assert.equal(hash(text), 'a38dc20ab17b392fcd1eeac4e8ff693859c3dbfaf4395ae0e0a782326bd72a6c');
+    const tree = ts.createSourceFile('policy.mjs', text, 99, true);
+    const entries = tree.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+      .find(n => n.name.getText(tree) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+    assert.equal(entries.length, 204);
+    text = text.slice(0, entries[0].getFullStart()) + text.slice(entries[10].end + 1);
+    assert.equal(hash(text), '1e7cb51d39ba3e93899143dddb081769b7569fe7b9ece610dc4b2da3543c38f4');
+  }
   // Remove only the exact newer Slider input finding before older policy stages.
   if(text.includes('fixture-slider-state-layer-composition')){
     assert.equal(hash(text),'1e7cb51d39ba3e93899143dddb081769b7569fe7b9ece610dc4b2da3543c38f4');
