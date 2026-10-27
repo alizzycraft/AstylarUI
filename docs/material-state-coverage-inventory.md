@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October27 supplementary single-open lifetime capture completes the next decisive
+observation without rebuilding. Chrome155.0.8059.85 profile/temp files were scoped
+to D: in the capture subprocess;1887 served assets match the existing Stepper
+checkpoint. Existing audit-material-snackbar-lifetime.mjs adds --single-open;
+default reopen/UNDO action sequence remains. Report
+artifacts/material-parity/snackbar-single-open-20261027/latest-report.json SHA
+1cc0846c8d56c58312bd47ede2c8c2c8ef1774682466b2b7f625d13682fbf804 passes
+checkpoint-bound validation. Four paired rows at light1440x1000/DPR1 have counts
+0,1,1,0. Actual click-relative samples:reference66.7/4017.1/6022.4ms and candidate
+412.4/4038.8/6043.3ms. Each side has one trusted click,no runtime errors,eight total
+trees and eight PNGs. Both first-open images visibly contain the snackbar panel.
+This proves a bounded ordinary open/present-before-expiry/absent-afterwards
+sequence,not original benchmark reconstruction,precise timer-start/fade equality,
+equal inputs,current-library rendering or complete case closure. Existing text/
+palette input differences remain visible and unaltered.
+Focused original-comparator and supplementary-capture tests pass2/2,exit0,
+3425.7377ms via node --test --test-name-pattern="original snackbar auto-dismiss|supplementary single-open"
+tests/material-parity/snackbar-position-observation.spec.mjs. Producer syntax and
+scoped diff checks pass. Retain capture stdout/stderr and all receipts;old lifetime
+producer is recoverable at81762748,not reauthenticated using the modified script.
+New suite/producer applicability and this supplementary observation remain outside
+canonical1099/425 pending the next coherent batch. No renderer/fixture changes.
+
 October27 snackbar timer-origin source review:do not repeat the settled5000ms/
 benchmark-persistence census. Native captured MatSnackBar._animateSnackBar starts
 _dismissAfter only through afterOpened(),which returns container._onEnter.

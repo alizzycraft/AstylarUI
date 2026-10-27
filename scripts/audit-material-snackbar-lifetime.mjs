@@ -10,7 +10,8 @@ import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/mat
 import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../tests/material-parity/supplemental-capture-evidence.mjs';
 
 // Replace only the missing lifetime provenance. Original unbound logs stay intact.
-const args = process.argv.slice(2), root = path.resolve('examples/material-showcase/dist/material-showcase/browser');
+const singleOpen = process.argv.includes('--single-open');
+const args = process.argv.slice(2).filter(arg => arg !== '--single-open'), root = path.resolve('examples/material-showcase/dist/material-showcase/browser');
 assert.equal(args.length, 2);
 const checkpoint = args.find(a => a.startsWith('--checkpoint=')); assert.ok(checkpoint);
 const manifest = JSON.parse(readFileSync(path.join(checkpoint.slice(13), 'manifest.json')));
@@ -32,9 +33,13 @@ try {
   const properties = Object.values(propertyGroups).flat();
   const evidence = openSupplementalCapture({ options, browser, script: 'scripts/audit-material-snackbar-lifetime.mjs', styleProperties: properties });
   const results = [];
-  for (const context of [{ profile: 'light', viewport: { width: 1440, height: 900, deviceScaleFactor: 1 } },
-    { profile: 'dark', viewport: { width: 390, height: 844, deviceScaleFactor: 2 } }]) {
-    const rows = ['closed', 'first-open', 'reopened', 'after-original-expiry', 'new-expired', 'third-open', 'action-dismissed']
+  const contexts = singleOpen
+    ? [{ profile: 'light', viewport: { width: 1440, height: 1000, deviceScaleFactor: 1 } }]
+    : [{ profile: 'light', viewport: { width: 1440, height: 900, deviceScaleFactor: 1 } },
+      { profile: 'dark', viewport: { width: 390, height: 844, deviceScaleFactor: 2 } }];
+  for (const context of contexts) {
+    const rows = (singleOpen ? ['closed', 'first-open', 'before-expiry', 'expired']
+      : ['closed', 'first-open', 'reopened', 'after-original-expiry', 'new-expired', 'third-open', 'action-dismissed'])
       .map(state => ({ family: 'snack-bar', ...context, state }));
     for (const mode of ['reference', 'astylar']) {
       const page = await browser.newPage({ viewport: { width: context.viewport.width, height: context.viewport.height }, deviceScaleFactor: context.viewport.deviceScaleFactor });
@@ -70,6 +75,12 @@ try {
           if (row.state === 'reopened') { await page.waitForTimeout(3000); await click('snack-bar-primary'); }
           if (row.state === 'after-original-expiry') await page.waitForTimeout(2300);
           if (row.state === 'new-expired') await page.waitForTimeout(2900);
+          if (singleOpen && ['before-expiry', 'expired'].includes(row.state)) {
+            const target = row.state === 'before-expiry' ? 4000 : 6000;
+            const elapsed = await page.evaluate(() => performance.now() - window.__lifetimeClicks[0].now);
+            assert.ok(Number.isFinite(elapsed));
+            await page.waitForTimeout(Math.max(0, target - elapsed));
+          }
           if (row.state === 'action-dismissed') {
             await click('snack-bar-dismiss');
             if (mode === 'reference') await page.locator('.mat-mdc-snack-bar-container').waitFor({ state: 'detached' });
@@ -78,7 +89,9 @@ try {
           const observation = await page.evaluate(mode => {
             const selector = mode === 'reference' ? '.mat-mdc-snack-bar-container' : '[data-astylar-id="snack-bar-surface"]';
             const nodes = [...document.querySelectorAll(selector)];
-            return { now: performance.now(), popupCount: nodes.length, text: nodes[0]?.textContent ?? null,
+            const now = performance.now();
+            return { now, elapsedSinceFirstClickMs: window.__lifetimeClicks.length ? now - window.__lifetimeClicks[0].now : null,
+              popupCount: nodes.length, text: nodes[0]?.textContent ?? null,
               clicks: window.__lifetimeClicks, events: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events() : null };
           }, mode);
           const tree = mode === 'reference' ? await page.evaluate(captureBrowserInputTree, { styleProperties: properties })
@@ -94,5 +107,8 @@ try {
     results.push(...rows); console.log(JSON.stringify({ profile: context.profile, boundaries: rows.map(r => ({ state: r.state, reference: r.reference.observation.popupCount, astylar: r.astylar.observation.popupCount })) }));
   }
   writeFileSync(`${evidence.directory}/latest-report.json`, JSON.stringify({ schemaVersion: 1, browser: browser.version(), generatedAt: new Date().toISOString(), capture: evidence.capture, results,
-    scope: 'Two ordinary snackbar contexts, real-click lifetime overlap and UNDO; runtime provenance replacement, not precise fade, full paint, resource or equal-input acceptance', inputEquivalent: false, renderingEquivalent: false }, null, 2) + '\n', { flag: 'wx' });
+    mode: singleOpen ? 'single-open' : 'reopen-undo',
+    scope: singleOpen
+      ? 'Supplementary ordinary single-open light 1440x1000 DPR1 sequence; requested 4000/6000ms click-relative samples retain actual elapsed times. Not original benchmark reconstruction, timer-start instrumentation, precise fade, current-package or equal-input acceptance.'
+      : 'Two ordinary snackbar contexts, real-click lifetime overlap and UNDO; runtime provenance replacement, not precise fade, full paint, resource or equal-input acceptance', inputEquivalent: false, renderingEquivalent: false }, null, 2) + '\n', { flag: 'wx' });
 } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }

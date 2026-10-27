@@ -72,6 +72,39 @@ test('original snackbar auto-dismiss comparator does not witness the timed trans
   // prior visibility, timer origin, elapsed runtime, or the cause of dismissal.
 });
 
+test('supplementary single-open snackbar is present before expiry and absent afterwards', () => {
+  const file = 'artifacts/material-parity/snackbar-single-open-20261027/latest-report.json';
+  const bytes = readFileSync(file);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    '1cc0846c8d56c58312bd47ede2c8c2c8ef1774682466b2b7f625d13682fbf804');
+  const report = JSON.parse(bytes), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.deepEqual(validateSupplementalCapture(report, { reportFile: file,
+    expectedProvenance: manifest.provenance, script: 'scripts/audit-material-snackbar-lifetime.mjs',
+    styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+  assert.equal(report.mode, 'single-open');
+  assert.deepEqual(report.results.map(r => r.state), ['closed', 'first-open', 'before-expiry', 'expired']);
+  for (const row of report.results) {
+    assert.equal(row.profile, 'light');
+    assert.deepEqual(row.viewport, { width: 1440, height: 1000, deviceScaleFactor: 1 });
+  }
+  for (const side of ['reference', 'astylar']) {
+    const observations = report.results.map(r => r[side].observation);
+    assert.deepEqual(observations.map(o => o.popupCount), [0, 1, 1, 0]);
+    assert.deepEqual(observations.map(o => o.clicks.length), [0, 1, 1, 1]);
+    assert.equal(observations[1].clicks[0].trusted, true);
+    assert.equal(observations[0].elapsedSinceFirstClickMs, null);
+    assert.ok(observations[1].elapsedSinceFirstClickMs > 0 && observations[1].elapsedSinceFirstClickMs < 4000);
+    assert.ok(observations[2].elapsedSinceFirstClickMs >= 4000 && observations[2].elapsedSinceFirstClickMs < 5000);
+    assert.ok(observations[3].elapsedSinceFirstClickMs >= 6000);
+    for (const row of report.results) {
+      const png = PNG.sync.read(readFileSync(row[side].screenshot.file));
+      assert.equal(png.width, 1440); assert.equal(png.height, 1000);
+      assert.deepEqual(row[side].runtime.errors, []);
+    }
+  }
+  assert.equal(report.inputEquivalent, false); assert.equal(report.renderingEquivalent, false);
+});
+
 test('ordinary snackbar opens in bounds but loses paint behind the short-surface camera', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const file = 'artifacts/material-parity/snackbar-boundary-e331e79/latest-report.json';
