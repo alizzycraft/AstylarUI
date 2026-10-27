@@ -4,6 +4,24 @@
 
 ### Current next action and publication status
 
+October27 Stepper structural-input question answered from retained evidence:
+complete node accounting did not establish equivalence of the omitted label
+wrappers. All68 cases have136 outer mat-step-label wrappers with min-width50px
+and136 inner mat-step-text-label wrappers with min-width0px;both request block,
+hidden x/y overflow,nowrap and ellipsis. Candidate136 labels are direct tab
+children with inline/nowrap and absent overflow/minWidth/textOverflow inputs.
+Absent properties are not asserted computed defaults. New focused proof
+tests/material-parity/stepper-label-wrapper-inputs.spec.mjs authenticates every
+paired tree via accepted3252368b/indexff2b1a1d and passes1/1 with272 rejecting
+controls (node --max-old-space-size=2048 --test FILE). First divergence is
+application/plugin authoring:omitted wrapper constraints,not proven core clipping.
+git show2f440115:examples/material-showcase/src/app/astylar.component.ts confirms
+the initial direct step-text children and same omitted constraints;git log -S
+on the step-text selector identifies initial2f440115 and later1f2f2aad/8870fc51.
+No long-label output,anonymous-box,current-rendering or whole-case claim follows.
+Queue this structural finding with the Stepper leave evidence for coherent
+registration;no fixtures,renderer,canonical payload or accepted pointer changed.
+
 October27 Stepper leave join is verified but NOT canonical:review
 863d24f5c259f5ae2cca0ffd9356dd9e16ff8d340aad850bd96ef488e71cca92
 adds supplementaryLeaveSelection to exactly eight authoredActivation obligations,
