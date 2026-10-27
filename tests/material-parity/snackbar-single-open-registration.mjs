@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
+import { createDatepickerHistoricalRead, restoreDatepickerOpeningRegistry } from './datepicker-opening-registration.mjs';
 import { createStepperBatchReviewReader } from './stepper-batch-registration.mjs';
 import { joinSnackbarSingleOpen } from '../../scripts/join-material-snackbar-single-open.mjs';
 
@@ -118,6 +119,7 @@ export function restoreSnackbarSharedSource(bytes, file) {
   assert.equal(hash(source), entry.prior); return source;
 }
 export function restoreSnackbarRegistrationIfPresent(bytes, kind) {
+  if (kind === 'producer' && bytes.toString().includes('"tests/material-parity/datepicker-opening-registration.mjs",')) bytes = restoreDatepickerOpeningRegistry(bytes);
   const source = normalize(bytes);
   if (kind === 'policy') return source;
   const marker = { producer: '"tests/material-parity/snackbar-single-open-registration.mjs",',
@@ -140,6 +142,7 @@ export const snackbarHistoricalSources = Object.freeze([
 // Historical evidence only: never substitute these bytes for current rendering.
 // Both endpoints are authenticated; unknown live edits fail closed.
 export function createSnackbarHistoricalRead({ root, read }) {
+  read = createDatepickerHistoricalRead({ root, read });
   const entries = new Map(snackbarHistoricalSources.map(row => [path.resolve(root, row[0]), row]));
   const registries = new Map(Object.entries({
     'tests/material-parity/input-equivalence-audit.mjs': 'producer',

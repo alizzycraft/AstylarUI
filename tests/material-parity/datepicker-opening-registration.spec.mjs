@@ -12,6 +12,7 @@ test('datepicker registry preparation preserves every predecessor entry and reje
   const bytes = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
   const prior = restoreDatepickerOpeningRegistry(bytes);
   const next = prepareDatepickerOpeningRegistry(prior);
+  assert.equal(bytes.toString().replaceAll('\r\n', '\n'), next, 'Live registry must equal the verified preparation');
   assert.equal(restoreDatepickerOpeningRegistry(next), prior);
   const entries = source => {
     const ast = ts.createSourceFile('audit.mjs', source, 99, true);

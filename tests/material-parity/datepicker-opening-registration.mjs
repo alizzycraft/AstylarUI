@@ -52,15 +52,28 @@ export function restoreDatepickerOpeningRegistry(bytes) {
 export const datepickerHistoricalSources = Object.freeze([
   ['tests/material-parity/input-equivalence-policy.mjs', 'a38dc20ab17b392fcd1eeac4e8ff693859c3dbfaf4395ae0e0a782326bd72a6c', '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f'],
   ['tests/material-parity/original-material-runner-source.spec.mjs', 'd362fd02e63c5a135d7688377281eb4ef88505cd13f7cd5ff34c629cbff7260e', '528806a405fa93abde36314484aa3287c2174660b019ab7b8d64cece6348f398'],
+  ['tests/material-parity/snackbar-single-open-registration.mjs', '0820b53f0ba80015faa853953ec824ed5f3fa480d8edd9404dce674d2e7c7d9a', '854992b5da3ca4d16a7f230d203aac5aaee1db2a3754150cc9c7a9a2213ba668'],
+  ['tests/material-parity/snackbar-single-open-registration.spec.mjs', '45a8e79222589ef10b1b309704229a9ef5fc6e20e70f2c1869ffbfefe2ee288a', '1fd52788e1e36bb7c2b476529952d262f7c60da7bc8a5a0061432e80291f1817'],
 ].map(row => Object.freeze(row)));
 export function createDatepickerHistoricalRead({ root, read }) {
   const entries = new Map(datepickerHistoricalSources.map(row => [path.resolve(root, row[0]), row]));
   const recovered = new Map();
   return (name, options) => {
+    if (path.resolve(root, name) === path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs')) {
+      const input = read(name);
+      if (!input.toString().includes('"tests/material-parity/datepicker-opening-registration.mjs",')) return read(name, options);
+      const bytes = Buffer.from(restoreDatepickerOpeningRegistry(input));
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? bytes.toString(encoding) : bytes;
+    }
     const entry = entries.get(path.resolve(root, name));
     if (!entry) return read(name, options);
     const [file, previous, current] = entry;
     const source = normalize(read(name));
+    // Earlier nested policy generations remain the earlier reader's job. Do
+    // not reinterpret them as this transition or overwrite them with a newer one.
+    if (file.endsWith('/input-equivalence-policy.mjs') && hash(source) !== previous &&
+      !source.includes('fixture-datepicker-opening-focus-transfer-omitted')) return read(name, options);
     assert.ok([previous, current].includes(hash(source)), `Unrecognized datepicker source: ${file}`);
     if (!recovered.has(file)) {
       const old = normalize(execFileSync('git', ['show', `83b9ad89:${file}`], { cwd: root, maxBuffer: 8_000_000 }));

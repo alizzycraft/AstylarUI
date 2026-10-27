@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync as readActualFileSync } from 'node:fs';
+import { createDatepickerHistoricalRead } from './datepicker-opening-registration.mjs';
+const readFileSync = createDatepickerHistoricalRead({ root: process.cwd(), read: readActualFileSync });
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import ts from 'typescript';

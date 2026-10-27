@@ -4,6 +4,22 @@
 
 ### Current next action and publication status
 
+October27 datepicker source/proof/plan registration is now live1113/443/72,
+with205 source-finding definitions. The exact prepared producer was installed;
+all1106/436/71 predecessors remain unchanged. The existing snackbar reader now
+reverses this successor registry before its own historical transition;four
+changed source endpoints (policy,original-runner proof,snackbar reader/spec) are
+authenticated before historical substitution. Earlier policy generations without
+this finding are passed through to their existing validators,not overwritten
+with this newer predecessor or declared verified by the datepicker adapter.
+This distinction corrected the initially failing nested Stepper compatibility
+check. All seven datepicker/snackbar/Stepper registration checks now pass
+(3719.3959ms);the added live-equals-preparation assertion passes in the two-test
+datepicker rerun(1337.7719ms). No fixture/renderer changes or new captures.
+Next select the17-case joined review through the existing exporter/reader path
+and verify complete source applicability before canonical export. Acceptedf16b,
+its case dispositions,and final acceptance gates remain unchanged.
+
 October27 datepicker registration preflight is implemented in the existing
 prepare/restore pattern,not yet applied to the producer. It adds seven sources,
 seven focused proofs and one root-cause implementation track,conserving all1106
