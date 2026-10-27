@@ -38,6 +38,43 @@ test('retained tooltip touch release timing excludes capture-delay expiry, not u
     r => { r.find(e => e.action === 'long-release').reference.samples[0].shown = true; },
   ]) { const altered = structuredClone(report.results); mutate(altered); assert.throws(() => inspect(altered)); }
 });
+test('captured native tooltip touch exits request delayed hide while body interaction can hide immediately', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+  const checkpointBytes = readFileSync('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json');
+  assert.equal(sha(checkpointBytes), '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352');
+  const checkpoint = JSON.parse(checkpointBytes);
+  const root = 'examples/material-showcase/.audit-historical-build-1275fa1d/dist/authenticated-replay/browser/';
+  for (const file of ['chunk-7SL66K3U.js', 'chunk-7SL66K3U.js.map']) {
+    assert.equal(sha(readFileSync(root + file)), checkpoint.provenance.browserFiles.find(row => row.file === file).sha256);
+  }
+  const map = JSON.parse(readFileSync(root + 'chunk-7SL66K3U.js.map'));
+  const source = map.sourcesContent[map.sources.indexOf('node_modules/@angular/material/fesm2022/module-CWxMD37a.mjs')];
+  assert.equal(sha(source), 'ec40d42a49f6c3b660cd08110c263f99e91481f6edaf2c37e1330832a76fd409');
+  const ts = await import('typescript');
+  const ast = ts.createSourceFile('captured.mjs', source, ts.ScriptTarget.Latest, true);
+  const method = name => {
+    const matches = [];
+    const visit = node => { if (ts.isMethodDeclaration(node) && node.name.getText(ast) === name) matches.push(node); ts.forEachChild(node, visit); };
+    visit(ast); assert.equal(matches.length, 1);
+    return new Function(matches[0].body.getText(ast).slice(1, -1));
+  };
+  const hides = [], installed = [];
+  const host = { _platform: { ANDROID: true, IOS: false }, touchGestures: 'auto',
+    _defaultOptions: { touchendHideDelay: 1500 }, _passiveListeners: [],
+    _platformSupportsMouseEvents: method('_platformSupportsMouseEvents'),
+    _disableNativeGesturesIfNecessary() {}, _addListeners(rows) { installed.push(...rows); },
+    hide(delay) { hides.push(delay); } };
+  method('_setupPointerExitEventsIfNeeded').call(host);
+  assert.deepEqual(installed.map(([type]) => type), ['touchend', 'touchcancel']);
+  for (const [, callback] of installed) callback();
+  assert.deepEqual(hides, [1500, 1500]);
+  method('_handleBodyInteraction').call({ _closeOnInteraction: true, hide: delay => hides.push(delay) });
+  assert.deepEqual(hides, [1500, 1500, 0]);
+  // Conditional source execution, not a claim that body interaction caused the
+  // retained runtime hide: the original trace omitted that event/caller.
+});
 const source = commit => execFileSync('git', ['show', `${commit}:${file}`], { encoding: 'utf8' });
 const rule = (text, selector) => {
   const matches = text.split(/\r?\n/).filter(line => line.includes(`selector: '${selector}'`));

@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October27 native touch-exit source trace narrows,not resolves,the early-hide cause.
+Checkpoint7ae2cba1 authenticates complete chunk-7SL66K3U.js and its source map;
+mapped Material module-CWxMD37a.mjs authenticates as
+ec40d42a49f6c3b660cd08110c263f99e91481f6edaf2c37e1330832a76fd409.
+Executing its actual AST-extracted exit-registration methods with ANDROID=true,
+IOS=false,touchGestures=auto and supplied default touchendHideDelay1500 installs
+only touchend/touchcancel;each requests1500. It does not install a pointerleave
+handler. Actual body-interaction method with closeOnInteraction=true requests0.
+Thus the retained pointerleave event is not by itself evidence of this directive
+directly hiding;body/focus/other paths remain unobserved. Conditional method replay
+does not prove the captured runtime option values or which callback actually ran.
+The same existing tooltip-position-history suite passes3/3,0skip,exit0
+(772.8857ms),including original compensation history and retained timing proof.
+No browser capture,production change,case promotion or canonical export.
+Both additive touch tests remain pending source/proof reconciliation as one batch.
+The decisive missing observation is the native hide caller/delay with focus and
+click events at touch release;do not repeat endpoint timings or infer that caller
+from this source replay. Source/provenance files and original failures are retained.
+
 October27 tooltip touch timing narrows the retained early-hide uncertainty.
 Authenticated report7949f5618b27fd71f0523db844428ecc8f3c9b52e9bf7414e23e0712eeb40332
 and unchanged producer50628b4edf89d4fb33c9b0bc810f806a8a4e1ed72a378048bd5adaec9c162bb3
