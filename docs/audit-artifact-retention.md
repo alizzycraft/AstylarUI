@@ -1,5 +1,16 @@
 # Audit artifact retention
 
+Temporal milestone f16b51d2/index52342f02 passed conservation,independent cold and
+verified isolated/accepted imports. Keep slider-temporal-independent-cold-20261027,
+slider-temporal-candidate-section-digests-20261027,
+slider-temporal-candidate-metadata-extract-20261027,
+slider-temporal-candidate-receipt-leaves-20261027,
+slider-temporal-control-receipts-20261027 and candidate/accepted-import logs with
+their stderr siblings where present. Isolated/accepted stores share86 immutable
+files by verified hard links;pathname sizes are not duplicate physical storage.
+Retain predecessorb7fb,its backup and original/failure evidence. No deletion was
+performed or authorized by accepting this evidence snapshot.
+
 Retain the failed slider-temporal-canonical-export-20261027 stdout/stderr.
 Session64598 terminated with exportExit=1 at the direct held-content historical
 source check;all canonical files still match the pre-export backup. A corrected

@@ -4,6 +4,78 @@
 
 ### Current next action and publication status
 
+Temporal evidence milestone is accepted locally as generation
+f16b51d247b97cbeeb87b3ecde6ca0175f2b1f654e29a74c83e1e5516c5a10e0,
+index52342f029cf75aba64f9d5da25d9ce8e1b077615d8fdfe530366f880c0b7ca4e.
+Export,complete conservation and independent zero-disk-hit cold replay pass.
+Isolated import4410 and accepted import36509 both finished exit0. All84 shards,
+payload and index verify before accepted pointer advancement and afterward.
+Isolated/accepted stores share86 immutable hard-linked files;no evidence deleted.
+Logs:slider-temporal-candidate-import-20261027 and
+slider-temporal-accepted-import-20261027 stdout/stderr under artifacts/material-parity.
+Counts remain8483 discrepancies,204 findings,39904 controls,389202 occurrences,
+zero unresolved scalar attributions;inventory1106 sources/436 proofs. All2311
+cases remain partial/current-rendering unverified. Next commit/push this verified
+milestone,then resume exact-case inspection;do not repeat these integration gates
+for prose. Earlier pending-state paragraphs below describe historical checkpoints.
+
+Independent cold replay73090 completed coldExit=0 in3626807.2073ms. Its evidence
+session reports diskHits0,invalidated0,19899 files and3446893779 verification
+bytes;canonical comparison passes. Logs:slider-temporal-independent-cold-20261027
+stdout/stderr under artifacts/material-parity. Do not restart completed73090.
+Conservation is complete as detailed below. Isolated import/verification is now
+running into slider-temporal-candidate-store-20261027 with
+slider-temporal-candidate-import-20261027 stdout/stderr logs. Acceptedb7fb stays
+unchanged until complete-store verification and accepted import succeed;commit
+and publication follow. This is evidence integration,not rendering acceptance.
+
+Corrected temporal export session54607 completed exportExit=0 against published
+e8c0add9,with the same1106-source/436-proof inventory and --snackbar-single-open.
+Logs:artifacts/material-parity/slider-temporal-restoration-corrected-export-20261027.log
+and .stderr.log. It verified19899 files/3446893779 bytes (diskHits1),then completed
+at3446667.476ms. Candidate compressed SHA256 is
+f16b51d247b97cbeeb87b3ecde6ca0175f2b1f654e29a74c83e1e5516c5a10e0;
+decoded SHA256 eab584e053389ab1292c809620c947661a8a713b6b36ddad2286d2f320ed8693.
+Do not poll completed54607. Section receipt55140 and selected metadata33713 both
+finished exit0. Their slider-temporal-candidate-section-digests and
+-metadata-extract-20261027 logs authenticate the candidate. All80 section names
+are preserved;73 section digests,including coverage,are unchanged. Seven changed
+sections are sourceFingerprints,focusedProofs,controlLineBoxes,discrepancies,
+ownerCaretInputs,reviewedSourceBatchInputs and controlTypography. All1104 prior
+source paths and432 prior proof non-line records are retained;two source paths
+and four proofs are added. Six prior source hashes change. All1106 candidate
+source fingerprints match the current files under the producer's CRLF policy.
+Complete changed-receipt leaf comparison39831 finished leavesExit=0 with the
+existing helper;log slider-temporal-candidate-receipt-leaves-20261027.log. It
+preserves14085648 entry paths/kinds across all five selected sections and reports
+147 changed values:98 direct producer receipts,48 dependent control-proof hashes
+and one derived motion-report hash. Independent recomputation of the48 control
+hashes completed in46150 with controlsExit=0 against acceptedb7fb using existing
+queryFindings/loadFindingEvidence;logs slider-temporal-control-receipts-20261027
+stdout/stderr. All48 old/new complete-row hashes independently match. Together
+with the motion-report reconstruction,all147 changed leaves are accounted for.
+Do not restart completed39831 or46150. No observed value or case status changes.
+Independent cold check
+runs in73090,ASTYLAR_AUDIT_COLD=1,with --snackbar-single-open --check and fresh
+slider-temporal-independent-cold-20261027 stdout/stderr logs. Sources stay frozen
+at e8c0add9. Neither running check is accepted on launch or progress alone.
+Acceptedb7fb remains unchanged pending conservation,independent cold and imports.
+
+Candidate Markdown conservation passes:removing exactly four added proof entries
+and reversing18 proof-line shifts restores the complete accepted Markdown byte
+for byte. Current Markdown SHA256 is
+e4c380ade4aebfe7c372992f2849230c027bd4280cfd9bee63107a14e8f2ad6d.
+Selected reviewedSourceBatchInputs has exactly two changed leaves:the producer
+source receipt and its dependent currentReportSha256. Reconstructing the retained
+motion report with its declared sourceReceiptTransitions independently reproduces
+prior91590f601cc2595b949e0278c189a54e6ebd6292652320eb18d1b7451f9c762d
+and candidate918531943999b450a9d7ab713565bcfe4f8f0b4e183e99bcdf8212177a043965.
+The fourth unchanged source authenticates directly. An initial lookup assumed
+all four report sources belonged to the top-level source inventory and rejected
+that missing membership;the corrected check uses the report's explicit receipts,
+not a relaxed assertion. Complete leaf comparison and independent cold remain
+pending;these bounded checks do not accept the candidate or close any case.
+
 October27 temporal export session64598 finished with exportExit=1 before any
 canonical publication. The direct held-content collector passed the current
 sort-focus suite to restoreScrollbarSupplementSuite without the newer temporal
