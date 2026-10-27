@@ -13,6 +13,29 @@ function loadOriginal() {
   assert.equal(hash(bytes), 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
   return bytes;
 }
+test('datepicker opening coverage join preserves all parent obligations and rejects corrupt evidence', async () => {
+  const { joinDatepickerOpening, restoreDatepickerOpening, datepickerOpeningPredecessor } =
+    await import('../../scripts/join-material-datepicker-opening.mjs');
+  const bytes = readFileSync('artifacts/material-parity/working-audit/f16b51d247b97cbeeb87b3ecde6ca0175f2b1f654e29a74c83e1e5516c5a10e0/index.json');
+  assert.equal(hash(bytes), '52342f029cf75aba64f9d5da25d9ce8e1b077615d8fdfe530366f880c0b7ca4e');
+  const e = JSON.parse(bytes).metadata.coverage.inspectionEvidence;
+  // Existing store's assertCaseObligationCoverage reconstruction, not a new
+  // review schema or a re-run of the historical dependency/reader chain.
+  const parent = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',
+    ...(e.schemaVersion === 2 ? { inspectionSchemaVersion: 2 } : {}), scope: e.scope, groups: e.cases };
+  assert.equal(hash(JSON.stringify(parent)), datepickerOpeningPredecessor);
+  const joined = joinDatepickerOpening(parent);
+  assert.equal(joined.cases, 17);
+  assert.equal(joined.review.groups.length, 2311);
+  assert.deepEqual(restoreDatepickerOpening(joined.review), parent);
+  assert.deepEqual(joined.review.groups.map(g => [g.case, g.inspection, g.currentRendering]),
+    parent.groups.map(g => [g.case, g.inspection, g.currentRendering]));
+  assert.equal(joined.review.groups.filter(g => g.obligations.authoredActivation.supplementaryDatepickerOpening).length, 17);
+  assert.throws(() => joinDatepickerOpening(parent, file => file.endsWith('/latest-report.json') ? Buffer.from('{}') : readFileSync(file)));
+  assert.throws(() => joinDatepickerOpening(parent, file => file.endsWith('.png') ? Buffer.from('corrupt') : readFileSync(file)));
+  assert.equal(hash(JSON.stringify(parent)), datepickerOpeningPredecessor);
+});
+
 test('datepicker opening finding preserves all predecessors and binds the exact current branch', async () => {
   const { execFileSync } = await import('node:child_process');
   const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');

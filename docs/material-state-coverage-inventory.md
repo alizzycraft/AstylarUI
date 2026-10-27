@@ -4,6 +4,26 @@
 
 ### Current next action and publication status
 
+October27 datepicker opening join is implemented and verified,not yet selected
+by the canonical exporter. join-material-datepicker-opening.mjs authenticates
+the17 exact maintained case keys,report/checkpoint,34 trees/34 PNGs,trusted event
+order,candidate logical routing/open state and divergent final focus owners.
+It adds supplementaryDatepickerOpening only under the17 authoredActivation
+obligations;their dispositions become partial,not complete. Removing those
+children recovers the exact predecessor review bcc94f3d. All2311 whole-case
+inspection/currentRendering states and every other parent obligation survive.
+Corrupt report/PNG controls reject. Owning suite8/8 passes,0skip,exit0(13890.4299ms).
+
+The predecessor can be reconstructed directly from acceptedf16b index52342f02
+using the existing assertCaseObligationCoverage object shape; its complete hash
+equals bcc94f3d. This avoids replaying the whole historical-reader chain merely
+to obtain an already authenticated review object. Exploratory reader session72051
+was explicitly stopped after this cheaper route was identified; it was not called
+a completed validation. No new capture/proposal data files or accepted-pointer
+mutation. Next register sources/proofs and reconcile historical reader applicability
+for this additive policy/spec change before selecting/exporting the join. Accepted
+coverage still reflectsf16b until the coherent integration gates pass.
+
 October27 opening-focus classification is now explicit as
 fixture-datepicker-opening-focus-transfer-omitted in sourceAuditDefinitions.
 The additive finding preserves all204 predecessor definitions exactly (205 total),
