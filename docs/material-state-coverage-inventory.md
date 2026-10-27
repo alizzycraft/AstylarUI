@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October27 shared historical entry reconciliation is implemented in
+chips-alternate-registration.mjs: direct restoration first reverses the exact
+Stepper policy/producer/selection delta; prior readers also restore the complete
+shared helper to SHA6db59f93c845b8c419340a982a34555a8c50e7dc928d5419137d288e6822c420.
+Direct FocusSelection entry calls now accept all four staged Stepper sources
+and recover byte-identical historical outputs. Nested reads, complete shared
+source recovery and drift rejection are tested in the existing Stepper suite.
+Initial combined Stepper/Chips/absolute-margin/public-email run passed13/14:
+the new shared-source preparation anchor also matched quoted import text.
+Line-boundary anchoring fixes that staging defect; rerunning the affected
+Stepper/Chips suites passes4/4. The earlier ten absolute-margin/public-email
+checks passed and were not repeated for this anchor-only correction. Commands:
+node --test tests/material-parity/{stepper-batch-registration,chips-alternate-registration,absolute-margin-top-evidence,public-email-selection}.spec.mjs
+(four explicit paths, not shell brace expansion), then the first two paths.
+Live registry/runner/launcher remain unchanged. Next install the prepared batch,
+adapt its existing staging assertions to authenticated predecessor reads, and
+validate installed reader/source applicability before canonical publication.
+No full reader rerun, browser capture, renderer/fixture edit or acceptance change.
+
 October27 staged Stepper selection now passes2/2 in the existing
 stepper-batch-registration.spec.mjs suite. Complete launcher execution through
 filesystem/process seams preserves all25 older/default choices, selects exact

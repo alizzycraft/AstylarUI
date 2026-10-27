@@ -46,6 +46,25 @@ const additions = {
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const normalize = bytes => bytes.toString().replaceAll('\r\n', '\n');
 const once = (source, before, after) => { assert.equal(source.split(before).length, 2); return source.replace(before, after); };
+const sharedFile = 'tests/material-parity/chips-alternate-registration.mjs';
+const sharedPrior = '6db59f93c845b8c419340a982a34555a8c50e7dc928d5419137d288e6822c420';
+const sharedChanges = [
+  ["import path from 'node:path';", "import path from 'node:path';\nimport {createStepperBatchPriorRead,restoreStepperBatchRegistryIfPresent} from './stepper-batch-registration.mjs';"],
+  ['export function restoreChipsAlternateRegistrationIfPresent(bytes, kind) {', 'export function restoreChipsAlternateRegistrationIfPresent(bytes, kind) {\n  bytes = restoreStepperBatchRegistryIfPresent(bytes, kind);'],
+  ['export function createChipsAlternatePriorRead({root, read}) {', 'export function createChipsAlternatePriorRead({root, read}) {\n  read = createStepperBatchPriorRead({root, read});'],
+];
+export function prepareStepperBatchSharedSource(bytes) {
+  let source = normalize(bytes); assert.equal(hash(source), sharedPrior);
+  for (const [before, after] of sharedChanges) source = once(source, '\n' + before, '\n' + after);
+  return source;
+}
+export function restoreStepperBatchSharedSource(bytes) {
+  let source = normalize(bytes);
+  if (!source.includes("from './stepper-batch-registration.mjs';")) return source;
+  for (const [before, after] of sharedChanges.toReversed()) source = once(source, '\n' + after, '\n' + before);
+  assert.equal(hash(source), sharedPrior, 'Complete pre-Stepper shared entry must recover');
+  return source;
+}
 const selectionChanges = {
   runner: [
     ["import { createChipsAlternateReviewReader } from './join-material-chips-alternate.mjs';", "import { createChipsAlternateReviewReader } from './join-material-chips-alternate.mjs';\nimport { stepperBatchReview, createStepperBatchReviewReader } from '../tests/material-parity/stepper-batch-registration.mjs';"],
@@ -101,8 +120,9 @@ export function createStepperBatchPriorRead({ root, read }) {
   }).map(([file, kind]) => [path.resolve(root, file), kind]));
   return (name, options) => {
     const kind = files.get(path.resolve(root, name));
-    if (!kind) return read(name, options);
-    const source = restoreStepperBatchRegistryIfPresent(read(name), kind);
+    const shared = path.resolve(root, name) === path.resolve(root, sharedFile);
+    if (!kind && !shared) return read(name, options);
+    const source = shared ? restoreStepperBatchSharedSource(read(name)) : restoreStepperBatchRegistryIfPresent(read(name), kind);
     const encoding = typeof options === 'string' ? options : options?.encoding;
     return encoding ? Buffer.from(source).toString(encoding) : Buffer.from(source);
   };

@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import {createStepperBatchPriorRead,restoreStepperBatchRegistryIfPresent} from './stepper-batch-registration.mjs';
 
 export const chipsAlternateReview = 'e17dff3342e922de9febdd85402b433deb5872091f36cbb709d38de2327d6431';
 const prior = {
@@ -62,6 +63,7 @@ export function restoreChipsAlternateRegistration(bytes, kind) {
   return source;
 }
 export function restoreChipsAlternateRegistrationIfPresent(bytes, kind) {
+  bytes = restoreStepperBatchRegistryIfPresent(bytes, kind);
   const source = normalize(bytes);
   const marker = { producer: '    "tests/material-parity/chips-alternate-registration.mjs",\n',
     runner: '    const chipsAlternateReaderFactory = ', launcher: "const chipsAlternate = rawRequested.includes('--chips-alternate');" }[kind];
@@ -123,6 +125,7 @@ export function restoreChipsAlternateSharedSourceIfPresent(bytes, file) {
   return source;
 }
 export function createChipsAlternatePriorRead({root, read}) {
+  read = createStepperBatchPriorRead({root, read});
   const kinds = new Map(Object.entries({ 'tests/material-parity/input-equivalence-audit.mjs': 'producer',
     'scripts/run-material-input-audit.mjs': 'runner', 'scripts/export-material-input-audit-current-ancestry.mjs': 'launcher' })
     .map(([file, kind]) => [path.resolve(root, file), kind]));

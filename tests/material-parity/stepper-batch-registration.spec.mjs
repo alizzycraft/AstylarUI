@@ -8,6 +8,7 @@ import ts from 'typescript';
 import { restoreFocusSelectionAuditRegistry, restoreFocusSelectionAuditSelection } from './public-tab-selection-finding.mjs';
 import { prepareStepperBatchRegistry as prepare, restoreStepperBatchRegistry as restore,
   stepperBatchSources, stepperBatchProofs, createStepperBatchPriorRead,
+  prepareStepperBatchSharedSource, restoreStepperBatchSharedSource,
   prepareStepperBatchSelection, restoreStepperBatchSelection, stepperBatchReview } from './stepper-batch-registration.mjs';
 
 test('staged Stepper batch preserves complete source proof finding and plan inventories', () => {
@@ -28,6 +29,7 @@ test('staged Stepper batch preserves complete source proof finding and plan inve
   for (const [kind, file] of Object.entries({ policy: 'tests/material-parity/input-equivalence-policy.mjs', producer: 'tests/material-parity/input-equivalence-audit.mjs' })) {
     const bytes = readFileSync(file), source = bytes.toString().replaceAll('\r\n', '\n'), staged = prepare(bytes, kind);
     assert.equal(restore(staged, kind), source);
+    assert.equal(restoreFocusSelectionAuditRegistry(staged, kind), restoreFocusSelectionAuditRegistry(source, kind), 'Direct historical entry must reverse the staged registry');
     const stagedRead = (name, options) => {
       if (path.resolve(name) !== path.resolve(file)) return readFileSync(name, options);
       const encoding = typeof options === 'string' ? options : options?.encoding;
@@ -63,6 +65,15 @@ test('staged Stepper batch preserves complete source proof finding and plan inve
     }
     assert.deepEqual(readFileSync(file), bytes, 'Staging must not write live registries');
   }
+  const sharedFile = 'tests/material-parity/chips-alternate-registration.mjs';
+  const live = readFileSync(sharedFile, 'utf8').replaceAll('\r\n', '\n');
+  const previous = restoreStepperBatchSharedSource(live);
+  assert.equal(prepareStepperBatchSharedSource(previous), live);
+  assert.throws(() => restoreStepperBatchSharedSource(live + '\n// drift'));
+  assert.throws(() => prepareStepperBatchSharedSource(previous + '\n// drift'));
+  const priorRead = createStepperBatchPriorRead({ root: process.cwd(), read: readFileSync });
+  const nestedRead = createStepperBatchPriorRead({ root: process.cwd(), read: priorRead });
+  for (const read of [priorRead, nestedRead]) assert.equal(read(sharedFile, 'utf8'), previous);
 });
 
 test('staged Stepper selection preserves every older choice and rejects mixed supplements', () => {
@@ -72,6 +83,7 @@ test('staged Stepper selection preserves every older choice and rejects mixed su
     original[kind] = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
     staged[kind] = prepareStepperBatchSelection(original[kind], kind);
     assert.equal(restoreStepperBatchSelection(staged[kind], kind), original[kind]);
+    assert.equal(restoreFocusSelectionAuditSelection(staged[kind], kind), restoreFocusSelectionAuditSelection(original[kind], kind), 'Direct historical entry must reverse the staged selection');
     assert.deepEqual(ts.createSourceFile(file, staged[kind], 99, true, ts.ScriptKind.JS).parseDiagnostics, []);
     assert.throws(() => prepareStepperBatchSelection(original[kind] + '\n// drift', kind));
     assert.throws(() => prepareStepperBatchSelection(staged[kind], kind));
