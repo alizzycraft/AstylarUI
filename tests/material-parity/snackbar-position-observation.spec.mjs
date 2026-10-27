@@ -97,7 +97,9 @@ test('supplementary single-open snackbar is present before expiry and absent aft
     assert.ok(observations[2].elapsedSinceFirstClickMs >= 4000 && observations[2].elapsedSinceFirstClickMs < 5000);
     assert.ok(observations[3].elapsedSinceFirstClickMs >= 6000);
     for (const row of report.results) {
-      const png = PNG.sync.read(readFileSync(row[side].screenshot.file));
+      const screenshot = row[side].screenshot, pixels = readFileSync(screenshot.file);
+      assert.equal(createHash('sha256').update(pixels).digest('hex'), screenshot.sha256);
+      const png = PNG.sync.read(pixels);
       assert.equal(png.width, 1440); assert.equal(png.height, 1000);
       assert.deepEqual(row[side].runtime.errors, []);
     }

@@ -4,6 +4,23 @@
 
 ### Current next action and publication status
 
+October27 producer applicability is reconciled for the old lifetime callback:
+benchmark-config.spec.mjs pins current diagnostic SHAdab25c42 and obtains the
+complete prior producer from81762748,requiring captured SHAca8d9552. Only that
+source path is substituted in validateSupplementalCapture;all other receipts
+read actual files unchanged. Complete original seven-boundary callback passes,
+including28 screenshot hashes,pixel bounds,opening-animation mismatch and negative
+asset mutation. Callback SHAcfb7d4dbfcba0d7a96154cc64e0c76b3bf354941751352a221efba32d140197e.
+Direct filtered suite launch still fails BEFORE that callback:historicalSemanticDefinitions
+reaches retainedStaticSemanticPopulation with204 findings where192 are expected.
+Do not describe bounded callback replay as a passing full benchmark suite or
+change192 to204. Source-definition restoration is a separate remaining batch
+prerequisite. The two current snackbar proofs pass;the new screenshot loop now
+also authenticates all eight PNG hashes,not just dimensions. Combined command
+reported2 passes/1 suite-initialization failure;bounded callback replay exited0.
+No browser recapture or canonical export. Preserve both current and historical
+producer applicability when the pending snackbar proofs enter the next batch.
+
 October27 supplementary single-open lifetime capture completes the next decisive
 observation without rebuilding. Chrome155.0.8059.85 profile/temp files were scoped
 to D: in the capture subprocess;1887 served assets match the existing Stepper

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { readHistoricalBenchmarkSource as readFileSync, historicalSemanticDefinitions, reviewedRootEditingGraph, reviewedRootEditingRunnerReceipt } from './semantic-text-transform-registration.mjs';
+import { readFileSync as readCurrentFileSync } from 'node:fs';
 import test from 'node:test';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -1399,8 +1400,16 @@ test('snackbar lifetime replacement binds real actions and all seven boundaries 
   const file = 'artifacts/material-parity/snackbar-lifetime-bound-current-20261008/latest-report.json';
   const raw = JSON.parse(readFileSync(file));
   const manifest = JSON.parse(readFileSync(raw.capture.checkpointManifest.file));
+  const script = 'scripts/audit-material-snackbar-lifetime.mjs';
+  const current = readCurrentFileSync(script);
+  assert.equal(createHash('sha256').update(current).digest('hex'),
+    'dab25c42bfad778b5d5b5dbd43b56cf87be52cdb255bfd199dfaee6c438c397e');
+  const historical = execFileSync('git', ['show', `81762748:${script}`]);
+  assert.equal(createHash('sha256').update(historical).digest('hex'),
+    'ca8d9552d3dd819b43127a76c9d88fc746c2b2846d663c2312272fd2efc8327b');
   const options = { reportFile: file, expectedProvenance: manifest.provenance,
-    script: 'scripts/audit-material-snackbar-lifetime.mjs', styleProperties: Object.values(propertyGroups).flat() };
+    script, styleProperties: Object.values(propertyGroups).flat(),
+    readBytes: name => path.resolve(name) === path.resolve(script) ? historical : readCurrentFileSync(name) };
   assert.deepEqual(validateSupplementalCapture(raw, options), { status: 'checkpoint-bound', errors: [] });
   const build = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011';
   for (const [name, mapName] of [['astylar.component.ts', 'chunk-JPEJK334.js.map'],
