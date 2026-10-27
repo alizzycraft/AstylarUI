@@ -4,6 +4,33 @@
 
 ### Current next action and publication status
 
+October27 installed snackbar replay completed (session67036,exit0): expected
+reviewbcc94f3d,2311 cases,18527 dependencies,inspectionComplete=false and
+currentRenderingAccepted=false. Do not repeat this completed integration.
+Compact tooltip review confirms matched-host-scroll causality was already
+resolved by retained Material and equal-input public reductions;no recapture or
+new classification is justified for that settled question.
+
+Freeze the installed1104-source/432-proof snackbar batch for its canonical
+milestone. D: had8070291456 bytes free before backup;C:572624896 bytes. Exact
+accepted manifest,gzip andMarkdown copies are hash-verified in
+`artifacts/material-parity/snackbar-pre-export-cd84d26c-20261027`:
+manifest e42791f3bc026d6db231210122e268f8ac1936409b32e156c97f25821434161c,
+gzip cd84d26cacb5f9fbce67938bdadbd418c3d5051ca489e2f8950d2007cce8ac87,
+Markdown3d2ea2206a0011ea150834526f75364ee6200ca1a0c42930d189a9ea3a60988e.
+No evidence or Git files were deleted.
+
+`ASTYLAR_AUDIT_PROGRESS=1 ASTYLAR_AUDIT_COLD=0 node scripts/export-material-input-audit-current-ancestry.mjs --snackbar-single-open`
+is running in session17175,with stdout/stderr retained respectively as
+`artifacts/material-parity/snackbar-canonical-export-20261027.log` and
+`artifacts/material-parity/snackbar-canonical-export-20261027.stderr.log`.
+Poll that handle,not a second export. Accepted store pointer remainscd84d26c;
+candidate output is NOT accepted until conservation,independent cold replay and
+verified imports pass. Original full acceptance gates and all2311 case statuses
+remain unchanged. This milestone publishes the coherent evidence/instrumentation
+batch,not renderer fixes or fresh browser parity.
+
+
 October27 snackbar batch is now installed locally at1104 sources/432 proofs;
 `--snackbar-single-open --dry-run` selects exactbcc94f3d without exporting.
 Shared Stepper entry points strip only the authenticated snackbar registry and
