@@ -4,6 +4,23 @@
 
 ### Current next action and publication status
 
+October27 snackbar timer-origin source review:do not repeat the settled5000ms/
+benchmark-persistence census. Native captured MatSnackBar._animateSnackBar starts
+_dismissAfter only through afterOpened(),which returns container._onEnter.
+onAnimationEnd emits that notification;enter includes disabled-animation and
+200ms fallback paths. Candidate startSnackbarDismissTimerAfterSettled waits a
+zero-delay task and surface.whenSettled before scheduling5000ms. These are distinct
+start signals;equal duration literals do not prove equal visible lifetime.
+Native map67e956a6 and contained snack-bar.mjs418aa2d9 authenticate the trace.
+Whole captured-versus-installed file equality failed because the map contains
+Angular-linked code. Narrow comparison of all tokens in five complete methods
+(afterOpened,_dismissAfter,_animateSnackBar,onAnimationEnd,enter) passes,including
+string/numeric tokens;this is not whole-package equivalence or runtime timing.
+Read-only checks only;no new core defect or acceptance claim. Missing decisive
+evidence is paired opening/settlement/timer-start/expiry timestamps and visible
+boundaries under equivalent inputs. Existing later lifetime samples cannot supply
+that precision. Preserve the separate historical auto-dismiss observation gap.
+
 October27 auto-dismiss retained-boundary follow-up:both exact-case endpoint trees
 authenticate to the original report and contain zero snackbar surfaces. There is
 one resource snapshot,no actionTimeline and no focused raster. Authenticated
