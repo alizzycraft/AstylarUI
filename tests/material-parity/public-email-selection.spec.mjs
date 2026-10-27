@@ -13,7 +13,7 @@ test('Focus selection staged registry preserves every accepted source proof find
   const {prepareFocusSelectionAuditRegistry:prepare,restoreFocusSelectionAuditRegistry:restore,createFocusSelectionAuditPriorRead:priorFactory}=await import('./public-tab-selection-finding.mjs');
   const acceptedRead=priorFactory({root:process.cwd(),read:readFileSync});
   const raw={},staged={};for(const [kind,file]of Object.entries({producer:'tests/material-parity/input-equivalence-audit.mjs',policy:'tests/material-parity/input-equivalence-policy.mjs'})){
-    const rawLive=readFileSync(file,'utf8').replaceAll('\r\n','\n');const live=kind==='producer'?restoreDividerMarginRegistry(rawLive):rawLive;raw[kind]=acceptedRead(file,'utf8');staged[kind]=prepare(raw[kind],kind,readFileSync);
+    const rawLive=readFileSync(file,'utf8').replaceAll('\r\n','\n');const live=kind==='producer'?restoreDividerMarginRegistry(rawLive):restoreChipsAlternateRegistrationIfPresent(rawLive,kind);raw[kind]=acceptedRead(file,'utf8');staged[kind]=prepare(raw[kind],kind,readFileSync);
     assert.equal(restore(staged[kind],kind),raw[kind]);assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),rawLive);if(live!==raw[kind])assert.equal(live,staged[kind]);
     assert.throws(()=>prepare(raw[kind]+'\n// drift',kind,readFileSync));assert.throws(()=>restore(staged[kind]+'\n// drift',kind));assert.throws(()=>prepare(staged[kind],kind,readFileSync));
   }

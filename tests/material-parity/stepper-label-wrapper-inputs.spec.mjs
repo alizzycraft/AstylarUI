@@ -62,12 +62,14 @@ test('68 retained Stepper cases omit native clipped minimum-width label wrappers
 });
 
 test('pending Stepper wrapper finding preserves the complete registry and pins initial authoring', () => {
-  assert.equal(sourceAuditDefinitions.length, 203);
-  assert.equal(hash(JSON.stringify(sourceAuditDefinitions)), '6f0d54b1e201a45dcbeb15d19fc0475c3e899d1bafd4b7c87cfff185bde02573');
-  assert.ok(!sourceAuditDefinitions.some(f => f.id === stepperLabelWrapperFinding.id));
-  const staged = [stepperLabelWrapperFinding, ...sourceAuditDefinitions];
+  assert.equal(sourceAuditDefinitions.length, 204);
+  assert.deepEqual(sourceAuditDefinitions[0], stepperLabelWrapperFinding);
+  const predecessor = sourceAuditDefinitions.slice(1);
+  assert.equal(hash(JSON.stringify(predecessor)), '6f0d54b1e201a45dcbeb15d19fc0475c3e899d1bafd4b7c87cfff185bde02573');
+  assert.ok(!predecessor.some(f => f.id === stepperLabelWrapperFinding.id));
+  const staged = [stepperLabelWrapperFinding, ...predecessor];
   assert.equal(staged.length, 204); assert.equal(new Set(staged.map(f => f.id)).size, 204);
-  assert.deepEqual(staged.slice(1), sourceAuditDefinitions);
+  assert.deepEqual(staged, sourceAuditDefinitions);
   assert.equal(stepperLabelWrapperFinding.classification, 'application-plugin-authoring-defect');
   const file = stepperLabelWrapperFinding.file;
   const original = execFileSync('git', ['show', `2f440115:${file}`], { encoding: 'utf8' });

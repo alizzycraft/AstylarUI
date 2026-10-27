@@ -53,16 +53,38 @@ const sharedChanges = [
   ['export function restoreChipsAlternateRegistrationIfPresent(bytes, kind) {', 'export function restoreChipsAlternateRegistrationIfPresent(bytes, kind) {\n  bytes = restoreStepperBatchRegistryIfPresent(bytes, kind);'],
   ['export function createChipsAlternatePriorRead({root, read}) {', 'export function createChipsAlternatePriorRead({root, read}) {\n  read = createStepperBatchPriorRead({root, read});'],
 ];
-export function prepareStepperBatchSharedSource(bytes) {
-  let source = normalize(bytes); assert.equal(hash(source), sharedPrior);
-  for (const [before, after] of sharedChanges) source = once(source, '\n' + before, '\n' + after);
+const sharedSpecFile = 'tests/material-parity/chips-alternate-registration.spec.mjs';
+const sharedSpecPrior = 'b20c342b0c4eef865113da1dfa0d848d925e49646cae0a08e62b041d7ea2e497';
+const sharedSpecChanges = [
+  ["import ts from 'typescript';", "import ts from 'typescript';\nimport { createStepperBatchPriorRead } from './stepper-batch-registration.mjs';"],
+  ["const read = file => readFileSync(file, 'utf8').replaceAll('\\r\\n', '\\n');", "const read = file => createStepperBatchPriorRead({root:process.cwd(),read:readFileSync})(file, 'utf8').replaceAll('\\r\\n', '\\n');"],
+];
+const sharedEntries = {
+  [sharedFile]: { prior: sharedPrior, changes: sharedChanges },
+  [sharedSpecFile]: { prior: sharedSpecPrior, changes: sharedSpecChanges },
+  'tests/material-parity/public-email-selection.spec.mjs': {
+    prior: '75fe04037daceb6e1f2c8319abac7b2fae6c86929f50f0444ea0cd763688457b',
+    changes: [[
+      "    const rawLive=readFileSync(file,'utf8').replaceAll('\\r\\n','\\n');const live=kind==='producer'?restoreDividerMarginRegistry(rawLive):rawLive;raw[kind]=acceptedRead(file,'utf8');staged[kind]=prepare(raw[kind],kind,readFileSync);",
+      "    const rawLive=readFileSync(file,'utf8').replaceAll('\\r\\n','\\n');const live=kind==='producer'?restoreDividerMarginRegistry(rawLive):restoreChipsAlternateRegistrationIfPresent(rawLive,kind);raw[kind]=acceptedRead(file,'utf8');staged[kind]=prepare(raw[kind],kind,readFileSync);",
+    ]],
+  },
+};
+export const stepperBatchSharedFiles = Object.freeze(Object.keys(sharedEntries));
+export function prepareStepperBatchSharedSource(bytes, file = sharedFile) {
+  assert.ok(Object.hasOwn(sharedEntries, file));
+  const { prior: expected, changes } = sharedEntries[file];
+  let source = normalize(bytes); assert.equal(hash(source), expected);
+  for (const [before, after] of changes) source = once(source, '\n' + before, '\n' + after);
   return source;
 }
-export function restoreStepperBatchSharedSource(bytes) {
+export function restoreStepperBatchSharedSource(bytes, file = sharedFile) {
+  assert.ok(Object.hasOwn(sharedEntries, file));
+  const { prior: expected, changes } = sharedEntries[file];
   let source = normalize(bytes);
-  if (!source.includes("from './stepper-batch-registration.mjs';")) return source;
-  for (const [before, after] of sharedChanges.toReversed()) source = once(source, '\n' + after, '\n' + before);
-  assert.equal(hash(source), sharedPrior, 'Complete pre-Stepper shared entry must recover');
+  if (!source.includes(changes.at(-1)[1])) return source;
+  for (const [before, after] of changes.toReversed()) source = once(source, '\n' + after, '\n' + before);
+  assert.equal(hash(source), expected, 'Complete pre-Stepper shared entry must recover');
   return source;
 }
 const selectionChanges = {
@@ -120,9 +142,9 @@ export function createStepperBatchPriorRead({ root, read }) {
   }).map(([file, kind]) => [path.resolve(root, file), kind]));
   return (name, options) => {
     const kind = files.get(path.resolve(root, name));
-    const shared = path.resolve(root, name) === path.resolve(root, sharedFile);
+    const shared = stepperBatchSharedFiles.find(file => path.resolve(root, name) === path.resolve(root, file));
     if (!kind && !shared) return read(name, options);
-    const source = shared ? restoreStepperBatchSharedSource(read(name)) : restoreStepperBatchRegistryIfPresent(read(name), kind);
+    const source = shared ? restoreStepperBatchSharedSource(read(name), shared) : restoreStepperBatchRegistryIfPresent(read(name), kind);
     const encoding = typeof options === 'string' ? options : options?.encoding;
     return encoding ? Buffer.from(source).toString(encoding) : Buffer.from(source);
   };

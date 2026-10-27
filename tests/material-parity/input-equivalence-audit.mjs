@@ -8922,6 +8922,14 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/audit-material-stepper-leave.mjs",
+    "scripts/join-material-stepper-leave.mjs",
+    "tests/material-parity/stepper-leave-evidence.spec.mjs",
+    "tests/material-parity/stepper-label-wrapper-inputs.spec.mjs",
+    "tests/material-parity/stepper-label-wrapper-finding.mjs",
+    "tests/material-parity/stepper-batch-registration.mjs",
+    "tests/material-parity/stepper-batch-registration.spec.mjs",
+    "artifacts/material-parity/stepper-leave-observed-20261027/latest-report.json",
     "scripts/audit-material-chips-alternate.mjs",
     "scripts/join-material-chips-alternate.mjs",
     "tests/material-parity/chips-alternate-source-boundary.spec.mjs",
@@ -10020,6 +10028,13 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/stepper-leave-evidence.spec.mjs", new RegExp("test\\('Stepper leave capture authenticates actual tab observations without promoting authored endpoints'"), "Stepper leave capture authenticates actual tab observations without promoting authored endpoints", "Retained Stepper wrapper input mismatch and supplementary actual tab transitions; not core clipping, historical hit reconstruction, current-library rendering or case closure."),
+    proof(root, "tests/material-parity/stepper-leave-evidence.spec.mjs", new RegExp("test\\('Stepper evidence rejects missing state, wrong identity, missing leave and forged event trust'"), "Stepper evidence rejects missing state, wrong identity, missing leave and forged event trust", "Retained Stepper wrapper input mismatch and supplementary actual tab transitions; not core clipping, historical hit reconstruction, current-library rendering or case closure."),
+    proof(root, "tests/material-parity/stepper-leave-evidence.spec.mjs", new RegExp("test\\('Stepper join changes only eight activation obligations and restores the accepted predecessor'"), "Stepper join changes only eight activation obligations and restores the accepted predecessor", "Retained Stepper wrapper input mismatch and supplementary actual tab transitions; not core clipping, historical hit reconstruction, current-library rendering or case closure."),
+    proof(root, "tests/material-parity/stepper-label-wrapper-inputs.spec.mjs", new RegExp("test\\('68 retained Stepper cases omit native clipped minimum-width label wrappers'"), "68 retained Stepper cases omit native clipped minimum-width label wrappers", "Retained Stepper wrapper input mismatch and supplementary actual tab transitions; not core clipping, historical hit reconstruction, current-library rendering or case closure."),
+    proof(root, "tests/material-parity/stepper-label-wrapper-inputs.spec.mjs", new RegExp("test\\('pending Stepper wrapper finding preserves the complete registry and pins initial authoring'"), "pending Stepper wrapper finding preserves the complete registry and pins initial authoring", "Retained Stepper wrapper input mismatch and supplementary actual tab transitions; not core clipping, historical hit reconstruction, current-library rendering or case closure."),
+    proof(root, "tests/material-parity/stepper-batch-registration.spec.mjs", new RegExp("test\\('staged Stepper batch preserves complete source proof finding and plan inventories'"), "staged Stepper batch preserves complete source proof finding and plan inventories", "Retained Stepper wrapper input mismatch and supplementary actual tab transitions; not core clipping, historical hit reconstruction, current-library rendering or case closure."),
+    proof(root, "tests/material-parity/stepper-batch-registration.spec.mjs", new RegExp("test\\('staged Stepper selection preserves every older choice and rejects mixed supplements'"), "staged Stepper selection preserves every older choice and rejects mixed supplements", "Retained Stepper wrapper input mismatch and supplementary actual tab transitions; not core clipping, historical hit reconstruction, current-library rendering or case closure."),
     proof(root, "tests/material-parity/chips-alternate-source-boundary.spec.mjs", new RegExp("test\\('Chips alternate join changes only eight activation obligations and restores the predecessor'"),
       "Chips alternate join changes only eight activation obligations and restores the predecessor", "Supplementary retained-build generated-option transitions and original recipe/comparator limits; not original hit reconstruction, current-library rendering or whole-case acceptance."),
     proof(root, "tests/material-parity/chips-alternate-source-boundary.spec.mjs", new RegExp("test\\('supplementary alternate capture observes generated options and preserves native DOM lag'"),
@@ -10867,6 +10882,7 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
+    {"priority":2.25,"rootCause":"Material Stepper label-wrapper structure and CSS constraint translation","action":"Restore equivalent native label structure and constraints before diagnosing residual layout or clipping behavior with equal-input public reproductions. Do not calibrate label offsets or widths to match current screenshots. Retained input mismatch, not a proven core defect or long-label visual failure. Omitted properties are not asserted computed defaults. Does not close anonymous boxes, paint, current-source applicability or whole-case inspection."},
     {"priority":2.06,"rootCause":"core native-origin focus and semantic control-selection synchronization","action":"Preserve browser-owned selection at the native-origin focus/control-sync boundary before managed editing consumes it. Keep scene-origin programmatic focus,pointer/directional selection,updates and unsupported selection APIs separate. Do not globally selectAll,patch Material callbacks,change input types or invent email endpoints. Core mechanism demonstrated for one public text Tab-entry trace with four text/email failing pairs and four explicit-selection controls. Not email-specific setter attribution,original Material runtime causality,all focus origins,IME/clipboard,raster,full current rendering or whole-case closure. No implementation fix authorized by this audit."},
     {"priority":2.2,"rootCause":"showcase Sort arrow presence/state translation","action":"Match native hover/focus/activation arrow presence through authored state;do not add renderer offsets or duplicate input routing. Retained input presence and current source/history only;not raw hover timing,animation,paint,current served build or whole-case closure."},
     {"priority":2.2,"rootCause":"Material sort-arrow CSS-space vector paint geometry","action":"Preserve native path and dimensions with faithful nonoverlapping vector geometry;do not retune scale,offset,color or opacity to hide the mismatch. Current geometry and source history plus two retained local observations. Captured-plugin linkage and fresh current raster remain unverified;not all-context paint or case closure."},

@@ -5,6 +5,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import vm from 'node:vm';
 import ts from 'typescript';
+import { createStepperBatchPriorRead } from './stepper-batch-registration.mjs';
 import { restoreFocusSelectionAuditRegistry, restoreFocusSelectionAuditSelection } from './public-tab-selection-finding.mjs';
 import { chipsAlternateReview, chipsAlternateSources, chipsAlternateProofs,
   prepareChipsAlternateRegistration as prepare, restoreChipsAlternateRegistration as restore,
@@ -16,7 +17,7 @@ const files = {
   runner: 'scripts/run-material-input-audit.mjs',
   launcher: 'scripts/export-material-input-audit-current-ancestry.mjs',
 };
-const read = file => readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+const read = file => createStepperBatchPriorRead({root:process.cwd(),read:readFileSync})(file, 'utf8').replaceAll('\r\n', '\n');
 test('proposed Chips registration preserves complete source and proof inventories', () => {
   for (const [kind, file] of Object.entries(files)) {
     const live = read(file), original = restoreChipsAlternateRegistrationIfPresent(live, kind), staged = prepare(original, kind);

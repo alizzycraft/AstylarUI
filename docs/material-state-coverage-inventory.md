@@ -4,6 +4,31 @@
 
 ### Current next action and publication status
 
+October27 Stepper batch is installed locally:1099 sources/425 proofs/204 findings/
+71 plan entries, preserving the complete1091/418/203/70 predecessor. Explicit
+--stepper-batch selects863d24f5;actual launcher --dry-run passes. The wrapper
+finding is registered,not a renderer fix or accepted case. New reader authenticates
+18509 dependencies and all2311 cases with exactly eight supplementary activation
+children,zero unjoined cases,inspectionComplete=false,currentRenderingAccepted=false.
+Installed withAuditEvidenceSession/loadCaseObligationReview validation exited0:
+collectors0,memoryHits0,diskHits0,invalidated0,filesRead18676,
+bytesRead3356200420,verificationBytes3356200420,elapsedMs194808.0491.
+Seven changed prior source paths have guarded recovery:policy,producer,runner,
+launcher,Chips registration helper/spec,and public-email-selection spec.
+Initial installed Stepper/Chips/wrapper suite passed6/6. Subsequent
+Stepper/absolute-margin/public-email suite passed11/12,exposing a remaining raw
+policy comparison in the old FocusSelection staging test. Its policy read now
+uses the existing guarded restoration;whole prior test source is recovered too.
+Affected FocusSelection staging plus Stepper registration rerun passes3/3 via
+node --test --test-name-pattern='staged registry|staged Stepper'
+tests/material-parity/stepper-batch-registration.spec.mjs
+tests/material-parity/public-email-selection.spec.mjs. No criteria were weakened.
+The first generated install patch failed verification before writes;the standard
+diff-based apply_patch succeeded. No evidence was deleted or new capture produced.
+Freeze this batch for export/conservation/independent-cold/import;accepted3252368b
+remains the canonical historical snapshot until those gates pass. Reuse settled
+captures and current tests;do not repeat them merely for documentation changes.
+
 October27 shared historical entry reconciliation is implemented in
 chips-alternate-registration.mjs: direct restoration first reverses the exact
 Stepper policy/producer/selection delta; prior readers also restore the complete
