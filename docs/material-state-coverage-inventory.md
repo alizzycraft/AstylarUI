@@ -4,6 +4,31 @@
 
 ### Current next action and publication status
 
+October27 datepicker activation target correction:the original runner's actual
+interactionTargetBox AST maps datepicker to native mat-datepicker-toggle button
+and candidate datepicker-icon,not the input. The earlier navigation note inferred
+too much from recordedControlApplicability's input owner;that record is not a
+pointer-hit witness. The113-context configured-control-activation producer also
+excludes datepicker;picker-focus-events uses programmatic datepicker focus and
+cannot substitute for this activation sequence. Do not conflate any of these
+with timepicker's focus-producing click or calendar keyboard opening.
+
+Existing original-material-runner-source.spec.mjs now pins acceptedf16b51d2 index
+52342f02 and exact17-case membership:four profiles x desktopDPR1/2 x activate/
+activate-leave,plus light desktop-shortDPR1 activate. All34 original tree hashes
+authenticate and contain exactly one native mat-calendar/candidate datepicker-popup.
+This establishes recorded endpoint presence and configured selector intent,not
+raw click delivery,paint,intermediate state,input-click semantics or current
+rendering. Whole original-runner suite passes4/4,0skip,exit0(4086.2804ms),including
+the complete original source receipt and original/current action-method equality.
+No capture,fixture or renderer edit;all case dispositions remain unchanged.
+This particular test file IS a registered canonical dependency,unlike the earlier
+standalone tooltip files. Its additive assertion/proof-line/source transition
+must be reconciled before the next canonical run;acceptedf16b remains historical.
+Next missing activation evidence is exact toggle pointer delivery/intermediate
+opening,not whether endpoint calendar nodes exist. Reuse existing opening-event
+records only if their exact target/action and checkpoint applicability match.
+
 October27 tooltip evidence reconciliation preflight is complete without export.
 AST inspection of all1106 explicit sourceFingerprints entries confirms neither
 audit-material-tooltip-touch.mjs nor tooltip-position-history.spec.mjs is registered;
