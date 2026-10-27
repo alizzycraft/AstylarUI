@@ -4,6 +4,28 @@
 
 ### Current next action and publication status
 
+October27 corrected snackbar dependency replay has finished successfully
+(session62946,exit0): expected reviewbcc94f3d,2311 cases,18527 authenticated
+dependencies,inspectionComplete=false,currentRenderingAccepted=false. This
+supersedes the running status below; do not restart that completed validation.
+The earlier absolute-path invocation failed before dependency validation and
+remains recorded as such. The reconstructed review and dependency check used
+the unchanged accepted Stepper source/proof registry,not a newly installed one.
+
+Staged `--snackbar-single-open` selection now preserves every older/default
+launcher result,rejects mixed/unknown supplements,and routes only exactbcc94f3d
+to the new reader. Complete previous runner/launcher source recovers with drift
+rejection. Staging does not execute an export or modify live selection. Its new
+proof brings the staged inventory to1104 sources/432 proofs (all1099/425 prior
+entries conserved); findings and implementation plan remain unchanged.
+`node --test tests/material-parity/snackbar-single-open-registration.spec.mjs`
+passes3/3(exit0,1166.0141ms); scoped `git diff --check` passes.
+Next reconcile the shared historical entry points before installing this staged
+registry/selector,then run coherent integration. No new capture or canonical
+export is justified merely by these metadata changes. All2311 cases remain
+partial/current-rendering-unverified and original acceptance gates are unchanged.
+
+
 October27 snackbar registration is staged, not installed. The new
 `snackbar-single-open-registration.mjs` authenticates five complete historical
 source transitions against pinned commit2ace4261 (capture producer plus four

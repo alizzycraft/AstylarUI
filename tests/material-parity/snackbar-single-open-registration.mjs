@@ -8,7 +8,41 @@ import { joinSnackbarSingleOpen } from '../../scripts/join-material-snackbar-sin
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const normalize = bytes => bytes.toString().replaceAll('\r\n', '\n');
 const revision = '2ace4261ab98e51afa5192eebcc59a30d5e07043';
+const selectionPrior = {
+  runner: '80ba2c07c7ad5f6295ef684b888e7f1e650f23ce85ccfc424093b5790776b1b6',
+  launcher: '31077d2cbef5e47cd54350dc8bd34164aaac9aa31407b62413c6ff932cba740f',
+};
 export const snackbarSingleOpenReview = 'bcc94f3deda38ea22fa475f239eb41e3797101b0b30f2eb58433fbef20b2826b';
+const selectionChanges = {
+  runner: [
+    ["import { stepperBatchReview, createStepperBatchReviewReader } from '../tests/material-parity/stepper-batch-registration.mjs';", "import { stepperBatchReview, createStepperBatchReviewReader } from '../tests/material-parity/stepper-batch-registration.mjs';\nimport { snackbarSingleOpenReview, createSnackbarSingleOpenReviewReader } from '../tests/material-parity/snackbar-single-open-registration.mjs';"],
+    ['const applicability=stepperBatchReaderFactory?.', 'const snackbarSingleOpenReaderFactory = options.caseObligationReviewSha256===snackbarSingleOpenReview ? createSnackbarSingleOpenReviewReader : stepperBatchReaderFactory;\n    const applicability=snackbarSingleOpenReaderFactory?.'],
+  ],
+  launcher: [
+    ["const stepperBatch = rawRequested.includes('--stepper-batch');", "const snackbarSingleOpen = rawRequested.includes('--snackbar-single-open');\nassert.ok(!snackbarSingleOpen || rawRequested.every(argument => ['--snackbar-single-open', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\nconst stepperBatch = rawRequested.includes('--stepper-batch');"],
+    ['const requested = rawRequested.filter(', "const requested = rawRequested.filter(argument => argument !== '--snackbar-single-open').filter("],
+    ['|--stepper-batch]', '|--stepper-batch|--snackbar-single-open]'],
+    ['for (const [name, relative] of Object.entries(inputs)) {', `if (snackbarSingleOpen) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${snackbarSingleOpenReview}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+    ['chipsAlternate || stepperBatch)', 'chipsAlternate || stepperBatch || snackbarSingleOpen)'],
+    ["if (requested.includes('--dry-run'))", `if (snackbarSingleOpen) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${snackbarSingleOpenReview}';\nif (requested.includes('--dry-run'))`],
+  ],
+};
+export function prepareSnackbarSingleOpenSelection(bytes, kind) {
+  assert.ok(Object.hasOwn(selectionChanges, kind));
+  let source = normalize(bytes); assert.equal(hash(source), selectionPrior[kind]);
+  for (const [before, after] of selectionChanges[kind]) {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  }
+  return source;
+}
+export function restoreSnackbarSingleOpenSelection(bytes, kind) {
+  assert.ok(Object.hasOwn(selectionChanges, kind));
+  let source = normalize(bytes);
+  for (const [before, after] of selectionChanges[kind].toReversed()) {
+    assert.equal(source.split(after).length, 2); source = source.replace(after, before);
+  }
+  assert.equal(hash(source), selectionPrior[kind]); return source;
+}
 export const snackbarSingleOpenSources = Object.freeze([
   'scripts/audit-material-snackbar-lifetime.mjs', 'scripts/join-material-snackbar-single-open.mjs',
   'tests/material-parity/snackbar-single-open-registration.mjs',
@@ -22,6 +56,7 @@ export const snackbarSingleOpenProofs = Object.freeze([
   ['tests/material-parity/static-semantic-inputs.spec.mjs', 'October27 historical semantic population preserves every prior definition'],
   ['tests/material-parity/snackbar-single-open-registration.spec.mjs', 'snackbar historical reader authenticates all five source transitions without changing live inputs'],
   ['tests/material-parity/snackbar-single-open-registration.spec.mjs', 'staged snackbar registration preserves every accepted source and proof'],
+  ['tests/material-parity/snackbar-single-open-registration.spec.mjs', 'staged snackbar selector preserves older choices and rejects mixed supplements'],
 ]);
 const producerPrior = 'a002e989cf9d586e815e91783d729e863c4c9c7fc144933253d8b45ab5168251';
 const boundary = 'Retained supplementary visibility and historical evidence reconciliation; not exact expiry timing, current rendering, input equivalence or case closure.';
