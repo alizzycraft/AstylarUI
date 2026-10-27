@@ -107,6 +107,48 @@ test('supplementary single-open snackbar is present before expiry and absent aft
   assert.equal(report.inputEquivalent, false); assert.equal(report.renderingEquivalent, false);
 });
 
+test('single-open coverage join preserves every other case and unresolved obligation', async () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const generation = 'cd84d26cacb5f9fbce67938bdadbd418c3d5051ca489e2f8950d2007cce8ac87';
+  const bytes = readFileSync(`artifacts/material-parity/working-audit/${generation}/index.json`);
+  assert.equal(hash(bytes), '28230d0ce2369102c6931a3cd8ae4792dac9631e5223b185bc2c781bb4b00bf7');
+  const coverage = JSON.parse(bytes).metadata.coverage.inspectionEvidence;
+  const parent = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical', scope: coverage.scope, groups: coverage.cases };
+  const { joinSnackbarSingleOpen: join, restoreSnackbarSingleOpen: restore,
+    snackbarSingleOpenPredecessor: predecessor } = await import('../../scripts/join-material-snackbar-single-open.mjs');
+  const joined = join(parent);
+  assert.equal(joined.cases, 1); assert.equal(joined.review.groups.length, 2311);
+  assert.equal(hash(JSON.stringify(parent)), predecessor);
+  assert.deepEqual(restore(joined.review), parent);
+  let changed = 0;
+  for (const [i, before] of parent.groups.entries()) {
+    const after = joined.review.groups[i];
+    if (before === after) continue;
+    changed++;
+    assert.equal(before.case, 'interaction:snack-bar@light/desktop-dpr1/auto-dismiss');
+    assert.equal(after.inspection, before.inspection); assert.equal(after.currentRendering, before.currentRendering);
+    for (const [name, obligation] of Object.entries(before.obligations)) {
+      assert.deepEqual(after.obligations[name].remaining, obligation.remaining);
+      if (name !== 'authoredActivation') assert.deepEqual(after.obligations[name], obligation);
+    }
+    assert.equal(after.obligations.authoredActivation.disposition, 'partial');
+    assert.equal(after.obligations.authoredActivation.supplementarySingleOpenVisibility.remaining.length, 2);
+  }
+  assert.equal(changed, 1);
+  assert.throws(() => join(joined.review));
+  const capture = JSON.parse(readFileSync('artifacts/material-parity/snackbar-single-open-20261027/latest-report.json'));
+  for (const suffix of ['latest-report.json', 'manifest.json', '.png', capture.results[0].reference.inputTree.file]) {
+    let intercepted = 0;
+    const read = (file, ...args) => {
+      if (String(file).endsWith(suffix)) { intercepted++; return Buffer.from('forged'); }
+      return readFileSync(file, ...args);
+    };
+    assert.throws(() => join(parent, read)); assert.ok(intercepted > 0);
+  }
+  console.log(JSON.stringify({ review: joined.sha256, changedActivationObligations: changed,
+    predecessorRecovered: true, canonicalUnchanged: true, parentCasesRemainPartial: 2311 }));
+});
+
 test('ordinary snackbar opens in bounds but loses paint behind the short-surface camera', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const file = 'artifacts/material-parity/snackbar-boundary-e331e79/latest-report.json';

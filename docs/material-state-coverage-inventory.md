@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October27 supplementary snackbar coverage join is implemented and tested, not
+yet selected/exported. `scripts/join-material-snackbar-single-open.mjs` consumes
+the authenticated accepted Stepper coverage parent863d24f5 and capture1cc0846c,
+producing reviewbcc94f3deda38ea22fa475f239eb41e3797101b0b30f2eb58433fbef20b2826b.
+Exactly one authoredActivation obligation changes: light/desktop-dpr1/auto-dismiss
+receives supplementary ordinary-mode visibility observations. Both sides show
+0/1/1/0 popup counts with one trusted open, including presence after4000ms and
+absence after6000ms. This does not establish exact timer origin, expiry/fade
+timing, dismissal cause, historical execution or rendering parity. Those limits
+are explicit in the child record. Other obligations, prior remaining tasks and
+all2311 partial/current-unverified case dispositions are unchanged. Complete
+predecessor recovery and rejection of double-joining or forged report, manifest,
+screenshot and input-tree bytes are tested. No new browser capture was needed.
+
+Verification: `node --test --test-name-pattern="single-open coverage join|supplementary single-open|original snackbar auto-dismiss" tests/material-parity/snackbar-position-observation.spec.mjs`
+passes3/3(exit0,10570.5014ms). After adding the explicit forged-tree control,
+the `single-open coverage join` filtered test passes1/1(exit0,9590.9767ms).
+This is a tested join, not full dependency-loader or canonical acceptance.
+Next reconcile the pending source/proof inventory and historical readers in one
+coherent snackbar batch before export. Do not regenerate a large canonical result
+solely to publish this one child. Accepted Stepper generationcd84d26c is unchanged.
+
+
 October27 historical semantic adapter reconciliation: direct filtered benchmark
 initialization rejected the current204-definition registry against its retained
 193/192 predecessors. The adapter now authenticates the complete current registry
