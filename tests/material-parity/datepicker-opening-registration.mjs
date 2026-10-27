@@ -96,6 +96,7 @@ export function restoreDatepickerOpeningPolicyIfPresent(bytes) {
 }
 
 export const datepickerHistoricalSources = Object.freeze([
+  ['scripts/audit-material-configured-control-activation.mjs', '26d7a294d0c5b4aaa2179fa7a697178b099391493ba28f9ac0261a04bd2d6d46', '837098a21a29cb1e1c50a65803d398a7588b9c6d05dd815eeea5d18e4b581118'],
   ['tests/material-parity/input-equivalence-policy.mjs', 'a38dc20ab17b392fcd1eeac4e8ff693859c3dbfaf4395ae0e0a782326bd72a6c', '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f'],
   ['tests/material-parity/original-material-runner-source.spec.mjs', 'd362fd02e63c5a135d7688377281eb4ef88505cd13f7cd5ff34c629cbff7260e', '528806a405fa93abde36314484aa3287c2174660b019ab7b8d64cece6348f398'],
   ['tests/material-parity/snackbar-single-open-registration.mjs', '0820b53f0ba80015faa853953ec824ed5f3fa480d8edd9404dce674d2e7c7d9a', 'dcf312086d8c6409fb6463b9c28f68d613b689ae75368ab8fd8e39f02572a4b5'],

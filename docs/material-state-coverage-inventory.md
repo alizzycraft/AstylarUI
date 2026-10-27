@@ -4,6 +4,20 @@
 
 ### Current next action and publication status
 
+October27 relative-path reader71997 constructed exact reviewcd9631f0 and reached
+complete dependency checking,but correctly rejected the older activation-driver
+receipt26d7a294 against current837098a2. The datepicker option had changed a file
+already referenced by parent cases even though it was not an explicit predecessor
+sourceFingerprints entry. Historical read mapping now authenticates both whole
+driver endpoints before recovering83b9ad89 bytes for those older records;the new
+datepicker capture remains verified separately against its actual newer producer.
+Seven compatibility tests pass(3999.8933ms). A bounded preflight compared every
+changed-since83b9ad89 path with accepted case evidenceFingerprints:only activation
+driver,policy,and original-runner proof intersect. All three now have historical
+bindings. Preserve reader-relative stdout/stderr as a real dependency failure;
+do not treat constructed review or partial validation as a pass. Next corrected
+complete reader validation,then canonical batch gates. Acceptedf16b is unchanged.
+
 October27 integrated reader slowdown has a demonstrated adapter cause:five
 nested datepicker passthrough readers made32 underlying reads for one unchanged
 producer request. Three no-restoration branches read the source and then called

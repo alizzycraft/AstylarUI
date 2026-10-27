@@ -1,5 +1,9 @@
 # Audit artifact retention
 
+Retain datepicker-opening-reader-relative-20261027 stdout/stderr:the joined review
+constructed successfully,but full dependency checking rejected an unreconciled
+historical activation-driver receipt. Preserve it alongside the corrected result.
+
 Retain datepicker-opening-reader-20261027 and datepicker-opening-reader-linear-20261027
 stdout/stderr logs. The first was stopped after demonstrated nested read amplification;
 the second constructed the expected review but its diagnostic caller used an invalid

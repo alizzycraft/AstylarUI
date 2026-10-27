@@ -94,7 +94,7 @@ test('datepicker historical source reader authenticates both endpoints and rejec
   assert.deepEqual(reader(untouched), readFileSync(untouched));
   const policy = readFileSync('tests/material-parity/input-equivalence-policy.mjs');
   const oldPolicy = restoreDatepickerOpeningPolicyIfPresent(policy);
-  assert.equal(hash(oldPolicy), datepickerHistoricalSources[0][1]);
+  assert.equal(hash(oldPolicy), datepickerHistoricalSources.find(([file]) => file.endsWith('/input-equivalence-policy.mjs'))[1]);
   assert.equal(restoreDatepickerOpeningPolicyIfPresent(oldPolicy), oldPolicy);
   assert.equal(restoreStepperBatchRegistryIfPresent(policy, 'policy'),
     restoreStepperBatchRegistryIfPresent(oldPolicy, 'policy'), 'Direct historical collectors must recover the same prior policy');
