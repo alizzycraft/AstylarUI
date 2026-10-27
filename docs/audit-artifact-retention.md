@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+Retain successful Chips retry1 export logs and October27 candidate section/
+metadata and independent-cold stdout/stderr logs. Candidate3252368b is not accepted
+until conservation,cold verification and imports pass. Preserve accepted d6f07066,
+its pre-export backup and original/failure evidence;no cleanup is authorized.
+
+Retain interrupted chips-canonical-export-20261026.log and retry1 stdout/stderr
+logs. Missing original process was confirmed before retry;all three canonical
+files still matched the pre-export backup. Do not infer successful export from
+progress lines or discard the incomplete first log.
+
 Keep chips-pre-export-d6f0-20261026 (three hash-verified canonical backup files),
 chips-pre-export-source-conservation-20261026.log and the in-flight
 chips-canonical-export-20261026.log. Accepted d6f07066 and authenticated prior

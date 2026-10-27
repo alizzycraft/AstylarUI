@@ -4,13 +4,57 @@
 
 ### Current next action and publication status
 
-October26 Chips canonical export is RUNNING,not accepted. Started from published
-74e9a874 with --chips-alternate,ASTYLAR_AUDIT_COLD=0 and progress enabled.
-Log:artifacts/material-parity/chips-canonical-export-20261026.log;session47481,
-launcherPID10588/runnerPID6848 observed live (start2026-10-26 17:38:21 local).
-Revalidate that same handle/process before waiting;do not duplicate the export.
-PowerShell NativeCommandError formatting around progress stderr is not a terminal
-export failure;the runner was verified live. Await its actual exit status.
+October27 Chips retry1 export is TERMINAL0,producing candidate
+3252368beb18426245167b716fe22c6af0d2c4ce8da283ef574f43b89cc686aa.
+Compressed98395999/decoded2369430963 bytes;decoded SHA
+2c7f21692430dcf4a299bc77b962005f83b239296672f928aa2356b52ca9f1cc.
+Export evidence session verifies19845 files/3441954575 bytes with diskHits1;
+this is not an independent cold result. Both retry1 logs retain completion and
+exportExit=0. Accepted working-store pointer remains d6f07066;candidate is NOT
+accepted and no case/current-rendering status is closed by export success.
+
+Independent --chips-alternate --check with ASTYLAR_AUDIT_COLD=1 started
+October27 01:44:02 local:wrapper22568/launcher11360/runner27448. Logs
+chips-independent-cold-20261027.log and .stderr.log under artifacts/material-parity;
+wrapper records coldExit on completion. Revalidate exact processes before waiting
+or restarting. Candidate section/selected-metadata extraction exits0 and authenticates
+all80 sections;72 match the predecessor. Log chips-candidate-sections-metadata-20261027.log
+SHA25ef3a3b2332a6c47e1c31718dc618186153d3fa92e77bc85cbda04bca680b39.
+Changed sections:sourceFingerprints,coverage,controlLineBoxes,discrepancies,
+ownerCaretInputs,reviewedSourceBatchInputs,controlTypography,focusedProofs.
+chips-metadata-conservation-20261027.log exits0:all1085 old source paths and412
+non-line proof declarations conserve,with exactly the seven previously reviewed
+old-source changes and six source/six proof additions. Summary,203 findings and
+70 plan entries are identical. Five changed derived-receipt sections pass complete
+leaf comparison (leafExit=0):14085648 leaves/containers conserve membership/order/
+shape,with147 changed values. Log chips-fixed-section-leaves-20261027.log SHA
+e49dd755546d2bcbe2e29447779ec1c452b9cdf9b7c1afb0693f52cda4a02701.
+Changes comprise98 direct producer receipts,48 control-proof hashes and one
+motion-report hash. chips-control-receipts-20261027.log exits0,authenticating the
+complete candidate payload and recomputing98 direct/48 control receipts.
+chips-derived-receipts-corrected-20261027.log exits0:the retained motion report,
+generation source receipts and exact current collector bytes reconstruct BOTH
+old/new complete motion-report hashes. Thus all147 changed values are accounted
+for without another motion capture. Initial chips-derived-receipts-20261027.log
+is empty because the assertion failed before stdout:the motion collector is not
+in the root source inventory. Corrected check explicitly handles only that file
+and still requires exact old/new full hashes. Preserve both attempts. Import was
+deferred with less than1GiB free physical memory while cold replay remains live.
+Coverage conservation,cold
+verification and isolated/accepted imports remain required. Source inputs stay
+frozen. Earlier RUNNING paragraph below is historical.
+
+October26 Chips canonical export RETRY1 is RUNNING,not accepted. Original
+session47481 became unavailable;launcher10588 and runner6848 were confirmed
+absent,with no exit result in chips-canonical-export-20261026.log. Cause is not
+established. All three canonical files were rehashed against the backup and
+remain identical;no candidate was produced. The original log is retained.
+Retry uses unchanged --chips-alternate,ASTYLAR_AUDIT_COLD=0 and progress enabled,
+started2026-10-26 17:42:10 local in a detached hidden PowerShell wrapper16412,
+launcher15560/runner25476 observed live. Logs:chips-canonical-export-retry1-20261026.log
+and chips-canonical-export-retry1-20261026.stderr.log under artifacts/material-parity.
+Wrapper records exportExit in stdout on completion. Revalidate these exact
+processes/command lines before waiting or restarting;do not duplicate the run.
 
 Pre-export backup chips-pre-export-d6f0-20261026 preserves all three canonical
 files with source/target SHA equality:manifest3385eade950c911b9506a01276d4a830f11be7ff33449c73a0b6e9a90bcfa009,
