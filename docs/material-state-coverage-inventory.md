@@ -4,6 +4,30 @@
 
 ### Current next action and publication status
 
+October27 tooltip evidence reconciliation preflight is complete without export.
+AST inspection of all1106 explicit sourceFingerprints entries confirms neither
+audit-material-tooltip-touch.mjs nor tooltip-position-history.spec.mjs is registered;
+repository reference search finds no canonical collector importing them. Prior
+wording about changed canonical fingerprints was too broad:these standalone
+proofs need intentional future registration,not an export of the unchanged
+producer. Published f16b51d2 remains its valid declared snapshot,not coverage of
+the new touch diagnosis. No canonical source/finding population changed.
+First-trace recovery is now an executable owning assertion:complete restored
+producer hash matches its report;strict default validation rejects changed source,
+only the exact read-only historical substitution passes,source/anchor mutations
+reject,and all8 PNG hashes verify. Current driver is unchanged on disk. Complete
+tooltip-position-history suite passes5/5,0skip,exit0(991.001ms).
+
+Next gap selection uses authenticated f16b51d2/index52342f02,not the stale broad
+family table. Of1433 pending activation joins,114 are activate and136
+activate-leave;324 are static desktop/tablet/mobile applicability,not missing
+performed clicks. Datepicker light/desktopDPR1/activate retains normalized
+pointerdown/up/click with stateMode=uncompared-default and no explicit state
+assertion. Its input identity is known,not its complete action outcome. Next
+check whether existing configured-activation captures cover this exact input
+click/state before collecting anything;do not substitute calendar-icon opening
+or timepicker focus behavior. No obligation or whole-case status is promoted.
+
 October27 fresh tooltip release trace resolves the dismissal path in Chrome156,
 not retrospectively in the uninstrumented Chrome154 recording. All1887 served
 application assets match the retained current-full checkpoint. Existing touch

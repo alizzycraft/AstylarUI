@@ -3,6 +3,43 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 
 const file = 'examples/material-showcase/src/app/astylar.component.ts';
+test('first release trace retains exact producer recovery without changing current capture reads', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const { validateSupplementalCapture } = await import('./supplemental-capture-evidence.mjs');
+  const { propertyGroups } = await import('./input-equivalence-policy.mjs');
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  const reportFile = 'artifacts/material-parity/tooltip-release-caller-20261027/latest-report.json';
+  const bytes = readFileSync(reportFile);
+  assert.equal(hash(bytes), '564dc47771b271115b23cb42523fdc41f9d135b0e6392c17b5cf076f71baad04');
+  const report = JSON.parse(bytes), script = 'scripts/audit-material-tooltip-touch.mjs';
+  const current = readFileSync(script, 'utf8');
+  const recover = source => {
+    const start = source.indexOf('          const originalShow = tooltip.show;');
+    const end = source.indexOf("          record('installation'", start);
+    assert.ok(start >= 0 && end > start);
+    const restored = source.slice(0, start) + source.slice(end);
+    assert.equal(hash(restored), report.capture.sources.find(row => row.file === script).sha256);
+    return Buffer.from(restored);
+  };
+  const restored = recover(current);
+  assert.throws(() => recover(current.replace("const script =", "const alteredScript =")));
+  assert.throws(() => recover(current.replace('const originalShow = tooltip.show;', 'const missing = tooltip.show;')));
+  const options = { reportFile, script, expectedProvenance: JSON.parse(readFileSync(report.capture.checkpointManifest.file)).provenance,
+    styleProperties: Object.values(propertyGroups).flat() };
+  // Strict normal validation rejects the changed producer; only this pinned
+  // historical read may substitute its fully recovered original bytes.
+  assert.equal(validateSupplementalCapture(report, options).status, 'invalid');
+  const path = await import('node:path');
+  assert.deepEqual(validateSupplementalCapture(report, { ...options,
+    readBytes: file => path.resolve(file) === path.resolve(script) ? restored : readFileSync(file) }),
+  { status: 'checkpoint-bound', errors: [] });
+  for (const row of report.results) for (const side of ['reference', 'astylar']) {
+    const receipt = row[side].screenshot;
+    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  }
+  assert.equal(readFileSync(script, 'utf8'), current);
+});
 test('fresh tooltip release trace observes body-interaction immediate component hide after trusted click', async () => {
   const { readFileSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');
