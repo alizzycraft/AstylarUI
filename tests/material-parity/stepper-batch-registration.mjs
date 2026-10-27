@@ -1,7 +1,12 @@
 // Staged only: live historical readers must be reconciled before installation.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
 import { stepperLabelWrapperFinding } from './stepper-label-wrapper-finding.mjs';
+import { createChipsAlternateReviewReader } from '../../scripts/join-material-chips-alternate.mjs';
+import { joinStepperLeave } from '../../scripts/join-material-stepper-leave.mjs';
+
+export const stepperBatchReview = '863d24f5c259f5ae2cca0ffd9356dd9e16ff8d340aad850bd96ef488e71cca92';
 
 const prior = {
   policy: '3a3b957723df7a7abef027b4317a4c3aaf7f73d47e36dbcef4e5929b0bd81cb0',
@@ -48,4 +53,37 @@ export function restoreStepperBatchRegistry(bytes, kind) {
   for (const [anchor, extra] of additions[kind].toReversed()) source = once(source, anchor + extra, anchor);
   assert.equal(hash(source), prior[kind], 'Complete pre-Stepper registry must recover');
   return source;
+}
+
+export function restoreStepperBatchRegistryIfPresent(bytes, kind) {
+  assert.ok(Object.hasOwn(prior, kind));
+  const marker = kind === 'policy' ? stepperLabelWrapperFinding.id : '"tests/material-parity/stepper-batch-registration.mjs",';
+  const source = normalize(bytes);
+  return source.includes(marker) ? restoreStepperBatchRegistry(source, kind) : source;
+}
+export function createStepperBatchPriorRead({ root, read }) {
+  const files = new Map(Object.entries({
+    'tests/material-parity/input-equivalence-policy.mjs': 'policy',
+    'tests/material-parity/input-equivalence-audit.mjs': 'producer',
+  }).map(([file, kind]) => [path.resolve(root, file), kind]));
+  return (name, options) => {
+    const kind = files.get(path.resolve(root, name));
+    if (!kind) return read(name, options);
+    const source = restoreStepperBatchRegistryIfPresent(read(name), kind);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? Buffer.from(source).toString(encoding) : Buffer.from(source);
+  };
+}
+export function createStepperBatchReviewReader({ root, read }) {
+  const prior = createChipsAlternateReviewReader({ root, read: createStepperBatchPriorRead({ root, read }) });
+  const joined = joinStepperLeave(JSON.parse(prior.read(prior.file)).review, read);
+  assert.equal(joined.sha256, stepperBatchReview);
+  const file = path.resolve(root, `artifacts/material-parity/working-audit/proposals/${joined.sha256}.json`);
+  const bytes = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256: joined.sha256, review: joined.review }));
+  return { ...joined, file, read(name, options) {
+    if (path.resolve(root, name) !== file) return prior.read(name, options);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  }, sourceApplicability: { mode: 'supplementary-stepper-leave-selection', predecessorApplicability: prior.sourceApplicability,
+    boundary: 'Retained-build actual tab state and reported logical pointer targets only; original historical evidence and all final acceptance gates remain.' } };
 }

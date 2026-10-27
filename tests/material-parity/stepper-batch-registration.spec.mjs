@@ -1,9 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import ts from 'typescript';
 import { prepareStepperBatchRegistry as prepare, restoreStepperBatchRegistry as restore,
-  stepperBatchSources, stepperBatchProofs } from './stepper-batch-registration.mjs';
+  stepperBatchSources, stepperBatchProofs, createStepperBatchPriorRead } from './stepper-batch-registration.mjs';
 
 test('staged Stepper batch preserves complete source proof finding and plan inventories', () => {
   const arrays = (text, kind) => {
@@ -23,6 +24,19 @@ test('staged Stepper batch preserves complete source proof finding and plan inve
   for (const [kind, file] of Object.entries({ policy: 'tests/material-parity/input-equivalence-policy.mjs', producer: 'tests/material-parity/input-equivalence-audit.mjs' })) {
     const bytes = readFileSync(file), source = bytes.toString().replaceAll('\r\n', '\n'), staged = prepare(bytes, kind);
     assert.equal(restore(staged, kind), source);
+    const stagedRead = (name, options) => {
+      if (path.resolve(name) !== path.resolve(file)) return readFileSync(name, options);
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? Buffer.from(staged).toString(encoding) : Buffer.from(staged);
+    };
+    const priorRead = createStepperBatchPriorRead({ root: process.cwd(), read: stagedRead });
+    const nestedRead = createStepperBatchPriorRead({ root: process.cwd(), read: priorRead });
+    for (const read of [priorRead, nestedRead]) {
+      assert.equal(read(file, 'utf8'), source);
+      assert.equal(read(path.resolve(file), { encoding: 'utf8' }), source);
+      assert.deepEqual(read(file), Buffer.from(source));
+      assert.deepEqual(read('scripts/join-material-stepper-leave.mjs'), readFileSync('scripts/join-material-stepper-leave.mjs'));
+    }
     assert.throws(() => prepare(source + '\n// drift', kind)); assert.throws(() => prepare(staged, kind));
     assert.throws(() => restore(staged + '\n// drift', kind));
     const before = arrays(source, kind), after = arrays(staged, kind);

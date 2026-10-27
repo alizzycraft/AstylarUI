@@ -4,6 +4,26 @@
 
 ### Current next action and publication status
 
+October27 Stepper reader integration passes against the current live sources.
+createStepperBatchPriorRead restores only the staged policy/producer additions;
+direct/nested Buffer and encoded reads recover complete predecessor source,
+while unrelated paths pass through. The existing staged registry test passes1/1
+via node --test tests/material-parity/stepper-batch-registration.spec.mjs.
+An inline node --max-old-space-size=4096 --input-type=module check invoked
+createStepperBatchReviewReader within withAuditEvidenceSession, then
+loadCaseObligationReview with its relative proposal path, exact digest and all
+2311 configured case IDs. It authenticated18509 dependencies, exactly eight
+supplementaryLeaveSelection children and zero unjoined cases. Review digest:
+863d24f5c259f5ae2cca0ffd9356dd9e16ff8d340aad850bd96ef488e71cca92.
+InspectionComplete and currentRenderingAccepted both remain false. Session
+metrics: collectors0,memoryHits0,diskHits0,invalidated0,filesRead18676,
+bytesRead3356193602,verificationBytes3356193602,elapsedMs163085.8329; exit0.
+This proves the new reader on current sources, not all historical direct entry
+points after installation. Live registries and accepted3252368b are unchanged.
+Next add exact Stepper selection and reconcile older direct readers before
+installing the coherent batch; reuse this check for unchanged reader inputs.
+No new capture, canonical export, renderer or fixture change was made.
+
 October27 coherent Stepper registry staging passes1/1 via node --test
 tests/material-parity/stepper-batch-registration.spec.mjs. Guarded in-memory
 policy/producer preparation proposes1099 sources/424 proofs/204 findings/71
