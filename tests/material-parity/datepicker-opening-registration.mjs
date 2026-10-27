@@ -104,20 +104,25 @@ export const datepickerHistoricalSources = Object.freeze([
 export function createDatepickerHistoricalRead({ root, read }) {
   const entries = new Map(datepickerHistoricalSources.map(row => [path.resolve(root, row[0]), row]));
   const recovered = new Map();
+  const format = (input, options) => {
+    const bytes = Buffer.isBuffer(input) ? input : Buffer.from(input);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  };
   return (name, options) => {
     const kind = path.resolve(root, name) === path.resolve(root, 'scripts/run-material-input-audit.mjs') ? 'runner'
       : path.resolve(root, name) === path.resolve(root, 'scripts/export-material-input-audit-current-ancestry.mjs') ? 'launcher' : null;
     if (kind) {
       const input = read(name);
       const marker = kind === 'runner' ? 'const datepickerOpeningReaderFactory = ' : "const datepickerOpening = rawRequested.includes('--datepicker-opening');";
-      if (!input.toString().includes(marker)) return read(name, options);
+      if (!input.toString().includes(marker)) return format(input, options);
       const bytes = Buffer.from(restoreDatepickerOpeningSelection(input, kind));
       const encoding = typeof options === 'string' ? options : options?.encoding;
       return encoding ? bytes.toString(encoding) : bytes;
     }
     if (path.resolve(root, name) === path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs')) {
       const input = read(name);
-      if (!input.toString().includes('"tests/material-parity/datepicker-opening-registration.mjs",')) return read(name, options);
+      if (!input.toString().includes('"tests/material-parity/datepicker-opening-registration.mjs",')) return format(input, options);
       const bytes = Buffer.from(restoreDatepickerOpeningRegistry(input));
       const encoding = typeof options === 'string' ? options : options?.encoding;
       return encoding ? bytes.toString(encoding) : bytes;
@@ -125,11 +130,11 @@ export function createDatepickerHistoricalRead({ root, read }) {
     const entry = entries.get(path.resolve(root, name));
     if (!entry) return read(name, options);
     const [file, previous, current] = entry;
-    const source = normalize(read(name));
+    const input = read(name), source = normalize(input);
     // Earlier nested policy generations remain the earlier reader's job. Do
     // not reinterpret them as this transition or overwrite them with a newer one.
     if (file.endsWith('/input-equivalence-policy.mjs') && hash(source) !== previous &&
-      !source.includes('fixture-datepicker-opening-focus-transfer-omitted')) return read(name, options);
+      !source.includes('fixture-datepicker-opening-focus-transfer-omitted')) return format(input, options);
     assert.ok([previous, current].includes(hash(source)), `Unrecognized datepicker source: ${file}`);
     if (!recovered.has(file)) {
       const old = normalize(execFileSync('git', ['show', `83b9ad89:${file}`], { cwd: root, maxBuffer: 8_000_000 }));

@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain datepicker-opening-reader-20261027 and datepicker-opening-reader-linear-20261027
+stdout/stderr logs. The first was stopped after demonstrated nested read amplification;
+the second constructed the expected review but its diagnostic caller used an invalid
+absolute evidence path. Neither is a completed dependency validation. Preserve these
+failure/incomplete records when the corrected relative-path validation runs.
+
 Retain datepicker-toggle-activation-20261027 and its -provenance sibling:17 exact
 configured toggle-action pairs,34 input trees/34 PNGs,and raw event/state/focus
 observations establish the new bounded focus-destination evidence. Independent

@@ -99,4 +99,19 @@ test('datepicker historical source reader authenticates both endpoints and rejec
   assert.equal(restoreStepperBatchRegistryIfPresent(policy, 'policy'),
     restoreStepperBatchRegistryIfPresent(oldPolicy, 'policy'), 'Direct historical collectors must recover the same prior policy');
   assert.throws(() => restoreDatepickerOpeningPolicyIfPresent(policy.toString() + '\n// drift'));
+  // Passthrough must reuse the bytes already read. A second read here amplified
+  // five nested adapters into32 underlying reads during complete validation.
+  for (const [file, bytes] of [
+    ['tests/material-parity/input-equivalence-audit.mjs', Buffer.from(restoreDatepickerOpeningRegistry(readFileSync('tests/material-parity/input-equivalence-audit.mjs')))],
+    ['scripts/run-material-input-audit.mjs', Buffer.from(restoreDatepickerOpeningSelection(readFileSync('scripts/run-material-input-audit.mjs'), 'runner'))],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', Buffer.from(restoreDatepickerOpeningSelection(readFileSync('scripts/export-material-input-audit-current-ancestry.mjs'), 'launcher'))],
+    ['tests/material-parity/input-equivalence-policy.mjs', Buffer.from(restoreStepperBatchRegistryIfPresent(oldPolicy, 'policy'))],
+  ]) {
+    let calls = 0;
+    let nested = () => { calls++; return bytes; };
+    for (let i = 0; i < 20; i++) nested = createDatepickerHistoricalRead({ root, read: nested });
+    assert.deepEqual(nested(file), bytes); assert.equal(calls, 1);
+    assert.equal(nested(file, 'utf8'), bytes.toString()); assert.equal(calls, 2);
+    assert.equal(nested(file, { encoding: 'utf8' }), bytes.toString()); assert.equal(calls, 3);
+  }
 });

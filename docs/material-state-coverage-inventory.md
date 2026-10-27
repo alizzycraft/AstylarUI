@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October27 integrated reader slowdown has a demonstrated adapter cause:five
+nested datepicker passthrough readers made32 underlying reads for one unchanged
+producer request. Three no-restoration branches read the source and then called
+the underlying reader again. Reusing the already-read bytes removes that
+amplification without skipping validation. Regression checks cover20 nested
+adapters for producer,runner,launcher,and earlier policy bytes;each request now
+makes exactly one underlying read across binary/string/options encodings.
+Seven compatibility tests pass(4616.0776ms). Preserve stopped reader53692 logs;
+it reached15012 requests but did not construct/validate the joined review.
+
+Corrected linear-reader27309 constructed exact reviewcd9631f0 after3776 reported
+requests. Its final dependency-validation invocation then failed because the
+diagnostic passed absolute r.file to loadCaseObligationReview,which requires a
+workspace-relative path. This is a caller error,not a validated dependency result
+or changed audit contract. Retain datepicker-opening-reader-linear-20261027.log
+and stderr. Next use the same production reader with path.relative(root,r.file)
+for the validation call;do not alter the reader or canonical API to accept absolute
+evidence paths. Canonical export/acceptance remains pending.
+
 October27 datepicker exporter selection is installed: --datepicker-opening
 selects joined reviewcd9631f0,with the existing complete review-reader path.
 Dry-run selects its exact path/hash. Every older selector remains unchanged;
