@@ -4,6 +4,32 @@
 
 ### Current next action and publication status
 
+October27 motion owner trace is now bound to the same captured checkpoint:
+main.js/main.js.map,chunk-PCHQTLJM.js/map and chunk-7SL66K3U.js/map authenticate
+againstc5fef625 before extracting plugin,application and native slider sources.
+Native MatSlider assigns the visual-thumb translateX transform and its animated
+class supplies transition-duration:80ms;the observed timeline reports ease.
+Candidate input handler calls updateSliderVisual(nextStart,nextEnd),which locates
+the range visual mesh and calls its metadata.updateRange. Replaying that exact
+mapped plugin callback at720px changes start local CSS position-144 to-72
+synchronously for30->40,leaves end108,and projects the final CSS points directly.
+No time advancement or generic transition request occurs in this callback.
+
+Classification for this observed interpolation difference: application/plugin
+motion substitution,not demonstrated equal-input core transition failure. It
+extends the existing range visual ownership finding;do not add a fixture tween
+as a parity fix. The native CSS motion request and plugin mesh assignment are
+unequal inputs. This does not dismiss core support gaps or explain every report
+of jerky dragging;step quantization,hit domains,render cadence and local raster
+remain separate. Next consult the existing generic transition-support evidence
+before deciding whether an additional equal-input reduction is required.
+
+Existing slider-retained-state-layer.spec.mjs gained one bounded source/capture
+assertion;node --test --test-name-pattern="retained Slider motion uses" passes
+1/1,0skip,exit0 (3421.4294ms),with no browser/export. Original tests unchanged.
+Source/proof registration of the three added tests remains pending as a coherent
+batch;no accepted generation,case disposition or acceptance criterion changed.
+
 October27 stationary-pointer temporal probe answers a specific missing observation:
 native thumb geometry continues interpolating after a single held move. The new
 opt-in test in existing sort-focus-structure.spec.mjs records44 RAF samples per

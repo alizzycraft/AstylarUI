@@ -26,6 +26,58 @@ const find = (ast, predicate) => {
   visit(ast); assert.equal(matches.length, 1); return matches[0];
 };
 
+test('retained Slider motion uses native CSS transition versus synchronous application plugin positions', () => {
+  const manifest = load({ file: 'artifacts/material-parity/stepper-leave-observed-20261027-provenance/checkpoint/manifest.json',
+    sha256: 'c5fef6257a5ba75ac46f2e3cdc66b1154c6a85b7a548f4da4ddf76e7e3c493ee' });
+  const source = (mapName, logicalFile) => {
+    const receipt = manifest.provenance.browserFiles.find(row => row.file === mapName); assert.ok(receipt);
+    const root = 'examples/material-showcase/dist/material-showcase/browser/';
+    const map = load({ file: root + mapName, sha256: receipt.sha256 });
+    const script = manifest.provenance.browserFiles.find(row => row.file === mapName.slice(0, -4)); assert.ok(script);
+    const bytes = readFileSync(root + script.file); assert.equal(hash(bytes), script.sha256);
+    assert.ok(bytes.toString().includes('sourceMappingURL=' + mapName));
+    const index = map.sources.indexOf(logicalFile); assert.ok(index >= 0);
+    return map.sourcesContent[index];
+  };
+  const plugin = ts.createSourceFile('plugin.ts', source('main.js.map', 'src/app/material-plugin/material-showcase.plugin.ts'), 99, true);
+  const appText = source('chunk-PCHQTLJM.js.map', 'src/app/astylar.component.ts');
+  const native = source('chunk-7SL66K3U.js.map', 'node_modules/@angular/material/fesm2022/slider.mjs');
+  assert.match(native, /thumb\._hostElement\.style\.transform = `translateX\(\$\{source\.translateX\}px\)`/);
+  assert.ok(native.includes('.mat-mdc-slider.mat-mdc-slider-with-animation .mdc-slider__thumb'));
+  assert.ok(native.includes('transition-duration:80ms'));
+  assert.match(appText, /this\.updateSliderVisual\(nextStart, nextEnd\)/);
+  const app = ts.createSourceFile('app.ts', appText, 99, true);
+  const method = find(app, node => ts.isMethodDeclaration(node) && node.name.getText(app) === 'updateSliderVisual');
+  const update = find(plugin, node => ts.isVariableDeclaration(node) && node.name.getText(plugin) === 'updateRange');
+  const pointCalls = [], mesh = () => ({ position: { x: 0 }, scaling: { x: 1 } });
+  const thumbs = { start: mesh(), end: mesh() }, stateLayers = { start: mesh(), end: mesh() }, active = mesh();
+  const context = { coordinates: { toRenderPoint: point => { pointCalls.push(point); return point; } } };
+  const updateRange = new Function('context', 'widthCss', 'active', 'thumbs', 'stateLayers',
+    compile(update.parent.parent.getText(plugin)) + ';return updateRange;')(context, 720, active, thumbs, stateLayers);
+  const call = new Function('start', 'end', method.body.getText(app).slice(1, -1));
+  const owner = { surface: { scene: { meshes: [{ metadata: { showcaseMaterialVisual: 'range', updateRange } }] } } };
+  call.call(owner, 30, 65);
+  assert.deepEqual([thumbs.start.position.x, thumbs.end.position.x], [-144, 108]);
+  pointCalls.length = 0;
+  call.call(owner, 40, 65);
+  assert.deepEqual([thumbs.start.position.x, thumbs.end.position.x], [-72, 108]);
+  assert.deepEqual(pointCalls, [{ x: 18, y: 0 }, { x: -72, y: 0 }, { x: 108, y: 0 }]);
+  assert.equal(stateLayers.start.position.x, -72);
+  // No clock advancement/render loop is involved: the application callback
+  // directly changes the visual mesh, not a CSS transition request to core.
+  const log = readFileSync('artifacts/material-parity/slider-temporal-observation-20261027.log');
+  assert.equal(hash(log), 'db6a476908862a24221eb9d3605df7df147a72af458a59c9eca85b4ea9878882');
+  const text = log[0] === 255 && log[1] === 254 ? log.subarray(2).toString('utf16le') : log.toString('utf8');
+  const rows = text.split(/\r?\n/).filter(line => line.startsWith('# {"sliderTemporal"'))
+    .map(line => JSON.parse(line.slice(2)).sliderTemporal);
+  assert.equal(rows.length, 4);
+  for (const row of rows.filter(row => row.mode === 'reference')) {
+    assert.ok(row.observation.frames.some(frame => frame.animations.some(animation => animation.timing.duration === 80 &&
+      animation.timing.easing === 'ease' && animation.keyframes.some(key => key.transform?.startsWith('translateX(')))));
+    assert.ok(new Set(row.observation.frames.map(frame => frame.centers[row.thumb === 'start' ? 0 : 1])).size > 2);
+  }
+});
+
 test('retained Slider state layers diverge in application inputs before plugin paint', t => {
   const report = load({ file: 'artifacts/material-parity/slider-hover-held-20261024/latest-report.json',
     sha256: 'de4228f971a0b0b341a21c9d71a20d9f351701ec634257732c6ed6d929a8ec98' });
