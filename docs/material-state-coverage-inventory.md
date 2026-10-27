@@ -4,6 +4,16 @@
 
 ### Current next action and publication status
 
+October27 coherent Stepper registry staging passes1/1 via node --test
+tests/material-parity/stepper-batch-registration.spec.mjs. Guarded in-memory
+policy/producer preparation proposes1099 sources/424 proofs/204 findings/71
+plan entries,adding8/6/1/1 while preserving every existing entry verbatim.
+Complete source-hash reversal,duplicate application and drift rejection pass;
+new proof titles resolve uniquely and all declared source files exist.
+Live1091/418/203/70 sources remain byte-identical. No export,large proposal,
+capture or acceptance-pointer change. Next reconcile historical policy/producer
+readers and exact Stepper review selection before installing this bounded batch.
+
 October27 Stepper wrapper finding is staged in
 tests/material-parity/stepper-label-wrapper-finding.mjs as
 fixture-stepper-label-clipping-wrappers-omitted,with exact retained evidence,
