@@ -8,7 +8,9 @@ import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../t
 
 // Trusted touch is a distinct input cohort, not a change to canonical fixtures.
 const script = 'scripts/audit-material-tooltip-touch.mjs';
-const options = parseSupplementalCaptureArguments(process.argv.slice(2));
+const traceRelease = process.argv.includes('--trace-release');
+assert.equal(process.argv.filter(arg => arg === '--trace-release').length, Number(traceRelease));
+const options = parseSupplementalCaptureArguments(process.argv.slice(2).filter(arg => arg !== '--trace-release'));
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const properties = Object.values(propertyGroups).flat();
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -40,6 +42,42 @@ try {
         await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
       }
       await page.evaluate(() => document.fonts.ready);
+      if (traceRelease && mode === 'reference') {
+        await page.evaluate(() => {
+          const trigger = document.querySelector('#tooltip-primary');
+          const tooltip = window.ng.getDirectives(trigger).find(value => typeof value._setupPointerExitEventsIfNeeded === 'function');
+          if (!tooltip) throw new Error('Native tooltip directive unavailable');
+          window.__tooltipReleaseTrace = [];
+          const record = (kind, data) => window.__tooltipReleaseTrace.push({ kind, time: performance.now(), ...data });
+          for (const type of ['click', 'focusin', 'focusout']) document.addEventListener(type,
+            event => record('event', { type, trusted: event.isTrusted, targetId: event.target.id ?? '', targetTag: event.target.tagName ?? '' }), true);
+          const original = tooltip.hide;
+          tooltip.hide = function (...args) {
+            record('hide', { delay: args[0] ?? null, defaultHideDelay: this.hideDelay,
+              touchendHideDelay: this._defaultOptions?.touchendHideDelay,
+              stack: new Error('tooltip hide caller').stack });
+            return Reflect.apply(original, this, args);
+          };
+          const originalShow = tooltip.show;
+          const observed = new WeakSet();
+          tooltip.show = function (...args) {
+            const result = Reflect.apply(originalShow, this, args);
+            const instance = this._tooltipInstance;
+            if (instance && !observed.has(instance)) {
+              observed.add(instance);
+              const originalHide = instance.hide;
+              instance.hide = function (...hideArgs) {
+                record('component-hide', { delay: hideArgs[0] ?? null,
+                  stack: new Error('tooltip component hide caller').stack });
+                return Reflect.apply(originalHide, this, hideArgs);
+              };
+            }
+            return result;
+          };
+          record('installation', { android: tooltip._platform.ANDROID, ios: tooltip._platform.IOS,
+            touchGestures: tooltip.touchGestures, touchendHideDelay: tooltip._defaultOptions?.touchendHideDelay });
+        });
+      }
       const box = mode === 'reference' ? await page.locator('#tooltip-primary').boundingBox()
         : await page.evaluate(() => {
           const api = window.__ASTYLAR_MATERIAL_BENCHMARK__, local = api.measure(['tooltip-primary'], false).elements['tooltip-primary'].borderBox;
@@ -76,7 +114,9 @@ try {
         writeFileSync(`${stem}.png`, png, { flag: 'wx' });
         let entry = entries.get(action);
         if (!entry) { entry = { family: 'tooltip', action, viewport, deviceScaleFactor: 2, profile: 'dark', cohort: 'android-trusted-touch' }; entries.set(action, entry); results.push(entry); }
-        entry[mode] = { samples, triggerBox: box, inputTree: { file: `${stem}-input-tree.json`, sha256: digest(bytes) },
+        entry[mode] = { samples, ...(traceRelease && mode === 'reference' ? {
+          releaseTrace: await page.evaluate(() => structuredClone(window.__tooltipReleaseTrace)),
+        } : {}), triggerBox: box, inputTree: { file: `${stem}-input-tree.json`, sha256: digest(bytes) },
           screenshot: { file: `${stem}.png`, sha256: digest(png) } };
       }
       await touch('touchStart');
@@ -99,7 +139,7 @@ try {
       await session.detach();
     } finally { await context.close(); }
   }
-  const report = { schemaVersion: 1, browser: browser.version(), capture: evidence.capture,
+  const report = { schemaVersion: 1, ...(traceRelease ? { diagnostic: 'native-release-caller-trace', instrumentation: 'Delegating hide wrapper and passive document event observations; timing may be perturbed.' } : {}), browser: browser.version(), capture: evidence.capture,
     viewport, userAgent, isMobile: true, hasTouch: true, deviceScaleFactor: 2,
     scope: 'Android emulation / dark / DPR2 trusted-touch state/timing diagnostic; no configured-case, physical-device, raster or parity acceptance claim.', results };
   writeFileSync(`${evidence.directory}/latest-report.json`, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });

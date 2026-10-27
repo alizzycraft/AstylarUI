@@ -4,6 +4,35 @@
 
 ### Current next action and publication status
 
+October27 fresh tooltip release trace resolves the dismissal path in Chrome156,
+not retrospectively in the uninstrumented Chrome154 recording. All1887 served
+application assets match the retained current-full checkpoint. Existing touch
+driver adds explicit --trace-release only:delegating directive/component hide
+wrappers plus click/focus observations,no fixture changes or synthetic DOM events.
+Report tooltip-release-component-caller-20261027/latest-report.json SHA
+2c88162f006c9e17a53983d479ae90f4b5388396bb8674e2fc3bee3ed536445b
+records native held-visible,then directive/component1500ms requests at touchend,
+trusted click,and component hide(0) through _TooltipComponent._handleBodyInteraction
+before release-early closed. Candidate remains closed during long hold,consistent
+with the existing authoring omission;no new core touch finding is inferred.
+Current browser156.0.8078.48 and instrumentation may affect timing. Exact old
+runtime causality,physical devices,other contexts and rendering parity remain open.
+
+First trace tooltip-release-caller-20261027 observed only the directive and thus
+missed the component call;it is retained with its checkpoint,not presented as a
+successful causal proof. Its complete producer bytes recover exactly by removing
+only the subsequent component-observer block from the current driver. Original
+Chrome154 producer is separately read from committed e34e0c23 and hash-verified.
+Initial validator invocation omitted expectedProvenance and rejected;corrected
+invocation passes without changing evidence or validator. Both browser processes
+and temporary servers terminated normally. No retained artifact was overwritten.
+Existing tooltip-position-history suite passes4/4,0skip,exit0(1003.0526ms),including
+fresh checkpoint/source/runtime/tree validation,all8 screenshot hashes,three
+negative controls,old timestamps and original compensation history. Scoped diff
+check passes. Driver/test changes and fresh evidence await one coherent source/
+proof integration batch;accepted f16b51d2 is unchanged. Next return to exact-case
+coverage gaps rather than repeat this resolved fresh dismissal investigation.
+
 October27 native touch-exit source trace narrows,not resolves,the early-hide cause.
 Checkpoint7ae2cba1 authenticates complete chunk-7SL66K3U.js and its source map;
 mapped Material module-CWxMD37a.mjs authenticates as

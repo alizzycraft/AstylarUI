@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+Retain tooltip-release-caller-20261027 and tooltip-release-component-caller-20261027
+with their -checkpoint siblings. The first records the insufficient directive-only
+observation;the second records the decisive immediate component hide caller after
+trusted click. Both reuse retained application assets in Chrome156,not the original
+Chrome154 runtime. Preserve their eight trees/eight PNGs each and reports. First
+producer source recovers exactly by removing the component observer block from the
+subsequent committed driver;the report binds its complete original source hash.
+No old capture or failure evidence was deleted. These are diagnostic evidence,
+not disposable successful scratch or current rendering acceptance.
+
 Temporal milestone f16b51d2/index52342f02 passed conservation,independent cold and
 verified isolated/accepted imports. Keep slider-temporal-independent-cold-20261027,
 slider-temporal-candidate-section-digests-20261027,

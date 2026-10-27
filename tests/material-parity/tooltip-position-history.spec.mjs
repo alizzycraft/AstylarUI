@@ -3,6 +3,48 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 
 const file = 'examples/material-showcase/src/app/astylar.component.ts';
+test('fresh tooltip release trace observes body-interaction immediate component hide after trusted click', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const { validateSupplementalCapture } = await import('./supplemental-capture-evidence.mjs');
+  const { propertyGroups } = await import('./input-equivalence-policy.mjs');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const reportFile = 'artifacts/material-parity/tooltip-release-component-caller-20261027/latest-report.json';
+  const bytes = readFileSync(reportFile);
+  assert.equal(hash(bytes), '2c88162f006c9e17a53983d479ae90f4b5388396bb8674e2fc3bee3ed536445b');
+  const report = JSON.parse(bytes);
+  const expectedProvenance = JSON.parse(readFileSync(report.capture.checkpointManifest.file)).provenance;
+  assert.equal(report.browser, '156.0.8078.48');
+  assert.deepEqual(expectedProvenance.browserFiles, JSON.parse(readFileSync(
+    'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json')).provenance.browserFiles);
+  assert.deepEqual(validateSupplementalCapture(report, { reportFile, expectedProvenance,
+    script: 'scripts/audit-material-tooltip-touch.mjs', styleProperties: Object.values(propertyGroups).flat() }),
+  { status: 'checkpoint-bound', errors: [] });
+  for (const row of report.results) for (const side of ['reference', 'astylar']) {
+    const receipt = row[side].screenshot;
+    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  }
+  const inspect = raw => {
+    const held = raw.results.find(row => row.action === 'long-held').reference.samples.at(-1);
+    const release = raw.results.find(row => row.action === 'long-release').reference;
+    assert.equal(held.shown, true); assert.equal(release.samples[0].shown, false);
+    const events = release.releaseTrace.filter(row => row.time > held.time);
+    assert.deepEqual(events.map(row => row.kind), ['hide', 'component-hide', 'event', 'component-hide']);
+    assert.deepEqual(events.filter(row => row.kind.includes('hide')).map(row => row.delay), [1500, 1500, 0]);
+    assert.equal(events[2].type, 'click'); assert.equal(events[2].trusted, true);
+    assert.match(events[0].stack, /HTMLButtonElement\.touchendListener/);
+    assert.match(events[3].stack, /_TooltipComponent\._handleBodyInteraction/);
+    assert.ok(events.every((row, i) => i === 0 || row.time >= events[i - 1].time));
+    assert.ok(events[3].time < release.samples[0].time);
+  };
+  inspect(report);
+  for (const mutate of [
+    r => { r.results.find(row => row.action === 'long-release').reference.releaseTrace.at(-1).delay = 1500; },
+    r => { r.results.find(row => row.action === 'long-release').reference.releaseTrace.at(-1).stack = 'unknown'; },
+    r => { r.results.find(row => row.action === 'long-held').reference.samples.at(-1).shown = false; },
+  ]) { const altered = structuredClone(report); mutate(altered); assert.throws(() => inspect(altered)); }
+  // This diagnoses the fresh instrumented run, not the unobserved Chrome154 caller.
+});
 test('retained tooltip touch release timing excludes capture-delay expiry, not unobserved dismissal paths', async () => {
   const { readFileSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');
@@ -13,7 +55,8 @@ test('retained tooltip touch release timing excludes capture-delay expiry, not u
   };
   const report = JSON.parse(read('artifacts/material-parity/tooltip-trusted-touch-20261008/latest-report.json',
     '7949f5618b27fd71f0523db844428ecc8f3c9b52e9bf7414e23e0712eeb40332'));
-  const producer = read('scripts/audit-material-tooltip-touch.mjs',
+  const producer = execFileSync('git', ['show', 'e34e0c23:scripts/audit-material-tooltip-touch.mjs'], { encoding: 'utf8' });
+  assert.equal(createHash('sha256').update(producer).digest('hex'),
     '50628b4edf89d4fb33c9b0bc810f806a8a4e1ed72a378048bd5adaec9c162bb3');
   assert.ok(producer.indexOf("await capture('long-held', [early, late]);") <
     producer.indexOf("const releaseEarly = await observe('release-early', 100)"));
