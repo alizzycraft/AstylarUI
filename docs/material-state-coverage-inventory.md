@@ -4,6 +4,40 @@
 
 ### Current next action and publication status
 
+October27 Stepper canonical milestone is accepted locally as
+cd84d26cacb5f9fbce67938bdadbd418c3d5051ca489e2f8950d2007cce8ac87,
+index28230d0ce2369102c6931a3cd8ae4792dac9631e5223b185bc2c781bb4b00bf7.
+Export and independent cold --stepper-batch --check both exit0; cold evidence
+session reports diskHits0,19881 files/3445358495 bytes and completes in3132684.6226ms.
+Isolated and accepted imports both exit0 and verify the identical index:
+8483 scalar differences/389202 occurrences,204 source findings,39904 control rows.
+All2311 cases remain partial/current-rendering unverified; these are publication
+and evidence-conservation gates,not whole-case acceptance or renderer fixes.
+
+Conservation authenticates all80 sections:69 unchanged and11 bounded changes.
+Complete leaf comparison of five changed receipt-bearing sections preserves
+14085648 entries and changes only147 hashes. Forty-eight proof hashes and the
+motion-report hash independently reconcile to the single producer fingerprint
+transition; no scalar metrics/classifications change. All203 previous findings,
+418 previous proof declarations and70 prior plan entries are conserved; additions
+are1 finding/7 proofs/1 plan entry. All1099 source hashes are verified,including
+eight additions and guarded whole-source recovery for seven changed prior paths.
+All2311 coverage records are conserved except the eight documented supplementary
+activation children;18474 prior receipts are unchanged and35 additions authenticate.
+Markdown conservation independently confirms only the new finding/plan/seven
+proofs,plan renumbering and two existing proof-line updates.
+
+Receipts under artifacts/material-parity/:stepper-canonical-export-20261027.log,
+stepper-independent-cold-check-20261027.log (phase details in corresponding stderr),
+stepper-candidate-section-digests-20261027.log,
+stepper-receipt-leaf-comparison-20261027.log,
+stepper-candidate-metadata-extract-20261027.log,
+stepper-candidate-import-20261027.log and stepper-accepted-import-20261027.log.
+The accepted predecessor remains in stepper-pre-export-3252368b-20261027 and its
+original working-store generation. Next publish this verified milestone,then
+resume remaining exact-case obligations. Do not repeat these checks for prose.
+Original equal-input scope,root-cause requirements and final acceptance gates remain.
+
 October27 Stepper batch is installed locally:1099 sources/425 proofs/204 findings/
 71 plan entries, preserving the complete1091/418/203/70 predecessor. Explicit
 --stepper-batch selects863d24f5;actual launcher --dry-run passes. The wrapper
