@@ -4,6 +4,20 @@
 
 ### Current next action and publication status
 
+October27 temporal-batch preflight passes:removing exactly four added tests and
+one crypto import restores all three complete test files to publishedfd3fd3f2,
+byte-for-byte after the established CRLF normalization. Producer is unchanged;
+executing its inventory with prior/current readers preserves all432 proof
+non-line fields,with18 line shifts. No new proof is registered yet.
+Historical-reader endpoints (prior -> current normalized SHA256):
+- public-range-drag-evidence.spec.mjs:355928ad9eabe639c8b838b4bd7d23a6890ceb13835a0dfeb6f323f1eb1e8653 -> 0d94003d2214b849ba89035d5757a4ec9c30d4bfd7b47e0ca763d18bc10368b1
+- sort-focus-structure.spec.mjs:6ea5ba46281a96565edd8599976ca90969f10cd653976f12a05202bfcc45107b -> 1e07ad431df8cc0c76bb8821a1f3d0c26841d57a353278bffa1d19a5000d3386
+- slider-retained-state-layer.spec.mjs:cc8c942541660c657dbbad42f3dbf353c63113d2ce0a96b51b8bcc98ed3e3288 -> 53de2d93dbb9502a13b2786d0afbfb17a26c368395c728d01cb48ade5317e3d9
+Use these bounded endpoints for historical reads;unknown edits must reject.
+Next install source restoration plus four proof entries and the retained temporal
+log dependency through existing registration infrastructure,then verify the
+combined reader before export. Acceptedb7fb and all case statuses remain unchanged.
+
 October27 generic motion support check closes the need for another browser
 reproduction of the already documented unsupported feature. The current core
 validateStyle method and its actual property set,executed from source,accept
