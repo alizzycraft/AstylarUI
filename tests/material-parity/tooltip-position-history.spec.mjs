@@ -3,6 +3,41 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 
 const file = 'examples/material-showcase/src/app/astylar.component.ts';
+test('retained tooltip touch release timing excludes capture-delay expiry, not unobserved dismissal paths', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const read = (file, expected) => {
+    const bytes = readFileSync(file);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), expected);
+    return bytes.toString('utf8');
+  };
+  const report = JSON.parse(read('artifacts/material-parity/tooltip-trusted-touch-20261008/latest-report.json',
+    '7949f5618b27fd71f0523db844428ecc8f3c9b52e9bf7414e23e0712eeb40332'));
+  const producer = read('scripts/audit-material-tooltip-touch.mjs',
+    '50628b4edf89d4fb33c9b0bc810f806a8a4e1ed72a378048bd5adaec9c162bb3');
+  assert.ok(producer.indexOf("await capture('long-held', [early, late]);") <
+    producer.indexOf("const releaseEarly = await observe('release-early', 100)"));
+  // This producer did not observe click/focusout/hide calls. Do not assign a cause
+  // merely because pointerleave is present in its restricted event stream.
+  const eventTypes = producer.slice(producer.indexOf('for (const type of ['), producer.indexOf('document.addEventListener(type'));
+  assert.ok(!eventTypes.includes("'click'") && !eventTypes.includes("'focusout'"));
+  const inspect = samples => {
+    const held = samples.find(e => e.action === 'long-held').reference.samples.at(-1);
+    const early = samples.find(e => e.action === 'long-release').reference.samples[0];
+    const end = early.events.findLast(e => e.type === 'touchend');
+    assert.equal(held.shown, true); assert.equal(early.shown, false);
+    assert.equal(end.trusted, true);
+    assert.equal(early.time - end.time, 105.5);
+    assert.ok(end.time > held.time && end.time - held.time < 117);
+    return { sinceTouchEndMs: early.time - end.time, hideCause: 'unobserved' };
+  };
+  assert.deepEqual(inspect(report.results), { sinceTouchEndMs: 105.5, hideCause: 'unobserved' });
+  for (const mutate of [
+    r => { r.find(e => e.action === 'long-release').reference.samples[0].time += 1500; },
+    r => { r.find(e => e.action === 'long-release').reference.samples[0].events = []; },
+    r => { r.find(e => e.action === 'long-release').reference.samples[0].shown = true; },
+  ]) { const altered = structuredClone(report.results); mutate(altered); assert.throws(() => inspect(altered)); }
+});
 const source = commit => execFileSync('git', ['show', `${commit}:${file}`], { encoding: 'utf8' });
 const rule = (text, selector) => {
   const matches = text.split(/\r?\n/).filter(line => line.includes(`selector: '${selector}'`));

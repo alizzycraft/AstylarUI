@@ -4,6 +4,28 @@
 
 ### Current next action and publication status
 
+October27 tooltip touch timing narrows the retained early-hide uncertainty.
+Authenticated report7949f5618b27fd71f0523db844428ecc8f3c9b52e9bf7414e23e0712eeb40332
+and unchanged producer50628b4edf89d4fb33c9b0bc810f806a8a4e1ed72a378048bd5adaec9c162bb3
+show native held-visible at2942.5ms,touchend3059.399999976158ms,and closed
+release-early3164.899999976158ms:105.5ms after release. The116.9ms capture
+interval preceded touchend;capture overhead cannot turn this endpoint into a
+1500ms post-release expiry observation. Pointerleave is recorded,but click,
+focusout and hide-call timing are not,so the responsible dismissal path remains
+unobserved. No source-derived default is claimed as observed runtime behavior.
+Existing tooltip-position-history.spec.mjs now preserves this timestamp boundary
+and rejects three altered-evidence controls;the complete suite passes2/2,0skip,
+exit0(326.1108ms). No recapture or renderer/fixture change.
+This additive test is not yet registered in the canonical producer;its changed
+source fingerprint/proof-line applicability must be reconciled in a coherent
+future batch. Accepted f16b51d2 remains the published historical snapshot,not an
+assertion that every current test source is unchanged. No case status changes.
+Next if resolving early hide is necessary:observe native hide caller plus
+click/focusout at the release boundary;do not repeat long-press opening or stored
+hover/held pixels. Those pixels,input mappings,host-scroll cause and actual-theme
+resource failures were already investigated and remain reusable within their
+recorded boundaries. The earlier hover/held navigation note below is superseded.
+
 October27 publication is confirmed: remote codex/material-audit-alignment-integration
 matches verified milestone83b9ad891657607c5aa331040ff5e21210193e50. The first
 HTTPS attempt failed;the existing retry finished before this independent remote
