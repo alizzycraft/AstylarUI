@@ -4,6 +4,62 @@
 
 ### Current next action and publication status
 
+October27 snackbar milestone is accepted locally as generation
+b7fb326da30ea5b2139e597077f16bfa36f2048995a2640a18d216cf43b2724f,
+index95edbdcae36022cebc2b0fd9c4bebe10ddac39828b1aa7c9cc376d562cddf29d.
+Export,complete conservation and independent zero-disk-hit cold replay pass.
+Isolated import16929 and accepted-copy/import both completed exit0;existing
+verifyFindings authenticated all84 shards and the payload/index before accepted
+pointer advancement and afterward. Counts8483 discrepancies,204 findings,
+39904 control rows,389202 occurrences and0 unresolved scalar attributions preserve.
+Logs:snackbar-candidate-import-20261027.log and
+snackbar-accepted-import-20261027.log under artifacts/material-parity.
+All2311 cases remain partial/current-rendering unverified. This accepts the
+evidence snapshot,not rendering parity or whole-case inspection. Previouscd84d26c
+and original/failure evidence remain retained. Publish the verified milestone,
+then resume remaining exact-case obligations without repeating these gates.
+Earlier pending-import/cold/export notes below are historical checkpoints.
+
+October27 snackbar export17175 completed exit0; candidate generation
+b7fb326da30ea5b2139e597077f16bfa36f2048995a2640a18d216cf43b2724f
+is NOT accepted yet. Compressed98415587 and decoded2369606848 bytes authenticate;
+decoded SHA7318f3de88237efd1388fc3ea54b49d48114db35ecb34dad65dcbe4374972a8c.
+Candidate section scan4116 and metadata extraction77002 both completed exit0.
+All80 section names/order preserve;72 sections are identical,including findings,
+summary and implementation plan. Eight changed sections are sourceFingerprints,
+coverage,controlLineBoxes,discrepancies,ownerCaretInputs,reviewedSourceBatchInputs,
+controlTypography and focusedProofs.
+
+Receipt comparison5595 completed exit0:13741789 entry paths/shapes preserved;
+145 changed leaves are97 registered producer hashes and48 control-proof hashes
+independently recomputed from the retained48 predecessor records. Both motion
+report hashes independently reconstruct from preserved evidence with only the
+declared source-receipt replacements. All1104 current source fingerprints verify
+under the producer's UTF-8/CRLF-to-LF contract;an initial raw-byte check failed
+on a retained log and the corrected contract check passed. All1099 predecessor
+sources recover through the guarded historical reader;exactly9 paths changed.
+All425 old non-line proof fields preserve,with7 additions and28 line shifts.
+All2311 case records preserve except the single documented snackbar activation
+supplement;all remain partial/current-rendering unverified. All18509 previous
+evidence receipts preserve and18 additions authenticate. Other coverage metadata
+and predecessor applicability preserve;the new applicability boundary remains
+supplementary visibility only,not exact timing or current rendering acceptance.
+
+Reuse snackbar-candidate-section-digests-20261027.log,
+snackbar-candidate-metadata-extract-20261027.log and
+snackbar-receipt-leaf-comparison-20261027.log under artifacts/material-parity.
+Independent cold --snackbar-single-open --check is running in session96467;
+stdout/stderr are snackbar-canonical-cold-20261027.log and corresponding stderr.log.
+Do not restart it. Markdown reconstruction passed:exactly7 new proof entries and
+28 existing proof-line updates,with no other changes. Candidate Markdown SHA256
+d35dc86ea7d24b42d516297ff49fd6992b4b075a992ef2e269d53cd131a8ffb1.
+Cold replay96467 completed exit0 in3450927.2871ms;its evidence session reports
+diskHits0,invalidated0,19899 files and3446879384 verification bytes. Isolated
+candidate import is now running against snackbar-candidate-store-20261027,
+with output snackbar-candidate-import-20261027.log. Verified isolated/accepted
+imports and publication remain pending. Accepted
+working-store pointer stayscd84d26c. Earlier running-export notes below are historical.
+
 October27 canonical conservation precheck completed while export17175 remains
 live. Reused accepted `stepper-candidate-metadata-extract-20261027.log`, SHA256
 bd58dc9b0885c9828f1c939717bf7fa4230be3beab3294fbd3006fa915cb5cd8,
