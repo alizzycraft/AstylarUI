@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October27 snackbar registration is staged, not installed. The new
+`snackbar-single-open-registration.mjs` authenticates five complete historical
+source transitions against pinned commit2ace4261 (capture producer plus four
+already-registered test/helper files). Unknown source edits reject; repeated and
+nested readers recover the same prior bytes without modifying live files.
+Staged registry conserves all1099 source entries and425 proofs, adding five
+sources/six proofs for1104/431. Implementation plan and finding registry are
+unchanged. `node --test tests/material-parity/snackbar-single-open-registration.spec.mjs`
+passes2/2(exit0,1254.9502ms), including whole-registry restoration, unique proof
+anchors, source drift rejection and live-file nonmutation.
+
+The complete historical reader reconstructed expected reviewbcc94f3d with2311
+cases. The first dependency-validation invocation then failed at the loader's
+workspace-relative-path guard because the invocation passed an absolute path;
+this is not a dependency-validation pass. A corrected invocation uses
+`path.relative(root, reader.file)` and the unchanged loader with explicit root.
+At this entry it is still running (session62946); poll that existing handle
+instead of restarting. No canonical export or capture was launched, and accepted
+generationcd84d26c remains unchanged. Next: obtain the corrected dependency result,
+then reconcile selector/shared-reader integration before installing the staged
+inventory. All original case/acceptance obligations remain open as previously.
+
+
 October27 supplementary snackbar coverage join is implemented and tested, not
 yet selected/exported. `scripts/join-material-snackbar-single-open.mjs` consumes
 the authenticated accepted Stepper coverage parent863d24f5 and capture1cc0846c,
