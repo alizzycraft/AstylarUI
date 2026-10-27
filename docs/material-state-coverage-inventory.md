@@ -5,7 +5,7 @@
 ### Current next action and publication status
 
 October27 Stepper leave join is verified but NOT canonical:review
-3bfdf15530366b15de0bcad334548cedd37e9a618a89f0e83a29a36d7c9504e3
+863d24f5c259f5ae2cca0ffd9356dd9e16ff8d340aad850bd96ef488e71cca92
 adds supplementaryLeaveSelection to exactly eight authoredActivation obligations,
 pending to partial. Complete predecessor e17dff33 is recovered by reversing only
 those children/dispositions;all other fields,remaining tasks and2311 whole-case
@@ -15,6 +15,15 @@ tests/material-parity/stepper-leave-evidence.spec.mjs),including forged report/
 screenshot rejection and duplicate-join rejection. No large proposal file was
 saved,canonical export repeated or acceptance pointer changed. Keep this bounded
 join for the next coherent integration batch;do not recapture its settled states.
+This supersedes the initial3bfdf155 pending digest without changing the capture.
+Retained configuredEvents already report candidate step-review-text for down/up/
+click in all eight contexts;native DOM events independently target that text,
+while native benchmark events record stepper-primary. The join now preserves
+the complete maintained event arrays alongside DOM events rather than discarding
+this stronger witness. A fifth negative control rejects a forged candidate leaf.
+Focused suite remains3/3 and predecessor recovery still holds. This proves the
+reported logical target in this capture,not independent hit-test math or whole
+event-schema equivalence. No browser recapture or canonical export was needed.
 
 October27 Stepper activate-leave observation closes a specific evidence question,
 not a case:the eight original paired trees agree on selection but candidate

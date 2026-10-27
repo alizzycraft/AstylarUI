@@ -41,12 +41,16 @@ export function joinStepperLeave(parent, read = readFileSync) {
       }
       assert.deepEqual(item.observations[0].tabOptions.map(t => t.selected), [true, false]);
       assert.deepEqual(item.observations.at(-1).tabOptions.map(t => t.selected), [false, true]);
+      const pointer = item.observations.at(-1).configuredEvents.filter(e => ['pointerdown', 'pointerup', 'click'].includes(e.type));
+      assert.deepEqual(pointer.map(e => [e.type, e.targetId]), ['pointerdown', 'pointerup', 'click'].map(type =>
+        [type, side === 'reference' ? 'stepper-primary' : 'step-review-text']));
     }
   }
   const producer = 'scripts/join-material-stepper-leave.mjs';
   const producerReceipt = { file: producer, sha256: hash(read(producer)) };
   const observed = item => [...item.observations.slice(0, 1), ...item.actionTimeline, ...item.observations.slice(1)].map(o => ({
     boundary: o.boundary, tabs: o.tabOptions, pointerEvents: o.events.filter(e => ['pointerdown', 'pointerup', 'click'].includes(e.type)),
+    maintainedEvents: o.configuredEvents,
   }));
   let changed = 0;
   const groups = parent.groups.map(group => {
@@ -62,7 +66,7 @@ export function joinStepperLeave(parent, read = readFileSync) {
         evidence: { report: receipt, manifest, actionSource: report.actionSource, producer: producerReceipt,
           pairedTrees: { reference: row.reference.inputTree, astylar: row.astylar.inputTree },
           screenshots: { reference: row.reference.screenshot, astylar: row.astylar.screenshot } },
-        boundary: 'Eight supplementary maintained activate-leave actions in a retained served build with extra awaited mouse-boundary reads. Actual generated tab selection/focus and DOM pointer targets observed. Sampled native DOM lag is not a timing defect; CANVAS targets do not prove internal hit identity. Not historical reconstruction, keyboard, paint, lifetime, full current-library applicability or whole-case acceptance. All prior remaining tasks and other obligations preserved.',
+        boundary: 'Eight supplementary maintained activate-leave actions in a retained served build with extra awaited mouse-boundary reads. Actual generated tab selection/focus and DOM pointer targets observed. Candidate maintained events report step-review-text; native DOM events identify that text while its benchmark stream records the host. These are distinct schemas, not normalized event parity or independent coordinate/hit-testing proof. Sampled native DOM lag is not a timing defect. Not historical reconstruction, keyboard, paint, lifetime, full current-library applicability or whole-case acceptance. All prior remaining tasks and other obligations preserved.',
       },
     } } };
   });

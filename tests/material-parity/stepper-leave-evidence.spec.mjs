@@ -37,6 +37,9 @@ function checkSide(item, side) {
     assert.equal(event.target.tag, side === 'reference' ? 'SPAN' : 'CANVAS');
     assert.equal(event.target.logicalId, side === 'reference' ? 'step-review-text' : null);
   }
+  const maintained = item.observations.at(-1).configuredEvents.filter(e => ['pointerdown', 'pointerup', 'click'].includes(e.type));
+  assert.deepEqual(maintained.map(e => [e.type, e.targetId]), ['pointerdown', 'pointerup', 'click'].map(type =>
+    [type, side === 'reference' ? 'stepper-primary' : 'step-review-text']));
 }
 
 test('Stepper leave capture authenticates actual tab observations without promoting authored endpoints', () => {
@@ -66,6 +69,7 @@ test('Stepper evidence rejects missing state, wrong identity, missing leave and 
     item => { item.observations[0].tabOptions[0].logicalId = 'step-review'; },
     item => { item.actionTimeline.pop(); },
     item => { item.observations.at(-1).events.find(e => e.type === 'click').trusted = false; },
+    item => { item.observations.at(-1).configuredEvents.find(e => e.type === 'click').targetId = 'step-details-text'; },
   ]) {
     const item = structuredClone(report.results[0].astylar); mutate(item);
     assert.throws(() => checkSide(item, 'astylar'), assert.AssertionError);
