@@ -1,9 +1,38 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { rangeDragArtifactRoot, inspectRangeDragCause, validateRangeDragEvidence } from './public-range-drag-evidence.mjs';
 const report = JSON.parse(readFileSync(`${rangeDragArtifactRoot}/latest-report.json`));
 const lines = readFileSync(`${rangeDragArtifactRoot}/audit.js`, 'utf8').split('\n');
+
+test('retained range timestamps are settled action samples, not continuous visual motion evidence', () => {
+  const travel = JSON.parse(readFileSync('docs/material-public-range-travel-audit.json'));
+  const bytes = readFileSync(`${rangeDragArtifactRoot}/latest-report.json`);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), travel.originalReport.sha256);
+  assert.equal(travel.originalReport.file, `${rangeDragArtifactRoot}/latest-report.json`);
+  let samples = 0, movementPictures = 0;
+  for (const entry of report.results) for (const side of ['reference', 'astylar']) {
+    let previous = -Infinity;
+    for (const stage of entry.stages) {
+      const sample = stage[side];
+      assert.ok(Number.isFinite(sample.time) && sample.time >= previous);
+      previous = sample.time;
+      assert.equal(Boolean(sample.screenshot), ['initial', 'updated', 'move-8', 'released'].includes(stage.name));
+      if (stage.name.startsWith('move-') && sample.screenshot) movementPictures++;
+      // These fields describe semantic controls/events, not an animation timeline
+      // or rendered thumb positions at each frame. Do not compare clocks across
+      // the separately navigated reference and candidate pages.
+      assert.deepEqual(Object.keys(sample).filter(key => !['mode', 'translated', 'stackTracing', 'site',
+        'controls', 'time', 'surfaceBox', 'nativeEvents', 'publicEvents', 'updates', 'active',
+        'diagnostics', 'resolved', 'screenshot'].includes(key)), []);
+      samples++;
+    }
+  }
+  assert.equal(samples, 832);
+  assert.equal(movementPictures, 64, 'only the final of eight movement boundaries has a raster per side');
+  assert.equal(travel.renderingEquivalent, false);
+});
 
 test('public range reduction binds every case, source, served bundle, screenshot and causal stack', () => {
   const proof = validateRangeDragEvidence(report);

@@ -4,6 +4,20 @@
 
 ### Current next action and publication status
 
+October27 temporal reuse check resolves the public-range alternative: authenticated
+v2 report8c298293 contains832 timestamped side samples,but only64 movement
+rasters (move-8 only across32 cases/two sides). Its collector settles each action
+and runs reference/candidate on separate pages;timestamps are not a synchronized
+frame timeline. Existing public-range-drag-evidence.spec.mjs now guards this
+boundary without altering the old causal assertions. Focused retained-range-
+timestamps test passes1/1,0skip,exit0 (1097.418ms);no browser/capture/export.
+This closes the reuse question for this public reduction,not smoothness itself.
+New test source is not yet registered in the canonical fingerprint/proof batch;
+preserve the accepted snapshot as historical until deliberate batch reconciliation.
+Next extend an existing bounded visual probe with timestamped frame samples and
+native animation observations,keeping equivalent-input public diagnosis separate
+from the unequal Material fixture. Do not rerun the endpoint travel proofs.
+
 October27 publication completed: commit fd3fd3f2e0cf256853e7239c52e34aaa6bae4751
 is verified on origin/codex/material-audit-alignment-integration. The accepted
 snackbar generation below is published; do not repeat its export/import gates.
