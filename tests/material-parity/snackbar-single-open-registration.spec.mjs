@@ -66,17 +66,17 @@ test('staged snackbar registration preserves every accepted source and proof', (
   };
   const prior = arrays(before), next = arrays(staged);
   assert.equal(prior.sourceFingerprints.length, 1099); assert.equal(prior.focusedProofInventory.length, 425);
-  assert.equal(next.sourceFingerprints.length, 1104); assert.equal(next.focusedProofInventory.length, 432);
-  assert.deepEqual(next.sourceFingerprints.slice(5), prior.sourceFingerprints);
-  assert.deepEqual(next.focusedProofInventory.slice(7), prior.focusedProofInventory);
+  assert.equal(next.sourceFingerprints.length, 1106); assert.equal(next.focusedProofInventory.length, 436);
+  assert.deepEqual(next.sourceFingerprints.slice(7), prior.sourceFingerprints);
+  assert.deepEqual(next.focusedProofInventory.slice(11), prior.focusedProofInventory);
   assert.deepEqual(next.implementationPlan, prior.implementationPlan);
   const files = next.sourceFingerprints.map(text => new Function(`return ${text}`)());
-  assert.equal(new Set(files).size, files.length); assert.deepEqual(files.slice(0, 5), snackbarSingleOpenSources);
+  assert.equal(new Set(files).size, files.length); assert.deepEqual(files.slice(0, 7), snackbarSingleOpenSources);
   const proof = (_root, file, pattern, title) => {
     assert.equal([...readFileSync(file, 'utf8').matchAll(new RegExp(pattern.source, 'g'))].length, 1);
     return [file, title];
   };
-  assert.deepEqual(next.focusedProofInventory.slice(0, 7).map(text => new Function('proof', 'root', `return ${text}`)(proof, '.')), snackbarSingleOpenProofs);
+  assert.deepEqual(next.focusedProofInventory.slice(0, 11).map(text => new Function('proof', 'root', `return ${text}`)(proof, '.')), snackbarSingleOpenProofs);
   assert.throws(() => prepareSnackbarSingleOpenRegistry(before + '\n// drift'));
   assert.throws(() => restoreSnackbarSingleOpenRegistry(staged + '\n// drift'));
   assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), live);

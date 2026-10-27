@@ -4,6 +4,18 @@
 
 ### Current next action and publication status
 
+October27 temporal registration is installed,not canonical:existing registration
+now includes four tests,temporal log,the directly executed core diagnostics source
+and three guarded historical test-source endpoints. Combined reader64471 finished
+exit0:reviewbcc94f3d,2311 cases/18527 dependencies,inspectionComplete=false,
+currentRenderingAccepted=false. Logs:slider-temporal-combined-reader-20261027.log
+and .stderr.log under artifacts/material-parity. Do not restart this finished run.
+After adding the diagnostics inventory entry,combined registration/older Stepper
+checks pass5/5,0skip,exit0 (2016.2966ms);inventory1106 sources/436 proofs.
+The last change adds a source receipt only and preserves historical reader output.
+Next perform coherent canonical export/conservation/cold/import gates;accepted
+b7fb,all case statuses and full acceptance criteria remain unchanged until then.
+
 October27 temporal-batch preflight passes:removing exactly four added tests and
 one crypto import restores all three complete test files to publishedfd3fd3f2,
 byte-for-byte after the established CRLF normalization. Producer is unchanged;

@@ -48,6 +48,8 @@ export const snackbarSingleOpenSources = Object.freeze([
   'tests/material-parity/snackbar-single-open-registration.mjs',
   'tests/material-parity/snackbar-single-open-registration.spec.mjs',
   'artifacts/material-parity/snackbar-single-open-20261027/latest-report.json',
+  'artifacts/material-parity/slider-temporal-observation-20261027.log',
+  'src/lib/astylar-diagnostics.ts',
 ]);
 export const snackbarSingleOpenProofs = Object.freeze([
   ['tests/material-parity/snackbar-position-observation.spec.mjs', 'original snackbar auto-dismiss comparator does not witness the timed transition'],
@@ -57,6 +59,10 @@ export const snackbarSingleOpenProofs = Object.freeze([
   ['tests/material-parity/snackbar-single-open-registration.spec.mjs', 'snackbar historical reader authenticates all five source transitions without changing live inputs'],
   ['tests/material-parity/snackbar-single-open-registration.spec.mjs', 'staged snackbar registration preserves every accepted source and proof'],
   ['tests/material-parity/snackbar-single-open-registration.spec.mjs', 'staged snackbar selector preserves older choices and rejects mixed supplements'],
+  ['tests/material-parity/public-range-drag-evidence.spec.mjs', 'retained range timestamps are settled action samples, not continuous visual motion evidence'],
+  ['tests/material-parity/sort-focus-structure.spec.mjs', 'slider held stationary pointer retains frame positions and native animation state'],
+  ['tests/material-parity/slider-retained-state-layer.spec.mjs', 'retained Slider motion uses native CSS transition versus synchronous application plugin positions'],
+  ['tests/material-parity/slider-retained-state-layer.spec.mjs', 'current core reports slider CSS motion requests unsupported while accepting transform'],
 ]);
 const producerPrior = 'a002e989cf9d586e815e91783d729e863c4c9c7fc144933253d8b45ab5168251';
 const boundary = 'Retained supplementary visibility and historical evidence reconciliation; not exact expiry timing, current rendering, input equivalence or case closure.';
@@ -121,6 +127,9 @@ export function restoreSnackbarRegistrationIfPresent(bytes, kind) {
   return kind === 'producer' ? restoreSnackbarSingleOpenRegistry(source) : restoreSnackbarSingleOpenSelection(source, kind);
 }
 export const snackbarHistoricalSources = Object.freeze([
+  ['tests/material-parity/public-range-drag-evidence.spec.mjs', '355928ad9eabe639c8b838b4bd7d23a6890ceb13835a0dfeb6f323f1eb1e8653', '0d94003d2214b849ba89035d5757a4ec9c30d4bfd7b47e0ca763d18bc10368b1'],
+  ['tests/material-parity/sort-focus-structure.spec.mjs', '6ea5ba46281a96565edd8599976ca90969f10cd653976f12a05202bfcc45107b', '1e07ad431df8cc0c76bb8821a1f3d0c26841d57a353278bffa1d19a5000d3386'],
+  ['tests/material-parity/slider-retained-state-layer.spec.mjs', 'cc8c942541660c657dbbad42f3dbf353c63113d2ce0a96b51b8bcc98ed3e3288', '53de2d93dbb9502a13b2786d0afbfb17a26c368395c728d01cb48ade5317e3d9'],
   ['scripts/audit-material-snackbar-lifetime.mjs', 'ca8d9552d3dd819b43127a76c9d88fc746c2b2846d663c2312272fd2efc8327b', 'dab25c42bfad778b5d5b5dbd43b56cf87be52cdb255bfd199dfaee6c438c397e'],
   ['tests/material-parity/benchmark-config.spec.mjs', 'd4102f705bf61418286a18932697a5ab95a2e4bb507d237fe3b61bc6914c62ce', 'f383821eef926747bd1de6ce675a858e0a3f75ff170e3c00cce81a77427b86e7'],
   ['tests/material-parity/snackbar-position-observation.spec.mjs', 'b36d490178f22260e4ce7c10ca5852851d8a34ea7fb72e101f7e53ba6f006a75', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
