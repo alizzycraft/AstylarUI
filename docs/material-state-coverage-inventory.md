@@ -4,6 +4,30 @@
 
 ### Current next action and publication status
 
+October27 Stepper publication is remotely verified at
+2ace4261ab98e51afa5192eebcc59a30d5e07043 on codex/material-audit-alignment-integration.
+First HTTPS upload returned408;one same-route retry succeeded and ls-remote matched.
+No credentials,trust,Git configuration or evidence were changed to publish.
+
+Next exact-case question:does the original snackbar auto-dismiss pass establish
+open-then-timed-dismissal? Authenticated runner e01ef9dc and report ab42dbec show
+one light/desktop-dpr1 case. Executing the original action with explicit target/
+mouse/timer seams yields move/down/up/wait5100 on both sides. Executing its actual
+compareInteractionState with observation-denying page objects returns matches:true
+for both candidate open=true and open=false. The retained candidate endpoint is
+closed;that does not establish prior visibility,timer origin,elapsed runtime or
+dismissal cause. This is a bounded harness-observation gap,not a timer defect.
+Existing supplementary ordinary-lifetime evidence remains valid for its recorded
+contexts and must not be relabelled as this exact1000px-high historical execution.
+Focused proof added to snackbar-position-observation.spec.mjs passes1/1,exit0:
+node --test --test-name-pattern="original snackbar auto-dismiss"
+tests/material-parity/snackbar-position-observation.spec.mjs (2730.0092ms total).
+This new proof is outside canonical1099/425 pending a coherent evidence batch;
+the changed suite receipt/line applicability must be reconciled at that milestone.
+No canonical re-export or browser capture was warranted. Next inspect whether
+separate retained action-boundary observations exist for this exact case before
+requesting fresh evidence;keep its activation obligation pending meanwhile.
+
 October27 Stepper canonical milestone is accepted locally as
 cd84d26cacb5f9fbce67938bdadbd418c3d5051ca489e2f8950d2007cce8ac87,
 index28230d0ce2369102c6931a3cd8ae4792dac9631e5223b185bc2c781bb4b00bf7.

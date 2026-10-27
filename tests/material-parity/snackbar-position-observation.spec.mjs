@@ -13,6 +13,47 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { proveSnackbarPositionRequests, applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
 
+test('original snackbar auto-dismiss comparator does not witness the timed transition', async () => {
+  const { gunzipSync } = await import('node:zlib');
+  const { default: ts } = await import('typescript');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const original = gunzipSync(Buffer.from(readFileSync(
+    'docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8').replace(/\s/g, ''), 'base64'));
+  assert.equal(hash(original), 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
+  const ast = ts.createSourceFile('original.mjs', original.toString(), 99, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const extract = name => {
+    const nodes = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+    assert.equal(nodes.length, 1);
+    return nodes[0].getText(ast);
+  };
+  const compare = new Function(`return (${extract('compareInteractionState')})`)();
+  const denied = new Proxy({}, { get() { throw new Error('Unexpected observation'); } });
+  for (const open of [true, false]) {
+    assert.deepEqual(await compare(denied, denied, 'snack-bar', 'auto-dismiss', { open }), { matches: true });
+  }
+  for (const mode of ['reference', 'astylar']) {
+    const trace = [];
+    const page = {
+      mouse: Object.fromEntries(['move', 'down', 'up'].map(k => [k, async (...args) => trace.push([k, ...args])])),
+      waitForTimeout: async ms => trace.push(['wait', ms]),
+    };
+    const perform = new Function('assert', 'interactionTargetBox', `return (${extract('performInteraction')})`)(
+      assert, async () => ({ x: 10, y: 20, width: 30, height: 40 }));
+    await perform(page, mode, { family: 'snack-bar', state: 'auto-dismiss' });
+    assert.deepEqual(trace, [['move', 25, 40], ['down'], ['up'], ['wait', 5100]]);
+  }
+  const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(bytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const rows = JSON.parse(bytes).interactions.filter(r => r.family === 'snack-bar' && r.state === 'auto-dismiss');
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].profile, 'light'); assert.equal(rows[0].viewport.id, 'desktop-dpr1');
+  assert.deepEqual(rows[0].interactionState, { matches: true });
+  assert.equal(rows[0].astylarState.open, false);
+  // Recipe replay is not historical execution: a closed endpoint cannot prove
+  // prior visibility, timer origin, elapsed runtime, or the cause of dismissal.
+});
+
 test('ordinary snackbar opens in bounds but loses paint behind the short-surface camera', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const file = 'artifacts/material-parity/snackbar-boundary-e331e79/latest-report.json';
