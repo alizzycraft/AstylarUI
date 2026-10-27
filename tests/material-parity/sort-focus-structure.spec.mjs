@@ -437,6 +437,93 @@ test('slider keyboard stepping exposes the authored range-constraint boundary', 
   });
 });
 
+test('slider held stationary pointer retains frame positions and native animation state', {
+  skip: process.env.ASTYLAR_AUDIT_SLIDER_TEMPORAL !== '1',
+}, async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    for (const mode of ['reference', 'astylar']) for (const thumb of ['start', 'end']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      try {
+        await page.goto(`${baseUrl}/${mode}/slider?benchmark=1&profile=light`);
+        await page.locator('.frame').waitFor();
+        await page.evaluate(() => document.fonts.ready);
+        if (mode === 'astylar') {
+          await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+          await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        }
+        const geometry = await page.evaluate(({ mode, thumb }) => {
+          const index = thumb === 'start' ? 0 : 1;
+          if (mode === 'reference') {
+            const track = document.querySelector('mat-slider .mdc-slider__track').getBoundingClientRect();
+            const handle = document.querySelectorAll('mat-slider mat-slider-visual-thumb')[index].getBoundingClientRect();
+            return { from: { x: handle.x + handle.width / 2, y: handle.y + handle.height / 2 },
+              to: { x: track.x + track.width * (index ? .75 : .4), y: handle.y + handle.height / 2 } };
+          }
+          const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['slider-visual'], false).elements['slider-visual'].borderBox;
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          return { from: { x: canvas.x + box.left + box.width * (index ? .65 : .3), y: canvas.y + box.top + box.height / 2 },
+            to: { x: canvas.x + box.left + box.width * (index ? .75 : .4), y: canvas.y + box.top + box.height / 2 } };
+        }, { mode, thumb });
+        await page.mouse.move(geometry.from.x, geometry.from.y);
+        await page.mouse.down();
+        await page.evaluate(mode => {
+          const frames = [], events = [];
+          const onPointer = event => events.push({ type: event.type, time: performance.now(),
+            x: event.clientX, y: event.clientY, buttons: event.buttons, trusted: event.isTrusted });
+          for (const type of ['pointermove', 'pointerup', 'pointercancel']) document.addEventListener(type, onPointer, true);
+          let request;
+          const tick = time => {
+            const nodes = [...document.querySelectorAll('mat-slider mat-slider-visual-thumb')];
+            let centers;
+            if (mode === 'reference') centers = nodes.map(node => { const b = node.getBoundingClientRect(); return b.x + b.width / 2; });
+            else {
+              const scene = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface.scene;
+              const engine = scene.getEngine(), bounds = engine.getRenderingCanvas().getBoundingClientRect();
+              const transform = scene.getTransformMatrix();
+              const viewport = scene.activeCamera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
+              centers = ['start', 'end'].map(name => {
+                const mesh = scene.meshes.find(mesh => mesh.name.endsWith(`-${name}-thumb`));
+                mesh.computeWorldMatrix(true); const center = mesh.getAbsolutePosition();
+                return bounds.x + center.constructor.Project(center, transform.constructor.IdentityReadOnly,
+                  transform, viewport).x * bounds.width / engine.getRenderWidth();
+              });
+            }
+            frames.push({ time, centers, animations: nodes.flatMap(node => node.getAnimations({ subtree: true }).map(animation => ({
+              currentTime: animation.currentTime, playState: animation.playState,
+              timing: animation.effect?.getComputedTiming(),
+              keyframes: animation.effect?.getKeyframes(),
+            }))) });
+            if (frames.length < 180) request = requestAnimationFrame(tick);
+          };
+          request = requestAnimationFrame(tick);
+          window.__sliderTemporal = { frames, events, stop() {
+            cancelAnimationFrame(request);
+            for (const type of ['pointermove', 'pointerup', 'pointercancel']) document.removeEventListener(type, onPointer, true);
+            return { frames, events };
+          } };
+        }, mode);
+        await page.mouse.move(geometry.to.x, geometry.to.y);
+        await page.waitForFunction(() => {
+          const frames = window.__sliderTemporal.frames;
+          return frames.length >= 2 && frames.at(-1).time - frames[0].time >= 350;
+        });
+        const observation = await page.evaluate(() => window.__sliderTemporal.stop());
+        await page.mouse.up();
+        assert.deepEqual(errors, []);
+        assert.ok(observation.events.some(event => event.type === 'pointermove' && event.buttons === 1 && event.trusted));
+        assert.ok(observation.events.every(event => event.type === 'pointermove'));
+        assert.ok(observation.frames.every((frame, index) => frame.centers.length === 2 && frame.centers.every(Number.isFinite) &&
+          (!index || frame.time > observation.frames[index - 1].time)));
+        t.diagnostic(JSON.stringify({ sliderTemporal: { mode, thumb, browser: browser.version(), geometry, observation,
+          checkpoint: process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT ?? 'artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json',
+          boundary: 'Historical unequal Material inputs; frame geometry and native animations only, not local raster, equal-input causality, performance or smoothness acceptance.' } }));
+      } finally { await page.close(); }
+    }
+  });
+});
+
 test('slider pointer-down ownership is measured at both visual thumb centers', async t => {
   await withFrozenShowcase(async (browser, baseUrl) => {
     const observations = {};

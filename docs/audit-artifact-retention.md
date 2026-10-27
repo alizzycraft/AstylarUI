@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Retain slider-temporal-observation-20261027.log and its stderr sibling. The log
+SHA256 db6a476908862a24221eb9d3605df7df147a72af458a59c9eca85b4ea9878882
+contains176 timestamped frame observations, native animation records and trusted
+held pointermove receipts not present in earlier endpoint captures. It uses the
+existing stepper-leave-observed-20261027-provenance checkpoint. This is required
+bounded diagnostic evidence,not successful disposable scratch or parity acceptance.
+
 Keep stepper-leave-observed-20261027 and its -provenance sibling with the capture
 log. Its eight-case report f64114dd41acc3da0d1ac4691eaa710dbb03b17a0ab0cb1b57971bd901841b95,
 16 trees and16 screenshots support actual tab-state observations unavailable in

@@ -4,6 +4,35 @@
 
 ### Current next action and publication status
 
+October27 stationary-pointer temporal probe answers a specific missing observation:
+native thumb geometry continues interpolating after a single held move. The new
+opt-in test in existing sort-focus-structure.spec.mjs records44 RAF samples per
+side/thumb over357.6-357.8ms,one trusted held pointermove each and no release or
+cancel before sampling ends. Native start/end each have11 distinct centers and
+an observed80ms/ease translateX animation;225ms scale ripple animations are
+separate. Candidate start samples contain289 then361;candidate end is613 from
+its first sample. This does not prove exact event-to-render latency:the first
+RAF can occur after motion. It does rule out treating the earlier paired immediate
+RAF positions as settled equal-time geometry. Candidate DOM animation absence
+alone says nothing about mesh animation;the recorded mesh centers are the evidence.
+
+Command: ASTYLAR_AUDIT_SLIDER_TEMPORAL=1, ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT=
+artifacts/material-parity/stepper-leave-observed-20261027-provenance/checkpoint/manifest.json,
+node --test --test-name-pattern="slider held stationary pointer retains frame positions"
+tests/material-parity/sort-focus-structure.spec.mjs. Result1/1,0skip,exit0,
+10143.1134ms;Chrome155.0.8059.85,light1440x900,DPR1. Existing helper authenticates
+the complete served directory against checkpointc5fef6257a5ba75ac46f2e3cdc66b1154c6a85b7a548f4da4ddf76e7e3c493ee.
+Log artifacts/material-parity/slider-temporal-observation-20261027.log SHA256
+db6a476908862a24221eb9d3605df7df147a72af458a59c9eca85b4ea9878882;stderr empty.
+Collector file SHA2561e07ad431df8cc0c76bb8821a1f3d0c26841d57a353278bffa1d19a5000d3386.
+No authored input or renderer edits;all previous tests remain unchanged. This
+is an opt-in supplementary historical-build geometry/animation observation,not
+local raster,performance,current-library or whole-case acceptance. The Material
+inputs remain unequal;next trace the observed native transition and candidate
+mesh update owners before choosing an equal-input motion reduction. Do not call
+the missing interpolation a confirmed generic renderer defect from this probe.
+Both new test additions remain pending coherent source-fingerprint reconciliation.
+
 October27 temporal reuse check resolves the public-range alternative: authenticated
 v2 report8c298293 contains832 timestamped side samples,but only64 movement
 rasters (move-8 only across32 cases/two sides). Its collector settles each action
