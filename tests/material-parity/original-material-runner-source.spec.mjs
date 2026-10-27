@@ -13,6 +13,23 @@ function loadOriginal() {
   assert.equal(hash(bytes), 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
   return bytes;
 }
+test('datepicker opening finding preserves all predecessors and binds the exact current branch', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const previous = execFileSync('git', ['show', '443acd94:tests/material-parity/input-equivalence-policy.mjs'], { encoding: 'utf8' });
+  const prior = Function(previous.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+  assert.equal(prior.length, 204); assert.equal(sourceAuditDefinitions.length, 205);
+  assert.deepEqual(sourceAuditDefinitions.slice(0, -1), prior);
+  const finding = sourceAuditDefinitions.at(-1);
+  assert.equal(finding.id, 'fixture-datepicker-opening-focus-transfer-omitted');
+  assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  const current = readFileSync(finding.file, 'utf8');
+  assert.equal([...current.matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
+  assert.doesNotMatch(current.replace("if (opening) this.datepickerView.set('month');",
+    "if (opening) this.surface.focus('calendar-active-cell');"), new RegExp(finding.pattern));
+  for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+});
+
 test('captured datepicker opening inputs explicitly differ in calendar focus transfer', () => {
   const manifestBytes = readFileSync('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json');
   assert.equal(hash(manifestBytes), '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352');
@@ -81,8 +98,17 @@ test('fresh seventeen-case datepicker toggle trace records opening and divergent
   const directory = 'artifacts/material-parity/datepicker-toggle-activation-20261027';
   const bytes = readFileSync(directory + '/latest-report.json');
   assert.equal(hash(bytes), '20c3697d44b777b380c070a3b2cf3b5178b68f3814e2aeb662d5aeed699ca62e');
-  const verified = JSON.parse(execFileSync(process.execPath, ['scripts/audit-material-configured-control-activation.mjs',
-    '--verify', directory, '--datepicker-activation'], { encoding: 'utf8' }));
+  // This capture predates the additive finding. Restore only its exact policy
+  // bytes for receipt verification in a separate read-only process; no disk edit.
+  const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+  const historical = execFileSync('git', ['show', `443acd94:${policyFile}`]);
+  assert.equal(hash(historical), 'a38dc20ab17b392fcd1eeac4e8ff693859c3dbfaf4395ae0e0a782326bd72a6c');
+  const bootstrap = `import fs from 'node:fs';import path from 'node:path';import {syncBuiltinESMExports} from 'node:module';
+    const original=fs.readFileSync,target=path.resolve(${JSON.stringify(policyFile)}),bytes=original(0);
+    fs.readFileSync=function(file,options){if(typeof file==='string'&&path.resolve(file)===target){const encoding=typeof options==='string'?options:options?.encoding;return encoding?bytes.toString(encoding):Buffer.from(bytes);}return original.apply(this,arguments);};
+    syncBuiltinESMExports();`;
+  const verified = JSON.parse(execFileSync(process.execPath, ['--import', 'data:text/javascript;base64,' + Buffer.from(bootstrap).toString('base64'),
+    'scripts/audit-material-configured-control-activation.mjs', '--verify', directory, '--datepicker-activation'], { encoding: 'utf8', input: historical }));
   assert.equal(verified.cases, 17); assert.equal(verified.sourceRecipeVerified, true);
   const report = JSON.parse(bytes);
   assert.equal(report.browser, '156.0.8078.48');

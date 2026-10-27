@@ -7151,6 +7151,24 @@ Object.freeze({
     recommendation: 'Preserve the reference state-layer composition and resolved ink/alpha through supported public APIs in later implementation. Do not tune fixture opacity or offsets to match screenshots. Any missing general rendering capability must remain an explicit core/public-API issue.',
     boundary: 'Current input mismatch for16 retained desktop contexts,not whole-case/current rendering acceptance,edge/track/knob sharpness,other actions or exact historical black-circle causality.',
   }),
+  Object.freeze({
+    id: 'fixture-datepicker-opening-focus-transfer-omitted',
+    introducedBy: 'Captured and current opening branch omit transfer; first-bad revision not established',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`if \(id === 'datepicker-icon'\) \{\s*const opening = !this\.store\.state\(\)\.open;\s*if \(opening\) this\.datepickerView\.set\('month'\);\s*this\.store\.patchState\(\{ open: opening \}\);\s*\}`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar opening focus intent before core focus/reconciliation',
+    focusedProof: 'tests/material-parity/original-material-runner-source.spec.mjs: captured datepicker opening inputs explicitly differ in calendar focus transfer',
+    observation: { component: 'datepicker', states: ['activate', 'activate-leave'], profiles: ['light', 'dark', 'contrast', 'custom'], dpr: [1, 2],
+      reference: 'Opening lifecycle requests active-cell focus; settled active BUTTON has calendar/gridcell ancestry',
+      astylar: 'Click branch requests month view and open state but no focus transfer; settled focus remains datepicker-icon',
+      stage: 'unequal application opening intent before any focus request reaches core' },
+    evidence: [{ file: 'artifacts/material-parity/datepicker-toggle-activation-20261027/latest-report.json',
+      sha256: '20c3697d44b777b380c070a3b2cf3b5178b68f3814e2aeb662d5aeed699ca62e' }],
+    justification: 'Seventeen exact maintained toggle-action contexts include four desktop profiles at DPR1/2 and light short DPR1. Both sides receive trusted pointerdown/up/click; candidate typed events target datepicker-icon and open the popup. Source-extracted Material lifecycle methods request active-cell focus; complete candidate click/dismiss methods request only view/open changes. Served JavaScript and map receipts authenticate the source replay. This opening-input omission is distinct from missing keyboard navigation or missing close-control structure; the observed difference is not evidence that core lost a requested focus transfer.',
+    recommendation: 'Restore equivalent calendar opening focus intent through the shared public focus lifecycle in later implementation. If the required behavior cannot be expressed or a correctly supplied request fails, reduce and classify that separate core/public-API issue. Do not move calendar geometry or alter timepicker/date-input opening triggers.',
+    boundary: 'Retained-build Chrome156/live-date diagnostics,not original-browser raster equivalence,current-code focus correctness,all core focus paths,intermediate frames,local paint or whole-case acceptance. Exact-case canonical joins and source reconciliation remain pending.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

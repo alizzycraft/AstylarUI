@@ -4,6 +4,26 @@
 
 ### Current next action and publication status
 
+October27 opening-focus classification is now explicit as
+fixture-datepicker-opening-focus-transfer-omitted in sourceAuditDefinitions.
+The additive finding preserves all204 predecessor definitions exactly (205 total),
+matches exactly one current opening branch and rejects a changed focus-request
+branch. It binds the existing17-case report and captured source replay. Calendar
+close-control structure and generic keyboard routing are distinct earlier findings;
+neither previously classified this opening-time focus input. Implementation belongs
+to equivalent opening intent through public focus lifecycle,with a separate core
+reduction required if an equivalent request fails;no fixture correction was made.
+
+Adding the finding correctly invalidates strict current-source verification of
+the older capture. The existing proof now supplies only the exact captured policy
+bytes from443acd94 (SHAa38dc20a) in an isolated read-only verifier process;other
+dependencies still validate normally. No file is temporarily overwritten and no
+capture receipt is rewritten. This is historical applicability,not current-code
+acceptance. Seven focused tests pass,0skip,exit0(5620.1428ms). Canonical proof/source
+registration,17-case joins and full batch conservation/export remain pending;
+acceptedf16b and all2311 case dispositions are unchanged. Do not rerun browser
+captures to compensate for the metadata-only source fingerprint transition.
+
 October27 datepicker opening focus input boundary is now source-replayed. The
 existing original-runner suite authenticates captured manifest7ae2cba1 and both
 JavaScript/map receipts before extracting native datepicker source d19532ed and
