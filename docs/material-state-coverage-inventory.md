@@ -4,6 +4,32 @@
 
 ### Current next action and publication status
 
+October27 exact datepicker toggle activation now has fresh raw-action evidence.
+Existing configured-control-activation driver adds explicit --datepicker-activation;
+default113-context selection remains unchanged. This option runs all17 original
+activate/activate-leave cases,including the short viewport,using unchanged maintained
+actions and retained served assets. Report datepicker-toggle-activation-20261027/
+latest-report.json SHA20c3697d44b777b380c070a3b2cf3b5178b68f3814e2aeb662d5aeed699ca62e.
+Capture25830 finished exit0;independent --verify passes17 cases/51 paired boundaries,
+exact source recipe,checkpoint/runtime/tree/PNG receipts. All1887 served asset paths
+and hashes match original current-full,none added/missing. Browser156.0.8078.48 and
+live date differ from original capture;do not promote historical raster currentness.
+
+Every pair records trusted pointerdown/up/click. Candidate maintained typed events
+route all three to datepicker-icon and final open=true. Native settled active BUTTON
+has gridcell/MAT-CALENDAR ancestry outside the input host;candidate stays focused on
+datepicker-icon. This expands the previously light-only observed focus difference
+to this exact17-case cohort,not a new inferred core cause. Native raw target is an
+anonymous SPAN;its complete pointer-target ancestry was not recorded,so selector
+intent is not relabeled as a uniquely identified native raw target. Before/after/
+settled snapshots do not establish every intermediate frame or local paint.
+Existing original-runner suite adds the bounded result proof and three negative
+controls;5/5 pass,0skip,exit0(5454.2735ms). No renderer/fixture/threshold change.
+The registered source/proof transitions and exact-case join remain pending as a
+coherent batch;no whole-case status changed. Next bind the observed focus difference
+to its captured native/candidate owner inputs before joining this failure evidence;
+do not recapture these17 actions or infer timepicker/input-click behavior.
+
 October27 datepicker activation target correction:the original runner's actual
 interactionTargetBox AST maps datepicker to native mat-datepicker-toggle button
 and candidate datepicker-icon,not the input. The earlier navigation note inferred

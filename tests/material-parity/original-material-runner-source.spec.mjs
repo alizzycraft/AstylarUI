@@ -13,6 +13,42 @@ function loadOriginal() {
   assert.equal(hash(bytes), 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
   return bytes;
 }
+test('fresh seventeen-case datepicker toggle trace records opening and divergent focus destinations', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const directory = 'artifacts/material-parity/datepicker-toggle-activation-20261027';
+  const bytes = readFileSync(directory + '/latest-report.json');
+  assert.equal(hash(bytes), '20c3697d44b777b380c070a3b2cf3b5178b68f3814e2aeb662d5aeed699ca62e');
+  const verified = JSON.parse(execFileSync(process.execPath, ['scripts/audit-material-configured-control-activation.mjs',
+    '--verify', directory, '--datepicker-activation'], { encoding: 'utf8' }));
+  assert.equal(verified.cases, 17); assert.equal(verified.sourceRecipeVerified, true);
+  const report = JSON.parse(bytes);
+  assert.equal(report.browser, '156.0.8078.48');
+  const inspect = row => {
+    const reference = row.reference.observations.at(-1), candidate = row.astylar.observations.at(-1);
+    for (const side of [reference, candidate]) {
+      const clicks = side.events.filter(e => ['pointerdown', 'pointerup', 'click'].includes(e.type));
+      assert.deepEqual(clicks.map(e => e.type), ['pointerdown', 'pointerup', 'click']);
+      assert.ok(clicks.every(e => e.trusted));
+    }
+    const routed = candidate.configuredEvents.filter(e => ['pointerdown', 'pointerup', 'click'].includes(e.type));
+    assert.deepEqual(routed.map(e => [e.type, e.targetId]),
+      ['pointerdown', 'pointerup', 'click'].map(type => [type, 'datepicker-icon']));
+    assert.equal(candidate.state.open, true);
+    assert.equal(candidate.active.logicalId, 'datepicker-icon');
+    assert.equal(reference.active.tag, 'BUTTON');
+    assert.ok(reference.activeAncestry.some(n => n.tag === 'MAT-CALENDAR'));
+    assert.ok(reference.activeAncestry.some(n => n.role === 'gridcell'));
+    assert.equal(reference.activeWithinHost, false);
+  };
+  for (const row of report.results) inspect(row);
+  for (const mutate of [
+    row => { row.astylar.observations.at(-1).state.open = false; },
+    row => { row.astylar.observations.at(-1).active.logicalId = 'datepicker-control'; },
+    row => { row.reference.observations.at(-1).activeAncestry = []; },
+  ]) { const altered = structuredClone(report.results[0]); mutate(altered); assert.throws(() => inspect(altered)); }
+  // Maintained exact configured actions, not an input click or unobserved
+  // sub-frame opening/paint. This is new-browser retained-build evidence.
+});
 test('original datepicker activation targets the toggle and seventeen retained endpoints contain calendars', () => {
   const original = ts.createSourceFile('original.mjs', loadOriginal().toString(), 99, true, ts.ScriptKind.JS);
   const target = original.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'interactionTargetBox');

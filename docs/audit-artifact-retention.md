@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain datepicker-toggle-activation-20261027 and its -provenance sibling:17 exact
+configured toggle-action pairs,34 input trees/34 PNGs,and raw event/state/focus
+observations establish the new bounded focus-destination evidence. Independent
+existing-driver verification and owning suite pass. No old capture is replaced;
+Chrome156/live-date evidence is not original Chrome155/date raster acceptance.
+
 Retain tooltip-release-caller-20261027 and tooltip-release-component-caller-20261027
 with their -checkpoint siblings. The first records the insufficient directive-only
 observation;the second records the decisive immediate component hide caller after
