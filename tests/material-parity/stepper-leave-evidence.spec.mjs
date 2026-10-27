@@ -71,3 +71,35 @@ test('Stepper evidence rejects missing state, wrong identity, missing leave and 
     assert.throws(() => checkSide(item, 'astylar'), assert.AssertionError);
   }
 });
+
+test('Stepper join changes only eight activation obligations and restores the accepted predecessor', async () => {
+  const generation = '3252368beb18426245167b716fe22c6af0d2c4ce8da283ef574f43b89cc686aa';
+  const bytes = readFileSync(`artifacts/material-parity/working-audit/${generation}/index.json`);
+  assert.equal(hash(bytes), 'ff2b1a1d86fb00467f1673f6db0f4b98febc1c2f33b12d45f8c37057aee54cb5');
+  const coverage = JSON.parse(bytes).metadata.coverage.inspectionEvidence;
+  const parent = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical', scope: coverage.scope, groups: coverage.cases };
+  const { joinStepperLeave: join, restoreStepperLeave: restore, stepperLeavePredecessor } = await import('../../scripts/join-material-stepper-leave.mjs');
+  const joined = join(parent);
+  assert.equal(joined.cases, 8); assert.equal(joined.review.groups.length, 2311);
+  assert.equal(hash(JSON.stringify(restore(joined.review))), stepperLeavePredecessor);
+  let changed = 0;
+  for (const [i, before] of parent.groups.entries()) {
+    const after = joined.review.groups[i];
+    assert.equal(after.inspection, before.inspection); assert.equal(after.currentRendering, before.currentRendering);
+    if (before === after) continue;
+    changed++;
+    assert.match(before.case, /^interaction:stepper@[^/]+\/desktop-dpr[12]\/activate-leave$/);
+    for (const [name, obligation] of Object.entries(before.obligations)) {
+      assert.deepEqual(after.obligations[name].remaining, obligation.remaining);
+      if (name !== 'authoredActivation') assert.deepEqual(after.obligations[name], obligation);
+      else assert.equal(after.obligations[name].disposition, 'partial');
+    }
+  }
+  assert.equal(changed, 8);
+  assert.throws(() => join(joined.review));
+  for (const suffix of ['latest-report.json', '-astylar.png']) {
+    assert.throws(() => join(parent, (file, ...args) => String(file).endsWith(suffix) ? Buffer.from('forged') : readFileSync(file, ...args)));
+  }
+  console.log(JSON.stringify({ review: joined.sha256, changedActivationObligations: changed,
+    predecessorRecovered: true, canonicalUnchanged: true, parentCasesRemainPartial: 2311 }));
+});

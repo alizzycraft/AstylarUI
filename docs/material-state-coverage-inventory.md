@@ -4,6 +4,18 @@
 
 ### Current next action and publication status
 
+October27 Stepper leave join is verified but NOT canonical:review
+3bfdf15530366b15de0bcad334548cedd37e9a618a89f0e83a29a36d7c9504e3
+adds supplementaryLeaveSelection to exactly eight authoredActivation obligations,
+pending to partial. Complete predecessor e17dff33 is recovered by reversing only
+those children/dispositions;all other fields,remaining tasks and2311 whole-case
+partial/current-unverified statuses preserve. Existing Stepper evidence suite
+passes3/3 (node --max-old-space-size=4096 --test
+tests/material-parity/stepper-leave-evidence.spec.mjs),including forged report/
+screenshot rejection and duplicate-join rejection. No large proposal file was
+saved,canonical export repeated or acceptance pointer changed. Keep this bounded
+join for the next coherent integration batch;do not recapture its settled states.
+
 October27 Stepper activate-leave observation closes a specific evidence question,
 not a case:the eight original paired trees agree on selection but candidate
 authored ariaSelected is not actual semantic DOM. The existing activate-only
