@@ -4,6 +4,19 @@
 
 ### Current next action and publication status
 
+October27 Stepper wrapper finding is staged in
+tests/material-parity/stepper-label-wrapper-finding.mjs as
+fixture-stepper-label-clipping-wrappers-omitted,with exact retained evidence,
+owner,recommendation and limitations. Focused wrapper suite passes2/2:all68
+case checks/272 negative controls plus immutable203-entry registry conservation
+(digest6f0d54b1e201a45dcbeb15d19fc0475c3e899d1bafd4b7c87cfff185bde02573).
+Proposed204 entries preserve every original definition;live policy remains203.
+Executable history check verifies both initial2f440115 and current direct-label
+source anchors. This is pending registration,not a canonical count increase.
+Next integrate this definition/proof and bounded Stepper leave review together,
+preserving historical readers and source applicability;no full export for this
+staging-only change.
+
 October27 Stepper structural-input question answered from retained evidence:
 complete node accounting did not establish equivalence of the omitted label
 wrappers. All68 cases have136 outer mat-step-label wrappers with min-width50px

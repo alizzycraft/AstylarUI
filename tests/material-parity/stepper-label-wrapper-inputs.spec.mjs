@@ -2,6 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { stepperLabelWrapperFinding } from './stepper-label-wrapper-finding.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const cls = (node, name) => node.attributes?.class?.split(/\s+/).includes(name);
@@ -56,4 +59,21 @@ test('68 retained Stepper cases omit native clipped minimum-width label wrappers
   console.log(JSON.stringify({ cases: 68, nativeWrappers: 272, candidateLabels: 136, negativeControls: controls,
     classification: 'application-plugin-authoring-defect', firstDivergence: 'omitted label wrapper structure and constraints',
     boundary: 'Retained input mismatch only. Omitted candidate properties are not asserted computed defaults. No long-label clipping, anonymous-box, core defect, current rendering or whole-case acceptance.' }));
+});
+
+test('pending Stepper wrapper finding preserves the complete registry and pins initial authoring', () => {
+  assert.equal(sourceAuditDefinitions.length, 203);
+  assert.equal(hash(JSON.stringify(sourceAuditDefinitions)), '6f0d54b1e201a45dcbeb15d19fc0475c3e899d1bafd4b7c87cfff185bde02573');
+  assert.ok(!sourceAuditDefinitions.some(f => f.id === stepperLabelWrapperFinding.id));
+  const staged = [stepperLabelWrapperFinding, ...sourceAuditDefinitions];
+  assert.equal(staged.length, 204); assert.equal(new Set(staged.map(f => f.id)).size, 204);
+  assert.deepEqual(staged.slice(1), sourceAuditDefinitions);
+  assert.equal(stepperLabelWrapperFinding.classification, 'application-plugin-authoring-defect');
+  const file = stepperLabelWrapperFinding.file;
+  const original = execFileSync('git', ['show', `2f440115:${file}`], { encoding: 'utf8' });
+  for (const source of [original, readFileSync(file, 'utf8')]) {
+    assert.equal([...source.matchAll(new RegExp(stepperLabelWrapperFinding.pattern, 'g'))].length, 1);
+    for (const id of ['step-details-text', 'step-review-text'])
+      assert.ok(source.includes(`type: 'span', id: '${id}', class: 'step-text'`));
+  }
 });
