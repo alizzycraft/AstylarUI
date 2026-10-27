@@ -4,6 +4,27 @@
 
 ### Current next action and publication status
 
+October27 datepicker opening focus input boundary is now source-replayed. The
+existing original-runner suite authenticates captured manifest7ae2cba1 and both
+JavaScript/map receipts before extracting native datepicker source d19532ed and
+candidate component71e2d41f from the retained served asset cohort. Material's
+MatDatepickerContent.ngAfterViewInit calls calendar.focusActiveCell; the extracted
+MatCalendar method delegates _focusActiveCell(false). Candidate complete handleClick
+and dismissPopupForOutsideTarget methods replay opening as month-view/open=true,
+closing as open=false, with no surface.focus or settlement request. This establishes
+an unequal opening-behavior input upstream of core, consistent with the17 observed
+focus destinations; it does not prove all core focus/reconciliation paths correct.
+
+The first proof attempt failed receipt lookup for a candidate map
+chunk-BSWHRDFS left in the historical build directory: it is not in the capture's
+served manifest. The passing proof uses authenticated chunk-JPEJK334 from the
+complete retained asset root instead; no stale map was accepted as runtime evidence.
+Six existing-suite tests pass,0skip,exit0(5421.6337ms). No browser recapture,
+renderer/fixture edit, threshold change, or whole-case status promotion. Next
+reconcile this bounded opening-input result with existing calendar input findings
+and join the17-case evidence in the pending coherent source/proof batch. Registered
+source fingerprints remain pending; acceptedf16b is not evidence for these additions.
+
 October27 exact datepicker toggle activation now has fresh raw-action evidence.
 Existing configured-control-activation driver adds explicit --datepicker-activation;
 default113-context selection remains unchanged. This option runs all17 original

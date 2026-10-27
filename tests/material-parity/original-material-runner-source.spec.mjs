@@ -13,6 +13,69 @@ function loadOriginal() {
   assert.equal(hash(bytes), 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
   return bytes;
 }
+test('captured datepicker opening inputs explicitly differ in calendar focus transfer', () => {
+  const manifestBytes = readFileSync('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json');
+  assert.equal(hash(manifestBytes), '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352');
+  const receipts = JSON.parse(manifestBytes).provenance.browserFiles;
+  const root = 'artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/';
+  function source(file, suffix, expected) {
+    for (const asset of [file.replace(/\.map$/, ''), file]) {
+      assert.equal(hash(readFileSync(root + asset)), receipts.find(r => r.file === asset).sha256);
+    }
+    const map = JSON.parse(readFileSync(root + file));
+    const indexes = map.sources.flatMap((s, i) => s.endsWith(suffix) ? [i] : []);
+    assert.equal(indexes.length, 1);
+    const text = map.sourcesContent[indexes[0]]; assert.equal(hash(text), expected);
+    return ts.createSourceFile(suffix, text, 99, true);
+  }
+  function methods(ast, names) {
+    const found = [];
+    function visit(n) {
+      if (ts.isMethodDeclaration(n) && names.includes(n.name.getText(ast))) found.push(n.getText(ast));
+      ts.forEachChild(n, visit);
+    }
+    visit(ast); assert.equal(found.length, names.length);
+    const js = ts.transpileModule(`class Replay { ${found.join('\n')} }`,
+      { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+    return new (Function(js + ';return Replay')())();
+  }
+  const native = source('chunk-7SL66K3U.js.map', '/datepicker.mjs',
+    'd19532ed7097a899496310d27e6e0a493e7581b16d40674f14fc82bcf5c489ae');
+  function nativeClass(name, names) {
+    const node = native.statements.find(n => ts.isClassDeclaration(n) && n.name?.text === name);
+    assert.ok(node);
+    return methods(ts.createSourceFile('native.ts', node.getText(native), 99, true), names);
+  }
+  const calls = [];
+  const calendar = nativeClass('MatCalendar', ['focusActiveCell']);
+  calendar._getCurrentViewComponent = () => ({ _focusActiveCell: value => calls.push(['cell-focus', value]) });
+  const content = nativeClass('MatDatepickerContent', ['ngAfterViewInit']);
+  content.datepicker = { stateChanges: { subscribe: () => ({ unsubscribe() {} }) } };
+  content._calendar = calendar;
+  content.ngAfterViewInit();
+  assert.deepEqual(calls, [['cell-focus', false]]);
+
+  const candidate = source('chunk-JPEJK334.js.map', 'astylar.component.ts',
+    '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd');
+  const replay = methods(candidate, ['handleClick', 'dismissPopupForOutsideTarget']);
+  let state = { open: false, disabled: false };
+  const effects = [];
+  replay.store = { state: () => state, patchState: patch => { state = { ...state, ...patch }; effects.push(['patch', patch]); } };
+  replay.datepickerView = { set: view => effects.push(['view', view]) };
+  replay.family = () => 'datepicker';
+  replay.status = { set() {} };
+  replay.surface = { focus: (...args) => effects.push(['focus', ...args]), whenSettled: () => { throw Error('Unexpected settlement request'); } };
+  replay.handleClick('datepicker-icon', { targetId: 'datepicker-icon' });
+  assert.deepEqual(effects, [['view', 'month'], ['patch', { open: true }]]);
+  assert.equal(state.open, true);
+  effects.length = 0;
+  replay.handleClick('datepicker-icon', { targetId: 'datepicker-icon' });
+  assert.deepEqual(effects, [['patch', { open: false }]]);
+  // Source-extracted complete click/dismiss methods, not hand-written substitutes.
+  // This identifies an opening-input omission; it does not exonerate all core
+  // focus/reconciliation paths or establish local paint/current-code acceptance.
+});
+
 test('fresh seventeen-case datepicker toggle trace records opening and divergent focus destinations', async () => {
   const { execFileSync } = await import('node:child_process');
   const directory = 'artifacts/material-parity/datepicker-toggle-activation-20261027';
