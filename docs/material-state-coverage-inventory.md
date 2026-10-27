@@ -4,6 +4,31 @@
 
 ### Current next action and publication status
 
+October27 publication is confirmed: remote codex/material-audit-alignment-integration
+matches verified milestone83b9ad891657607c5aa331040ff5e21210193e50. The first
+HTTPS attempt failed;the existing retry finished before this independent remote
+lookup. No duplicate push,credential change or canonical rerun was needed.
+
+Next-case triage authenticated accepted f16b51d2 index against52342f02 before
+reading all2311 records. Pending evidence joins now total activation1433,
+programmaticFocus1571 and localPaint949;these are obligation counts,not untouched
+cases. All input/structure,semantics,history and currentness parents remain partial.
+Prioritize shared interaction/paint obligations over settled receipt integration.
+
+Bounded tooltip question:do retained focus cases provide a paired visible popup
+for investigating the reported displacement/blur? All16 paired input-tree hashes
+for the eight tooltip focus cases authenticate against this accepted index.
+Each reference tree contains10 nodes and each candidate7,with empty collector
+errors;neither records a tooltip-popup or role=tooltip node. The light/DPR1
+reference subtree is the opener and its five button spans;candidate is the anchor
+and opener. This agrees with the existing candidate-depth applicability child,
+but does not prove absent pixels outside collector scope or expected opening
+behavior. These focus trees cannot establish popup geometry/sharpness. Opener
+focus paint remains applicable and uninspected;do not exclude the whole paint
+obligation. Next use retained hover/held tooltip evidence and its exact state
+adapter provenance for popup paint,not another focus capture. No case disposition,
+source registration,canonical package or acceptance criterion changed.
+
 Temporal evidence milestone is accepted locally as generation
 f16b51d247b97cbeeb87b3ecde6ca0175f2b1f654e29a74c83e1e5516c5a10e0,
 index52342f029cf75aba64f9d5da25d9ce8e1b077615d8fdfe530366f880c0b7ca4e.
