@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+October27 Chips candidate3252368b passed cold verification, complete conservation,
+isolated import and accepted import. Retain chips-independent-cold-20261027
+stdout/stderr, chips-isolated-import-20261027.log,
+chips-coverage-conservation-20261027.log and chips-accepted-import-20261027.log.
+Isolated/accepted stores share86 immutable files by verified hard links; do not
+count their pathname sizes as duplicate physical allocation. Accepted index is
+ff2b1a1d86fb00467f1673f6db0f4b98febc1c2f33b12d45f8c37057aee54cb5.
+Preserve prior d6f07066, its backup and original/failure evidence. No deletion
+was performed. Earlier pending-candidate paragraphs are historical checkpoints.
+
 Retain successful Chips retry1 export logs and October27 candidate section/
 metadata and independent-cold stdout/stderr logs. Candidate3252368b is not accepted
 until conservation,cold verification and imports pass. Preserve accepted d6f07066,

@@ -4,6 +4,27 @@
 
 ### Current next action and publication status
 
+October27 Chips canonical milestone is ACCEPTED LOCALLY as generation
+3252368beb18426245167b716fe22c6af0d2c4ce8da283ef574f43b89cc686aa,
+index ff2b1a1d86fb00467f1673f6db0f4b98febc1c2f33b12d45f8c37057aee54cb5.
+Independent cold stdout records coldExit=0:19845 files/3441954575 bytes,
+diskHits0. Isolated import exits0; full verifyFindings passes. Coverage conservation
+log chips-coverage-conservation-20261027.log proves exact predecessor recovery,
+unchanged coverage outside inspectionEvidence, and exactly eight Chips alternate
+activation updates. All18439 old evidence receipts are unchanged;35 additions
+are the exact manifest/report/join producer and32 paired tree/screenshot files,
+each authenticated against its complete file bytes. The first receipt-log read
+used UTF8 on PowerShell UTF16 output and failed before validation; corrected
+encoding-aware read passes. This was not a failed evidence assertion.
+Accepted-import log chips-accepted-import-20261027.log records86 hard-linked
+immutable files, complete verification before/after existing import reuse,
+and exact pointer equality. Prior d6f07066 and original/failure evidence remain.
+All2311 cases remain partial/current-rendering unverified; this accepts an audit
+snapshot, not rendering parity. Publish the verified canonical increment next,
+then resume exact-case structural/semantic and unjoined activation/focus gaps.
+Earlier pending/run paragraphs below are historical; do not repeat these gates
+for documentation-only changes.
+
 October27 Chips retry1 export is TERMINAL0,producing candidate
 3252368beb18426245167b716fe22c6af0d2c4ce8da283ef574f43b89cc686aa.
 Compressed98395999/decoded2369430963 bytes;decoded SHA

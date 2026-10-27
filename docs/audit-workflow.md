@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+October27 Chips milestone3252368b/indexff2b1a1d is accepted locally after export,
+complete conservation, independent cold check with diskHits0 and verified
+isolated/accepted imports. Counts1091 sources/418 proofs/203 findings/70 tracks.
+Exactly eight supplementary activation obligations changed; all2311 cases stay
+partial/current-rendering unverified. Publish then resume remaining exact-case
+inspection. Reuse these gates for unchanged inputs; do not rerun for prose.
+Original equal-input scope and final acceptance gates remain unchanged.
+
 October26 Chips alternate registration is live1091/418/203/70 with explicit
 --chips-alternate selectinge17dff33. Direct/nested historical restoration,
 complete inventory conservation and8 compatibility tests pass. Actual live
