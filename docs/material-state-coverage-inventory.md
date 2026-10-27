@@ -4,6 +4,24 @@
 
 ### Current next action and publication status
 
+October27 staged Stepper selection now passes2/2 in the existing
+stepper-batch-registration.spec.mjs suite. Complete launcher execution through
+filesystem/process seams preserves all25 older/default choices, selects exact
+863d24f5 only for --stepper-batch, and rejects combined/unknown supplements.
+Actual runner selection fragment routes that digest to the Stepper reader and
+delegates older digests unchanged. Whole runner/launcher reversal rejects drift;
+direct/nested prior reads recover exact source before older FocusSelection
+policy/producer/selection restorers, whose complete outputs remain identical.
+The added selector proof changes proposed counts to1099 sources/425 proofs/204
+findings/71 plan entries (8/7/1/1 additions); live counts remain1091/418/203/70.
+A separate read-only negative check confirms all four direct legacy entry calls
+(policy,producer,runner,launcher) reject staged Stepper bytes without the new
+adapter. This is the concrete remaining installation prerequisite: wire the
+bounded restoration at shared direct entry points and reconcile their receipts,
+not merely the newest reader. No live registration, export or capture occurred.
+The prior18509-dependency check below applies to its recorded reader revision;
+do not describe it as validation of the newly staged selection installation.
+
 October27 Stepper reader integration passes against the current live sources.
 createStepperBatchPriorRead restores only the staged policy/producer additions;
 direct/nested Buffer and encoded reads recover complete predecessor source,
