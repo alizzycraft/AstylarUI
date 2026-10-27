@@ -1,5 +1,16 @@
 # Audit artifact retention
 
+Retain the failed slider-temporal-canonical-export-20261027 stdout/stderr.
+Session64598 terminated with exportExit=1 at the direct held-content historical
+source check;all canonical files still match the pre-export backup. A corrected
+retry must use separate logs. The failure is diagnostic evidence,not disposable
+successful scratch;no original or failed evidence was removed.
+
+Retain slider-temporal-pre-export-b7fb-20261027 and temporal canonical export
+stdout/stderr while the candidate is pending. All three backup files were
+hash-verified against the accepted canonical files. No old evidence was deleted;
+the accepted pointer must not advance on an in-flight export or exit code alone.
+
 Retain slider-temporal-observation-20261027.log and its stderr sibling. The log
 SHA256 db6a476908862a24221eb9d3605df7df147a72af458a59c9eca85b4ea9878882
 contains176 timestamped frame observations, native animation records and trusted

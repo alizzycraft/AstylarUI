@@ -31,7 +31,18 @@ export function retainedStaticSemanticPopulation(current) {
 // Source applicability for the three standalone scrollbar supplements only.
 // This does not publish their proof inventory or rewrite any retained capture.
 export function restoreScrollbarSupplementSuite(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  let text = source.toString().replaceAll('\r\n', '\n');
+  // The later opt-in motion probe adds one test, not a change to captured tests.
+  // Authenticate and remove that exact addition before the older restoration.
+  if (text.includes("test('slider held stationary pointer retains frame positions and native animation state'")) {
+    assert.equal(hash(text), '1e07ad431df8cc0c76bb8821a1f3d0c26841d57a353278bffa1d19a5000d3386');
+    const tree = ts.createSourceFile('slider-temporal-suite.mjs', text, 99, true);
+    const added = tree.statements.filter(node => ts.isExpressionStatement(node) && ts.isCallExpression(node.expression) &&
+      node.expression.arguments[0]?.text === 'slider held stationary pointer retains frame positions and native animation state');
+    assert.equal(added.length, 1);
+    text = text.slice(0, added[0].getFullStart()) + text.slice(added[0].end);
+    assert.equal(hash(text), '6ea5ba46281a96565edd8599976ca90969f10cd653976f12a05202bfcc45107b', 'Complete pre-motion source must conserve');
+  }
   const priorHash = '9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa';
   if (hash(text) === priorHash) return text;
   assert.equal(hash(text), '6ea5ba46281a96565edd8599976ca90969f10cd653976f12a05202bfcc45107b');

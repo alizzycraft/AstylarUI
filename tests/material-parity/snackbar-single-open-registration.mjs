@@ -134,7 +134,7 @@ export const snackbarHistoricalSources = Object.freeze([
   ['tests/material-parity/benchmark-config.spec.mjs', 'd4102f705bf61418286a18932697a5ab95a2e4bb507d237fe3b61bc6914c62ce', 'f383821eef926747bd1de6ce675a858e0a3f75ff170e3c00cce81a77427b86e7'],
   ['tests/material-parity/snackbar-position-observation.spec.mjs', 'b36d490178f22260e4ce7c10ca5852851d8a34ea7fb72e101f7e53ba6f006a75', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
   ['tests/material-parity/static-semantic-inputs.spec.mjs', '5956ef3b19b884fc8448934314888a10be4a5c74ce815b2f2e22562931c6eca7', '493acd7c7361e441786daaec9e606be99a6cdcae349a2675c3cb143a48e692d8'],
-  ['tests/material-parity/static-semantic-registration.mjs', 'e733c6663e42dc4f20e236d0d9f8e293ab8821e5a081c0dd14d3a05d2bdd9a30', '0afade3ee2f243a740ecce32935365ad580f6d2538cce4bcba730e99b222b502'],
+  ['tests/material-parity/static-semantic-registration.mjs', 'e733c6663e42dc4f20e236d0d9f8e293ab8821e5a081c0dd14d3a05d2bdd9a30', 'ddb238a911e95a16329129bf83364744a4df4b73cd771e094567347e115658e7'],
 ].map(row => Object.freeze(row)));
 
 // Historical evidence only: never substitute these bytes for current rendering.

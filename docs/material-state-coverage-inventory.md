@@ -4,6 +4,35 @@
 
 ### Current next action and publication status
 
+October27 temporal export session64598 finished with exportExit=1 before any
+canonical publication. The direct held-content collector passed the current
+sort-focus suite to restoreScrollbarSupplementSuite without the newer temporal
+addition reversal (actual1e07ad43 versus expected6ea5ba46). The shared restoration
+now authenticates the complete current suite, removes exactly the one added test,
+and proves the complete pre-motion hash before its existing restoration chain.
+No fingerprint check is relaxed and no captured source or browser evidence changes.
+The current/historical static-semantic helper endpoint is reconciled explicitly.
+Registration/older Stepper checks pass5/5,0skip (2971.9315ms); direct held-content
+collector and historical semantic checks pass2/2,0skip (4153.723ms). The regression
+also rejects unknown source drift and verifies unchanged disk inputs. All three
+canonical files still match the backup hashes below;acceptedb7fb is unchanged.
+Next retry once with a new temporal-restoration-corrected log prefix,then preserve
+the full conservation/independent cold/import gates. No case closure is implied.
+
+Historical launch:October27 temporal canonical export ran in session64598 against frozen
+commit1a905ad9 sources (1106 paths/436 proofs). Command:ASTYLAR_AUDIT_PROGRESS=1,
+ASTYLAR_AUDIT_COLD=0 node scripts/export-material-input-audit-current-ancestry.mjs
+--snackbar-single-open. Logs:slider-temporal-canonical-export-20261027.log and
+.stderr.log under artifacts/material-parity. This attempt failed as recorded above;
+do not poll or restart its completed session.
+Prior three canonical files are copied/hash-verified in
+artifacts/material-parity/slider-temporal-pre-export-b7fb-20261027:
+manifest0ad9e10e70908a77602bd3adf140fac207553d3ba8cc66343abc4e115193a271,
+gzipb7fb326da30ea5b2139e597077f16bfa36f2048995a2640a18d216cf43b2724f,
+Markdownd35dc86ea7d24b42d516297ff49fd6992b4b075a992ef2e269d53cd131a8ffb1.
+Accepted pointer remainsb7fb/index95ed. Export success alone will not accept the
+candidate:conservation,independent cold replay and verified imports remain.
+
 October27 temporal registration is installed,not canonical:existing registration
 now includes four tests,temporal log,the directly executed core diagnostics source
 and three guarded historical test-source endpoints. Combined reader64471 finished

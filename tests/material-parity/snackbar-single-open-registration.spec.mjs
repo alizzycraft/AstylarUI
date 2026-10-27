@@ -81,7 +81,7 @@ test('staged snackbar registration preserves every accepted source and proof', (
   assert.throws(() => restoreSnackbarSingleOpenRegistry(staged + '\n// drift'));
   assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), live);
 });
-test('snackbar historical reader authenticates all five source transitions without changing live inputs', () => {
+test('snackbar historical reader authenticates all five source transitions without changing live inputs', async () => {
   const root = process.cwd(), read = createSnackbarHistoricalRead({ root, read: readFileSync });
   const nested = createSnackbarHistoricalRead({ root, read });
   for (const [file, previous, current] of snackbarHistoricalSources) {
@@ -99,6 +99,14 @@ test('snackbar historical reader authenticates all five source transitions witho
   }
   const untouched = 'scripts/join-material-snackbar-single-open.mjs';
   assert.deepEqual(read(untouched), readFileSync(untouched));
+  // Exercise the direct production collector path, not just the review reader.
+  const { readRetainedSortFocusSource } = await import('./position-composition-producer-transition.mjs');
+  const sorter = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs');
+  const originalSorter = read('tests/material-parity/sort-focus-structure.spec.mjs');
+  assert.deepEqual(readRetainedSortFocusSource(sorter), readRetainedSortFocusSource(originalSorter));
+  assert.equal(hash(readRetainedSortFocusSource(sorter)), '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce');
+  assert.throws(() => readRetainedSortFocusSource(Buffer.from(sorter.toString() + '\n// unreviewed drift')));
+  assert.deepEqual(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs'), sorter);
   for (const file of snackbarSharedFiles) {
     const before = restoreSnackbarSharedSource(readFileSync(file), file);
     const staged = prepareSnackbarSharedSource(before, file);
