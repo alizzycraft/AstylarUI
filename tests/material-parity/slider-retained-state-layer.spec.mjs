@@ -78,6 +78,39 @@ test('retained Slider motion uses native CSS transition versus synchronous appli
   }
 });
 
+test('current core reports slider CSS motion requests unsupported while accepting transform', () => {
+  const text = readFileSync('src/lib/astylar-diagnostics.ts', 'utf8');
+  const ast = ts.createSourceFile('diagnostics.ts', text, 99, true);
+  const properties = find(ast, node => ts.isVariableDeclaration(node) && node.name.getText(ast) === 'styleProperties');
+  const method = find(ast, node => ts.isMethodDeclaration(node) && node.name.getText(ast) === 'validateStyle');
+  const Probe = new Function(compile(properties.parent.parent.getText(ast) + '\nclass Probe {' + method.getText(ast) + '}') +
+    ';return Probe;')();
+  const probe = new Probe(), messages = [];
+  probe.report = message => messages.push(message);
+  probe.fail = () => assert.fail('well-formed motion request must not fail document shape validation');
+  const request = { selector: '#thumb', transform: 'translateX(72px)', transition: 'transform 80ms ease',
+    transitionProperty: 'transform', transitionDuration: '80ms', transitionTimingFunction: 'ease' };
+  const before = structuredClone(request);
+  probe.validateStyle(request, '$.styles[0]');
+  assert.deepEqual(messages.map(message => [message.property, message.code, message.severity]),
+    ['transition', 'transitionProperty', 'transitionDuration', 'transitionTimingFunction']
+      .map(property => [property, 'unsupported-style-property', 'warning']));
+  assert.ok(messages.every(message => message.message.includes('will be ignored')));
+  assert.deepEqual(request, before, 'diagnostics must preserve authored evidence');
+  const style = ts.createSourceFile('style-rule.ts', readFileSync('src/app/types/style-rule.ts', 'utf8'), 99, true);
+  const rule = find(style, node => ts.isInterfaceDeclaration(node) && node.name.text === 'StyleRule');
+  const names = rule.members.map(member => member.name?.getText(style));
+  assert.ok(names.includes('transform'));
+  for (const name of Object.keys(request).filter(name => name.startsWith('transition'))) assert.ok(!names.includes(name));
+  const catalog = JSON.parse(readFileSync('docs/compatibility/capabilities.json'));
+  const declarations = [];
+  const visit = value => { if (!value || typeof value !== 'object') return;
+    if (Array.isArray(value.names) && value.names.includes('transition')) declarations.push(value);
+    for (const child of Object.values(value)) visit(child); };
+  visit(catalog);
+  assert.equal(declarations.length, 1); assert.equal(declarations[0].classification, 'unsupported');
+});
+
 test('retained Slider state layers diverge in application inputs before plugin paint', t => {
   const report = load({ file: 'artifacts/material-parity/slider-hover-held-20261024/latest-report.json',
     sha256: 'de4228f971a0b0b341a21c9d71a20d9f351701ec634257732c6ed6d929a8ec98' });

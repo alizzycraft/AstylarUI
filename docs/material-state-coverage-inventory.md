@@ -4,6 +4,30 @@
 
 ### Current next action and publication status
 
+October27 generic motion support check closes the need for another browser
+reproduction of the already documented unsupported feature. The current core
+validateStyle method and its actual property set,executed from source,accept
+transform but report transition,transitionProperty,transitionDuration and
+transitionTimingFunction as unsupported-style-property warnings (will be ignored)
+for transform80ms ease. Authored values remain preserved. Current StyleRule omits
+those motion properties and the capability catalog classifies transition as
+unsupported. Existing slider-retained-state-layer.spec.mjs now checks all three
+boundaries;combined native/plugin source replay and current support test pass
+2/2,0skip,exit0 (946.5312ms),without browser or canonical export.
+
+The implementation dependency is therefore two-part: core CSS transition support
+is missing,and the showcase substitutes direct plugin mesh updates instead of
+equivalent authored motion. A future fix must establish generic core-owned CSS
+motion semantics,then remove the comparison's motion substitution;do not add an
+80ms fixture-specific plugin tween. The documented alternative is not permission
+to claim equal-input parity. This proves current validation/type/catalog support
+status,not runtime behavior of every installed build or the cause of all slider
+jerkiness. No renderer edit,case closure or acceptance change occurred.
+
+Next reconcile the four additive temporal/source/support tests as one bounded
+source/proof batch,retaining the publishedb7fb snapshot and original source bytes.
+Do not repeat the settled slider captures or general transition-support check.
+
 October27 motion owner trace is now bound to the same captured checkpoint:
 main.js/main.js.map,chunk-PCHQTLJM.js/map and chunk-7SL66K3U.js/map authenticate
 againstc5fef625 before extracting plugin,application and native slider sources.
