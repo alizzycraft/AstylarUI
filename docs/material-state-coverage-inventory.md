@@ -4,6 +4,36 @@
 
 ### Current next action and publication status
 
+October27 publication completed: commit fd3fd3f2e0cf256853e7239c52e34aaa6bae4751
+is verified on origin/codex/material-audit-alignment-integration. The accepted
+snackbar generation below is published; do not repeat its export/import gates.
+
+Next-gap triage reuses the hash-authenticated b7fb326d working index. Pending
+evidence joins are activation1433,focus1571,localPaint949 (obligations,not case
+counts). All2311 cases remain partial/current-rendering unverified. Prioritize
+missing action-boundary evidence over already settled scalar classifications.
+
+Slider triage: fixed-half hit ownership/full-domain visual mismatch and unequal
+step authoring are already investigated; do not reopen them as new coordinate
+findings. The remaining smoothness question cannot be answered by the retained
+four-move geometry trace. A read-only schema check of all28 samples in
+artifacts/material-parity/slider-held-geometry-complete-20261005.log finds only
+boundary,state,thumbCenters,values: no sample timestamps,animation timeline/state
+or per-sample local raster. Current file SHA256 is
+ce0212e7777ab9c441e13aaf4a508bc12242d39c97b8956ac2b443e8df6c5722.
+This log is not a direct receipt in the accepted inspection evidence list; its
+current hash and schema inspection do not establish historical applicability.
+The existing sort-focus-structure.spec.mjs collector also explicitly limits this
+trace to four held moves,not continuous-motion acceptance. No new capture,test
+layer,canonical data or case-status change was made.
+
+Next decisive smoothness evidence must pair timestamped pointer/visual samples
+with native animation state and local paint,at equal authored range inputs.
+Otherwise unequal steps or different animation sampling remain competing
+explanations for apparent jerkiness. First check existing temporal/range evidence
+for that exact observation contract; if absent,extend the existing bounded probe
+rather than repeat endpoint drags or introduce another audit framework.
+
 October27 snackbar milestone is accepted locally as generation
 b7fb326da30ea5b2139e597077f16bfa36f2048995a2640a18d216cf43b2724f,
 index95edbdcae36022cebc2b0fd9c4bebe10ddac39828b1aa7c9cc376d562cddf29d.
