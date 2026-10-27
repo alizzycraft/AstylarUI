@@ -50,6 +50,24 @@ test('original snackbar auto-dismiss comparator does not witness the timed trans
   assert.equal(rows[0].profile, 'light'); assert.equal(rows[0].viewport.id, 'desktop-dpr1');
   assert.deepEqual(rows[0].interactionState, { matches: true });
   assert.equal(rows[0].astylarState.open, false);
+  assert.equal(rows[0].resourceSnapshots.length, 1);
+  assert.deepEqual(rows[0].focusedRasters, []);
+  assert.equal(Object.hasOwn(rows[0], 'actionTimeline'), false);
+  for (const side of ['reference', 'astylar']) {
+    const receipt = rows[0].inputTrees[side], treeBytes = readFileSync(receipt.file);
+    assert.equal(hash(treeBytes), receipt.sha256);
+    const tree = JSON.parse(treeBytes);
+    const panels = tree.nodes.filter(n => side === 'reference'
+      ? String(n.attributes?.class ?? '').split(/\s+/).includes('mat-mdc-snackbar-surface')
+      : n.authored?.id === 'snack-bar-surface');
+    assert.equal(panels.length, 0);
+  }
+  const capture = extract('captureInteractionCase');
+  const action = capture.indexOf("performInteraction(astylar.page, 'astylar', benchmarkCase)");
+  const snapshot = capture.indexOf('resourceSnapshots.push(');
+  assert.ok(action >= 0 && snapshot > action);
+  assert.equal(capture.split('resourceSnapshots.push(').length - 1, 1);
+  assert.match(capture, /const cycles = state === 'open-dismiss' \? 3 : 1/);
   // Recipe replay is not historical execution: a closed endpoint cannot prove
   // prior visibility, timer origin, elapsed runtime, or the cause of dismissal.
 });

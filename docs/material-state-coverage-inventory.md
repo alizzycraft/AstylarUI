@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October27 auto-dismiss retained-boundary follow-up:both exact-case endpoint trees
+authenticate to the original report and contain zero snackbar surfaces. There is
+one resource snapshot,no actionTimeline and no focused raster. Authenticated
+captureInteractionCase samples resources after performInteraction resolves and
+uses one cycle for this state;the sample cannot establish an opening boundary.
+The case directory contains only two endpoint trees,two endpoint images and two
+trigger-alignment crops. Existing lifetime capture uses1440x900/light/DPR1 and
+390x844/dark/DPR2,not this1440x1000 case. The later postdelay AX capture observes
+300ms announcement settlement,not expiry;keyboard UNDO is explicit dismissal.
+These records do not reconstruct the historical open-to-expiry sequence.
+Extended existing focused proof passes1/1,exit0 (2289.6708ms total),authenticating
+both endpoint trees and original sampling order. Historical transition remains
+unproved,not a confirmed timer failure;do not repeat searches of these artifacts.
+Next evidence,if collected,must be a clearly supplementary ordinary single-open
+sequence with timed before/after-expiry visibility,not a rewrite of the original
+pass. C: currently has631812096 bytes free;new browser capture remains deferred.
+No canonical status changes or renderer/fixture changes. Pending proof receipt
+reconciliation remains part of the next coherent batch,not a reason to re-export.
+
 October27 Stepper publication is remotely verified at
 2ace4261ab98e51afa5192eebcc59a30d5e07043 on codex/material-audit-alignment-integration.
 First HTTPS upload returned408;one same-route retry succeeded and ls-remote matched.
