@@ -37,6 +37,7 @@ import { createChipsAlternateReviewReader } from './join-material-chips-alternat
 import { stepperBatchReview, createStepperBatchReviewReader } from '../tests/material-parity/stepper-batch-registration.mjs';
 import { snackbarSingleOpenReview, createSnackbarSingleOpenReviewReader } from '../tests/material-parity/snackbar-single-open-registration.mjs';
 import { datepickerOpeningReview, createDatepickerOpeningReviewReader } from '../tests/material-parity/datepicker-opening-registration.mjs';
+import { tooltipOpenReview, createTooltipOpenReviewReader } from './join-material-tooltip-open.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const root = process.cwd();
@@ -81,7 +82,8 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const stepperBatchReaderFactory = options.caseObligationReviewSha256===stepperBatchReview ? createStepperBatchReviewReader : chipsAlternateReaderFactory;
     const snackbarSingleOpenReaderFactory = options.caseObligationReviewSha256===snackbarSingleOpenReview ? createSnackbarSingleOpenReviewReader : stepperBatchReaderFactory;
     const datepickerOpeningReaderFactory = options.caseObligationReviewSha256===datepickerOpeningReview ? createDatepickerOpeningReviewReader : snackbarSingleOpenReaderFactory;
-    const applicability=datepickerOpeningReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
+    const tooltipOpenReaderFactory = options.caseObligationReviewSha256===tooltipOpenReview ? createTooltipOpenReviewReader : datepickerOpeningReaderFactory;
+    const applicability=tooltipOpenReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
     assert.ok(!applicability || typeof applicability.then !== 'function', 'Audit evidence readers must be synchronous within evidence session');
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
       options.caseObligationReviewSha256, { root, read: applicability?.read ?? auditReadFileSync });

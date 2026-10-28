@@ -7,7 +7,8 @@ test('tooltip registry preparation preserves the complete predecessor inventory'
   const { readFileSync } = await import('node:fs');
   const ts = await import('typescript');
   const { prepareTooltipOpenRegistry, restoreTooltipOpenRegistry, tooltipOpenSources, tooltipOpenProofs,
-    prepareTooltipOpenSelection, restoreTooltipOpenSelection, tooltipOpenReview } =
+    prepareTooltipOpenSelection, restoreTooltipOpenSelection, tooltipOpenReview,
+    prepareTooltipSharedBoundary, restoreTooltipSharedBoundary } =
     await import('../../scripts/join-material-tooltip-open.mjs');
   const live = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
   const prior = restoreTooltipOpenRegistry(live), next = prepareTooltipOpenRegistry(prior);
@@ -40,6 +41,17 @@ test('tooltip registry preparation preserves the complete predecessor inventory'
   assert.throws(() => prepareTooltipOpenRegistry(prior + '\n// drift'));
   assert.throws(() => restoreTooltipOpenRegistry(next + '\n// drift'));
   assert.deepEqual(readFileSync('tests/material-parity/input-equivalence-audit.mjs'), live);
+  const sharedFile = 'tests/material-parity/snackbar-single-open-registration.mjs';
+  const shared = readFileSync(sharedFile, 'utf8').replaceAll('\r\n', '\n');
+  assert.equal(prepareTooltipSharedBoundary(restoreTooltipSharedBoundary(shared)), shared);
+  assert.throws(() => restoreTooltipSharedBoundary(shared + '\n// drift'));
+  const { restoreSnackbarRegistrationIfPresent } = await import('./snackbar-single-open-registration.mjs');
+  for (const [kind, name] of [['producer', 'tests/material-parity/input-equivalence-audit.mjs'],
+    ['runner', 'scripts/run-material-input-audit.mjs'], ['launcher', 'scripts/export-material-input-audit-current-ancestry.mjs']]) {
+    const current = readFileSync(name);
+    const previous = kind === 'producer' ? restoreTooltipOpenRegistry(current) : restoreTooltipOpenSelection(current, kind);
+    assert.equal(restoreSnackbarRegistrationIfPresent(current, kind), restoreSnackbarRegistrationIfPresent(previous, kind));
+  }
   const path = await import('node:path'), vm = await import('node:vm');
   const { pathToFileURL, fileURLToPath } = await import('node:url');
   for (const [kind, name] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {

@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Retain tooltip-open-full-reader-20261028.log:construction passed,but its absolute
+virtual-file argument was rejected before dependency validation. Keep the separate
+tooltip-open-full-reader-relative-20261028.log for the corrected invocation;do not
+overwrite the failed attempt or describe construction as a completed gate.
+
 Retain tooltip-open-reader-construction-20261028.log:complete prior-reader chain
 and exact8-case join constructed review3a51fbe3,2311 cases,exit0. This is not a
 full dependency-validation or canonical-export receipt. Original and failure

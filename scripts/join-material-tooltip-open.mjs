@@ -9,6 +9,34 @@ import { createDatepickerOpeningReviewReader } from '../tests/material-parity/da
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const tooltipOpenPredecessor = 'cd9631f0dc9f7ca63b35c5d11d11611ebd3f98930166352ff56b3016d7989894';
 const childKey = 'supplementaryTooltipOpen';
+const sharedPrior = 'dcf312086d8c6409fb6463b9c28f68d613b689ae75368ab8fd8e39f02572a4b5';
+const sharedImport = "import { restoreTooltipOpenRegistry, restoreTooltipOpenSelection } from '../../scripts/join-material-tooltip-open.mjs';\n";
+const sharedBody = `  if (kind === 'producer' && bytes.toString().includes('"scripts/join-material-tooltip-open.mjs",')) bytes = restoreTooltipOpenRegistry(bytes);
+  if ((kind === 'runner' && bytes.toString().includes('const tooltipOpenReaderFactory = ')) ||
+    (kind === 'launcher' && bytes.toString().includes("const tooltipOpen = rawRequested.includes('--tooltip-open');"))) bytes = restoreTooltipOpenSelection(bytes, kind);
+`;
+export function prepareTooltipSharedBoundary(bytes) {
+  const source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(source), sharedPrior);
+  return sharedImport + source.replace('export function restoreSnackbarRegistrationIfPresent(bytes, kind) {\n',
+    'export function restoreSnackbarRegistrationIfPresent(bytes, kind) {\n' + sharedBody);
+}
+export function restoreTooltipSharedBoundary(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  if (hash(source) === sharedPrior) return source;
+  assert.ok(source.startsWith(sharedImport)); source = source.slice(sharedImport.length);
+  assert.equal(source.split(sharedBody).length, 2); source = source.replace(sharedBody, '');
+  assert.equal(hash(source), sharedPrior); return source;
+}
+export function restoreTooltipSnackbarSuite(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  const prior = '1fd52788e1e36bb7c2b476529952d262f7c60da7bc8a5a0061432e80291f1817';
+  if (hash(source) === prior) return source;
+  const addition = "import { createTooltipOpenHistoricalRead } from '../../scripts/join-material-tooltip-open.mjs';\n";
+  assert.equal(source.split(addition).length, 2); source = source.replace(addition, '');
+  source = source.replace('read: createTooltipOpenHistoricalRead({ root: process.cwd(), read: readActualFileSync })', 'read: readActualFileSync');
+  assert.equal(hash(source), prior); return source;
+}
 const registryPredecessor = '68b3644e4fcbdb4b1865e6bb15341066e4549bf7235bbf0f7a1a280fc4e5563e';
 export const tooltipOpenReview = '3a51fbe3299d2c0f3f7ee70822bb69e0a4f7d9ec77739e6942337d12917cfe9d';
 const selectionPrior = {
@@ -104,6 +132,16 @@ export function createTooltipOpenHistoricalRead({ root, read }) {
   const file = 'scripts/audit-material-configured-control-activation.mjs';
   let previous;
   return (name, options) => {
+    if (path.resolve(root, name) === path.resolve(root, 'tests/material-parity/snackbar-single-open-registration.spec.mjs')) {
+      const bytes = Buffer.from(restoreTooltipSnackbarSuite(read(name)));
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? bytes.toString(encoding) : bytes;
+    }
+    if (path.resolve(root, name) === path.resolve(root, 'tests/material-parity/snackbar-single-open-registration.mjs')) {
+      const bytes = Buffer.from(restoreTooltipSharedBoundary(read(name)));
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? bytes.toString(encoding) : bytes;
+    }
     const kind = path.resolve(root, name) === path.resolve(root, 'scripts/run-material-input-audit.mjs') ? 'runner'
       : path.resolve(root, name) === path.resolve(root, 'scripts/export-material-input-audit-current-ancestry.mjs') ? 'launcher' : null;
     if (kind) {

@@ -4,18 +4,31 @@
 
 ### Current next action and publication status
 
-October28 tooltip registry/selector preparation passes focused checks2/2
-(1193.7795ms). Prepared inventory is1123 sources/453 proofs,adding10/10 while
-preserving every1113/443 predecessor entry and all72 implementation-plan tracks;
-no new finding is fabricated for the already-classified tooltip state mismatch.
-Whole registry restoration returns68b3644e. Prepared --tooltip-open selects exact
-3a51fbe3;default and every older selector produce unchanged arguments,mixed or
-unknown supplements reject,and complete runner/launcher predecessors restore.
-Historical read boundary now supports these prepared source transitions. These
-are tested preparations,not installed live producer/selector changes. Next apply
-the coherent registry/selector update,adapt the previous registry proof to its
-explicit predecessor view,and validate the complete dependency chain once before
-export. Do not recapture or rebuild the canonical package for this preparation.
+October28 tooltip registry/selector is now installed locally:1123 sources/453
+proofs,adding10/10 while preserving every1113/443 predecessor entry and all72
+implementation-plan tracks. No new finding is fabricated for the already-classified
+state mismatch. Whole registry restoration returns68b3644e;live --tooltip-open
+dry-run selects exact3a51fbe3. Default/older selectors preserve and mixed flags reject.
+The prior datepicker registry suite now explicitly reads its authenticated
+predecessor view;after-hook proves actual files remain unchanged. Combined owning
+suites pass12/12,0skip (14377.7271ms),including whole-case conservation,negative
+receipts and current/previous source boundaries. Full reader constructed3a51fbe3,
+but the first validation invocation passed an absolute virtual-file path and was
+correctly rejected before dependency validation. Retain failed
+tooltip-open-full-reader-20261028.log;this is a caller error,not a passing gate.
+Corrected tooltip-open-full-reader-relative-20261028.log completes exit0:
+2311 cases/18631 dependencies,inspectionComplete=false,currentRenderingAccepted=false,
+22544 reads/4556395481 bytes/185061.8218ms. This measured invocation uses direct
+reads rather than claiming an evidence-session cache metric.
+Subsequently the separate direct older-collector path was corrected:shared
+restoreSnackbarRegistrationIfPresent now reverses tooltip producer/runner/launcher
+additions before prior stages. Complete shared helper and snackbar-suite source
+recovery authenticate originaldcf31208/1fd52788;unknown edits reject. Current
+tooltip/date-picker suites pass12/12 (13918.6614ms),then snackbar/date-picker
+compatibility passes5/5 (2527.2632ms). The full dependency pass predates these final
+bounded source changes and is not mislabeled as a current-byte pass. Next freeze
+the coherent batch for canonical export/conservation/independent cold/import gates,
+which must validate current inputs. No export or accepted-pointer change yet.
 
 October28 complete tooltip reader construction passes(exit0),review
 3a51fbe3299d2c0f3f7ee70822bb69e0a4f7d9ec77739e6942337d12917cfe9d,

@@ -1,3 +1,4 @@
+import { restoreTooltipOpenRegistry, restoreTooltipOpenSelection } from '../../scripts/join-material-tooltip-open.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -119,6 +120,9 @@ export function restoreSnackbarSharedSource(bytes, file) {
   assert.equal(hash(source), entry.prior); return source;
 }
 export function restoreSnackbarRegistrationIfPresent(bytes, kind) {
+  if (kind === 'producer' && bytes.toString().includes('"scripts/join-material-tooltip-open.mjs",')) bytes = restoreTooltipOpenRegistry(bytes);
+  if ((kind === 'runner' && bytes.toString().includes('const tooltipOpenReaderFactory = ')) ||
+    (kind === 'launcher' && bytes.toString().includes("const tooltipOpen = rawRequested.includes('--tooltip-open');"))) bytes = restoreTooltipOpenSelection(bytes, kind);
   if (kind === 'policy') bytes = restoreDatepickerOpeningPolicyIfPresent(bytes);
   if ((kind === 'runner' && bytes.toString().includes('const datepickerOpeningReaderFactory = ')) ||
     (kind === 'launcher' && bytes.toString().includes("const datepickerOpening = rawRequested.includes('--datepicker-opening');"))) bytes = restoreDatepickerOpeningSelection(bytes, kind);

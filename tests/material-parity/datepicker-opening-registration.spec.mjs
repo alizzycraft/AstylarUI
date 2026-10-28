@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import test from 'node:test';
+import { readFileSync as nativeReadFileSync } from 'node:fs';
+import test, { after } from 'node:test';
 import ts from 'typescript';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -11,6 +11,15 @@ import { prepareDatepickerOpeningRegistry, restoreDatepickerOpeningRegistry,
   datepickerHistoricalSources, prepareDatepickerOpeningSelection, restoreDatepickerOpeningSelection,
   datepickerOpeningReview, restoreDatepickerOpeningPolicyIfPresent } from './datepicker-opening-registration.mjs';
 import { restoreStepperBatchRegistryIfPresent } from './stepper-batch-registration.mjs';
+import { createTooltipOpenHistoricalRead } from '../../scripts/join-material-tooltip-open.mjs';
+
+// This suite proves the pinned datepicker transition. The tooltip suite proves
+// the current registry and its exact reversible additions separately.
+const readFileSync = createTooltipOpenHistoricalRead({ root: process.cwd(), read: nativeReadFileSync });
+const unchanged = ['tests/material-parity/input-equivalence-audit.mjs',
+  'scripts/audit-material-configured-control-activation.mjs', 'scripts/run-material-input-audit.mjs',
+  'scripts/export-material-input-audit-current-ancestry.mjs'].map(file => [file, nativeReadFileSync(file)]);
+after(() => { for (const [file, bytes] of unchanged) assert.deepEqual(nativeReadFileSync(file), bytes); });
 
 test('datepicker registry preparation preserves every predecessor entry and rejects unrelated drift', () => {
   const bytes = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
