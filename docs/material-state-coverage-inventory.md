@@ -4,6 +4,37 @@
 
 ### Current next action and publication status
 
+Tooltip export completed exit0, candidate080b1dd5 (decodedccaac6f3), with
+20003 files/3463092440 verification bytes and diskHits1. This is not the cold gate.
+Candidate section digests pass:80 sections,none added/removed;72 unchanged.
+Changed sections are sourceFingerprints,coverage,focusedProofs and the five
+receipt sections controlLineBoxes,discrepancies,ownerCaretInputs,
+reviewedSourceBatchInputs,controlTypography. Leaf comparison and metadata extraction
+completed exit0. tooltip-open-derived-receipt-conservation-20261028.log verifies
+all147 changed leaves:98 direct producer receipts,48 recomputed control-proof
+hashes and one recomputed motion-report hash;exact predecessor producer recovered.
+tooltip-open-metadata-conservation-20261028.log preserves205 findings/72 tracks,
+all443 old proofs (five verified source-line shifts),and all prior case records
+after removing only eight configured tooltip-open evidence additions. All18597
+prior evidence fingerprints remain exact;34 authenticated capture receipts added.
+Source inventory adds10 and changes7;owning source-boundary tests cover the
+datepicker test-body transition. All2311 cases remain partial/current-unverified.
+Independent --tooltip-open --check with ASTYLAR_AUDIT_COLD=1 completed exit0 in
+tooltip-open-independent-cold-20261028 stdout/stderr:diskHits0,collectors2,
+20003 files/3463092440 verification bytes,elapsed4318999.3384ms.
+Canonical comparison and isolated/accepted imports passed exit0;see
+tooltip-open-candidate-import-20261028.log and tooltip-open-accepted-import-20261028.log.
+Accepted generation080b1dd5/index3856b794 preserves8483 scalar discrepancies,
+39904 control differences,389202 occurrences and205 source findings. Candidate
+and accepted stores share86 immutable files through hard links;no evidence deleted.
+All2311 cases remain partial/current-rendering unverified. Publish this increment,
+then resume outstanding exact-case inspection without repeating these gates.
+Retained candidate metadata identifies shared outstanding structural/descendant
+mapping and owner-applicability obligations in2287 cases,semantic-association
+obligations in2271,and history/resource ownership obligations in1875 interactions.
+These are overlapping remaining obligations,not new failures or case-closure counts.
+Original scope and all final acceptance gates remain unchanged.
+
 October28 tooltip registry/selector is now installed locally:1123 sources/453
 proofs,adding10/10 while preserving every1113/443 predecessor entry and all72
 implementation-plan tracks. No new finding is fabricated for the already-classified
@@ -26,9 +57,15 @@ additions before prior stages. Complete shared helper and snackbar-suite source
 recovery authenticate originaldcf31208/1fd52788;unknown edits reject. Current
 tooltip/date-picker suites pass12/12 (13918.6614ms),then snackbar/date-picker
 compatibility passes5/5 (2527.2632ms). The full dependency pass predates these final
-bounded source changes and is not mislabeled as a current-byte pass. Next freeze
-the coherent batch for canonical export/conservation/independent cold/import gates,
-which must validate current inputs. No export or accepted-pointer change yet.
+bounded source changes and is not mislabeled as a current-byte pass. Batch7adbc051
+is now frozen for --tooltip-open export in tooltip-open-canonical-export-20261028
+stdout/stderr. Hash-verified backup tooltip-open-pre-export-a58e-20261028 preserves
+manifest2842c91a,payloada58e7a47 and Markdown290395f9. Reuse authenticated predecessor
+80-section receipt datepicker-opening-candidate-section-digests-20261027.log
+(SHAca7c3ba1) and metadata-extract-20261028.log (SHA3e7a8b19);both manifests equal
+the exact backup. Do not rescan the old2.37GB package for those existing receipts.
+That pre-export checkpoint is historical;the completed conservation,cold check
+and verified imports above supersede its pending status. Rendering remains unverified.
 
 October28 complete tooltip reader construction passes(exit0),review
 3a51fbe3299d2c0f3f7ee70822bb69e0a4f7d9ec77739e6942337d12917cfe9d,

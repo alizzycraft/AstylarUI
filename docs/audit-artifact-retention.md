@@ -1,5 +1,21 @@
 # Audit artifact retention
 
+Retain tooltip-open-candidate-section-digests, candidate-receipt-leaves,
+candidate-metadata-extract, derived-receipt-conservation and metadata-conservation
+20261028 logs:completed candidate conservation evidence. Retain the separate
+tooltip-open-independent-cold-20261028 stdout/stderr:check completed exit0 with
+diskHits0. Retain tooltip-open-candidate-import-20261028.log and
+tooltip-open-accepted-import-20261028.log:both verified imports passed exit0.
+Accepted generation080b1dd5/index3856b794 and the candidate store share86 immutable
+files through hard links. Preserve predecessora58e7a47 and original/failure evidence;
+no deletion was performed. Evidence-snapshot acceptance is not rendering acceptance.
+
+Retain tooltip-open-pre-export-a58e-20261028 three-file hash-verified backup and
+tooltip-open-canonical-export-20261028 stdout/stderr as integration evidence.
+Reuse predecessor datepicker-opening-candidate-section-digests-20261027.log and
+candidate-metadata-extract-20261028.log:their manifests match payloada58e7a47 exactly.
+No decoded predecessor duplicate or fresh browser capture was created for export.
+
 Retain tooltip-open-full-reader-20261028.log:construction passed,but its absolute
 virtual-file argument was rejected before dependency validation. Keep the separate
 tooltip-open-full-reader-relative-20261028.log for the corrected invocation;do not
