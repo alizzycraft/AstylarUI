@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Retain badge-local-baseline-texture-20261028.log:both owning tests pass,including
+byte-exact CPU reconstruction and wrong-baseline controls. It reuses existing
+texture evidence and authenticated font/build bytes;no app capture or new PNG
+set was created. The earlier one-test model log remains historical evidence.
+
 Retain badge-texture-model-20261028.log and the owning
 tests/material-parity/badge-texture-observation.spec.mjs. The focused proof reads
 existing CPU texture/frame evidence and writes no new image/capture set. It keeps

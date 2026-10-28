@@ -4,6 +4,22 @@
 
 ### Current next action and publication status
 
+October28 Badge local baseline/CPU question answered without recapturing the app:
+owning badge-texture-observation.spec.mjs now passes2/2,0skip in
+badge-local-baseline-texture-20261028.log. The second test authenticates retained
+chunkf366533b and Roboto400 font425c0713,extracts the complete retained
+calculateCssLineBoxAlphabeticBaseline method body,and runs it with the captured
+14.4px font and18px line box in the same observed Chrome156. Font-box ascent14,
+descent4 yield local baseline14 CSSpx. Drawing Notifications atx0/baseline14
+reproduces EVERY stored CPU RGBA channel at both DPRs,including transparent ones.
+Two +1CSSpx baseline controls differ. This is exact texture reconstruction,not
+an observed historical draw call or proof of native HTML baseline/global phase.
+Together with the prior screen model,it bounds local texture production and
+post-texture transfer without a new unexplained residual in the tested prefix.
+Next measure native baseline/global glyph phase at the same source-bound state;
+do not infer it solely from the Range box or compensate by moving the fixture.
+No renderer/fixture/canonical changes;all final gates and unequal-input findings remain.
+
 October28 Badge post-texture boundary is now bounded by an owning focused test:
 `node --test tests/material-parity/badge-texture-observation.spec.mjs` passes1/1
 in badge-texture-model-20261028.log. It authenticates capture-source/manifest/loaded
