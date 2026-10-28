@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Retain badge-global-canvas-phase-20261028.log:four owning tests pass with bounded
+sample transfer and unchanged original screenshots. The cancelled full-frame
+exploratory command produced no audit artifact;its resource failure and exact
+replacement are recorded in the coverage ledger. No evidence was deleted.
+
 Retain badge-baseline-20261028.log and badge-native-baseline-check-20261028.log.
 They preserve native marker bounds,all captured candidate draw events (including
 transient13px draws),loaded asset receipts and three owning test results. Existing

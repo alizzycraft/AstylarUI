@@ -4,6 +4,24 @@
 
 ### Current next action and publication status
 
+October28 global Canvas phase hypothesis tested:owning suite passes4/4,0skip
+in badge-global-canvas-phase-20261028.log. Direct Canvas2D drawing with the exact
+authenticated Roboto400 bytes at globalx65 and either measured native baseline
+191.546875 or candidate baseline191.5599822998047 retains the same native-prefix
+residual COUNTS/maxima:412/1122 pixels over1RGB level,max82 atDPR1;1222/4760,max213
+atDPR2. These match prior local-texture/model totals,not a demonstrated equality
+of complete error maps. Bypassing the text-plane sampler and choosing either
+measured baseline does not remove the discrepancy in this region. Do not infer
+that a fixture offset or the0.0131px baseline delta is its demonstrated cause.
+Native-versus-Canvas shaping/raster settings and remaining input differences are
+still unresolved;next inspect those settings before another coordinate probe.
+
+The first exploratory command sent full-frame numeric arrays into Playwright
+and grew to about2.7GB process working set. Its exact owned process tree was
+deliberately terminated (exit1),not restarted on an observation timeout. The
+replacement transfers only sampled RGB triples (<200KB asserted),completes in
+seconds,and saves no extra screenshots. Original evidence/acceptance remains.
+
 October28 native Badge baseline is measured,not inferred from its Range box.
 audit-material-badge-baseline.mjs reuses exact prior native-marker/asset observer
 bb87aa65 with bounded source substitutions;all1887 served build receipts agree.

@@ -7,6 +7,47 @@ import { chromium } from 'playwright-core';
 import { materialBrowserLaunchOptions } from './run-checkpoint.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
+test('measured global Canvas baselines do not remove the native Badge prefix discrepancy', async t => {
+  const bytes=readFileSync('artifacts/material-parity/badge-texture-observation-20261028/latest-report.json');
+  assert.equal(hash(bytes),'d5c94aec9eb800e86c027be14ee1d0dadf63e4a12697a19c8d9dfa1b7a4576ff');
+  const report=JSON.parse(bytes),font=readFileSync('artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/media/roboto-latin-400-normal.woff2');
+  assert.equal(hash(font),'425c0713a8176f92273d378599c7eac57de7fafabd4bd0ed457b70eb8f80d371');
+  const rows=report.results.filter(r=>r.side==='astylar').map(row=>{
+    const native=report.results.find(r=>r.side==='reference'&&r.dpr===row.dpr);
+    const b=readFileSync(native.screenshot.file);assert.equal(hash(b),native.screenshot.sha256);
+    const image=PNG.sync.read(b),o=row.observation,dpr=row.dpr;
+    const top=Math.min(...o.projected.map(p=>p.y)),bottom=Math.max(...o.projected.map(p=>p.y));
+    const left=Math.min(...o.projected.map(p=>p.x));
+    const stop=Math.floor(o.measurement.elements['badge-count'].borderBox.left*dpr)-2;
+    const samples=[];
+    for(let y=Math.ceil(top);y<Math.floor(bottom);y++)for(let x=Math.ceil(left);x<stop;x++) {
+      const i=(y*image.width+x)*4;samples.push([x,y,...image.data.subarray(i,i+3)]);
+    }
+    return {dpr,samples,baselines:[native.observation.textRange.top+14,(top+14*dpr*(bottom-top)/o.texture.size.height)/dpr]};
+  });
+  // Transfer only sampled RGBs, never full-frame numeric arrays.
+  assert.ok(Buffer.byteLength(JSON.stringify(rows))<200000);
+  const browser=await chromium.launch(materialBrowserLaunchOptions());
+  try {
+    assert.equal(browser.version(),report.currentBrowser);
+    const page=await browser.newPage();
+    const results=await page.evaluate(async({font,rows})=>{
+      const face=new FontFace('Roboto',`url(data:font/woff2;base64,${font})`);await face.load();document.fonts.add(face);
+      return rows.map(row=>({dpr:row.dpr,variants:row.baselines.map(baseline=>{
+        const c=document.createElement('canvas');c.width=400*row.dpr;c.height=220*row.dpr;
+        const ctx=c.getContext('2d');ctx.fillStyle='#f0f0f0';ctx.fillRect(0,0,c.width,c.height);ctx.scale(row.dpr,row.dpr);
+        ctx.font='normal normal 14.4px Roboto, Arial, sans-serif';ctx.fillStyle='#1d1b20';ctx.textBaseline='alphabetic';
+        ctx.fillText('Notifications',65,baseline);const pixels=ctx.getImageData(0,0,c.width,c.height).data;
+        let overOne=0,maximum=0;
+        for(const [x,y,...rgb]of row.samples){const i=(y*c.width+x)*4,delta=Math.max(...rgb.map((v,k)=>Math.abs(pixels[i+k]-v)));overOne+=delta>1;maximum=Math.max(maximum,delta);}
+        return {baseline,pixels:row.samples.length,overOne,maximum};
+      })}));
+    },{font:font.toString('base64'),rows});
+    for(const row of results)for(const v of row.variants)assert.deepEqual({pixels:v.pixels,overOne:v.overOne,maximum:v.maximum},
+      row.dpr===1?{pixels:1122,overOne:412,maximum:82}:{pixels:4760,overOne:1222,maximum:213});
+    t.diagnostic(JSON.stringify({results,boundary:'Direct global Canvas drawing retains native-prefix residual at both measured baselines. This does not establish identical per-pixel error maps,shaping settings or complete equal-input HTML/Canvas semantics;no fixture shift is authorized.'}));
+  }finally{await browser.close();}
+});
 test('Badge native baseline marker preserves bounds and separates transient candidate draws', () => {
   const bytes=readFileSync('artifacts/material-parity/badge-baseline-20261028.log');
   assert.equal(hash(bytes),'ba7e4156548864785562f97ab21448f68507519b14d35a12f80a2318b7ce5678');
