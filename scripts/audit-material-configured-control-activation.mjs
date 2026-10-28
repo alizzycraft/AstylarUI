@@ -11,6 +11,9 @@ import { fingerprintModuleGraph } from '../tests/material-parity/run-checkpoint.
 const baseFile = 'scripts/audit-material-configured-control-focus.mjs';
 const datepickerActivation = process.argv.includes('--datepicker-activation');
 assert.equal(process.argv.filter(value => value === '--datepicker-activation').length, Number(datepickerActivation));
+const tooltipOpen = process.argv.includes('--tooltip-open');
+assert.equal(process.argv.filter(value => value === '--tooltip-open').length, Number(tooltipOpen));
+assert.ok(!(datepickerActivation && tooltipOpen), 'Choose one activation cohort');
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const base = readFileSync(baseFile), baseSha256 = 'dc9305e44f29548ac6b7fbc890d0029467cf01015ba5828eef5b8e22ad491dc3';
 assert.equal(hash(base), baseSha256);
@@ -21,14 +24,16 @@ function replace(before, after) {
 }
 replace("const script = 'scripts/audit-material-configured-control-focus.mjs';",
   "const script = 'scripts/audit-material-configured-control-activation.mjs';");
-if (datepickerActivation) {
-  replace("const families = ['chips', 'slide-toggle', 'button', 'menu', 'expansion', 'snack-bar', 'tooltip'];", "const families = ['datepicker'];");
+if (datepickerActivation || tooltipOpen) {
+  replace("const families = ['chips', 'slide-toggle', 'button', 'menu', 'expansion', 'snack-bar', 'tooltip'];", `const families = ['${tooltipOpen ? 'tooltip' : 'datepicker'}'];`);
   replace('assert.equal(process.argv.length, verifyMode ? 4 : 3);', 'assert.equal(process.argv.length, verifyMode ? 5 : 4);');
   replace("const root = path.resolve('examples/material-showcase/dist/material-showcase/browser');",
     "const root = path.resolve('artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser');");
 }
-replace("families.includes(c.family) && c.state === 'focus'", "families.includes(c.family) && ['activate', 'activate-leave'].includes(c.state)");
-replace('assert.equal(cases.length, 56);', `assert.equal(cases.length, ${datepickerActivation ? 17 : 113});
+replace("families.includes(c.family) && c.state === 'focus'", tooltipOpen
+  ? "families.includes(c.family) && c.state === 'open'"
+  : "families.includes(c.family) && ['activate', 'activate-leave'].includes(c.state)");
+replace('assert.equal(cases.length, 56);', `assert.equal(cases.length, ${tooltipOpen ? 8 : datepickerActivation ? 17 : 113});
 assert.equal(new Set(cases.map(c => materialCaseKey('interaction', c))).size, cases.length);
 assert.equal(new Set(cases.map(c => [c.family,c.profile,c.viewport.id,c.state,hash(materialCaseKey('interaction', c)).slice(0,12)].join('-'))).size, cases.length);`);
 replace('${c.family}-${c.profile}-${c.viewport.id}-${mode}',
@@ -56,7 +61,9 @@ replace('actionSource, results, scope:', 'actionSource, sourceRecipe: recipe, re
 replace('assert.deepEqual(report.actionSource, actionSource);',
   'assert.deepEqual(report.actionSource, actionSource); assert.deepEqual(report.sourceRecipe, recipe);');
 replace('56 exact configured focus contexts; direct active owners before/after action and settlement.',
-  datepickerActivation
+  tooltipOpen
+    ? '8 exact configured tooltip open contexts; maintained click action and raw events,state and active owners before/after action and settlement. Not Android touch,intermediate paint or current rendering acceptance.'
+    : datepickerActivation
     ? '17 exact configured datepicker toggle activate/activate-leave contexts; raw events,state and active owners before/after action and settlement. Focus-selector target is not the pointer target; no input-click or intermediate paint acceptance.'
     : '113 exact configured pointer activate/activate-leave contexts,including the extra snackbar comparison case; raw maintained events,state and direct active owners before/after action and settlement. Target means focus-selector candidate,not a pointer hit witness.');
 replace('observedNotParityAccepted: true, reportSha256:', 'observedNotParityAccepted: true, sourceRecipeVerified: true, reportSha256:');

@@ -3,6 +3,50 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 
 const file = 'examples/material-showcase/src/app/astylar.component.ts';
+test('configured tooltip open clicks retain eight exact divergent popup endpoints', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const directory = 'artifacts/material-parity/tooltip-configured-open-20261028';
+  const bytes = readFileSync(`${directory}/latest-report.json`);
+  assert.equal(hash(bytes), '48dfc121bb0788f4f2d595fd0d3097adae4a48edd53bd1bd6eb381b75ca26dbd');
+  const report = JSON.parse(bytes);
+  const verified = JSON.parse(execFileSync(process.execPath,
+    ['scripts/audit-material-configured-control-activation.mjs', '--verify', directory, '--tooltip-open'], { encoding: 'utf8' }));
+  assert.equal(verified.cases, 8); assert.equal(verified.sourceRecipeVerified, true);
+  const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.deepEqual(manifest.provenance.browserFiles, JSON.parse(readFileSync(
+    'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json')).provenance.browserFiles);
+  const inspect = raw => {
+    assert.equal(raw.browser, '156.0.8078.48');
+    assert.deepEqual(raw.results.map(r => `${r.profile}/${r.viewport.deviceScaleFactor}`).sort(),
+      ['light', 'dark', 'contrast', 'custom'].flatMap(p => [1, 2].map(d => `${p}/${d}`)).sort());
+    for (const row of raw.results) for (const side of ['reference', 'astylar']) {
+      assert.equal(row.state, 'open');
+      const evidence = row[side], samples = evidence.observations;
+      assert.deepEqual(samples.map(s => s.boundary), ['before', 'after-action', 'settled']);
+      assert.deepEqual(samples.map(s => s.state.open), side === 'reference' ? [false, false, false] : [false, true, true]);
+      assert.equal(samples.at(-1).active.logicalId, 'tooltip-primary');
+      const pointer = samples.at(-1).events.filter(e => ['pointerdown', 'pointerup', 'click'].includes(e.type));
+      assert.deepEqual(pointer.map(e => e.type), ['pointerdown', 'pointerup', 'click']);
+      assert.ok(pointer.every(e => e.trusted));
+      const treeBytes = readFileSync(evidence.inputTree.file);
+      assert.equal(hash(treeBytes), evidence.inputTree.sha256);
+      const popup = JSON.parse(treeBytes).nodes.filter(n => side === 'reference'
+        ? String(n.attributes?.class ?? '').split(/\s+/).includes('mat-mdc-tooltip-surface')
+        : n.authored?.id === 'tooltip-popup');
+      assert.equal(popup.length, side === 'reference' ? 0 : 1);
+    }
+  };
+  inspect(report);
+  for (const mutate of [r => r.results.pop(),
+    r => { r.results[0].astylar.observations.at(-1).state.open = false; },
+    r => { r.results[0].reference.observations.at(-1).events.find(e => e.type === 'click').trusted = false; }]) {
+    const changed = structuredClone(report); mutate(changed); assert.throws(() => inspect(changed));
+  }
+  // Current Chrome over retained assets, not the original Chrome154 execution,
+  // intermediate paint, native anonymous hit ancestry, or whole-case closure.
+});
 test('supplementary Android tooltip actions cannot close responsive canonical cases', async () => {
   const { readFileSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');

@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Retain tooltip-configured-open-20261028 report,16 paired trees/screenshots,
+capture stdout and its -provenance checkpoint. This fills eight exact configured
+open action boundaries;it is distinct from Android-touch and earlier activation
+cohorts. Report48dfc121,Chrome156,all1887 original assets;verification passes.
+No original captures or failed evidence were overwritten or removed. Activation
+driver source changed;keep its a566bdf0 predecessor for explicit receipt recovery.
+
 October28 datepicker snapshota58e7a47/index4abe8026 is accepted after conservation,
 independent cold comparison(exit0,diskHits0) and verified isolated/accepted imports.
 Retain datepicker-opening-independent-cold-20261028 stdout/stderr,

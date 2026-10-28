@@ -4,6 +4,28 @@
 
 ### Current next action and publication status
 
+October28 publication confirmed:853ce834 and a566bdf0 are pushed to
+codex/material-audit-alignment-integration. The pending-push notes below are history.
+Eight configured tooltip `open` cases now have supplementary raw action evidence,
+using existing activation diagnostic `--tooltip-open`,not a replacement action.
+Report tooltip-configured-open-20261028/latest-report.json SHA
+48dfc121bb0788f4f2d595fd0d3097adae4a48edd53bd1bd6eb381b75ca26dbd binds all four
+themes/DPR1 and2,24 paired before/after-action/settled boundaries,16 trees and16 PNGs.
+Chrome156.0.8078.48 served all1887 unchanged original assets. Both triggers receive
+focus and trusted pointerdown/up/click;candidate open false/true/true versus native
+store false/false/false,with settled popup node counts1 versus0. Native store.open
+alone is not tooltip visibility evidence;the authenticated endpoint trees supply
+that observation. This supports the existing scenario-state authoring mismatch,
+not a new equal-input core defect,intermediate raster or original Chrome154 replay.
+`--verify ... --tooltip-open` passes8 cases/24 paired boundaries;existing tooltip
+suite passes7/7,0skip (3141.8884ms),including missing-case,state and trust negatives.
+Mixed datepicker/tooltip flags and duplicate tooltip flags reject before capture.
+No browser/capture process remains. Canonical case statuses are unchanged pending
+an exact eight-case join. Next reconcile the registered activation driver from
+837098a2 at a566bdf0 to f97c4459,then integrate this evidence and the standalone
+tooltip proofs in one coherent source batch. Accepteda58e7a47 remains its pinned
+historical snapshot;do not claim its source receipts match the modified driver.
+
 October28 tooltip integration scope is now executable,not inferred from viewport
 dimensions. `node --test tests/material-parity/tooltip-position-history.spec.mjs`
 passes6/6,0skip (2257.0027ms). The added check authenticates original runnere01ef9dc
