@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Retain badge-fractional-origin-snap-20261028.log:five tests,ten independent HTML
+origin/DPR contexts and ten wrong-baseline controls. The existing Material PNGs
+remain authoritative;the original-origin reduction is checked against their exact
+visible-prefix bytes. No original image/metric or canonical generation was replaced.
+
 Retain badge-canvas-alpha-mode-20261028.log. Its four-test run preserves the
 alpha-enabled failures and records the opaque-context intervention separately.
 No failing image or original metric was replaced by the DPR1 diagnostic match.

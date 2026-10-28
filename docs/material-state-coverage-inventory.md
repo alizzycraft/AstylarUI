@@ -4,6 +4,30 @@
 
 ### Current next action and publication status
 
+October28 Badge DPR2 residual now has a multi-origin phase witness rather than
+a fitted fixture offset. Five independent HTML origins177.125/.375/.546875/.625/
+.875 atDPR1/2 use authenticated Roboto400,14.4px text and an explicit18px line box.
+Geometry-neutral markers measure baseline=top+14. At the original.546875 origin,
+the reduction's visible prefix exactly matches the retained Material native pixels
+at both DPRs. Opaque Canvas drawing at Math.round(baseline) CSSpx matches every
+sampled native pixel in all ten contexts. At the unrounded baseline,DPR1 matches;
+DPR2 .375/.546875/.625 each retain848 differing pixels,while.125/.875 match.
+Ten +1CSSpx wrong-baseline controls reject. This is empirical CSS-space baseline
+raster snapping in this exact font/browser/population,not a universal browser rule.
+The earlier direct-device28.8px versus scaled14.4px exploratory check produced
+the same residual;changing the scaling representation alone was not decisive.
+
+badge-fractional-origin-snap-20261028.log records5/5 owning tests,0skip. Existing
+alpha-enabled failures,backing intervention,texture/baseline receipts and original
+images remain intact. This extends the existing suspected-core text backing/local
+raster-phase finding with a concrete Material-prefix bridge:backing mode explains
+the DPR1 contribution,and native CSS-baseline raster phase explains the tested
+opaque DPR2 residual. It does not prove full Badge input equivalence,occluded
+glyphs,arbitrary fonts/backgrounds/compositing,or current installed-source acceptance.
+No canonical fixture offsets,opaque atlas workaround or renderer fix is authorized.
+Next consolidate these bounded observations with the existing finding and case
+obligations;do not repeat baseline/phase captures without new contradictory input.
+
 October28 Badge now has a bounded connection to existing finding
 core-text-transparent-backing-and-local-raster-phase (no duplicate finding).
 Changing ONLY Canvas context alpha:true to alpha:false,with the same authenticated

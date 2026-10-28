@@ -7,6 +7,55 @@ import { chromium } from 'playwright-core';
 import { materialBrowserLaunchOptions } from './run-checkpoint.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
+test('fractional-origin HTML reduction exposes CSS-baseline raster snapping at DPR2', async t => {
+  const font=readFileSync('artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/media/roboto-latin-400-normal.woff2');
+  assert.equal(hash(font),'425c0713a8176f92273d378599c7eac57de7fafabd4bd0ed457b70eb8f80d371');
+  const bytes=readFileSync('artifacts/material-parity/badge-texture-observation-20261028/latest-report.json');
+  assert.equal(hash(bytes),'d5c94aec9eb800e86c027be14ee1d0dadf63e4a12697a19c8d9dfa1b7a4576ff');
+  const report=JSON.parse(bytes),browser=await chromium.launch(materialBrowserLaunchOptions()),results=[];
+  try {
+    assert.equal(browser.version(),report.currentBrowser);
+    for(const dpr of [1,2]) {
+      const page=await browser.newPage({viewport:{width:400,height:220},deviceScaleFactor:dpr});
+      await page.evaluate(async font=>{
+        const f=new FontFace('Roboto',`url(data:font/woff2;base64,${font})`);await f.load();document.fonts.add(f);
+        document.body.style.cssText='margin:0;background:#f0f0f0';const n=document.createElement('span');n.id='label';
+        n.style.cssText='position:absolute;left:65px;font:normal 400 14.4px Roboto;line-height:18px;color:#1d1b20;white-space:nowrap';
+        n.textContent='Notifications';document.body.append(n);
+      },font.toString('base64'));
+      for(const top of [177.125,177.375,177.546875,177.625,177.875]) {
+        const probe=await page.evaluate(top=>{
+          const n=document.getElementById('label');n.style.top=top+'px';const before=n.getBoundingClientRect().toJSON();
+          const marker=document.createElement('span');marker.style.cssText='display:inline-block;width:0;height:0;vertical-align:baseline';n.append(marker);
+          const baseline=marker.getBoundingClientRect().top,after=n.getBoundingClientRect().toJSON();marker.remove();
+          return {baseline,stable:JSON.stringify(before)===JSON.stringify(after)};
+        },top);
+        assert.equal(probe.stable,true);assert.equal(probe.baseline,top+14);
+        const image=PNG.sync.read(await page.screenshot()),samples=[];
+        const old=report.results.find(r=>r.side==='reference'&&r.dpr===dpr);
+        const oldBytes=readFileSync(old.screenshot.file);assert.equal(hash(oldBytes),old.screenshot.sha256);
+        const original=PNG.sync.read(oldBytes);
+        for(let y=Math.floor(top*dpr)-1;y<Math.ceil((top+18)*dpr)+1;y++)for(let x=65*dpr;x<130*dpr;x++) {
+          const i=(y*image.width+x)*4,rgb=[...image.data.subarray(i,i+3)];
+          if(top===177.546875)assert.deepEqual(rgb,[...original.data.subarray((y*original.width+x)*4,(y*original.width+x)*4+3)]);
+          samples.push([x,y,...rgb]);
+        }
+        const variants=await page.evaluate(({samples,baseline,dpr})=>[baseline,Math.round(baseline),Math.round(baseline)+1].map(y=>{
+          const c=document.createElement('canvas');c.width=400*dpr;c.height=220*dpr;const ctx=c.getContext('2d',{alpha:false});
+          ctx.fillStyle='#f0f0f0';ctx.fillRect(0,0,c.width,c.height);ctx.scale(dpr,dpr);ctx.font='normal 400 14.4px Roboto';
+          ctx.fillStyle='#1d1b20';ctx.fillText('Notifications',65,y);const pixels=ctx.getImageData(0,0,c.width,c.height).data;
+          let changed=0,maximum=0;for(const[x,y,...rgb]of samples){const i=(y*c.width+x)*4,e=Math.max(...rgb.map((v,k)=>Math.abs(pixels[i+k]-v)));changed+=e>0;maximum=Math.max(maximum,e);}
+          return {baseline:y,changed,maximum};
+        }),{samples,baseline:probe.baseline,dpr});
+        assert.equal(variants[1].changed,0);assert.ok(variants[2].changed>0);
+        assert.equal(variants[0].changed,dpr===2&&[177.375,177.546875,177.625].includes(top)?848:0);
+        results.push({dpr,top,probe,variants});
+      }
+      await page.close();
+    }
+    t.diagnostic(JSON.stringify({results,boundary:'Independent HTML/opaque-Canvas phase reduction; explicit18px line height. Original-origin visible prefix matches retained Material pixels. Empirical CSS-baseline snapping rule for this font/browser/population,not a universal browser rule or permission to offset fixtures or opaque atlases.'}));
+  }finally{await browser.close();}
+});
 test('measured global Canvas baselines do not remove the native Badge prefix discrepancy', async t => {
   const bytes=readFileSync('artifacts/material-parity/badge-texture-observation-20261028/latest-report.json');
   assert.equal(hash(bytes),'d5c94aec9eb800e86c027be14ee1d0dadf63e4a12697a19c8d9dfa1b7a4576ff');
