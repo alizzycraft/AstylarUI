@@ -1,8 +1,11 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { createTooltipOpenReviewReader } from './join-material-tooltip-open.mjs';
 
 export const badgeLabelPaintPredecessor = '3a51fbe3299d2c0f3f7ee70822bb69e0a4f7d9ec77739e6942337d12917cfe9d';
+export const badgeLabelPaintReview = '3cb9fe23409d103230b7d2f9e842d9f3dfd984fd579e5cf2cfc4c32bcef52b60';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const childKey = 'retainedBadgeLabelRegionPaint';
 const receipt = (file, sha256) => ({ file, sha256 });
@@ -19,6 +22,21 @@ const diagnosis = {
     '248c3be4e2592d3591bf7a08b639d90c2eb44f9a31b2cc5cfb04fe9c61678d69'),
 };
 const decode = bytes => bytes.toString(bytes[0] === 255 && bytes[1] === 254 ? 'utf16le' : 'utf8').replace(/^\uFEFF/, '');
+
+export function createBadgeLabelPaintReviewReader({ root, read }) {
+  const prior = createTooltipOpenReviewReader({ root, read });
+  const joined = joinBadgeLabelPaint(JSON.parse(prior.read(prior.file)).review,
+    (name, options) => read(path.resolve(root, name), options));
+  assert.equal(joined.sha256, badgeLabelPaintReview);
+  const file = path.resolve(root, `artifacts/material-parity/working-audit/proposals/${joined.sha256}.json`);
+  const bytes = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256: joined.sha256, review: joined.review }));
+  return { ...joined, file, read(name, options) {
+    if (path.resolve(root, name) !== file) return prior.read(name, options);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  }, sourceApplicability: { mode: 'retained-badge-label-region-paint', predecessorApplicability: prior.sourceApplicability,
+    boundary: 'Forty historical local crop observations and two bounded prefix diagnoses;not full glyph,original action causality,current rendering or whole-case acceptance.' } };
+}
 
 export function restoreBadgeLabelPaint(review) {
   return { ...review, groups: review.groups.map(group => {

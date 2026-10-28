@@ -4,6 +4,24 @@
 
 ### Current next action and publication status
 
+October29 Badge integration preparation:the new reader composes the existing
+Tooltip predecessor and exact3cb9fe23 label-region join. Full actual-source
+reader/dependency validation exited0,constructing the exact expected digest and
+authenticating18636 dependencies across2311 partial,current-unverified cases.
+Staged registration conserves all1123 prior sources,453 proofs and72 plan
+entries,adding14 sources/nine proofs without changing live registration.
+The staged selector preserves every older/default selection and supports
+--badge-label-paint with export,check or dry-run separately. Initial selector
+test incorrectly combined --check and --dry-run and failed the existing usage
+guard;the test now verifies that rejection without changing the launcher.
+Corrected staged tests pass2/2 in4.63s;two existing Tooltip registration/source
+applicability compatibility tests pass2/2 in5.58s. Live historical-source
+reconciliation and actual exporter activation are still pending. Next apply
+the guarded shared-reader transition and verify old selectors before enabling
+the staged registration. Reuse this successful unchanged-reader check;do not
+restart it just for prose. No canonical export or
+browser recapture was run,and accepted080b1dd5/all2311 case statuses preserve.
+
 October28 Badge label evidence now has a bounded standalone ledger join in
 scripts/join-material-badge-label-paint.mjs. Its proposal digest is
 3cb9fe23409d103230b7d2f9e842d9f3dfd984fd579e5cf2cfc4c32bcef52b60;
