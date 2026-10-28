@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Retain badge-label-interaction-paint-20261028.log:40 historical interaction-label
+crop observations,80 authenticated original image receipts,three controls and
+the exact executed diagnostic source. Retain badge-label-retained-paint-20261028.log
+and badge-label-retained-paint-resolved-20261028.log as failed-attempt recipes
+(module resolution,then absent static label geometry). No new PNG/crop files or
+canonical generation were created. Original count evidence and all original
+screenshots/checkpoints remain unchanged;this does not authorize their deletion.
+
 Retain tooltip-open-candidate-section-digests, candidate-receipt-leaves,
 candidate-metadata-extract, derived-receipt-conservation and metadata-conservation
 20261028 logs:completed candidate conservation evidence. Retain the separate

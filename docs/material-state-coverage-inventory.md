@@ -4,6 +4,36 @@
 
 ### Current next action and publication status
 
+October28 bounded Badge label-paint follow-up (after published3b252cb8):
+the existing count-only check did not cover label-local pixels. Reuse of its
+checkpoint/image authentication, union-box crop and unmodified focused metric
+now checks40 configured interactions,80 original PNG receipts,zero phase offsets.
+No new capture,renderer change,fixture adjustment or canonical export was made.
+`badge-label-interaction-paint-20261028.log` (SHA256
+2fc649fab505e49bfe919ebcf978fb172fd5fca1cf1a921d7861e08770ab3bcc)
+contains the executable diagnostic source and all40 records; executed sourceSHA
+9ee8b1ef8ed853a17bd4511e7fdf69eda10a6c82366a29623934c851c1618bbb.
+Identity,altered-image and out-of-bounds controls pass. SSIM ranges
+0.6887093490670028 to0.9926366954584775. Five contrast/desktop-dpr2 states
+(focus,hover,held,activate,activate-leave) fail the existing local metric and
+sharpness target;all40 original page-output gates passed. Those five share
+SSIM0.6887093490670028 despite top-edge difference only0.01312255859375 CSSpx.
+This establishes a local-paint observation,not its renderer cause:known label
+nowrap/reference-normal and ancestor input differences remain authoritative.
+
+The original52-case attempt cannot supply label crops for12 static cases:
+all four profiles x desktop/tablet/mobile omit badge-label from geometry.elements;
+their input-tree owners also lack rectangles. Text-alignment summary centers are
+not substituted for crop bounds. Preserve both failed-attempt recipes:
+badge-label-retained-paint-20261028.log (data-URL bare-package resolution failure)
+and badge-label-retained-paint-resolved-20261028.log (missing static geometry).
+Both terminate1;the interaction-only diagnostic terminates0. Source report
+ab42dbec and on-disk producer remain unchanged. This standalone observation is
+not yet joined into canonical obligations;all2311 cases remain partial and
+current rendering unverified. Next inspect the five contrast/DPR2 label-local
+failures against retained typography/paint inputs before proposing any core cause;
+the12 static label crops require independently evidenced bounds,not guessed ones.
+
 Tooltip export completed exit0, candidate080b1dd5 (decodedccaac6f3), with
 20003 files/3463092440 verification bytes and diskHits1. This is not the cold gate.
 Candidate section digests pass:80 sections,none added/removed;72 unchanged.
