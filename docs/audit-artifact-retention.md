@@ -1,5 +1,31 @@
 # Audit artifact retention
 
+October28 datepicker snapshota58e7a47/index4abe8026 is accepted after conservation,
+independent cold comparison(exit0,diskHits0) and verified isolated/accepted imports.
+Retain datepicker-opening-independent-cold-20261028 stdout/stderr,
+datepicker-opening-candidate-import-20261028.log and
+datepicker-opening-accepted-import-20261028.log with the conservation receipts.
+Candidate and accepted generations share86 immutable files through hard links.
+Preserve predecessorf16b and original/failure evidence;no deletion was performed.
+Pending-check statements below are historical and superseded by this result.
+
+Retain datepicker-opening-source-conservation-20261028.log and independent-cold
+20261028 stdout/stderr. Source/dependency/applicability conservation passed;the cold
+check remains in flight. Acceptedf16b and its backup remain required until all gates
+and verified imports finish. No original or failure evidence was deleted.
+
+Retain datepicker-opening-canonical-export,candidate-section-digests and
+candidate-receipt-leaves logs dated20261027,plus candidate-metadata-extract,
+motion-reconciliation and core-conservation logs dated20261028. Candidatea58e7a47
+is not accepted:source/dependency/applicability reconciliation,cold verification
+and imports remain. Preserve acceptedf16b and its hash-verified backup. The selected
+metadata extract avoids a duplicate decoded2.37GB report;no evidence was deleted.
+
+Retain successful datepicker-opening-reader-bound-20261027 stdout/stderr and
+hash-verified datepicker-opening-pre-export-f16b-20261027 three-file backup during
+canonical integration. Full reader authenticates2311 cases/18597 dependencies;
+it does not replace canonical conservation,cold verification or acceptance gates.
+
 Retain datepicker-opening-reader-relative-20261027 stdout/stderr:the joined review
 constructed successfully,but full dependency checking rejected an unreconciled
 historical activation-driver receipt. Preserve it alongside the corrected result.

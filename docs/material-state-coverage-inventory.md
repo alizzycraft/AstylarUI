@@ -4,6 +4,57 @@
 
 ### Current next action and publication status
 
+October28 datepicker milestone is accepted locally as generationa58e7a47,
+index4abe8026 (full receipts in working-audit/current.json). Independent
+`--datepicker-opening --check` completed exit0:collectors2,memoryHits10,diskHits0,
+19969 files/3460426164 verified bytes. Isolated import and accepted import both
+passed;86 immutable files are hard-linked,not duplicated. Retain
+datepicker-opening-independent-cold,candidate-import and accepted-import logs
+dated20261028. This supersedes pending gates in the historical entries below.
+Complete conservation preserves prior findings and adds the opening-focus omission:
+1113 sources/443 proofs/205 findings/72 implementation tracks. Exactly17 supplementary
+activation obligations advance;all2311 cases remain partial,current-rendering
+unverified. No renderer or fixture change,case closure or acceptance waiver.
+Next publish this verified increment,then review the retained tooltip release
+component-caller evidence for integration without repeating settled captures.
+
+October28 datepicker source-conservation passes:all six extracted metadata sections
+match authenticated candidate token digests. Seven changed predecessor sources match
+83b9ad89/current whole-file hashes;seven added sources authenticate. All18527 prior
+dependency receipts preserve exactly and70 added capture receipts hash-verify.
+SourceApplicability is exactly the new datepicker wrapper around the unchanged
+predecessor. Retain datepicker-opening-source-conservation-20261028.log. Independent
+cold --datepicker-opening --check is now running with ASTYLAR_AUDIT_COLD=1 in
+datepicker-opening-independent-cold-20261028 stdout/stderr. Do not restart or accept
+on launch;verify terminal result and cache metrics,then isolated/accepted imports.
+
+October28 datepicker candidate a58e7a47 exported successfully; NOT accepted.
+Authenticated section digests preserve all80 sections,69 unchanged. Streaming
+receipt comparison preserves membership/order/shape across five changed sections;
+147 leaves differ:98 producer fingerprints,48 derived control hashes,one motion
+report hash. Independent motion replay and all48 reconstructed control hashes pass.
+Core conservation recovers all2311 prior case records after removing exactly17
+opening observations; all204 prior findings and71 plan items match original section
+digests. All1106 source paths remain;436 prior proof entries retain non-line fields.
+Current counts1113 sources/443 proofs/205 findings/72 tracks. All cases remain
+partial/current-rendering unverified. Retain datepicker-opening candidate section/
+receipt logs (20261027),metadata-extract,motion-reconciliation and core-conservation
+logs (20261028). Next reconcile seven changed prior source paths,dependency receipts
+and sourceApplicability metadata,then independent cold check and verified imports.
+Accepted f16b51d2 remains unchanged; no renderer/fixture edits or acceptance waiver.
+
+October27 complete datepicker reader validation PASSED:session86374 exit0,
+reviewcd9631f0,2311 cases,18597 dependencies,17 joined activation obligations.
+All whole-case inspection states remain partial/currentRendering unverified.
+Cold session verified18764 files/3371268089 bytes with diskHits0 in222533.8548ms.
+Retain datepicker-opening-reader-bound-20261027 stdout/stderr as the completed
+result;earlier stopped/failed attempts remain diagnostic records,not passes.
+Canonical pre-export backup datepicker-opening-pre-export-f16b-20261027 contains
+three hash-verified files:manifestc448f391,payloadf16b51d2(98415606 bytes),Markdown
+e4c380ad. Next canonical --datepicker-opening export,conservation,independent cold
+check and isolated/accepted import gates. Do not advance the accepted pointer on
+an export exit code alone. No renderer/fixture changes or new browser captures.
+
 October27 relative-path reader71997 constructed exact reviewcd9631f0 and reached
 complete dependency checking,but correctly rejected the older activation-driver
 receipt26d7a294 against current837098a2. The datepicker option had changed a file
