@@ -3,6 +3,70 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 
 const file = 'examples/material-showcase/src/app/astylar.component.ts';
+test('tooltip registry preparation preserves the complete predecessor inventory', async () => {
+  const { readFileSync } = await import('node:fs');
+  const ts = await import('typescript');
+  const { prepareTooltipOpenRegistry, restoreTooltipOpenRegistry, tooltipOpenSources, tooltipOpenProofs,
+    prepareTooltipOpenSelection, restoreTooltipOpenSelection, tooltipOpenReview } =
+    await import('../../scripts/join-material-tooltip-open.mjs');
+  const live = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+  const prior = restoreTooltipOpenRegistry(live), next = prepareTooltipOpenRegistry(prior);
+  assert.equal(restoreTooltipOpenRegistry(next), prior);
+  const entries = source => {
+    const ast = ts.createSourceFile('audit.mjs', source, 99, true);
+    assert.deepEqual(ast.parseDiagnostics, []);
+    return Object.fromEntries(['sourceFingerprints', 'focusedProofInventory', 'implementationPlan'].map(name => {
+      const fn = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+      let array; const visit = n => { if (!array && ts.isArrayLiteralExpression(n)) array = n; ts.forEachChild(n, visit); }; visit(fn);
+      return [name, array.elements.map(n => n.getText(ast))];
+    }));
+  };
+  const before = entries(prior), after = entries(next);
+  assert.equal(before.sourceFingerprints.length, 1113);
+  assert.equal(before.focusedProofInventory.length, 443);
+  assert.equal(before.implementationPlan.length, 72);
+  assert.deepEqual(after.sourceFingerprints.slice(10), before.sourceFingerprints);
+  assert.deepEqual(after.focusedProofInventory.slice(10), before.focusedProofInventory);
+  assert.deepEqual(after.implementationPlan, before.implementationPlan);
+  const files = after.sourceFingerprints.map(value => Function(`return ${value}`)());
+  assert.equal(new Set(files).size, files.length);
+  assert.deepEqual(files.slice(0, 10), tooltipOpenSources);
+  for (const name of tooltipOpenSources) assert.ok(readFileSync(name).length);
+  const proof = (_root, name, pattern, title) => {
+    assert.equal([...readFileSync(name, 'utf8').matchAll(new RegExp(pattern.source, 'g'))].length, 1);
+    return title;
+  };
+  assert.deepEqual(after.focusedProofInventory.slice(0, 10).map(value => Function('proof', 'root', `return ${value}`)(proof, '.')), tooltipOpenProofs);
+  assert.throws(() => prepareTooltipOpenRegistry(prior + '\n// drift'));
+  assert.throws(() => restoreTooltipOpenRegistry(next + '\n// drift'));
+  assert.deepEqual(readFileSync('tests/material-parity/input-equivalence-audit.mjs'), live);
+  const path = await import('node:path'), vm = await import('node:vm');
+  const { pathToFileURL, fileURLToPath } = await import('node:url');
+  for (const [kind, name] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
+    const before = restoreTooltipOpenSelection(readFileSync(name), kind);
+    const after = prepareTooltipOpenSelection(before, kind);
+    assert.equal(restoreTooltipOpenSelection(after, kind), before);
+    assert.throws(() => restoreTooltipOpenSelection(after + '\n// drift', kind));
+    assert.deepEqual(ts.createSourceFile(name, after, 99, true).parseDiagnostics, []);
+    if (kind !== 'launcher') continue;
+    const execute = (source, flags) => {
+      const outputs = [];
+      vm.runInNewContext(source.replace(/^import .*;\n/gm, '').replaceAll('import.meta.url', 'moduleUrl'), {
+        assert, path, fileURLToPath, moduleUrl: pathToFileURL(path.resolve(name)).href,
+        statSync: () => ({ isFile: () => true, isDirectory: () => true }),
+        process: { argv: ['node', name, ...flags], execPath: 'node', env: {} },
+        spawnSync: () => { throw Error('No export in selector check'); }, console: { log: value => outputs.push(JSON.parse(value)) },
+      });
+      assert.equal(outputs.length, 1); return outputs[0];
+    };
+    const older = [...before.matchAll(/rawRequested\.includes\('(.*?)'\)/g)].map(m => m[1]);
+    for (const flags of [[], ...older.map(flag => [flag])]) assert.deepEqual(execute(after, [...flags, '--dry-run']), execute(before, [...flags, '--dry-run']));
+    const selected = execute(after, ['--tooltip-open', '--dry-run']);
+    assert.ok(selected.args.includes(`--case-obligation-review-sha256=${tooltipOpenReview}`));
+    assert.ok(selected.args.includes(`--case-obligation-review=artifacts/material-parity/working-audit/proposals/${tooltipOpenReview}.json`));
+    for (const flag of [...older, '--unknown']) assert.throws(() => execute(after, ['--tooltip-open', flag, '--dry-run']));
+  }
+});
 test('tooltip open join preserves all predecessor obligations and rejects changed receipts', async () => {
   const { readFileSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');

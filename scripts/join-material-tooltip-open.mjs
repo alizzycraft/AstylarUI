@@ -9,6 +9,88 @@ import { createDatepickerOpeningReviewReader } from '../tests/material-parity/da
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const tooltipOpenPredecessor = 'cd9631f0dc9f7ca63b35c5d11d11611ebd3f98930166352ff56b3016d7989894';
 const childKey = 'supplementaryTooltipOpen';
+const registryPredecessor = '68b3644e4fcbdb4b1865e6bb15341066e4549bf7235bbf0f7a1a280fc4e5563e';
+export const tooltipOpenReview = '3a51fbe3299d2c0f3f7ee70822bb69e0a4f7d9ec77739e6942337d12917cfe9d';
+const selectionPrior = {
+  runner: 'f892923704a593a4966cf08c09a18c45edad00f36ffbd4fcc52994d29df61e0a',
+  launcher: 'f4e69c99a0aca6399bf4cf3b1b10c7314e8205009a7501bae8f079abc1a0f849',
+};
+const selectionChanges = {
+  runner: [
+    ["import { datepickerOpeningReview, createDatepickerOpeningReviewReader } from '../tests/material-parity/datepicker-opening-registration.mjs';", "import { datepickerOpeningReview, createDatepickerOpeningReviewReader } from '../tests/material-parity/datepicker-opening-registration.mjs';\nimport { tooltipOpenReview, createTooltipOpenReviewReader } from './join-material-tooltip-open.mjs';"],
+    ['const applicability=datepickerOpeningReaderFactory?.', 'const tooltipOpenReaderFactory = options.caseObligationReviewSha256===tooltipOpenReview ? createTooltipOpenReviewReader : datepickerOpeningReaderFactory;\n    const applicability=tooltipOpenReaderFactory?.'],
+  ],
+  launcher: [
+    ["const datepickerOpening = rawRequested.includes('--datepicker-opening');", "const tooltipOpen = rawRequested.includes('--tooltip-open');\nassert.ok(!tooltipOpen || rawRequested.every(argument => ['--tooltip-open', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\nconst datepickerOpening = rawRequested.includes('--datepicker-opening');"],
+    ['const requested = rawRequested.filter(', "const requested = rawRequested.filter(argument => argument !== '--tooltip-open').filter("],
+    ['|--datepicker-opening]', '|--datepicker-opening|--tooltip-open]'],
+    ['for (const [name, relative] of Object.entries(inputs)) {', `if (tooltipOpen) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${tooltipOpenReview}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+    ['snackbarSingleOpen || datepickerOpening)', 'snackbarSingleOpen || datepickerOpening || tooltipOpen)'],
+    ["if (requested.includes('--dry-run'))", `if (tooltipOpen) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${tooltipOpenReview}';\nif (requested.includes('--dry-run'))`],
+  ],
+};
+export function prepareTooltipOpenSelection(bytes, kind) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(source), selectionPrior[kind]);
+  for (const [before, after] of selectionChanges[kind]) {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  }
+  return source;
+}
+export function restoreTooltipOpenSelection(bytes, kind) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  if (hash(source) === selectionPrior[kind]) return source;
+  for (const [before, after] of selectionChanges[kind].toReversed()) {
+    assert.equal(source.split(after).length, 2); source = source.replace(after, before);
+  }
+  assert.equal(hash(source), selectionPrior[kind]); return source;
+}
+export const tooltipOpenSources = Object.freeze([
+  'scripts/join-material-tooltip-open.mjs',
+  'scripts/audit-material-tooltip-touch.mjs',
+  'tests/material-parity/tooltip-position-history.spec.mjs',
+  'artifacts/material-parity/tooltip-configured-open-20261028/latest-report.json',
+  'artifacts/material-parity/tooltip-configured-open-20261028-provenance/checkpoint/manifest.json',
+  'artifacts/material-parity/tooltip-release-component-caller-20261027/latest-report.json',
+  'artifacts/material-parity/tooltip-release-component-caller-20261027-checkpoint/checkpoint/manifest.json',
+  'artifacts/material-parity/tooltip-release-caller-20261027/latest-report.json',
+  'artifacts/material-parity/tooltip-release-caller-20261027-checkpoint/checkpoint/manifest.json',
+  'artifacts/material-parity/tooltip-trusted-touch-20261008/latest-report.json',
+]);
+export const tooltipOpenProofs = Object.freeze([
+  'tooltip registry preparation preserves the complete predecessor inventory',
+  'tooltip open join preserves all predecessor obligations and rejects changed receipts',
+  'tooltip diagnostic source applicability authenticates both exact driver revisions',
+  'configured tooltip open clicks retain eight exact divergent popup endpoints',
+  'supplementary Android tooltip actions cannot close responsive canonical cases',
+  'first release trace retains exact producer recovery without changing current capture reads',
+  'fresh tooltip release trace observes body-interaction immediate component hide after trusted click',
+  'retained tooltip touch release timing excludes capture-delay expiry, not unobserved dismissal paths',
+  'captured native tooltip touch exits request delayed hide while body interaction can hide immediately',
+  'tooltip history records calibration followed by local-flow substitution, not restored overlay equivalence',
+]);
+const proofBoundary = 'Bounded tooltip action/history evidence with explicit configured-versus-Android and original-versus-fresh runtime boundaries;not current rendering,all event paths or whole-case acceptance.';
+const registryAdditions = [
+  ['function sourceFingerprints(root) {\n  const files = [\n', tooltipOpenSources.map(file => `    ${JSON.stringify(file)},\n`).join('')],
+  ['function focusedProofInventory(root) {\n  return [\n', tooltipOpenProofs.map(title =>
+    `    proof(root, "tests/material-parity/tooltip-position-history.spec.mjs", new RegExp(${JSON.stringify("test\\('" + title + "'")}), ${JSON.stringify(title)}, ${JSON.stringify(proofBoundary)}),\n`).join('')],
+];
+export function prepareTooltipOpenRegistry(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(source), registryPredecessor);
+  for (const [anchor, extra] of registryAdditions) {
+    assert.equal(source.split(anchor).length, 2); source = source.replace(anchor, anchor + extra);
+  }
+  return source;
+}
+export function restoreTooltipOpenRegistry(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  if (hash(source) === registryPredecessor) return source;
+  for (const [anchor, extra] of registryAdditions.toReversed()) {
+    assert.equal(source.split(anchor + extra).length, 2); source = source.replace(anchor + extra, anchor);
+  }
+  assert.equal(hash(source), registryPredecessor); return source;
+}
 
 // Explicit read-only applicability boundary. Neither recorded receipt nor source
 // is rewritten, and unknown revisions must not fall through to historical bytes.
@@ -22,6 +104,18 @@ export function createTooltipOpenHistoricalRead({ root, read }) {
   const file = 'scripts/audit-material-configured-control-activation.mjs';
   let previous;
   return (name, options) => {
+    const kind = path.resolve(root, name) === path.resolve(root, 'scripts/run-material-input-audit.mjs') ? 'runner'
+      : path.resolve(root, name) === path.resolve(root, 'scripts/export-material-input-audit-current-ancestry.mjs') ? 'launcher' : null;
+    if (kind) {
+      const bytes = Buffer.from(restoreTooltipOpenSelection(read(name), kind));
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? bytes.toString(encoding) : bytes;
+    }
+    if (path.resolve(root, name) === path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs')) {
+      const bytes = Buffer.from(restoreTooltipOpenRegistry(read(name)));
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? bytes.toString(encoding) : bytes;
+    }
     if (path.resolve(root, name) !== path.resolve(root, file)) return read(name, options);
     const input = read(name);
     if (!previous) previous = execFileSync('git', ['show', `a566bdf0:${file}`], { cwd: root });
@@ -34,6 +128,7 @@ export function createTooltipOpenHistoricalRead({ root, read }) {
 export function createTooltipOpenReviewReader({ root, read }) {
   const prior = createDatepickerOpeningReviewReader({ root, read: createTooltipOpenHistoricalRead({ root, read }) });
   const joined = joinTooltipOpen(JSON.parse(prior.read(prior.file)).review, read);
+  assert.equal(joined.sha256, tooltipOpenReview);
   const file = path.resolve(root, `artifacts/material-parity/working-audit/proposals/${joined.sha256}.json`);
   const bytes = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256: joined.sha256, review: joined.review }));
   return { ...joined, file, read(name, options) {

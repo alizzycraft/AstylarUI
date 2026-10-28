@@ -4,6 +4,19 @@
 
 ### Current next action and publication status
 
+October28 tooltip registry/selector preparation passes focused checks2/2
+(1193.7795ms). Prepared inventory is1123 sources/453 proofs,adding10/10 while
+preserving every1113/443 predecessor entry and all72 implementation-plan tracks;
+no new finding is fabricated for the already-classified tooltip state mismatch.
+Whole registry restoration returns68b3644e. Prepared --tooltip-open selects exact
+3a51fbe3;default and every older selector produce unchanged arguments,mixed or
+unknown supplements reject,and complete runner/launcher predecessors restore.
+Historical read boundary now supports these prepared source transitions. These
+are tested preparations,not installed live producer/selector changes. Next apply
+the coherent registry/selector update,adapt the previous registry proof to its
+explicit predecessor view,and validate the complete dependency chain once before
+export. Do not recapture or rebuild the canonical package for this preparation.
+
 October28 complete tooltip reader construction passes(exit0),review
 3a51fbe3299d2c0f3f7ee70822bb69e0a4f7d9ec77739e6942337d12917cfe9d,
 2311 cases/exactly8 joined activation entries. Retain
