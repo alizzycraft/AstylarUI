@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October28 native Badge baseline is measured,not inferred from its Range box.
+audit-material-badge-baseline.mjs reuses exact prior native-marker/asset observer
+bb87aa65 with bounded source substitutions;all1887 served build receipts agree.
+badge-baseline-20261028.log SHA256
+ba7e4156548864785562f97ab21448f68507519b14d35a12f80a2318b7ce5678
+records native baselineY191.546875,local offset14 CSSpx at both DPRs. Inserting
+and removing a zero-size inline marker preserves the COMPLETE label and text
+Range rectangles. Candidate fillText events include initial13px baselines on
+16px logical-height canvases AND14px baselines on18px canvases;events alone are
+not live-texture identity. Existing byte-exact reconstruction binds the stored
+final CPU texture to14px. Projecting that offset through the measured plane gives
+191.5599822998047 CSSpx,delta+0.0131072998046875 from native at both DPRs.
+Thus this evidence does not support a one-CSS-pixel local-baseline error.
+
+Owning suite passes3/3,0skip in badge-native-baseline-check-20261028.log,including
+receipt/runtime-asset checks,transient/final draw distinction,projection arithmetic,
+CPU reconstruction and screen-model controls. Geometry-neutral marker evidence
+is not an uninstrumented draw-call replay or general semantic/lifetime proof.
+Next examine subpixel raster phase using the measured native global baseline
+and existing equal-input Canvas/HTML methods;do not relocate canonical inputs.
+These standalone observations remain outside canonical case closure;accepted
+080b1dd5 and all full acceptance gates remain unchanged.
+
 October28 Badge local baseline/CPU question answered without recapturing the app:
 owning badge-texture-observation.spec.mjs now passes2/2,0skip in
 badge-local-baseline-texture-20261028.log. The second test authenticates retained

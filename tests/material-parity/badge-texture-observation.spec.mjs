@@ -7,6 +7,30 @@ import { chromium } from 'playwright-core';
 import { materialBrowserLaunchOptions } from './run-checkpoint.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
+test('Badge native baseline marker preserves bounds and separates transient candidate draws', () => {
+  const bytes=readFileSync('artifacts/material-parity/badge-baseline-20261028.log');
+  assert.equal(hash(bytes),'ba7e4156548864785562f97ab21448f68507519b14d35a12f80a2318b7ce5678');
+  const report=JSON.parse(bytes.toString('utf16le').replace(/^\uFEFF/,''));
+  assert.equal(hash(readFileSync('scripts/audit-material-badge-baseline.mjs')),report.producerSha256);
+  const manifestBytes=readFileSync(report.baseline.file);assert.equal(hash(manifestBytes),report.baseline.sha256);
+  const assets=new Map(JSON.parse(manifestBytes).provenance.browserFiles.map(x=>[x.file,x.sha256]));
+  const textureBytes=readFileSync('artifacts/material-parity/badge-texture-observation-20261028/latest-report.json');
+  assert.equal(hash(textureBytes),'d5c94aec9eb800e86c027be14ee1d0dadf63e4a12697a19c8d9dfa1b7a4576ff');
+  const textures=JSON.parse(textureBytes);
+  assert.equal(report.browser,textures.currentBrowser);assert.equal(report.results.length,4);
+  for(const row of report.results)for(const asset of row.assets)assert.equal(asset.sha256,assets.get(asset.file));
+  for(const dpr of [1,2]) {
+    const native=report.results.find(r=>r.side==='reference'&&r.dpr===dpr).observation.native[0];
+    assert.equal(native.stable,true);assert.equal(native.baselineOffset,14);assert.equal(native.baselineCssY,191.546875);
+    const observed=report.results.find(r=>r.side==='astylar'&&r.dpr===dpr).observation.draws;
+    assert.ok(observed.some(d=>d.y===13&&d.height===16*dpr));
+    assert.ok(observed.some(d=>d.y===14&&d.height===18*dpr));
+    const o=textures.results.find(r=>r.side==='astylar'&&r.dpr===dpr).observation;
+    const top=Math.min(...o.projected.map(p=>p.y)),bottom=Math.max(...o.projected.map(p=>p.y));
+    const projectedBaseline=(top+(14*dpr)*(bottom-top)/o.texture.size.height)/dpr;
+    assert.ok(Math.abs(projectedBaseline-native.baselineCssY-0.0131072998046875)<1e-8);
+  }
+});
 test('retained Badge CPU texture and projected plane explain visible prefix, not native glyph parity', t => {
   const file = 'artifacts/material-parity/badge-texture-observation-20261028/latest-report.json';
   const bytes = readFileSync(file);

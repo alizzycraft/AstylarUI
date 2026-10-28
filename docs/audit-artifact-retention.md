@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Retain badge-baseline-20261028.log and badge-native-baseline-check-20261028.log.
+They preserve native marker bounds,all captured candidate draw events (including
+transient13px draws),loaded asset receipts and three owning test results. Existing
+texture/frame evidence is reused;no screenshot set or canonical export was added.
+
 Retain badge-local-baseline-texture-20261028.log:both owning tests pass,including
 byte-exact CPU reconstruction and wrong-baseline controls. It reuses existing
 texture evidence and authenticated font/build bytes;no app capture or new PNG
