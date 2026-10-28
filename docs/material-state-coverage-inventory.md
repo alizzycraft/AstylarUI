@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+October28 Badge paint attribution correction:the earlier "label-only" wording
+was too strong. The label rectangle overlaps the count bubble,whose known
+error-token/primary-token mismatch is visible in the retained screenshots.
+Neither original label-region SSIM nor its weighted pixel centroid isolates
+glyph paint. Preserve those measurements as composite-region observations.
+The same crop-context script now authenticates full reportab42dbec and records
+count rectangles plus a separate visible-label prefix ending two device pixels
+before either count rectangle. Original full-crop/padding metrics remain intact;
+the prefix is not a masked acceptance test or proof about occluded label glyphs.
+
+badge-label-count-overlap-20261028.log completes exit0,SHA256
+a592ffecb2c6f84760d7f7bb941478d35408a7bbc2e54402a35c14827c70d1d8.
+All ten contrast cases authenticate;DPR1 prefixes pass (SSIM.9934437659641795,
+gradient RMSE.020819308497995213),while all five repeated DPR2 prefixes still
+fail (SSIM.7179144459002299,RMSE.12829707884803074). Thus count overlap confounds
+the full crop but does not explain all of its observed discrepancy. No phase
+adjustment,reference edit,threshold change or complete glyph acceptance follows.
+The retained input trees expose text styles,not CPU/GPU glyph textures or origins.
+Existing Divider/Tooltip texture observations concern different owners/captures
+and cannot supply Badge's missing intermediate values. Next use the established
+texture-boundary diagnostic on a source-bound Badge reproduction,or retain this
+specific causal uncertainty;do not infer texture-sampling cause from box agreement.
+
 October28 Badge crop-context check answers the next measurement question:
 `node scripts/audit-material-badge-label-crop-context.mjs` completed exit0 in
 badge-label-crop-context-zero-20261028.log (SHA256

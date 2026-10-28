@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain badge-label-count-overlap-20261028.log:the same crop-context diagnostic now
+binds original count geometry and a separate non-overlapping label prefix. It
+preserves full-region metrics and does not replace failed evidence with a smaller
+passing region. The predecessor script is retained in Git1cc493e0;original
+crop-context logs remain historical,not silently rebound to the updated script.
+
 Retain badge-label-crop-context-zero-20261028.log with its checked-in diagnostic
 scripts/audit-material-badge-label-crop-context.mjs. It authenticates20 original
 images and records30 unshifted crop-context measurements without writing PNGs.
