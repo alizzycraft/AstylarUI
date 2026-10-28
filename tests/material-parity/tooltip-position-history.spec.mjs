@@ -3,6 +3,49 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 
 const file = 'examples/material-showcase/src/app/astylar.component.ts';
+test('tooltip open join preserves all predecessor obligations and rejects changed receipts', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const { joinTooltipOpen, restoreTooltipOpen } = await import('../../scripts/join-material-tooltip-open.mjs');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const indexBytes = readFileSync('artifacts/material-parity/working-audit/a58e7a479344f0e809010974627ab188fb4e84b5258f4895f52bbb2911dcad07/index.json');
+  assert.equal(hash(indexBytes), '4abe8026ba5add4a80a471ba20fd9a5124c5dde2385354d04843c48f9f5cb413');
+  const evidence = JSON.parse(indexBytes).metadata.coverage.inspectionEvidence;
+  const parent = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',
+    ...(evidence.schemaVersion === 2 ? { inspectionSchemaVersion: 2 } : {}), scope: evidence.scope, groups: evidence.cases };
+  const original = JSON.stringify(parent);
+  const result = joinTooltipOpen(parent);
+  assert.equal(result.cases, 8); assert.equal(result.review.groups.length, 2311);
+  assert.deepEqual(restoreTooltipOpen(result.review), parent);
+  assert.equal(JSON.stringify(parent), original);
+  const changed = result.review.groups.filter((g, i) => JSON.stringify(g) !== JSON.stringify(parent.groups[i]));
+  assert.equal(changed.length, 8);
+  for (const group of result.review.groups) {
+    assert.equal(group.inspection, 'partial'); assert.equal(group.currentRendering, 'unverified');
+  }
+  assert.throws(() => joinTooltipOpen({ ...parent, scope: 'altered scope' }));
+  for (const suffix of ['latest-report.json', 'manifest.json', '.png', '-astylar.json']) {
+    let changedRead = false;
+    assert.throws(() => joinTooltipOpen(parent, name => {
+      const bytes = readFileSync(name);
+      if (name.endsWith(suffix)) { changedRead = true; return Buffer.concat([bytes, Buffer.from('corrupt')]); }
+      return bytes;
+    }));
+    assert.equal(changedRead, true, suffix);
+  }
+});
+
+test('tooltip diagnostic source applicability authenticates both exact driver revisions', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { reconcileTooltipActivationDriver } = await import('../../scripts/join-material-tooltip-open.mjs');
+  const name = 'scripts/audit-material-configured-control-activation.mjs';
+  const current = readFileSync(name), previous = execFileSync('git', ['show', `a566bdf0:${name}`]);
+  assert.deepEqual(reconcileTooltipActivationDriver(current, previous), previous);
+  assert.throws(() => reconcileTooltipActivationDriver(Buffer.concat([current, Buffer.from('drift')]), previous));
+  assert.throws(() => reconcileTooltipActivationDriver(current, Buffer.concat([previous, Buffer.from('drift')])));
+  assert.deepEqual(readFileSync(name), current);
+});
+
 test('configured tooltip open clicks retain eight exact divergent popup endpoints', async () => {
   const { readFileSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');

@@ -4,6 +4,20 @@
 
 ### Current next action and publication status
 
+October28 exact tooltip-open join is prepared in join-material-tooltip-open.mjs.
+It authenticates predecessor reviewcd9631f0 and report48dfc121,updates exactly8
+authoredActivation children,and restores all2311 predecessor records byte-for-byte
+after removing those additions. All whole-case inspection/current-rendering states
+remain partial/unverified. Unknown report,manifest,PNG and tree bytes reject;
+changed predecessor scope rejects. Driver applicability separately authenticates
+currentf97c4459 and a566bdf0 predecessor837098a2 without rewriting either source or
+capture receipt. Unknown source revisions reject. Existing tooltip suite passes
+9/9,0skip (13563.1343ms);no capture or canonical export was repeated.
+This is a tested prepared join,not live canonical integration. Next connect its
+exact source read boundary through the existing datepicker review reader,register
+the bounded supplementary proofs,and perform coherent integration gates. Accepted
+a58e7a47 and all original final acceptance requirements remain unchanged.
+
 October28 publication confirmed:853ce834 and a566bdf0 are pushed to
 codex/material-audit-alignment-integration. The pending-push notes below are history.
 Eight configured tooltip `open` cases now have supplementary raw action evidence,
