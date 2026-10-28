@@ -4,6 +4,32 @@
 
 ### Current next action and publication status
 
+October28 Badge crop-context check answers the next measurement question:
+`node scripts/audit-material-badge-label-crop-context.mjs` completed exit0 in
+badge-label-crop-context-zero-20261028.log (SHA256
+091936ab14336c62d8547d3239dedd5e555094612ce41e68a8d8746cae45aedf).
+Ten contrast interaction rows authenticate20 images;zero-padding metrics exactly
+reproduce the prior result. Padding both unshifted crops by2 and8 device pixels
+leaves all five DPR2 states below the existing.80 SSIM diagnostic threshold:
+0.6887093490670028,0.6916152668479562,0.7583261854181175 respectively.
+DPR1 remains above.96 at all three bounds. There are only two distinct original
+crop pairs across the ten states (one per DPR):these are repeated observations,
+not ten independent rendering conditions. Tight crop boundaries alone do not
+explain the DPR2 discrepancy;expanded context does not replace original metrics.
+
+Do not label the result confirmed blur:original DPR2 gradient-energy retention
+is1.0023018672402397 and edge alignment.9943601910401393;the failed sharpness
+subcriterion is gradient RMSE.1318735291443747 against.12. Retained label font
+family,size14.4px,normal/400 weight,normal style and text color agree in meaning
+at both DPRs;nowrap/normal still differs. This does not prove equal shaping,
+glyph origin,texture sampling or ancestor inputs. Next inspect retained glyph/
+texture positioning evidence for this one DPR-sensitive condition,using existing
+fractional-text proofs where applicable;no blanket core attribution or fixture fix.
+Initial command terminated1 on JavaScript-0 strict comparison before observations;
+the corrected numeric-zero check and JSON-roundtrip comparison preserve all metric
+values and match the serialized predecessor. No threshold or phase allowance changed.
+Standalone evidence only:canonical pointer,case closure and final gates unchanged.
+
 October28 bounded Badge label-paint follow-up (after published3b252cb8):
 the existing count-only check did not cover label-local pixels. Reuse of its
 checkpoint/image authentication, union-box crop and unmodified focused metric

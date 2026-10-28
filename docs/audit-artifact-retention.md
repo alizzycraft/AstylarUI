@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Retain badge-label-crop-context-zero-20261028.log with its checked-in diagnostic
+scripts/audit-material-badge-label-crop-context.mjs. It authenticates20 original
+images and records30 unshifted crop-context measurements without writing PNGs.
+The initial badge-label-crop-context-20261028.log is empty:command failed on
+strict-0 comparison before stdout;the coverage ledger records the failure and
+exact correction. Neither log changes original evidence or canonical acceptance.
+
 Retain badge-label-interaction-paint-20261028.log:40 historical interaction-label
 crop observations,80 authenticated original image receipts,three controls and
 the exact executed diagnostic source. Retain badge-label-retained-paint-20261028.log
