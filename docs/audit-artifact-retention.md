@@ -1,5 +1,9 @@
 # Audit artifact retention
 
+Retain badge-canvas-alpha-mode-20261028.log. Its four-test run preserves the
+alpha-enabled failures and records the opaque-context intervention separately.
+No failing image or original metric was replaced by the DPR1 diagnostic match.
+
 Retain badge-global-canvas-phase-20261028.log:four owning tests pass with bounded
 sample transfer and unchanged original screenshots. The cancelled full-frame
 exploratory command produced no audit artifact;its resource failure and exact

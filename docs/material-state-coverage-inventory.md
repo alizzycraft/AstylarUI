@@ -4,6 +4,27 @@
 
 ### Current next action and publication status
 
+October28 Badge now has a bounded connection to existing finding
+core-text-transparent-backing-and-local-raster-phase (no duplicate finding).
+Changing ONLY Canvas context alpha:true to alpha:false,with the same authenticated
+font,text,background,global origin and measured baseline,removes ALL sampled
+native-prefix differences atDPR1 (1122 pixels,maximum0). AtDPR2 the residual
+over1RGB-level count falls from1222 to872 of4760;maximum remains213. Both measured
+baseline choices give those same totals. A background fill on an alpha-enabled
+canvas is NOT equivalent to an opaque backing;the preceding global-Canvas
+experiment tested the former and must not be read as disproving backing effects.
+This is direct differential evidence for a backing-dependent raster contribution,
+not permission to force opaque atlases or a diagnosis of the remaining DPR2 phase.
+
+badge-canvas-alpha-mode-20261028.log records4/4 owning tests,0skip. Existing
+native/candidate receipts,CPU reconstruction,baseline and post-texture tests stay
+intact;the global-Canvas test now retains both alpha modes. No screenshot,metric,
+canonical finding or acceptance threshold was replaced. This expands one bounded
+observation for the existing suspected-core fidelity finding,whose compositing
+contract limits remain. Next isolate the remaining DPR2 raster-phase behavior
+with the existing equal-input method;do not repeat glyph inventory,baseline or
+post-texture checks absent changed evidence.
+
 October28 global Canvas phase hypothesis tested:owning suite passes4/4,0skip
 in badge-global-canvas-phase-20261028.log. Direct Canvas2D drawing with the exact
 authenticated Roboto400 bytes at globalx65 and either measured native baseline

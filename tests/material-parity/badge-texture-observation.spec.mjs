@@ -33,19 +33,20 @@ test('measured global Canvas baselines do not remove the native Badge prefix dis
     const page=await browser.newPage();
     const results=await page.evaluate(async({font,rows})=>{
       const face=new FontFace('Roboto',`url(data:font/woff2;base64,${font})`);await face.load();document.fonts.add(face);
-      return rows.map(row=>({dpr:row.dpr,variants:row.baselines.map(baseline=>{
+      return rows.map(row=>({dpr:row.dpr,variants:[true,false].flatMap(alpha=>row.baselines.map(baseline=>{
         const c=document.createElement('canvas');c.width=400*row.dpr;c.height=220*row.dpr;
-        const ctx=c.getContext('2d');ctx.fillStyle='#f0f0f0';ctx.fillRect(0,0,c.width,c.height);ctx.scale(row.dpr,row.dpr);
+        const ctx=c.getContext('2d',{alpha});ctx.fillStyle='#f0f0f0';ctx.fillRect(0,0,c.width,c.height);ctx.scale(row.dpr,row.dpr);
         ctx.font='normal normal 14.4px Roboto, Arial, sans-serif';ctx.fillStyle='#1d1b20';ctx.textBaseline='alphabetic';
         ctx.fillText('Notifications',65,baseline);const pixels=ctx.getImageData(0,0,c.width,c.height).data;
         let overOne=0,maximum=0;
         for(const [x,y,...rgb]of row.samples){const i=(y*c.width+x)*4,delta=Math.max(...rgb.map((v,k)=>Math.abs(pixels[i+k]-v)));overOne+=delta>1;maximum=Math.max(maximum,delta);}
-        return {baseline,pixels:row.samples.length,overOne,maximum};
-      })}));
+        return {alpha,baseline,pixels:row.samples.length,overOne,maximum};
+      }))}));
     },{font:font.toString('base64'),rows});
     for(const row of results)for(const v of row.variants)assert.deepEqual({pixels:v.pixels,overOne:v.overOne,maximum:v.maximum},
-      row.dpr===1?{pixels:1122,overOne:412,maximum:82}:{pixels:4760,overOne:1222,maximum:213});
-    t.diagnostic(JSON.stringify({results,boundary:'Direct global Canvas drawing retains native-prefix residual at both measured baselines. This does not establish identical per-pixel error maps,shaping settings or complete equal-input HTML/Canvas semantics;no fixture shift is authorized.'}));
+      v.alpha ? (row.dpr===1?{pixels:1122,overOne:412,maximum:82}:{pixels:4760,overOne:1222,maximum:213}) :
+        (row.dpr===1?{pixels:1122,overOne:0,maximum:0}:{pixels:4760,overOne:872,maximum:213}));
+    t.diagnostic(JSON.stringify({results,boundary:'Alpha-enabled global Canvas retains native-prefix residual; opaque backing removes it at DPR1 but not DPR2. An opaque fill is not an opaque backing. This does not authorize opaque text atlases or prove general compositing,global phase or full-case parity.'}));
   }finally{await browser.close();}
 });
 test('Badge native baseline marker preserves bounds and separates transient candidate draws', () => {
