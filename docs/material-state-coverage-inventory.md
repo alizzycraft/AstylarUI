@@ -4,6 +4,27 @@
 
 ### Current next action and publication status
 
+October28 Badge label evidence now has a bounded standalone ledger join in
+scripts/join-material-badge-label-paint.mjs. Its proposal digest is
+3cb9fe23409d103230b7d2f9e842d9f3dfd984fd579e5cf2cfc4c32bcef52b60;
+it is not selected, registered, saved as canonical, or accepted. The join
+authenticates209 dependencies and adds only40 interaction localPaint children.
+Five contrast/DPR2 diagnostic failures remain visible;all12 static Badge cases
+stay unchanged because label bounds are missing. The original count children,
+remaining requirements and all other records preserve. The corrected scope is
+label-REGION paint including overlapping count paint,not label-only glyphs.
+Only two contrast focus records link the existing backing/local-phase finding
+and its authenticated proof/log;their initial inspect-state frame matches are
+not focus-action replay or a claim about other states' runtime causality.
+
+Verification:node --test tests/material-parity/badge-label-paint-join.spec.mjs
+passed2/2,0skip in26.85s. It recovers the entire3a51fbe3 predecessor exactly,
+keeps the accepted pointer unchanged,and rejects altered predecessor/log/proof/
+image bytes. No new capture,large export,renderer or fixture change. All2311
+cases remain partial/current-rendering unverified. Next integrate this bounded
+proposal with the existing review reader/source inventory in a coherent batch;
+do not rerun settled raster experiments or infer whole-case closure from this join.
+
 October28 Badge DPR2 residual now has a multi-origin phase witness rather than
 a fitted fixture offset. Five independent HTML origins177.125/.375/.546875/.625/
 .875 atDPR1/2 use authenticated Roboto400,14.4px text and an explicit18px line box.
