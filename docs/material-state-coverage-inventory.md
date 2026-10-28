@@ -4,6 +4,22 @@
 
 ### Current next action and publication status
 
+October28 tooltip integration scope is now executable,not inferred from viewport
+dimensions. `node --test tests/material-parity/tooltip-position-history.spec.mjs`
+passes6/6,0skip (2257.0027ms). The added check authenticates original runnere01ef9dc
+and reportab42dbec,enumerates all62 configured tooltip cases,and verifies both
+browser contexts omit touch/mobile-UA options. Negative controls reject added
+hasTouch,isMobile,userAgent and unknown context spreads. Fresh trace2c88162f has
+four explicitly Android-touch actions,none matching those configured states.
+Therefore do not join these actions to responsive/mobile canonical case obligations.
+Retain the release-caller diagnosis as supplementary input-contract evidence for
+the existing touch-authoring omission;original Chrome154 hide causality remains
+unobserved. This standalone suite is not a canonical producer dependency,so no
+canonical export is warranted by this assertion. No new capture or case closure.
+Next integrate supplementary proof references in a coherent source batch,keeping
+the62-case coverage unchanged;continue exact configured obligations separately.
+Datepicker milestone853ce834 is committed;its existing push remains in flight.
+
 October28 datepicker milestone is accepted locally as generationa58e7a47,
 index4abe8026 (full receipts in working-audit/current.json). Independent
 `--datepicker-opening --check` completed exit0:collectors2,memoryHits10,diskHits0,

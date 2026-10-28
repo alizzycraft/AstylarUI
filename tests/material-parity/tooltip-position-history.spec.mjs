@@ -3,6 +3,57 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 
 const file = 'examples/material-showcase/src/app/astylar.component.ts';
+test('supplementary Android tooltip actions cannot close responsive canonical cases', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const { gunzipSync } = await import('node:zlib');
+  const ts = await import('typescript');
+  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+  const original = gunzipSync(Buffer.from(readFileSync(
+    'docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8').replace(/\s/g, ''), 'base64'));
+  assert.equal(sha(original), 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
+  const checkContexts = source => {
+    const ast = ts.createSourceFile('retained-runner.mjs', source, ts.ScriptTarget.Latest, true);
+    assert.deepEqual(ast.parseDiagnostics, []);
+    const contexts = [];
+    const visit = node => {
+      if (ts.isCallExpression(node) && node.expression.getText(ast) === 'browser.newContext') {
+        const options = node.arguments[0];
+        assert.ok(ts.isObjectLiteralExpression(options));
+        assert.ok(options.properties.every(p => ts.isPropertyAssignment(p)));
+        contexts.push(options.properties.map(p => p.name.getText(ast)).sort());
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(ast);
+    assert.equal(contexts.length, 2);
+    for (const keys of contexts) assert.deepEqual(keys,
+      ['colorScheme', 'deviceScaleFactor', 'reducedMotion', 'viewport']);
+  };
+  checkContexts(original.toString());
+  for (const addition of ['hasTouch: true,', 'isMobile: true,', "userAgent: 'Android',", '...unknownContext,']) {
+    assert.throws(() => checkContexts(original.toString().replace('browser.newContext({', `browser.newContext({${addition}`)));
+  }
+  const fullBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(sha(fullBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const provenance = JSON.parse(fullBytes).captureProvenance;
+  const cases = [...provenance.cases, ...provenance.interactionCases, ...provenance.mobileFlowCases]
+    .filter(row => row.family === 'tooltip');
+  assert.equal(cases.length, 62);
+  const traceBytes = readFileSync('artifacts/material-parity/tooltip-release-component-caller-20261027/latest-report.json');
+  assert.equal(sha(traceBytes), '2c88162f006c9e17a53983d479ae90f4b5388396bb8674e2fc3bee3ed536445b');
+  const trace = JSON.parse(traceBytes);
+  assert.equal(trace.hasTouch, true); assert.equal(trace.isMobile, true);
+  assert.match(trace.userAgent, /Android/);
+  assert.equal(trace.results.length, 4);
+  for (const row of trace.results) {
+    assert.equal(row.cohort, 'android-trusted-touch');
+    assert.ok(!cases.some(c => c.state === row.action));
+  }
+  // These four actions supplement the input-contract investigation. Matching
+  // dimensions/DPR do not turn them into any of the 62 original case states.
+  // No original obligation, current rendering status or acceptance gate changes.
+});
 test('first release trace retains exact producer recovery without changing current capture reads', async () => {
   const { readFileSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');
