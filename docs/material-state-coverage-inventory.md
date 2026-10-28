@@ -4,6 +4,17 @@
 
 ### Current next action and publication status
 
+October28 complete tooltip reader construction passes(exit0),review
+3a51fbe3299d2c0f3f7ee70822bb69e0a4f7d9ec77739e6942337d12917cfe9d,
+2311 cases/exactly8 joined activation entries. Retain
+tooltip-open-reader-construction-20261028.log. Its current-source read boundary
+recovers exact837098a2 for the existing datepicker reader,which then authenticates
+its older26d7a294 driver;the focused nested-read assertion passes(693.9298ms).
+No stored capture/source is modified by these reads. Construction is not complete
+dependency validation,source/proof registration or canonical acceptance. Next
+register this bounded successor and supplementary tooltip proofs before one
+coherent integration milestone;do not repeat construction merely for prose.
+
 October28 exact tooltip-open join is prepared in join-material-tooltip-open.mjs.
 It authenticates predecessor reviewcd9631f0 and report48dfc121,updates exactly8
 authoredActivation children,and restores all2311 predecessor records byte-for-byte

@@ -37,12 +37,22 @@ test('tooltip open join preserves all predecessor obligations and rejects change
 
 test('tooltip diagnostic source applicability authenticates both exact driver revisions', async () => {
   const { readFileSync } = await import('node:fs');
-  const { reconcileTooltipActivationDriver } = await import('../../scripts/join-material-tooltip-open.mjs');
+  const { reconcileTooltipActivationDriver, createTooltipOpenHistoricalRead } = await import('../../scripts/join-material-tooltip-open.mjs');
+  const { createDatepickerHistoricalRead } = await import('./datepicker-opening-registration.mjs');
+  const path = await import('node:path');
+  const { createHash } = await import('node:crypto');
   const name = 'scripts/audit-material-configured-control-activation.mjs';
   const current = readFileSync(name), previous = execFileSync('git', ['show', `a566bdf0:${name}`]);
   assert.deepEqual(reconcileTooltipActivationDriver(current, previous), previous);
   assert.throws(() => reconcileTooltipActivationDriver(Buffer.concat([current, Buffer.from('drift')]), previous));
   assert.throws(() => reconcileTooltipActivationDriver(current, Buffer.concat([previous, Buffer.from('drift')])));
+  const root = process.cwd(), read = (name, options) => readFileSync(path.resolve(root, name), options);
+  const historical = createTooltipOpenHistoricalRead({ root, read });
+  assert.deepEqual(historical(name), previous);
+  assert.equal(historical(name, 'utf8'), previous.toString());
+  const nested = createDatepickerHistoricalRead({ root, read: historical });
+  assert.equal(createHash('sha256').update(nested(name)).digest('hex'),
+    '26d7a294d0c5b4aaa2179fa7a697178b099391493ba28f9ac0261a04bd2d6d46');
   assert.deepEqual(readFileSync(name), current);
 });
 

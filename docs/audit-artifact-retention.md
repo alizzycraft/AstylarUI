@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Retain tooltip-open-reader-construction-20261028.log:complete prior-reader chain
+and exact8-case join constructed review3a51fbe3,2311 cases,exit0. This is not a
+full dependency-validation or canonical-export receipt. Original and failure
+evidence remains required;no cleanup or source-receipt replacement was performed.
+
 Retain tooltip-configured-open-20261028 report,16 paired trees/screenshots,
 capture stdout and its -provenance checkpoint. This fills eight exact configured
 open action boundaries;it is distinct from Android-touch and earlier activation

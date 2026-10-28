@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { materialCaseKey } from '../tests/material-parity/run-checkpoint.mjs';
+import { createDatepickerOpeningReviewReader } from '../tests/material-parity/datepicker-opening-registration.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const tooltipOpenPredecessor = 'cd9631f0dc9f7ca63b35c5d11d11611ebd3f98930166352ff56b3016d7989894';
@@ -13,6 +16,32 @@ export function reconcileTooltipActivationDriver(current, previous) {
   assert.equal(hash(current), 'f97c4459373bcca113d05842aec5179425a551d7c8ccd064e62d0693d9438fda');
   assert.equal(hash(previous), '837098a21a29cb1e1c50a65803d398a7588b9c6d05dd815eeea5d18e4b581118');
   return Buffer.from(previous);
+}
+
+export function createTooltipOpenHistoricalRead({ root, read }) {
+  const file = 'scripts/audit-material-configured-control-activation.mjs';
+  let previous;
+  return (name, options) => {
+    if (path.resolve(root, name) !== path.resolve(root, file)) return read(name, options);
+    const input = read(name);
+    if (!previous) previous = execFileSync('git', ['show', `a566bdf0:${file}`], { cwd: root });
+    const bytes = reconcileTooltipActivationDriver(input, previous);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : bytes;
+  };
+}
+
+export function createTooltipOpenReviewReader({ root, read }) {
+  const prior = createDatepickerOpeningReviewReader({ root, read: createTooltipOpenHistoricalRead({ root, read }) });
+  const joined = joinTooltipOpen(JSON.parse(prior.read(prior.file)).review, read);
+  const file = path.resolve(root, `artifacts/material-parity/working-audit/proposals/${joined.sha256}.json`);
+  const bytes = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256: joined.sha256, review: joined.review }));
+  return { ...joined, file, read(name, options) {
+    if (path.resolve(root, name) !== file) return prior.read(name, options);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  }, sourceApplicability: { mode: 'supplementary-tooltip-open', predecessorApplicability: prior.sourceApplicability,
+    boundary: 'Exact configured open click observations in retained assets;not touch,original runtime causality,current rendering or whole-case acceptance.' } };
 }
 
 export function restoreTooltipOpen(review) {
