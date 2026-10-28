@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain badge-texture-model-20261028.log and the owning
+tests/material-parity/badge-texture-observation.spec.mjs. The focused proof reads
+existing CPU texture/frame evidence and writes no new image/capture set. It keeps
+the full original failures and separately bounds the unoccluded interior model;
+the model's small candidate residual is not replacement native-parity acceptance.
+
 Retain badge-texture-observation-20261028 and its -checkpoint sibling,stdout and
 badge-texture-observation-verify-20261028.log. Four PNGs and one texture-observation
 report preserve the independently checked pixel-identical reproduction in a newer

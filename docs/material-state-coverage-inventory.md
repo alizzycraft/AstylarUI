@@ -4,6 +4,26 @@
 
 ### Current next action and publication status
 
+October28 Badge post-texture boundary is now bounded by an owning focused test:
+`node --test tests/material-parity/badge-texture-observation.spec.mjs` passes1/1
+in badge-texture-model-20261028.log. It authenticates capture-source/manifest/loaded
+asset/image receipts and four original decoded frame matches,then reuses the
+existing Divider pixel-center nearest-texel/straight-alpha model. In the visible
+label prefix (before count overlap),all1122 DPR1 and4760 DPR2 candidate interior
+pixels fit within1 RGB level. The identical prediction differs from native text
+by more than1 at412/1222 pixels,maximum82/213 levels respectively. Four wrong-row
+controls detect a changed texel address. Original local metrics are unchanged.
+
+This removes an unsupported inference:there is no additional unexplained large
+CPU-texture-to-screen residual in this bounded region. It does NOT prove actual
+hardware sampling addresses,plane-edge coverage,complete glyph parity,equal
+authored inputs or original focus replay. Native Range/element boxes are not
+baseline or glyph-origin observations. Next distinguish local Canvas2D glyph
+production/baseline from its fractional plane placement with an equivalent-input
+public reduction or bound draw-call evidence;do not "fix" fixture coordinates.
+The newer browser reproduced original pixels but current-source acceptance and
+all canonical joins/final gates remain separate and open.
+
 October28 Badge intermediate texture observation now exists. All1887 original
 application assets authenticate;original Chrome154.0.8037.58 differs from observed
 Chrome156.0.8078.48. Nevertheless all four decoded full frames (reference/candidate
