@@ -6,8 +6,36 @@ import vm from 'node:vm';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { prepareBadgeLabelPaintRegistration, restoreBadgeLabelPaintRegistration,
-  badgeLabelPaintSources, badgeLabelPaintProofs } from './badge-label-paint-registration.mjs';
+  badgeLabelPaintSources, badgeLabelPaintProofs, badgeLabelPaintSharedFiles,
+  prepareBadgeLabelPaintShared, restoreBadgeLabelPaintShared,
+  createBadgeLabelPaintHistoricalRead } from './badge-label-paint-registration.mjs';
 import { badgeLabelPaintReview } from '../../scripts/join-material-badge-label-paint.mjs';
+
+test('Badge historical boundary restores exact sources and rejects unrecognized changes', () => {
+  const root = process.cwd(), sources = new Map();
+  for (const [kind, file] of Object.entries({ producer: 'tests/material-parity/input-equivalence-audit.mjs',
+    runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
+    const prior = restoreBadgeLabelPaintRegistration(readFileSync(file), kind);
+    sources.set(path.resolve(root, file), { prior, next: prepareBadgeLabelPaintRegistration(prior, kind) });
+  }
+  for (const file of badgeLabelPaintSharedFiles) {
+    const prior = restoreBadgeLabelPaintShared(readFileSync(file), file);
+    const next = prepareBadgeLabelPaintShared(prior, file);
+    assert.equal(restoreBadgeLabelPaintShared(next, file), prior);
+    assert.throws(() => restoreBadgeLabelPaintShared(next + '\n// drift', file));
+    sources.set(path.resolve(root, file), { prior, next });
+  }
+  const reader = createBadgeLabelPaintHistoricalRead({ root, read: name => Buffer.from(sources.get(path.resolve(root, name)).next) });
+  for (const [file, source] of sources) {
+    assert.equal(reader(file, 'utf8'), source.prior);
+    assert.equal(reader(path.relative(root, file)).toString(), source.prior);
+    assert.equal(reader(file, { encoding: 'utf8' }), source.prior);
+    const forged = createBadgeLabelPaintHistoricalRead({ root, read: () => Buffer.from(source.next + '\n// drift') });
+    assert.throws(() => forged(file));
+  }
+  const sentinel = Buffer.from('unchanged');
+  assert.equal(createBadgeLabelPaintHistoricalRead({ root, read: () => sentinel })('unrelated.json'), sentinel);
+});
 
 test('Badge staged registration preserves complete source proof and plan inventories', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

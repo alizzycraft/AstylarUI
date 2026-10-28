@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October29 Badge live integration is verified locally but not yet canonical.
+Explicit --badge-label-paint selects3cb9fe23;the actual launcher dry-run confirms
+the exact review path/digest. Registry now has1137 sources/463 proofs/72 plans.
+Eight focused Badge/Tooltip/Snackbar integration checks pass in15.12s,including
+whole-source restoration for all six older changed integration files,drift
+rejection and older/default selector preservation. The added proof since staging
+is the guarded historical-boundary test (ten total new proofs,not nine).
+The accepted-source census in badge-label-source-census-20261029.log exited0:
+all1123 old paths remain,exactly14 additions/six expected transitions,and all
+six complete predecessor hashes recover. No unanticipated source drift/removal.
+The live reader check in badge-label-live-reader-20261029.log exited0:exact
+3cb9fe23 review,18636 authenticated dependencies and2311 partial,current-unverified
+cases. The existing cold evidence session read18803 files/3375021716 bytes and
+re-read the same3375021716 bytes at finish;diskHits0,elapsed751788.0723ms.
+Freeze this verified batch for one canonical export/conservation/independent
+cold/import milestone. Reuse unchanged source/case checks rather than repeating
+them for prose. Accepted080b1dd5 remains unchanged until those gates pass;no
+browser recapture,renderer fix,fixture compensation or case closure occurred.
+
 October29 Badge integration preparation:the new reader composes the existing
 Tooltip predecessor and exact3cb9fe23 label-region join. Full actual-source
 reader/dependency validation exited0,constructing the exact expected digest and

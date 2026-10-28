@@ -38,6 +38,7 @@ import { stepperBatchReview, createStepperBatchReviewReader } from '../tests/mat
 import { snackbarSingleOpenReview, createSnackbarSingleOpenReviewReader } from '../tests/material-parity/snackbar-single-open-registration.mjs';
 import { datepickerOpeningReview, createDatepickerOpeningReviewReader } from '../tests/material-parity/datepicker-opening-registration.mjs';
 import { tooltipOpenReview, createTooltipOpenReviewReader } from './join-material-tooltip-open.mjs';
+import { badgeLabelPaintReview, createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const root = process.cwd();
@@ -83,7 +84,8 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const snackbarSingleOpenReaderFactory = options.caseObligationReviewSha256===snackbarSingleOpenReview ? createSnackbarSingleOpenReviewReader : stepperBatchReaderFactory;
     const datepickerOpeningReaderFactory = options.caseObligationReviewSha256===datepickerOpeningReview ? createDatepickerOpeningReviewReader : snackbarSingleOpenReaderFactory;
     const tooltipOpenReaderFactory = options.caseObligationReviewSha256===tooltipOpenReview ? createTooltipOpenReviewReader : datepickerOpeningReaderFactory;
-    const applicability=tooltipOpenReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
+    const badgeLabelPaintReaderFactory = options.caseObligationReviewSha256===badgeLabelPaintReview ? createBadgeLabelPaintReviewReader : tooltipOpenReaderFactory;
+    const applicability=badgeLabelPaintReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
     assert.ok(!applicability || typeof applicability.then !== 'function', 'Audit evidence readers must be synchronous within evidence session');
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
       options.caseObligationReviewSha256, { root, read: applicability?.read ?? auditReadFileSync });

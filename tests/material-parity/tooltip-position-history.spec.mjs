@@ -4,7 +4,9 @@ import { execFileSync } from 'node:child_process';
 
 const file = 'examples/material-showcase/src/app/astylar.component.ts';
 test('tooltip registry preparation preserves the complete predecessor inventory', async () => {
-  const { readFileSync } = await import('node:fs');
+  const { readFileSync: readNativeFileSync } = await import('node:fs');
+  const { createBadgeLabelPaintHistoricalRead } = await import('./badge-label-paint-registration.mjs');
+  const readFileSync = createBadgeLabelPaintHistoricalRead({ root: process.cwd(), read: readNativeFileSync });
   const ts = await import('typescript');
   const { prepareTooltipOpenRegistry, restoreTooltipOpenRegistry, tooltipOpenSources, tooltipOpenProofs,
     prepareTooltipOpenSelection, restoreTooltipOpenSelection, tooltipOpenReview,

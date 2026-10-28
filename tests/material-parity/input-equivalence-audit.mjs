@@ -8922,6 +8922,20 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/join-material-badge-label-paint.mjs",
+    "scripts/audit-material-badge-label-crop-context.mjs",
+    "scripts/audit-material-badge-texture-observation.mjs",
+    "scripts/audit-material-badge-baseline.mjs",
+    "tests/material-parity/badge-label-paint-registration.mjs",
+    "tests/material-parity/badge-label-paint-join.spec.mjs",
+    "tests/material-parity/badge-label-paint-registration.spec.mjs",
+    "tests/material-parity/badge-texture-observation.spec.mjs",
+    "artifacts/material-parity/badge-label-interaction-paint-20261028.log",
+    "artifacts/material-parity/badge-label-count-overlap-20261028.log",
+    "artifacts/material-parity/badge-texture-observation-20261028/latest-report.json",
+    "artifacts/material-parity/badge-texture-observation-20261028-checkpoint/checkpoint/manifest.json",
+    "artifacts/material-parity/badge-baseline-20261028.log",
+    "artifacts/material-parity/badge-fractional-origin-snap-20261028.log",
     "scripts/join-material-tooltip-open.mjs",
     "scripts/audit-material-tooltip-touch.mjs",
     "tests/material-parity/tooltip-position-history.spec.mjs",
@@ -10052,6 +10066,16 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/badge-label-paint-join.spec.mjs", new RegExp("test\\('Badge label join preserves whole predecessor and bounds paint evidence to 40 interactions'"), "Badge label join preserves whole predecessor and bounds paint evidence to 40 interactions", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/badge-label-paint-join.spec.mjs", new RegExp("test\\('Badge label join rejects changed predecessor and corrupt evidence without writing'"), "Badge label join rejects changed predecessor and corrupt evidence without writing", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/badge-label-paint-registration.spec.mjs", new RegExp("test\\('Badge staged registration preserves complete source proof and plan inventories'"), "Badge staged registration preserves complete source proof and plan inventories", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/badge-label-paint-registration.spec.mjs", new RegExp("test\\('Badge staged selector preserves older selections and rejects mixed supplements'"), "Badge staged selector preserves older selections and rejects mixed supplements", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/badge-label-paint-registration.spec.mjs", new RegExp("test\\('Badge historical boundary restores exact sources and rejects unrecognized changes'"), "Badge historical boundary restores exact sources and rejects unrecognized changes", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/badge-texture-observation.spec.mjs", new RegExp("test\\('fractional-origin HTML reduction exposes CSS-baseline raster snapping at DPR2'"), "fractional-origin HTML reduction exposes CSS-baseline raster snapping at DPR2", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/badge-texture-observation.spec.mjs", new RegExp("test\\('measured global Canvas baselines do not remove the native Badge prefix discrepancy'"), "measured global Canvas baselines do not remove the native Badge prefix discrepancy", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/badge-texture-observation.spec.mjs", new RegExp("test\\('Badge native baseline marker preserves bounds and separates transient candidate draws'"), "Badge native baseline marker preserves bounds and separates transient candidate draws", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/badge-texture-observation.spec.mjs", new RegExp("test\\('retained Badge CPU texture and projected plane explain visible prefix, not native glyph parity'"), "retained Badge CPU texture and projected plane explain visible prefix, not native glyph parity", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
+    proof(root, "tests/material-parity/badge-texture-observation.spec.mjs", new RegExp("test\\('authenticated retained baseline formula reproduces both Badge CPU textures exactly'"), "authenticated retained baseline formula reproduces both Badge CPU textures exactly", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
     proof(root, "tests/material-parity/tooltip-position-history.spec.mjs", new RegExp("test\\('tooltip registry preparation preserves the complete predecessor inventory'"), "tooltip registry preparation preserves the complete predecessor inventory", "Bounded tooltip action/history evidence with explicit configured-versus-Android and original-versus-fresh runtime boundaries;not current rendering,all event paths or whole-case acceptance."),
     proof(root, "tests/material-parity/tooltip-position-history.spec.mjs", new RegExp("test\\('tooltip open join preserves all predecessor obligations and rejects changed receipts'"), "tooltip open join preserves all predecessor obligations and rejects changed receipts", "Bounded tooltip action/history evidence with explicit configured-versus-Android and original-versus-fresh runtime boundaries;not current rendering,all event paths or whole-case acceptance."),
     proof(root, "tests/material-parity/tooltip-position-history.spec.mjs", new RegExp("test\\('tooltip diagnostic source applicability authenticates both exact driver revisions'"), "tooltip diagnostic source applicability authenticates both exact driver revisions", "Bounded tooltip action/history evidence with explicit configured-versus-Android and original-versus-fresh runtime boundaries;not current rendering,all event paths or whole-case acceptance."),

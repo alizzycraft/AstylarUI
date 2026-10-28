@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain badge-label-live-reader-20261029.log and badge-label-source-census-20261029.log.
+They are the live integration and accepted-source conservation checks for the
+bounded Badge label-region join,not new browser captures or canonical exports.
+Their completion/status is recorded in the current coverage ledger;do not
+overwrite them or infer success solely from file existence.
+
 Retain badge-fractional-origin-snap-20261028.log:five tests,ten independent HTML
 origin/DPR contexts and ten wrong-baseline controls. The existing Material PNGs
 remain authoritative;the original-origin reduction is checked against their exact

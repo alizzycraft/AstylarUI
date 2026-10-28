@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync as readActualFileSync } from 'node:fs';
+import { readFileSync as readNativeFileSync } from 'node:fs';
+import { createBadgeLabelPaintHistoricalRead } from './badge-label-paint-registration.mjs';
+const readActualFileSync = createBadgeLabelPaintHistoricalRead({ root: process.cwd(), read: readNativeFileSync });
 import { createDatepickerHistoricalRead } from './datepicker-opening-registration.mjs';
 import { createTooltipOpenHistoricalRead } from '../../scripts/join-material-tooltip-open.mjs';
 const readFileSync = createDatepickerHistoricalRead({ root: process.cwd(), read: createTooltipOpenHistoricalRead({ root: process.cwd(), read: readActualFileSync }) });

@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { badgeLabelPaintReview } from '../../scripts/join-material-badge-label-paint.mjs';
+import path from 'node:path';
+// Literal avoids a cycle through the legacy shared historical reader. The
+// selector and reader tests bind this to the actual join's exported digest.
+const badgeLabelPaintReview = '3cb9fe23409d103230b7d2f9e842d9f3dfd984fd579e5cf2cfc4c32bcef52b60';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const priors = {
@@ -29,6 +32,7 @@ export const badgeLabelPaintProofs = Object.freeze([
   ['badge-label-paint-join', 'Badge label join rejects changed predecessor and corrupt evidence without writing'],
   ['badge-label-paint-registration', 'Badge staged registration preserves complete source proof and plan inventories'],
   ['badge-label-paint-registration', 'Badge staged selector preserves older selections and rejects mixed supplements'],
+  ['badge-label-paint-registration', 'Badge historical boundary restores exact sources and rejects unrecognized changes'],
   ['badge-texture-observation', 'fractional-origin HTML reduction exposes CSS-baseline raster snapping at DPR2'],
   ['badge-texture-observation', 'measured global Canvas baselines do not remove the native Badge prefix discrepancy'],
   ['badge-texture-observation', 'Badge native baseline marker preserves bounds and separates transient candidate draws'],
@@ -76,4 +80,65 @@ export function restoreBadgeLabelPaintRegistration(bytes, kind) {
     assert.equal(source.split(after).length, 2); source = source.replace(after, before);
   }
   assert.equal(hash(source), priors[kind]); return source;
+}
+
+const shared = {
+  'tests/material-parity/snackbar-single-open-registration.mjs': {
+    prior: '03804e5a7e975b324f2aabba32eef7a128a3fbaa285e5ebfd15f64a73fb123af',
+    changes: [
+      ["import assert from 'node:assert/strict';", "import { restoreBadgeLabelPaintIfPresent } from './badge-label-paint-registration.mjs';\nimport assert from 'node:assert/strict';"],
+      ['export function restoreSnackbarRegistrationIfPresent(bytes, kind) {',
+        'export function restoreSnackbarRegistrationIfPresent(bytes, kind) {\n  bytes = restoreBadgeLabelPaintIfPresent(bytes, kind);'],
+    ],
+  },
+  'tests/material-parity/snackbar-single-open-registration.spec.mjs': {
+    prior: '27e976a62772b2868936c1f2039bbb0e002af13ff980475baa1a50e603182a0d',
+    changes: [["import { readFileSync as readActualFileSync } from 'node:fs';",
+      "import { readFileSync as readNativeFileSync } from 'node:fs';\nimport { createBadgeLabelPaintHistoricalRead } from './badge-label-paint-registration.mjs';\nconst readActualFileSync = createBadgeLabelPaintHistoricalRead({ root: process.cwd(), read: readNativeFileSync });"]],
+  },
+  'tests/material-parity/tooltip-position-history.spec.mjs': {
+    prior: 'eef9b37c0f07148213cce62373992a0826ccfba93f05875e48630366671d3f1c',
+    changes: [["test('tooltip registry preparation preserves the complete predecessor inventory', async () => {\n  const { readFileSync } = await import('node:fs');",
+      "test('tooltip registry preparation preserves the complete predecessor inventory', async () => {\n  const { readFileSync: readNativeFileSync } = await import('node:fs');\n  const { createBadgeLabelPaintHistoricalRead } = await import('./badge-label-paint-registration.mjs');\n  const readFileSync = createBadgeLabelPaintHistoricalRead({ root: process.cwd(), read: readNativeFileSync });"]],
+  },
+};
+export const badgeLabelPaintSharedFiles = Object.freeze(Object.keys(shared));
+export function prepareBadgeLabelPaintShared(bytes, file) {
+  const entry = shared[file]; assert.ok(entry);
+  let source = bytes.toString().replaceAll('\r\n', '\n'); assert.equal(hash(source), entry.prior);
+  for (const [before, after] of entry.changes) {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  }
+  return source;
+}
+export function restoreBadgeLabelPaintShared(bytes, file) {
+  const entry = shared[file]; assert.ok(entry);
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  if (hash(source) === entry.prior) return source;
+  for (const [before, after] of entry.changes.toReversed()) {
+    assert.equal(source.split(after).length, 2); source = source.replace(after, before);
+  }
+  assert.equal(hash(source), entry.prior); return source;
+}
+export function restoreBadgeLabelPaintIfPresent(bytes, kind) {
+  const marker = { producer: '"scripts/join-material-badge-label-paint.mjs",',
+    runner: 'const badgeLabelPaintReaderFactory = ', launcher: "const badgeLabelPaint = rawRequested.includes('--badge-label-paint');" }[kind];
+  return marker && bytes.toString().includes(marker) ? restoreBadgeLabelPaintRegistration(bytes, kind) : bytes;
+}
+export function createBadgeLabelPaintHistoricalRead({ root, read }) {
+  const kinds = new Map(Object.entries({ producer: 'tests/material-parity/input-equivalence-audit.mjs',
+    runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })
+    .map(([kind, file]) => [path.resolve(root, file), kind]));
+  const sharedPaths = new Map(badgeLabelPaintSharedFiles.map(file => [path.resolve(root, file), file]));
+  return (name, options) => {
+    const absolute = path.resolve(root, name), kind = kinds.get(absolute), file = sharedPaths.get(absolute);
+    if (!kind && !file) return read(name, options);
+    const input = read(name);
+    // Older nested generations belong to their existing readers. Only a
+    // recognized new addition is peeled; whole predecessor hashes still bind it.
+    const restored = file ? restoreBadgeLabelPaintShared(input, file) : restoreBadgeLabelPaintIfPresent(input, kind);
+    const bytes = Buffer.from(restored);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : bytes;
+  };
 }

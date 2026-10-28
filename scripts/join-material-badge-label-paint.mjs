@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { createTooltipOpenReviewReader } from './join-material-tooltip-open.mjs';
+import { createBadgeLabelPaintHistoricalRead } from '../tests/material-parity/badge-label-paint-registration.mjs';
 
 export const badgeLabelPaintPredecessor = '3a51fbe3299d2c0f3f7ee70822bb69e0a4f7d9ec77739e6942337d12917cfe9d';
 export const badgeLabelPaintReview = '3cb9fe23409d103230b7d2f9e842d9f3dfd984fd579e5cf2cfc4c32bcef52b60';
@@ -24,7 +25,7 @@ const diagnosis = {
 const decode = bytes => bytes.toString(bytes[0] === 255 && bytes[1] === 254 ? 'utf16le' : 'utf8').replace(/^\uFEFF/, '');
 
 export function createBadgeLabelPaintReviewReader({ root, read }) {
-  const prior = createTooltipOpenReviewReader({ root, read });
+  const prior = createTooltipOpenReviewReader({ root, read: createBadgeLabelPaintHistoricalRead({ root, read }) });
   const joined = joinBadgeLabelPaint(JSON.parse(prior.read(prior.file)).review,
     (name, options) => read(path.resolve(root, name), options));
   assert.equal(joined.sha256, badgeLabelPaintReview);
