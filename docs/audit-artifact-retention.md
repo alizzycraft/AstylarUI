@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain badge-texture-observation-20261028 and its -checkpoint sibling,stdout and
+badge-texture-observation-verify-20261028.log. Four PNGs and one texture-observation
+report preserve the independently checked pixel-identical reproduction in a newer
+browser. CPU RGBA is embedded in the report;no duplicate texture PNGs were made.
+This texture-only schema is not a passing paired-input-tree supplemental report.
+
 Retain badge-label-count-overlap-20261028.log:the same crop-context diagnostic now
 binds original count geometry and a separate non-overlapping label prefix. It
 preserves full-region metrics and does not replace failed evidence with a smaller

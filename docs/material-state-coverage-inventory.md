@@ -4,6 +4,32 @@
 
 ### Current next action and publication status
 
+October28 Badge intermediate texture observation now exists. All1887 original
+application assets authenticate;original Chrome154.0.8037.58 differs from observed
+Chrome156.0.8078.48. Nevertheless all four decoded full frames (reference/candidate
+x DPR1/2,contrast,initial inspect mode) are byte-identical to the original focus
+frames. This is bounded pixel reproduction,not focus-event replay or general
+browser/current-source equivalence. New script audit-material-badge-texture-observation.mjs
+uses existing checkpoint/runtime observers;no renderer or fixture is changed.
+Report badge-texture-observation-20261028/latest-report.json SHA256
+d5c94aec9eb800e86c027be14ee1d0dadf63e4a12697a19c8d9dfa1b7a4576ff
+contains native Range rectangles,candidate CPU RGBA,projected vertices and sampling
+metadata. The candidate texture is82x18 atDPR1,164x36 atDPR2;its text plane is
+81.8577x18 CSSpx. Projected top is177.5599822998047 CSSpx versus native
+177.546875. Sampling mode1 is recorded raw. This is not yet a causal intervention.
+The texture context reports10px sans-serif AFTER rendering;do not mislabel that
+post-draw context state as the font used to create its pixels (retained input14.4px).
+
+badge-texture-observation-verify-20261028.log authenticates three capture-source
+receipts,checkpoint/browser identity,loaded asset receipts,all four image hashes
+and decoded equality,empty runtime errors,theme scale and RGBA dimensions. The
+generic paired-input-tree supplemental validator was attempted and rejected this
+texture-only schema (missing raw.browser);it is not reported as passed. This
+diagnostic has its own explicitly checked observations,not paired-tree acceptance.
+Next compare CPU texture alpha placement with projected screen glyphs and native
+Range evidence,using the existing texture-boundary methods without modifying
+canonical authoring. Original unequal inputs and all final gates remain open.
+
 October28 Badge paint attribution correction:the earlier "label-only" wording
 was too strong. The label rectangle overlaps the count bubble,whose known
 error-token/primary-token mismatch is visible in the retained screenshots.
