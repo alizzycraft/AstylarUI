@@ -12,6 +12,12 @@ This repeats the discrepancy under the newer browser on that retained build;
 it is not a fresh current-package build, full semantic review or case closure.
 The additive collector selector changes its fingerprint; historical receipts
 remain preserved and need reconciliation before canonical integration.
+Running the unchanged historical verifier now fails at the changed collector
+hash; its retained `producer.mjs` still exactly matches the original receipt.
+A temporary exact-hash producer substitution exposed a second pre-existing
+helper mismatch (`sort-focus-structure.spec.mjs`); the experimental verifier
+edit was reverted. Full historical verifier compatibility is therefore not
+claimed. Reconcile both source transitions together without weakening receipts.
 
 October 30 sidenav AX capture build applicability: every one of 1887 browser
 files in the `divider-current-browser-20261020/checkpoint/manifest.json` used
