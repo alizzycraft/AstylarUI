@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 30 Tooltip history check: `f3c8254c` ("complete showcase interaction
+parity") replaced a top-level absolute tooltip with a child in a column-flex
+anchor, initially retaining `translate(93px, 37px)` and `marginLeft:16px`.
+`899c7417` ("anchor snackbar and tooltip overlays") removed both values and
+changed the anchor's cross-axis alignment to center; it retained relative
+flow and a fixed 107px popup width.
+Later `f324bd18` changed the anchor width and popup typography/box while the
+relative flow placement remained. This is source history, not proof that either
+version was equivalent to the reference or that a core coordinate defect was
+present or absent. The accepted placement finding already classifies unequal
+flow/overlay inputs; preserve an equal-input core placement reduction as open.
+
 October 30 focused `flex-auto-main-size` baseline attempt did not reach its
 fixture: `npm run parity` with `ASTYLAR_PARITY_FIXTURE=flex-auto-main-size`
 and isolated `ASTYLAR_PARITY_ARTIFACTS=artifacts/parity-chip-intrinsic-baseline-20261030`
