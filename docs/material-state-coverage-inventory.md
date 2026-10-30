@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+October 30 chip paint join reconciliation: the current pointer names generation
+`73c84aef8e91a98f5aeb04a07426473ef6d24fb1811a5b0f2aa519dfc38cf484`.
+Its index bytes match the pointer SHA256
+`baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059`;
+its coverage metadata contains 76 `retainedChipFocusIndicatorRequests` and
+24 `retainedChipStateLayerRequests` keys. This confirms the counts survived
+into the accepted index, not independent validation of each child, current
+rendering, or complete case inspection. Reuse the earlier full join/dependency
+validation for its historical boundary; do not re-export for this count.
+The prior proposal review digest independently matches
+`868daaecb79c16d632701361c4303197f5d2760aec70f4cdd5d138840decabe5`.
+Comparing complete child values by their case-array paths confirms all 100
+prior children are byte-equivalent JSON values in the current index, with
+zero missing or changed. This does not reauthenticate each underlying capture.
+
 October 30 Chips keyboard source trace: current component SHA256
 `71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd`
 authors focusable `div` options; its click callback invokes `handleClick`,
