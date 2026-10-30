@@ -1,5 +1,23 @@
 # Audit artifact retention
 
+Keep badge-label-pre-export-080b-20261029 and the separate
+badge-label-canonical-export-20261029.log/.stderr.log. Backup copies authenticate
+the accepted080b1dd5 payload and original manifest/readable report. Export launch
+does not authorize deleting that backup or replacing the accepted working-store
+pointer;conservation,cold verification and validated import still apply.
+
+Retain badge-label-candidate-section-digests-20261029.log,
+badge-label-candidate-receipt-leaves-20261029.log and
+badge-label-candidate-metadata-extract-20261029.log as completed candidate checks.
+Retain successful badge-label-derived-receipt-conservation-20261029.log:
+all147 changed leaves reconcile. Keep badge-label-independent-cold-20261029.log/
+.stderr.log:exit0,zero disk-cache hits and canonical equality verified. Retain
+badge-label-candidate-store-20261030 and its candidate-import log (exit0),plus
+badge-label-accepted-import-20261030.log (exit0). Generation e1072ead/indexec8dad55
+is accepted locally after verified isolated import and86 immutable hard links
+into the accepted store. Both stores share file data;do not mutate linked files.
+Acceptance is of the evidence package,not rendering parity or case completion.
+
 Retain badge-label-live-reader-20261029.log and badge-label-source-census-20261029.log.
 They are the live integration and accepted-source conservation checks for the
 bounded Badge label-region join,not new browser captures or canonical exports.

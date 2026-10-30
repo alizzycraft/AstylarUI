@@ -4,6 +4,102 @@
 
 ### Current next action and publication status
 
+October29 Badge canonical export completed with exit0 via the existing launcher
+with --badge-label-paint,ASTYLAR_AUDIT_PROGRESS=1 and ASTYLAR_AUDIT_COLD=0.
+Preserved hash-verified originals are in badge-label-pre-export-080b-20261029:
+manifestd6ec5f85,payload080b1dd5,readable4cf92f01. Export stdout/stderr are
+badge-label-canonical-export-20261029.log/.stderr.log. Candidate compressed SHA256
+e1072eadfbfdd91ccaf266c93caffcbc80d707b5438073c54ed30b763e8f82df,
+decoded48bc3ff729528d675326daeb0e07b12521f32e2cfd96e1f1192ea2813ba2fea7.
+October30 candidate accepted locally after all milestone gates:working pointer
+e1072ead,indexec8dad55ba45ad9b1bec640ae9a0a9d20927e43277faec87cc067e80d297fbc0.
+This accepts the audit evidence package,not rendering parity or case completion.
+Reuse the retained80-section record tooltip-open-candidate-section-digests-
+20261028.log (raw SHA256 b04eb40fbba6fc7abb7a71be011935c40fe3f0582ee8b06bba694debef213ee6):
+its current.manifest matches the exact080b1dd5 compressed/ccaac6f3 decoded pair.
+Accepted metadata extractda754e52 and source census remain reusable. Do not
+decode the old2.37GB payload again just to obtain these receipts. Candidate
+conservation,independent cold verification and isolated/accepted import are
+complete as recorded below. No browser capture,case closure or renderer/fixture
+change is implied.
+
+Completed candidate checks:badge-label-candidate-section-digests-20261029.log
+authenticates both payloads and all80 sections:72 unchanged,eight changed,none
+added/removed. badge-label-candidate-receipt-leaves-20261029.log exited0 with147
+changed values across five fixed-shape sections. Derived-hash reconciliation
+exited0 in badge-label-derived-receipt-conservation-20261029.log:98 direct
+producer fingerprints,48 independently recomputed control-proof hashes and one
+recomputed motion-report hash account for all147 changes. The exact predecessor
+producer recovers;no non-receipt change is accepted by this comparison. The leaf
+receipt authenticates as5e040d0839b88d4d0833b5145dfdc964182906d5ce33de2eaa4d778781ef8479.
+Metadata extraction exited0 in badge-label-candidate-metadata-extract-20261029.log
+(raw SHA256 a001b781e0d5c39f6e38662e7d4904341d47b34c5d18eda1e6cf02ec09b812b8).
+Read-only assertions against authenticated predecessor extractda754e52 pass:
+all1123 old source entries accounted for,14 exact registered additions,six exact
+historical source recoveries;453 old proofs preserved,ten additions and12 verified
+two-line shifts. Fingerprints use the producer's UTF8/CRLF-normalization rule,
+not raw artifact hashing;an initial raw-byte comparison of a log failed and was
+corrected to that existing rule without changing data. Raw evidence authentication
+remains separate. Coverage preserves every prior obligation and all2311 partial,
+current-unverified cases;only40 Badge localPaint children are added (35 diagnostic
+matches,five failures). All18631 prior evidence receipts remain;five additions
+authenticate. Review SHA changes exactly3a51fbe3 to3cb9fe23 and predecessor source
+applicability preserves. Readable report adds only ten proof descriptions and12
+line references;all22 changed locations were checked against source. These checks
+do not establish case completion or current rendering. Independent cold check
+badge-label-independent-cold-20261029.log/.stderr.log completed exit0 with
+diskHits0,20008 files and3464179791 bytes read and reverified;canonical equality
+passed. On October30 isolated import/verification passed exit0 in
+badge-label-candidate-store-20261030 with log badge-label-candidate-import-20261030.log.
+Its result preserved the prior accepted pointer and verified8483 discrepancies,
+205 source findings,39904 controls,389202 occurrences and zero unresolved scalar
+attributions (not zero remaining audit questions). Accepted-store promotion then
+passed exit0 in badge-label-accepted-import-20261030.log,using86 immutable hard
+links,verified reused import and exact index authentication. All2311 cases remain
+partial/current-rendering unverified. Next publish this coherent milestone,then
+resume the bounded Chips source-currentness reconciliation described below.
+Do not repeat completed checks for prose edits.
+
+Post-milestone priority:the accepted sourceCurrentness flags record91 matching
+and2220 nonmatching configured cases,but their producer's buildCaptureSources
+in tests/material-parity/input-boundary-evidence.spec.mjs enumerates only three
+October11 reports (overlay subset,settlement trace,selection replay). These flags
+are not an exhaustive census of every later retained capture. Before scheduling
+recaptures,check later evidence's exact build/context/action applicability and
+whether any valid reuse is omitted from that fixed set. No flag or case status
+has been upgraded,and current build/browser validity is not inferred here.
+
+Read-only follow-up narrows that next check:the union of registered source
+manifests and accepted case-evidence manifests contains50 paths. Their complete
+1887-file browser vectors split18 matching the ledger's recorded served build
+and32 matching the October5 retained build;none has a third/missing vector.
+Seventeen of the18 matches are directly receipt-bound in accepted case evidence.
+The matching vector is29de7da0d0360f7624b1a035dded597ad09f77a210bf0378ae954f064b30a4e3;
+the original vector isd73eb7871b4e195506b575fb1f24436767a90e8dcb4872f5407d7aeef1fab369
+(SHA256 of file/SHA pairs sorted by localeCompare after removing the served-root
+prefix). Fifteen matching manifests lie outside the original three-report set.
+428 currently nonmatching-flag cases contain a reference to at least one of the
+17 receipt-bound matching manifests,but this is ONLY a triage set:shared Divider
+evidence also appears on Sidenav and other families. Exact case/context/action
+coverage must be checked before any flag change;neither428 new captures nor428
+completed/current cases is inferred. This census is not all filesystem artifacts,
+does not revalidate today's served directory,and does not alter the running export.
+
+Exact-case follow-up authenticates all eight Chips activate-alternate rows in
+report0a248209 and manifest9b2dc941 against accepted080b1dd5/index3856b794.
+Each accepted authoredActivation.supplementaryAlternateSelection child references
+the same report,manifest and paired tree/screenshot receipts;all32 paired files
+authenticate. Both sides retain before/after-action/settled observations and six
+move/down/up action boundaries with no recorded runtime errors. These are exact
+case/theme/DPR matches,not cross-family manifest references. Nevertheless all eight
+sourceCurrentness records still say no-retained-capture-matching-served-build
+with empty captures. Thus that fixed-set flag omits known supplementary evidence;
+it must not alone trigger recapture. The report uses Chrome155.0.8059.85 and extra
+awaited boundary reads:historical timing,full runtime/input applicability and
+current-rendering acceptance remain unproved. Next reconcile only this bounded
+capture availability after the Badge milestone;do not upgrade case completeness
+or current rendering. No source or canonical data changed in this read-only check.
+
 October29 Badge live integration is verified locally but not yet canonical.
 Explicit --badge-label-paint selects3cb9fe23;the actual launcher dry-run confirms
 the exact review path/digest. Registry now has1137 sources/463 proofs/72 plans.
