@@ -53,6 +53,8 @@ const aliases = new Map([
 ]);
 const tableFile = path.resolve(packageRoot, '../app/services/dom/elements/table.service.js');
 const dimensionFile = path.resolve(packageRoot, '../app/services/dom/elements/element-dimension.service.js');
+const dimensionReturn = 'return { width, height, left, top, padding: layoutInsets, margin };';
+const dimensionBranchTrace = `if (element.id === 'calendar-table') console.info('TABLE_AUDIT_TRACE ' + JSON.stringify({name: 'heightSource', heightSource, height, contentHeight, display, hasTextContent, heightValue: heightValue ?? null, minHeight: minHeight ?? null, maxHeight: maxHeight ?? null}));`;
 const dimensionTraceSource = `
 const originalDimensionCalculation = ElementDimensionService.prototype.calculateDimensions;
 ElementDimensionService.prototype.calculateDimensions = function (...args) {
@@ -111,7 +113,9 @@ const built = await consumer('esbuild').build({ absWorkingDir: root,
       if (path.resolve(args.path) !== dimensionFile) return;
       const bytes = readFileSync(args.path);
       assert.equal(hash(bytes), '0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c');
-      return { contents: bytes.toString('utf8') + dimensionTraceSource, loader: 'js' };
+      const source = bytes.toString('utf8');
+      assert.equal(source.split(dimensionReturn).length, 2, 'Expected exactly one dimension return boundary');
+      return { contents: source.replace(dimensionReturn, dimensionBranchTrace + '\n' + dimensionReturn) + dimensionTraceSource, loader: 'js' };
     });
     build.onResolve({ filter: /^astylarui$/ }, () => ({ path: packageResolver.resolve('astylarui') }));
     build.onResolve({ filter: /^\.\.\/(lib\/(index|astylar)|app\/services\/(css-layout-geometry|dom\/elements\/flex.service))$/ }, args => ({ path: aliases.get(args.path) }));
@@ -132,7 +136,7 @@ const assets = new Map([
 const html = '<!doctype html><html><body><script src="/jasmine.js"></script><script src="/jasmine-html.js"></script><script src="/boot0.js"></script><script type="module" src="/audit.js"></script></body></html>';
 const provenance = { commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
   specFilter: process.env.ASTYLAR_AUDIT_SPEC_FILTER ?? '',
-  tableTrace: tableTrace ? { source: tableFile, originalSha256: hash(readFileSync(tableFile)), instrumentationSha256: hash(tableTraceSource), dimensionSource: dimensionFile, dimensionOriginalSha256: hash(readFileSync(dimensionFile)), dimensionInstrumentationSha256: hash(dimensionTraceSource) } : null,
+  tableTrace: tableTrace ? { source: tableFile, originalSha256: hash(readFileSync(tableFile)), instrumentationSha256: hash(tableTraceSource), dimensionSource: dimensionFile, dimensionOriginalSha256: hash(readFileSync(dimensionFile)), dimensionInstrumentationSha256: hash(dimensionTraceSource), dimensionBranchTraceSha256: hash(dimensionBranchTrace) } : null,
   freshBuild, compiledReceipts, packedRoot,
   runnerSha256: hash(readFileSync('scripts/audit-overlay-layout-stage.mjs')),
   htmlSha256: hash(html), runtimeAssets: [...assets].map(([url, bytes]) => ({ url, sha256: hash(bytes) })),

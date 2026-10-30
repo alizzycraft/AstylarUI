@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+October 31 calendar table height branch: the exact installed dimension method,
+with a read-only trace immediately before its unique return, reports
+`heightSource=parent-content`, `height=contentHeight=360`, `display=table`, no
+text metrics, no resolved height and no min/max height in both reductions.
+Thus the parent-content default is confirmed for these cases, not merely inferred
+from matching numbers. The one-week browser table is 40px; the Astylar table
+service consumes the 360px result and distributes it to the rows. Selected
+outcomes/failures match the uninstrumented baseline exactly and page errors are
+empty; the trace is scoped to the reduction, not the original multiweek calendar.
+Retain `calendar-table-height-branch-20261031/result.json` SHA256
+`954077718fde4c161546efb9e98d7c533a1a74ff16ff8c7314b99ed9d4c920b7` and
+`provenance.json` SHA256
+`187c7a00399af4970f5dedc648ad13d9f3c9cf26ebbcc6b6417267234d1c91f0`.
+No renderer fix or current Material-case acceptance is implied.
+
 October 31 calendar table height producer: a provenance-bound, non-mutating
 wrapper around the installed dimension service records `calculateDimensions`
 returning `280x360` for the table in both reductions, with neither authored nor
