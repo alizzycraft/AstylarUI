@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+October 31 table diagnostic source applicability: current `table.service.ts`
+(SHA256 `0d96f98c3bdcfbba71a1eaa839cfa34d19e5621471b27929574334535e7733c9`)
+was transpiled to ES2022 with TypeScript experimental decorators and compared
+to installed `table.service.js` (SHA256
+`ed47ea57566bfe77b884453487f2b34296adea23ad74041883ce8c4afb5f7fec`) using
+the comment-free TypeScript printer. All five complete methods match:
+`processTable`, `calculateTotalColumnCount`, `resolveColumnWidths`,
+`processTableCells`, and `resolveRowHeights`. Their printed method hashes are
+respectively `279ac907...`, `6b9083be...`, `29244ae1...`, `2ddaedc6...`, and
+`5243fe88...`. This bounds source-to-installed syntax for the diagnostic path;
+it does not authenticate the served browser bundle, imported dependencies,
+in-situ execution, other table methods or the original datepicker outcome.
+No current-rendering acceptance or complete case inspection follows.
+
 October 31 exact Snackbar activate-twice input check: the paired October 5
 input trees authenticate to the case receipts (`a2b8b3a5...` reference,
 `d1018ee4...` candidate). On the reference snackbar surface, the recorded
