@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+October 30 current-installed public range retry completed 32 cases with exit 1
+because every case recorded failing parity checks; no case errors or runtime
+errors were recorded. `artifacts/material-parity/public-range-drag-retry-20261030/latest-report.json`
+SHA256 `8a69377d7f2580d2a69263617d660f5b64fa9c7ca6ce292008e5ed2ab8b0aaf6`,
+Chrome 156.0.8078.79, Angular 20.3.31, AstylarUI 0.2.0. Independent replay
+recomputed all case checks, verified each screenshot and served document/script
+receipt, the provenance hash and all 2516 bundle-input hashes. In all 16
+no-update cases intermediate values diverged and final owner release count
+failed; in all 16 equivalent-held-update cases an early release was observed
+and subsequent values diverged. These are public equal-authored-input results,
+not proof of Material swapped-thumb cause, visual smoothness, source-build
+equivalence or whole-case acceptance. Source commit was `11ad8197`; the runner
+and test fingerprints changed separately and still require canonical integration.
+Preserve the prior incomplete and injected-failure captures independently.
+
 October 30 current-dependency public range diagnostic was incomplete: command
 `node scripts/audit-public-range-drag.mjs --output=artifacts/material-parity/public-range-drag-current-20261030`
 terminated exit 1 after a 30-second reference-page navigation timeout. The
