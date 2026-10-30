@@ -122,6 +122,9 @@ async function main() {
           } finally { await page.close(); }
         }
         Object.assign(entry, inspectRangeDrag(entry)); results.push(entry);
+        if (process.env.ASTYLAR_AUDIT_RANGE_INJECT_FAILURE === '1') {
+          throw new Error('Injected audit failure after first complete case');
+        }
         console.log(JSON.stringify({ dpr, translated, target, update, stackTracing, errors: entry.errors,
           failures: Object.entries(entry.checks).filter(([, pass]) => !pass).map(([name]) => name),
           reference: entry.stages.map(s => s.reference.controls.map(c => c.value)),

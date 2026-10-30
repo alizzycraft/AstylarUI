@@ -12,7 +12,12 @@ any bounded retry; do not overwrite the partial evidence or weaken checks.
 The existing runner now writes a distinct `partial-report.json` on an exception
 after browser launch, containing completed cases, runtime errors, error message
 and provenance hash, then rethrows. A focused shape test passes 1/1; it does
-not exercise a real browser navigation failure or explain the earlier timeout.
+not explain the earlier timeout. An opt-in injected-failure test ran one real
+paired case and exited 2; its partial report contains that completed case, the
+injected error and a matching provenance hash, with no `latest-report.json`.
+The intentionally failed capture is retained at
+`artifacts/material-parity/public-range-partial-test-20261030`. It validates
+exception publication, not the original navigation failure or current parity.
 This instrumentation changes runner/test fingerprints; historical receipts
 remain historical and require reconciliation before canonical integration.
 
