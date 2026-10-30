@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 31 calendar reference source applicability: retained
+`chunk-7SL66K3U.js.map` SHA256
+`67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4`
+embeds `src/app/reference.component.ts` SHA256
+`debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa`,
+identical to the current reference component file. The paired reference runtime
+records loading its corresponding retained `chunk-7SL66K3U.js`, SHA256
+`816c0114708acc9b883f9ac300e21017e2556f81fecaf26e5719bc334cf80237`.
+This narrows one source-applicability gap, not the Material dependency, styles,
+clock, renderer or source-map build provenance gaps; the comparison remains
+unequal-input diagnostic evidence, not current parity acceptance.
+
 October 31 calendar capture source applicability: the retained build's
 `chunk-JPEJK334.js.map` (SHA256 `47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e`)
 embeds `src/app/astylar.component.ts` with SHA256
