@@ -1,5 +1,21 @@
 # Material comparison/state coverage inventory
 
+October 31 calendar table auto-height trace: the same bounded, non-mutating
+runner instrumentation now records table-service entry, container dimensions
+and row-height resolution. In both equal-input reductions the table dimension
+map already contains `280x360` when `processTable` begins; the one-week row
+resolver receives height 360 and returns `[360]`, while the two-week control
+returns `[40,320]`. Thus the 360px value predates row-height distribution in
+this path; its upstream producer and the reason for the second row's remaining
+height are not yet established. The first row's reference height was 40px.
+The two-week test asserts horizontal edges only and is not vertical parity.
+The instrumented selected outcomes exactly match the uninstrumented run and
+there are no page errors. Retain `calendar-table-height-entry-20261031` result
+SHA256 `05f439be77d96497312690a84a9b2afa77e760949997503ea10332ee4195530b`,
+provenance SHA256 `5afb7873211c878140a692a821556f688f0b4f520fcbefa0f360c50b728332ba`.
+The earlier `calendar-table-height-trace-20261031` is also retained. No
+renderer fix, current Material-case acceptance or canonical publication follows.
+
 October 31 table runtime trace: the existing provenance-bound diagnostic runner
 has an explicit calendar-only trace mode. It wraps three methods in the exact
 installed table-service bytes, records the original source and instrumentation

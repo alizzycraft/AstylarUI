@@ -53,13 +53,21 @@ const aliases = new Map([
 ]);
 const tableFile = path.resolve(packageRoot, '../app/services/dom/elements/table.service.js');
 const tableTraceSource = `
-for (const name of ['calculateTotalColumnCount','resolveColumnWidths','processTableCells']) {
+for (const name of ['processTable','calculateTotalColumnCount','resolveColumnWidths','processTableCells','getTableContainerDimensions','resolveRowHeights']) {
   const original = TableService.prototype[name];
   TableService.prototype[name] = function (...args) {
+    if (name === 'processTable' && args[5]?.id === 'calendar-table') {
+      const dims = args[0].context.elementDimensions;
+      console.info('TABLE_AUDIT_TRACE ' + JSON.stringify({name, table: args[5].id, parent: args[3]?.name, tableDimensions: dims.get(args[5].id), parentDimensions: dims.get(args[3]?.name), tableHeightRequest: args[5].style?.height ?? null}));
+    }
     const value = original.apply(this, args);
     if (name === 'calculateTotalColumnCount') {
       const rows = args[0].flatMap(section => section.children || []).filter(row => row.type === 'tr');
       if (rows.some(row => row.id === 'calendar-week')) console.info('TABLE_AUDIT_TRACE ' + JSON.stringify({name, rows: rows.map(row => ({id: row.id, cells: (row.children || []).map(cell => ({id: cell.id, colspan: cell.colspan || 1}))})), result: value}));
+    } else if (name === 'getTableContainerDimensions' && args[1]?.name === 'calendar-table') {
+      console.info('TABLE_AUDIT_TRACE ' + JSON.stringify({name, table: args[1].name, result: value}));
+    } else if (name === 'resolveRowHeights' && args[1].some(row => row.id === 'calendar-week')) {
+      console.info('TABLE_AUDIT_TRACE ' + JSON.stringify({name, rows: args[1].map(row => row.id), tableHeight: args[3], result: value}));
     } else if (name === 'resolveColumnWidths' && args[1] === 280) {
       console.info('TABLE_AUDIT_TRACE ' + JSON.stringify({name, width: args[1], columnCount: args[2], result: value}));
     } else if (name === 'processTableCells' && args[2].some(cell => cell.id === 'month-label')) {
