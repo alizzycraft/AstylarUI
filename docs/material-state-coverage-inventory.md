@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+October 31 capture producer reconciliation: the calendar-only extension added
+in `dc0bb349` changed the shared activation producer to SHA256 `862155fe...`,
+outside historical readers' authenticated source chain. Its addition was unsafe
+for replay even though the new capture verified. The shared producer is now
+restored byte-for-byte to pre-extension SHA256 `f97c4459...`; the focused
+October27 historical semantic population test passes 1/1. The corrected
+geometry capture remains retained, with its exact `862155fe...` producer bytes
+recoverable from commit `dc0bb349`; it must not be verified using the restored
+producer as if identical. A portable separate diagnostic adapter and complete
+downstream reconciliation remain open. No capture or finding was overwritten.
+
 October 31 calendar reference source applicability: retained
 `chunk-7SL66K3U.js.map` SHA256
 `67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4`

@@ -10,8 +10,6 @@ import { fingerprintModuleGraph } from '../tests/material-parity/run-checkpoint.
 // cohort and observations. No replacement click,focus,layout or fixture rules.
 const baseFile = 'scripts/audit-material-configured-control-focus.mjs';
 const datepickerActivation = process.argv.includes('--datepicker-activation');
-const calendarGeometry = process.argv.includes('--calendar-geometry');
-assert.ok(!calendarGeometry || datepickerActivation, 'Calendar geometry requires the datepicker activation cohort');
 assert.equal(process.argv.filter(value => value === '--datepicker-activation').length, Number(datepickerActivation));
 const tooltipOpen = process.argv.includes('--tooltip-open');
 assert.equal(process.argv.filter(value => value === '--tooltip-open').length, Number(tooltipOpen));
@@ -28,15 +26,14 @@ replace("const script = 'scripts/audit-material-configured-control-focus.mjs';",
   "const script = 'scripts/audit-material-configured-control-activation.mjs';");
 if (datepickerActivation || tooltipOpen) {
   replace("const families = ['chips', 'slide-toggle', 'button', 'menu', 'expansion', 'snack-bar', 'tooltip'];", `const families = ['${tooltipOpen ? 'tooltip' : 'datepicker'}'];`);
-  replace('assert.equal(process.argv.length, verifyMode ? 4 : 3);', `assert.equal(process.argv.length, verifyMode ? ${calendarGeometry ? 6 : 5} : ${calendarGeometry ? 5 : 4});`);
+  replace('assert.equal(process.argv.length, verifyMode ? 4 : 3);', 'assert.equal(process.argv.length, verifyMode ? 5 : 4);');
   replace("const root = path.resolve('examples/material-showcase/dist/material-showcase/browser');",
     "const root = path.resolve('artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser');");
 }
 replace("families.includes(c.family) && c.state === 'focus'", tooltipOpen
   ? "families.includes(c.family) && c.state === 'open'"
   : "families.includes(c.family) && ['activate', 'activate-leave'].includes(c.state)");
-if (calendarGeometry) replace("families.includes(c.family) && ['activate', 'activate-leave'].includes(c.state)", "families.includes(c.family) && c.state === 'activate' && c.profile === 'contrast' && c.viewport.id === 'desktop-dpr1'");
-replace('assert.equal(cases.length, 56);', `assert.equal(cases.length, ${calendarGeometry ? 1 : tooltipOpen ? 8 : datepickerActivation ? 17 : 113});
+replace('assert.equal(cases.length, 56);', `assert.equal(cases.length, ${tooltipOpen ? 8 : datepickerActivation ? 17 : 113});
 assert.equal(new Set(cases.map(c => materialCaseKey('interaction', c))).size, cases.length);
 assert.equal(new Set(cases.map(c => [c.family,c.profile,c.viewport.id,c.state,hash(materialCaseKey('interaction', c)).slice(0,12)].join('-'))).size, cases.length);`);
 replace('${c.family}-${c.profile}-${c.viewport.id}-${mode}',
@@ -82,23 +79,7 @@ for (const node of ast.statements.filter(ts.isImportDeclaration).toReversed()) {
 }
 const focusInitializer = ast.statements.filter(node => ts.isFunctionDeclaration(node) && node.name?.text === 'installFocusObserver');
 assert.equal(focusInitializer.length, 1);
-let observer = installObserver.toString();
-if (calendarGeometry) {
-  const before = 'return { ...observation, targetKind:';
-  assert.equal(observer.split(before).length, 2);
-  observer = observer.replace(before, `const geometry = mode === 'reference' ? (() => {
-    const box = element => element ? element.getBoundingClientRect().toJSON() : null;
-    const calendar = document.querySelector('mat-month-view');
-    return { calendarText: calendar?.textContent?.trim() ?? null,
-      weekdays: [...(calendar?.querySelectorAll('thead tr:first-child th') ?? [])].map(box),
-      days: [...(calendar?.querySelectorAll('tbody td.mat-calendar-body-cell-container') ?? [])].map(element => ({text: element.textContent.trim(), box: box(element)})) };
-  })() : (() => {
-    const ids = ['datepicker-grid', ...Array.from({length: 7}, (_, i) => 'datepicker-weekday-' + i), ...Array.from({length: 31}, (_, i) => 'datepicker-day-' + (i + 1))];
-    const canvas = document.querySelector('canvas');
-    return { canvas: canvas?.getBoundingClientRect().toJSON() ?? null, elements: api.measure(ids, false).elements };
-  })();
-  return { ...observation, geometry, targetKind:`);
-}
+const observer = installObserver.toString();
 assert.equal(observer.split('installFocusObserver();').length, 2);
 // Playwright serializes this function alone. Include its unchanged initializer
 // locally rather than relying on a Node-side closure in the browser realm.
