@@ -1,5 +1,13 @@
 # Material comparison/state coverage inventory
 
+October 30 capture-availability checkpoint is accepted locally: independent cold
+comparison completed successfully (capture-availability-independent-cold-20261030.log;
+disk hits 0, invalidations 0), and verified store import reused generation
+73c84aef8e91a98f5aeb04a07426473ef6d24fb1811a5b0f2aa519dfc38cf484 with index
+baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059.
+The 16 historical capture-availability updates do not establish current rendering
+parity or complete inspection; all 2311 cases remain partial.
+
 ## Current audit pointer — October26
 
 ### Current next action and publication status

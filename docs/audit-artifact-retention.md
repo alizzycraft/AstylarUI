@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+The capture-availability cold comparison and verified accepted-store import have
+completed. Generation 73c84aef is accepted locally; its 86 store files are hard
+links to the isolated candidate and must not be mutated. Retain the cold logs,
+candidate evidence, and e107 predecessor backup under the existing rules below.
+
 Retain capture-availability-candidate-sections-20261030.log,
 capture-availability-candidate-receipt-leaves-20261030.log,
 capture-availability-derived-receipts-20261030.log,
