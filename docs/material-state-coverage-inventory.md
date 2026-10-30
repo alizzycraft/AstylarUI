@@ -71,6 +71,12 @@ capture through a path-only reader: 32 cases, 416 boundaries, 256 screenshots,
 An added focused test pins the report hash and this result; paired historical
 and fresh focused tests pass 2/2. This establishes bounded validator coverage,
 not canonical registration or Material case acceptance.
+An independent cross-capture comparison keyed all 32 matching cases and all
+416 action boundaries: reference/candidate control values, native/public
+pointer-up counts and pressed-owner fields match between the authenticated
+historical Chrome 152 capture and fresh Chrome 156 capture. This is agreement
+on those selected observations only, not byte-identical dependencies, exact
+event timing, local raster equivalence or proof for untested interactions.
 
 October 30 current-dependency public range diagnostic was incomplete: command
 `node scripts/audit-public-range-drag.mjs --output=artifacts/material-parity/public-range-drag-current-20261030`
