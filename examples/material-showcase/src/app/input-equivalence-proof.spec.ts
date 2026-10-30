@@ -291,6 +291,27 @@ describe('Material audit: equivalent CSS input reductions', () => {
       }, ids: ['flow', 'first', 'second'],
     },
     {
+      name: 'calendar table first week shares a four-column month label',
+      site: {
+        root: { children: [{ type: 'table', id: 'calendar-table', tableProperties: { tableLayout: 'fixed', borderCollapse: 'separate', borderSpacing: 0 }, children: [
+          { type: 'tbody', id: 'calendar-body', children: [
+            { type: 'tr', id: 'calendar-week', children: [
+              { type: 'td', id: 'month-label', colspan: 4, textContent: 'SEP' },
+              { type: 'td', id: 'day-one', textContent: '1' },
+              { type: 'td', id: 'day-two', textContent: '2' },
+              { type: 'td', id: 'day-three', textContent: '3' },
+            ] },
+          ] },
+        ] }] },
+        styles: [
+          { selector: '#calendar-table', width: '280px', fontFamily: 'Arial', fontSize: '14px' },
+          { selector: '#calendar-week', height: '40px' },
+          { selector: '#month-label', lineHeight: '0', textAlign: 'left', paddingLeft: '5%' },
+          { selector: '#day-one, #day-two, #day-three', textAlign: 'center' },
+        ],
+      }, ids: ['calendar-table', 'calendar-week', 'month-label', 'day-one', 'day-two', 'day-three'],
+    },
+    {
       name: 'full-span calendar marker preserves auto-placed day cells',
       site: {
         root: { children: [{ type: 'div', id: 'calendar', children: [
@@ -317,6 +338,18 @@ describe('Material audit: equivalent CSS input reductions', () => {
       }, ids: ['overlay', 'surface'],
     },
   ];
+
+  // A normal seven-cell week distinguishes column-count discovery from the
+  // independent auto-height mismatch in the one-week reduction above.
+  const calendarSingleWeek = cases.find((entry) => entry.name === 'calendar table first week shares a four-column month label')!;
+  const calendarTwoWeeks = structuredClone(calendarSingleWeek);
+  calendarTwoWeeks.name = 'calendar table first week with a following seven-cell week';
+  const calendarBody = calendarTwoWeeks.site.root.children![0].children![0];
+  calendarBody.children!.push({ type: 'tr', id: 'second-week', children: Array.from({ length: 7 }, (_, index) => ({
+    type: 'td' as const, id: `second-day-${index}`, textContent: String(index + 4),
+  })) });
+  calendarTwoWeeks.horizontalOnly = [...calendarTwoWeeks.ids];
+  cases.push(calendarTwoWeeks);
 
   for (const entry of cases.filter((candidate) => candidate.name.startsWith('content-sized '))) {
     cases.push({
@@ -397,6 +430,14 @@ describe('Material audit: equivalent CSS input reductions', () => {
           const element = doc.createElement(child.type);
           element.id = child.id!;
           if (child.class) element.className = child.class;
+          if (element instanceof doc.defaultView!.HTMLTableCellElement) {
+            const colspan = child.colspan ?? child.tableProperties?.colspan;
+            const rowspan = child.rowspan ?? child.tableProperties?.rowspan;
+            if (colspan !== undefined) element.colSpan = colspan;
+            if (rowspan !== undefined) element.rowSpan = rowspan;
+            expect(element.colSpan).withContext(`${child.id} reference colspan`).toBe(colspan ?? 1);
+            expect(element.rowSpan).withContext(`${child.id} reference rowspan`).toBe(rowspan ?? 1);
+          }
           if (child.tableProperties) {
             // Public table options express these CSS declarations separately
             // from StyleRule. Project the same inputs into the reference DOM.

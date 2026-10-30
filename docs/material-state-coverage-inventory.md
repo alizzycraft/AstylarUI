@@ -1,5 +1,43 @@
 # Material comparison/state coverage inventory
 
+October 30 calendar table reduction: the existing public-package browser proof
+now mirrors authored `colspan`/`rowspan` onto reference cells and asserts the
+resulting DOM values. A diagnostic 280px fixed table has one week with a
+four-column SEP cell and three day cells, identical declarations and structure
+on both sides. Chrome Headless 156, Babylon 8.56.2, installed AstylarUI 0.2.0:
+the isolated case failed (one failed, 51 skipped; exit 1). The browser label
+ends at x=160 and day cells span x=160..280; Astylar's label ends at x=280
+and all three day cells have zero width at x=280. Astylar's table and row
+bottom also measured 360 versus browser 40. This proves a discrepancy in this
+reduction, not the original datepicker's raster cause or current source release.
+
+The installed table service (SHA256
+`ed47ea57566bfe77b884453487f2b34296adea23ad74041883ce8c4afb5f7fec`)
+and current source both count physical cells rather
+than summing spans when deriving columns, and bound cell-width summation by
+that count. Isolated execution of the exact two installed JavaScript methods,
+using the captured row and no column definitions, returned four 70px columns;
+the four-span cell consumes 280px and leaves no width entries for the three
+days. This explains the observed width values at the calculation stage, but is
+not a trace of the browser run: installed-to-current provenance and in-situ
+causality remain unverified. Auto-height is separate and not attributed to span.
+An equal-input control adds a following week of seven unspanned cells, leaving
+the first week unchanged. Its horizontal edges all match within 0.5 CSS px
+(isolated Chrome 156 run: one passed, 52 skipped, exit 0); vertical geometry
+was deliberately not asserted because of the separate height failure. This
+limits the column-count finding: an ordinary later seven-cell week can mask it,
+so do not infer that this defect explains the full multiweek datepicker. The
+temporary focused selection was removed after the run.
+The complete diagnostic file run was 27 failed/25 passed, including established
+unrelated reductions; the isolated test used a temporary focused selection,
+which was removed. No case is closed. The accepted `73c84aef` payload's
+`sourceFingerprints` section contains 1,142 entries and does not list this
+proof file. The canonical builder nevertheless names it in focused-proof
+descriptions, including the historical 51-case result; those descriptions
+remain historical and are not a current 53-case pass. Other retained readers
+and their dependencies have not been exhaustively reconciled. Do not promote
+this diagnostic into a current canonical result without that reconciliation.
+
 October 30 focused sidenav AX capture: the existing passive collector now accepts
 an exact static case selector; default remains 36 cases/72 observations and an
 invalid selector fails before capture. `ASTYLAR_AUDIT_PASSIVE_AX_CASE=sidenav/light/desktop`
