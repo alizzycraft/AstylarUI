@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+October 31 activation source reconciliation: existing tooltip and datepicker
+historical readers compose without changes, authenticating live `f97c4459...`,
+intermediate `837098a2...`, and retained `26d7a294...` activation bytes; an
+unknown live edit is rejected. A read-only retained text-backing review probe
+using that composition only for the activation file progresses to the next
+independent mismatch: tooltip theme-ownership source `98347c3b...` versus
+retained `ee4f273b...`. The review has not passed; the composition is not yet
+wired into the production reader. No full export, current-rendering conclusion
+or case closure follows.
+
 October 31 text-backing historical boundary: the expected intermediate
 benchmark source `a270e3d3...` is recovered from Git revision `96fd6260`
 only after authenticating the exact live `f383821e...` source, then the
