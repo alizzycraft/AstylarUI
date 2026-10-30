@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+October 31 paired calendar geometry population: a read-only comparison of the
+31 numbered day-cell pairs in the authenticated corrected report below finds
+the same horizontal delta (approximately zero) and the same vertical delta
+(candidate +34.01312256 CSS px) for every day, after adding the recorded canvas
+origin. This is a uniform observed displacement across all five calendar rows,
+not an accumulating per-row displacement. It does not prove which unequal
+input or layout stage causes the offset, nor does it establish text/ring paint
+parity or current-source applicability. No additional capture was needed.
+
 October 31 paired calendar geometry: the existing configured activation capture
 now has an opt-in single contrast/desktop-DPR1 datepicker geometry mode. A fresh
 checkpoint fingerprints the retained served build, installed browser and capture
