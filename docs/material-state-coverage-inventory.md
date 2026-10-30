@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+October 31 calendar table height producer: a provenance-bound, non-mutating
+wrapper around the installed dimension service records `calculateDimensions`
+returning `280x360` for the table in both reductions, with neither authored nor
+resolved height and with a `640x360` unpadded root parent. The installed code
+initializes height from parent content height; this is consistent with the
+observed value, though the wrapper does not record the internal branch and does
+not by itself prove the original multiweek calendar's cause. Table service then
+uses that value as previously traced. Selected outcomes and failures exactly
+match the uninstrumented run; no page errors. Retain
+`calendar-table-height-producer-20261031/result.json` SHA256
+`614b02783b45a0131ef2fb4484e33dc0514a9d4f42cc131aba1f4e767b079e05` and
+`provenance.json` SHA256
+`98a5eaf58477dfcfe0e3c48a4bb8840ba73e8960885e3c00b90a6d261dc13934`.
+No renderer behavior changed and no Material case is accepted on this evidence.
+
 October 31 calendar table auto-height trace: the same bounded, non-mutating
 runner instrumentation now records table-service entry, container dimensions
 and row-height resolution. In both equal-input reductions the table dimension

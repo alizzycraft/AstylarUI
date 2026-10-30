@@ -52,6 +52,17 @@ const aliases = new Map([
   ['../app/services/dom/elements/flex.service', path.join(packageRoot, '../app/services/dom/elements/flex.service.js')],
 ]);
 const tableFile = path.resolve(packageRoot, '../app/services/dom/elements/table.service.js');
+const dimensionFile = path.resolve(packageRoot, '../app/services/dom/elements/element-dimension.service.js');
+const dimensionTraceSource = `
+const originalDimensionCalculation = ElementDimensionService.prototype.calculateDimensions;
+ElementDimensionService.prototype.calculateDimensions = function (...args) {
+  const result = originalDimensionCalculation.apply(this, args);
+  if (args[2]?.id === 'calendar-table') {
+    console.info('TABLE_AUDIT_TRACE ' + JSON.stringify({name: 'calculateDimensions', element: args[2].id, type: args[2].type, authoredHeight: args[2].style?.height ?? null, resolvedHeight: args[3]?.height ?? null, parent: args[4]?.name, parentDimensions: args[0].context.elementDimensions.get(args[4]?.name), result}));
+  }
+  return result;
+};
+`;
 const tableTraceSource = `
 for (const name of ['processTable','calculateTotalColumnCount','resolveColumnWidths','processTableCells','getTableContainerDimensions','resolveRowHeights']) {
   const original = TableService.prototype[name];
@@ -96,6 +107,12 @@ const built = await consumer('esbuild').build({ absWorkingDir: root,
       assert.equal(hash(bytes), 'ed47ea57566bfe77b884453487f2b34296adea23ad74041883ce8c4afb5f7fec');
       return { contents: bytes.toString('utf8') + tableTraceSource, loader: 'js' };
     });
+    if (tableTrace) build.onLoad({ filter: /element-dimension\.service\.js$/ }, args => {
+      if (path.resolve(args.path) !== dimensionFile) return;
+      const bytes = readFileSync(args.path);
+      assert.equal(hash(bytes), '0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c');
+      return { contents: bytes.toString('utf8') + dimensionTraceSource, loader: 'js' };
+    });
     build.onResolve({ filter: /^astylarui$/ }, () => ({ path: packageResolver.resolve('astylarui') }));
     build.onResolve({ filter: /^\.\.\/(lib\/(index|astylar)|app\/services\/(css-layout-geometry|dom\/elements\/flex.service))$/ }, args => ({ path: aliases.get(args.path) }));
     build.onResolve({ filter: /^(@angular\/|@babylonjs\/core)/ }, args => ({ path: consumer.resolve(args.path) }));
@@ -115,7 +132,7 @@ const assets = new Map([
 const html = '<!doctype html><html><body><script src="/jasmine.js"></script><script src="/jasmine-html.js"></script><script src="/boot0.js"></script><script type="module" src="/audit.js"></script></body></html>';
 const provenance = { commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
   specFilter: process.env.ASTYLAR_AUDIT_SPEC_FILTER ?? '',
-  tableTrace: tableTrace ? { source: tableFile, originalSha256: hash(readFileSync(tableFile)), instrumentationSha256: hash(tableTraceSource) } : null,
+  tableTrace: tableTrace ? { source: tableFile, originalSha256: hash(readFileSync(tableFile)), instrumentationSha256: hash(tableTraceSource), dimensionSource: dimensionFile, dimensionOriginalSha256: hash(readFileSync(dimensionFile)), dimensionInstrumentationSha256: hash(dimensionTraceSource) } : null,
   freshBuild, compiledReceipts, packedRoot,
   runnerSha256: hash(readFileSync('scripts/audit-overlay-layout-stage.mjs')),
   htmlSha256: hash(html), runtimeAssets: [...assets].map(([url, bytes]) => ({ url, sha256: hash(bytes) })),
