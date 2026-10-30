@@ -14,14 +14,14 @@ const sourceAuditDefinitions = retainedStaticSemanticPopulation(currentSourceAud
 const hash = b => createHash('sha256').update(b).digest('hex');
 const normalize = b => b.toString().replaceAll('\r\n', '\n');
 test('October27 historical semantic population preserves every prior definition', () => {
-  assert.equal(currentSourceAuditDefinitions.length, 204);
+  assert.equal(currentSourceAuditDefinitions.length, 205);
   const before = structuredClone(currentSourceAuditDefinitions);
   const historical = retainedStaticSemanticPopulation(currentSourceAuditDefinitions);
   assert.deepEqual(currentSourceAuditDefinitions, before);
   assert.equal(historical.length, 191);
   assert.equal(hash(JSON.stringify(historical)), '13c86852010dbff5153a44c53756eff3c59344c66b5391b9a2b3f2430c22c064');
-  assert.deepEqual(historical, currentSourceAuditDefinitions.slice(11, -2));
-  for (const i of [0, 10, 11, 100, 203]) {
+  assert.deepEqual(historical, currentSourceAuditDefinitions.slice(11, -3));
+  for (const i of [0, 10, 11, 100, 203, 204]) {
     const changed = structuredClone(before); changed[i].id += '-drift';
     assert.throws(() => retainedStaticSemanticPopulation(changed));
   }

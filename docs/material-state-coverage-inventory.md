@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+October 30 static semantic predecessor: the 205-definition current registry
+is exactly the authenticated 204-definition predecessor plus the final
+datepicker-opening focus finding. The existing historical population reader
+now checks both complete hashes and reconstructs the 191-definition boundary
+without changing current definitions. The corresponding policy-source replay
+checks the complete current file and Git predecessor hashes. Its focused test
+passes 1/1, including mutations and unknown additions. The downstream passive
+test now reaches the separate historical list-AX helper mismatch instead of
+failing during 205-versus-192 initialization. The full static-semantic suite
+remains 2/4: older bottom-sheet and chip-orientation review scripts directly
+expect 180 definitions but receive 205. Reader-source fingerprint integration
+and those downstream replays remain pending; no capture, canonical export,
+current rendering claim or case closure follows.
+
 October 30 passive AX downstream integration check: the existing
 `join-static-passive-ax-evidence.mjs` and `review-passive-main-landmarks.mjs`
 execute the verifier and compare its complete output bytes to the retained

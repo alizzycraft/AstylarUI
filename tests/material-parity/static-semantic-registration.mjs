@@ -1,10 +1,19 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { restorePendingEvidenceProducer, restoreOriginalRunnerExportSource } from './pending-evidence-registration.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 // Explicit historical population only. Production retains the complete current registry.
 export function retainedStaticSemanticPopulation(current) {
+  // Datepicker opening added exactly one later finding. Authenticate the
+  // complete current and predecessor populations before historical replay.
+  if (current.length === 205) {
+    assert.equal(hash(JSON.stringify(current)), 'bf2026d920761c8a553b35e79b3ea4b6713c819e5c31e6548b5d23f2bf20f5a2');
+    assert.equal(current[204].id, 'fixture-datepicker-opening-focus-transfer-omitted');
+    current = current.slice(0, 204);
+    assert.equal(hash(JSON.stringify(current)), '480341830b0dd3b4982e86aaf827313d9ce7385c2d5128078a5652f93c02e72f');
+  }
   // October27 additions prepend the unchanged accepted193 population.
   // Authenticate both complete populations; never truncate an unknown registry.
   if (current.length === 204) {
@@ -62,6 +71,11 @@ export function restoreScrollbarSupplementSuite(source) {
 }
 export function restoreRootDepthPolicy(source) {
   let text = source.toString().replaceAll('\r\n', '\n');
+  if (text.includes('fixture-datepicker-opening-focus-transfer-omitted')) {
+    assert.equal(hash(text), '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f');
+    text = execFileSync('git', ['show', '83b9ad89:tests/material-parity/input-equivalence-policy.mjs'], { maxBuffer: 8_000_000 }).toString().replaceAll('\r\n', '\n');
+    assert.equal(hash(text), 'a38dc20ab17b392fcd1eeac4e8ff693859c3dbfaf4395ae0e0a782326bd72a6c');
+  }
   if (text.includes('fixture-stepper-label-clipping-wrappers-omitted')) {
     assert.equal(hash(text), 'a38dc20ab17b392fcd1eeac4e8ff693859c3dbfaf4395ae0e0a782326bd72a6c');
     const tree = ts.createSourceFile('policy.mjs', text, 99, true);
