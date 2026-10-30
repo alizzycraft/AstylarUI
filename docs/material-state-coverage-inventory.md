@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 31 calendar grid history clarification: `git log -S
+datepicker-month-marker` and the original `87f7f830` diff show the candidate
+calendar grid was introduced with the picker overlay, not demonstrated to be a
+replacement of an earlier Astylar table. Its initial authored grid already had
+seven 40px rows and columns. Later `c64397c1` adjusted the grid's horizontal
+offset and added the marker's full-span declaration under an alignment commit.
+These changes establish non-equivalent fixture authoring and subsequent tuning;
+the diffs and commit messages do not establish the original author's reason or
+prove that the grid was introduced to hide a table-service defect. References
+above to table-to-grid replacement mean substitution relative to the HTML
+reference, not a demonstrated history of replacing an Astylar table.
+
 October 31 paired calendar preceding boxes: in the same retained case, all
 seven reference weekday header cells run y289.546875–314.546875 (25px);
 candidate weekday boxes run y277.559998–317.559998 (40px). Reference day 1
