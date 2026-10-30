@@ -32,8 +32,11 @@ boundary, but does not authenticate imports, other renderer modules, browser
 conditions, actual live AX behavior or complete case currentness.
 Separately transpiling the current TypeScript semantic bridge to ES2022 and
 comparing the 21 class methods with the installed JS gives no method differences
-after whitespace normalization. That supports the current source-to-installed
-method boundary, not constructor/field/import equivalence or live AX behavior.
+after whitespace normalization. TypeScript's comment-free printer also emits
+identical complete 24,626-character JS for the transpiled current source and
+installed module, including constructor, fields and import declarations. This
+supports that module's source-to-installed syntax boundary, not the contents of
+its imported dependencies, actual live AX behavior or whole-case currentness.
 
 October 30 exact-case triage of accepted index `73c84aef` (index SHA256
 `baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059`):
