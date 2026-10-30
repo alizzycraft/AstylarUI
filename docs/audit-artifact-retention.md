@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep `artifacts/material-parity/public-range-drag-retry-20261030`: its report,
+provenance, bundle and 256 screenshots are required by the current-installed
+range failure replay. Separately retain `public-range-drag-current-20261030`
+and `public-range-partial-test-20261030` as incomplete and injected-failure
+evidence respectively; neither is a complete capture or a parity pass.
+
 Keep `artifacts/material-parity/retained-evidence/public-range-v2-dependencies`:
 its 27 hash-verified files are required by the historical range evidence replay.
 They replace a cross-worktree dependency for that replay, not original captures.
