@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+October 30 current-dependency public range diagnostic was incomplete: command
+`node scripts/audit-public-range-drag.mjs --output=artifacts/material-parity/public-range-drag-current-20261030`
+terminated exit 1 after a 30-second reference-page navigation timeout. The
+new directory retains the bundled producer, provenance and 240 PNGs but no
+`latest-report.json`; preserve it as failed-capture evidence, not a validated
+32-case result. Earlier console observations included value and release
+differences, but their structured traces were not published and are not a
+current-runtime finding. Investigate the navigation/resource failure before
+any bounded retry; do not overwrite the partial evidence or weaken checks.
+
 October 30 datepicker placement provenance: the authenticated October5
 light/desktop-DPR1 open row records a pointerdown/up/click on both sides and
 matching popup bounds (296x354px, 56px below the primary host's top). The
