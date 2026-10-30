@@ -4,6 +4,18 @@
 
 ### Current next action and publication status
 
+October30 staged capture-availability historical reader now restores only the
+three recognized registration changes with complete predecessor hash checks.
+Focused registration tests pass3/3 via `node --test tests/material-parity/capture-availability-registration.spec.mjs`:
+all prior inventory/selector checks plus absolute/relative read routing,
+encoding, defensive buffers, unrelated-file delegation and source-drift rejection.
+Current raw source collection remains unchanged. Staged inventory is now1142
+sources/470 proofs/72 tracks. This helper is not yet wired into the live reader
+or runner; next verify that routing boundary before activating registration.
+No canonical export, accepted-pointer change, browser capture or case closure
+was performed for this bounded staging increment. All2311 cases remain partial
+and current-rendering unverified; original final acceptance gates still apply.
+
 October29 Badge canonical export completed with exit0 via the existing launcher
 with --badge-label-paint,ASTYLAR_AUDIT_PROGRESS=1 and ASTYLAR_AUDIT_COLD=0.
 Preserved hash-verified originals are in badge-label-pre-export-080b-20261029:

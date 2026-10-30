@@ -6,8 +6,40 @@ import vm from 'node:vm';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { prepareCaptureAvailabilityRegistration, restoreCaptureAvailabilityRegistration,
-  captureAvailabilitySources, captureAvailabilityProofs } from './capture-availability-registration.mjs';
+  captureAvailabilitySources, captureAvailabilityProofs, createCaptureAvailabilityHistoricalRead } from './capture-availability-registration.mjs';
 import { captureAvailabilityReview } from '../../scripts/join-material-capture-availability.mjs';
+
+test('availability historical reader restores only authenticated registration changes', () => {
+  const root = process.cwd();
+  const files = { producer: 'tests/material-parity/input-equivalence-audit.mjs',
+    runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' };
+  for (const [kind, file] of Object.entries(files)) {
+    const before = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    let current = Buffer.from(prepareCaptureAvailabilityRegistration(before, kind));
+    const raw = (name, options) => {
+      assert.equal(path.resolve(root, name), path.resolve(root, file));
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? current.toString(encoding) : current;
+    };
+    const historical = createCaptureAvailabilityHistoricalRead({ root, read: raw });
+    assert.equal(historical(file, 'utf8'), before);
+    assert.equal(historical(path.resolve(root, file), { encoding: 'utf8' }), before);
+    assert.notEqual(raw(file, 'utf8'), before); // Current collection stays raw.
+    const copy = historical(file); copy.fill(0);
+    assert.equal(historical(file, 'utf8'), before);
+    current = Buffer.concat([current, Buffer.from('\n// unrelated drift')]);
+    assert.throws(() => historical(file));
+    current = Buffer.from(before);
+    assert.equal(historical(file, 'utf8'), before);
+    current = Buffer.from('earlier source owned by an earlier reader');
+    assert.deepEqual(historical(file), current);
+  }
+  const options = { encoding: 'utf8' }, sentinel = {};
+  const delegated = createCaptureAvailabilityHistoricalRead({ root, read: (name, received) => {
+    assert.equal(name, 'unrelated.json'); assert.equal(received, options); return sentinel;
+  } });
+  assert.equal(delegated('unrelated.json', options), sentinel);
+});
 
 test('availability staged inventory preserves every predecessor source proof and plan', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs', bytes = readFileSync(file);

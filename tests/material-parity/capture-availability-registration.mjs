@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
 
 // Staged source transformation; applying it to live files is a separate gate.
 const review = '2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1';
@@ -23,6 +24,7 @@ export const captureAvailabilityProofs = Object.freeze([
   ['capture-availability-join', 'availability reader preserves predecessor routing and returns only the exact successor envelope'],
   ['capture-availability-registration', 'availability staged inventory preserves every predecessor source proof and plan'],
   ['capture-availability-registration', 'availability staged selector preserves older routes and rejects mixed supplements'],
+  ['capture-availability-registration', 'availability historical reader restores only authenticated registration changes'],
 ]);
 const boundary = 'Exact retained capture availability and recorded-build matching only;not current-browser execution,input equivalence,rendering acceptance or case closure.';
 const changes = {
@@ -64,4 +66,26 @@ export function restoreCaptureAvailabilityRegistration(bytes, kind) {
     assert.equal(source.split(after).length, 2); source = source.replace(after, before);
   }
   assert.equal(hash(source), priors[kind]); return source;
+}
+
+// For predecessor evidence readers only. Current source collection must retain
+// its raw reader so registration changes remain visible in the new inventory.
+export function createCaptureAvailabilityHistoricalRead({ root, read }) {
+  const kinds = new Map(Object.entries({ producer: 'tests/material-parity/input-equivalence-audit.mjs',
+    runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })
+    .map(([kind, file]) => [path.resolve(root, file), kind]));
+  const markers = { producer: '"scripts/join-material-capture-availability.mjs",',
+    runner: 'const captureAvailabilityReaderFactory = ',
+    launcher: "const captureAvailability = rawRequested.includes('--capture-availability');" };
+  return (name, options) => {
+    const kind = kinds.get(path.resolve(root, name));
+    if (!kind) return read(name, options);
+    const input = read(name);
+    // Leave earlier generations to their existing, independently guarded readers.
+    const restored = input.toString().includes(markers[kind])
+      ? restoreCaptureAvailabilityRegistration(input, kind) : input;
+    const bytes = Buffer.from(restored);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : bytes;
+  };
 }
