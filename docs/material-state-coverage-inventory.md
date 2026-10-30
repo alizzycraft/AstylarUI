@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+October 30 sidenav AX capture build applicability: every one of 1887 browser
+files in the `divider-current-browser-20261020/checkpoint/manifest.json` used
+by `passive-static-ax-20261021` still hashes identically under the present
+`examples/material-showcase/dist/material-showcase/browser`; recursive file
+inventory also finds exactly 1887 files and no additions. This supports reuse
+for that unchanged served-build byte set only. The captured browser was Chrome
+155, not today's Chrome 156, and this does not prove the dist is rebuilt from
+current sources, runtime/font equivalence, current AX behavior or case closure.
+Original capture/report/checkpoint hashes and the recorded one-versus-three
+main-landmark discrepancy remain unchanged.
+
 October 30 exact-case triage of accepted index `73c84aef` (index SHA256
 `baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059`):
 all 2311 cases have partial `inputStyleStructure`, `semantics`,
