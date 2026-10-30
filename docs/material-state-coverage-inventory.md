@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 31 text-backing historical boundary: the expected intermediate
+benchmark source `a270e3d3...` is recovered from Git revision `96fd6260`
+only after authenticating the exact live `f383821e...` source, then the
+existing guarded restoration produces the original `e74ef1d5...` bytes.
+An isolated reader check confirms both endpoint hashes and rejects an unknown
+live edit. The broader text-backing applicability test advances past this
+transition but fails on an independently changed configured-control activation
+source (`f97c4459...` versus retained `26d7a294...`); its later assertions and
+the complete semantic join have not passed. Reader fingerprints and canonical
+integration remain pending. No capture, current-rendering result or case
+closure follows.
+
 October 30 static semantic join integration: the loader now gives the exact
 hash-bound menu and snackbar join dependencies the live policy in the exact
 static-semantic join process, while retained reviewers receive a separately

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import ts from 'typescript';
 import { restoreTextBackingPolicy } from './semantic-text-transform-registration.mjs';
@@ -199,6 +200,10 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
     const benchmark='tests/material-parity/benchmark-config.spec.mjs';
     const benchmarkCurrentText=read(path.resolve(root,benchmark),'utf8');
     let benchmarkText=benchmarkCurrentText;
+    if(hash(benchmarkText)==='f383821eef926747bd1de6ce675a858e0a3f75ff170e3c00cce81a77427b86e7'){
+      benchmarkText=execFileSync('git',['show',`96fd626066a4f6e3691c7a9f7ff662091c77b078:${benchmark}`],{cwd:root,maxBuffer:8000000}).toString().replaceAll('\r\n','\n');
+      assert.equal(hash(benchmarkText),'a270e3d3330d361512593efa60f69771c71709f70f2f679c8787f186ceb275d0');
+    }
     if(hash(benchmarkText)==='31f2cb8ec0aa6299e4854d07b70f8031e0e646a2a39812841e984e5a7098ab57'){
       const current="  // This historical AX capture owns retained assets, not today's mutable dist.\n"+
         "  assert.deepEqual(verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles),\n"+
