@@ -123,6 +123,31 @@ rendering evidence. Preserve that distinction in the eventual canonical field
 correction;reuse historical findings while retaining the original final-browser
 gate. No repeat capture is justified merely to prove capture availability.
 
+Broader October30 exact-case triage prevents blanket availability upgrades.
+Authenticated later reports/manifests show Stepper's eight activate-leave cases
+also match served vector29de7da0 and exact configured case keys (Chrome155).
+Datepicker's17 activate/activate-leave rows and Tooltip's eight open rows match
+their configured case keys but use older vectord73eb787,with Chrome156.0.8078.48.
+Their later capture dates do not imply the current served build. Snackbar's
+single-open report matches vector29de7da0 but records four diagnostic stages
+(closed,first-open,before-expiry,expired),not a row keyed auto-dismiss;its joined
+auto-dismiss child cannot be promoted by a generic exact-case matcher. Two
+exploratory assertions correctly rejected the uniform-build and exact-Snackbar-
+state assumptions;no records were changed. Therefore prioritize the16 exact
+Chips/Stepper availability omissions together,retain Datepicker/Tooltip build
+limitations,and preserve Snackbar's explicit diagnostic-to-case scope boundary.
+This triage is not an exhaustive supplementary-capture census or current parity.
+
+Existing validateSupplementalCapture independently accepts both Chips and Stepper
+reports as checkpoint-bound,errors[],eight rows each,using their authenticated
+manifests,exact collector script and captured property sets. It checks capture
+source receipts,each side's required runtime asset kinds/digests,and unique paired
+tree receipts/errors. No new validator is needed. The omission belongs to the
+later case-coverage join's limited capture census,not the capture validator.
+Correct it in a batched successor review while preserving the historical
+three-report census and all prior obligations;do not edit frozen captures or
+claim that checkpoint-bound means current-browser accepted.
+
 October29 Badge live integration is verified locally but not yet canonical.
 Explicit --badge-label-paint selects3cb9fe23;the actual launcher dry-run confirms
 the exact review path/digest. Registry now has1137 sources/463 proofs/72 plans.
