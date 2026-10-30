@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+October 31 retained geometry verifier: `node
+scripts/verify-calendar-geometry-retained.mjs` runs the exact `dc0bb349`
+producer in memory while authenticating and preserving the restored live
+producer, then invokes its existing verification mode. It returns one case,
+three paired boundaries, source-recipe verification, and report SHA256
+`a8305e790a662ede13eeab265188b708b00f3a96852f6bb6f849adfe5b5b1b09` (exit 0).
+This verifies retained capture receipts and the original producer's checks,
+not an independent new browser run or geometry parity; complete downstream
+fingerprint integration remains open.
+
 October 31 retained geometry receipt recheck: without changing files, the
 corrected report's complete SHA256, checkpoint manifest SHA256, and producer
 SHA256 were checked against the retained report; the producer bytes recovered
