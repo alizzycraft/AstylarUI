@@ -18,6 +18,15 @@ A temporary exact-hash producer substitution exposed a second pre-existing
 helper mismatch (`sort-focus-structure.spec.mjs`); the experimental verifier
 edit was reverted. Full historical verifier compatibility is therefore not
 claimed. Reconcile both source transitions together without weakening receipts.
+Read-only reconciliation recovered the exact historical helper from Git object
+`35807a5a8dc51ccefa3e38026daae397a7af6dc7` (SHA256
+`9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa`);
+its extracted `withFrozenShowcase` body equals the captured helper source.
+With the original producer and helper supplied through a hash-guarded in-memory
+reader, the unchanged verifier completed for all 36 pairs/72 captures. It
+preserves the 12 additional sidenav content-main findings. This is historical
+replay, not a current-package AX pass; the normal direct verifier still fails
+on current file hashes and production integration remains pending.
 
 October 30 sidenav AX capture build applicability: every one of 1887 browser
 files in the `divider-current-browser-20261020/checkpoint/manifest.json` used
