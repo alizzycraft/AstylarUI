@@ -4,6 +4,43 @@
 
 ### Current next action and publication status
 
+October30 post-reboot capture-availability export completed exit0. Candidate
+compressed SHA256 73c84aef8e91a98f5aeb04a07426473ef6d24fb1811a5b0f2aa519dfc38cf484,
+decoded SHA256 64df3f3e355dc79264097b6816e5fa37e811b409db84a11f7d86d0394405dd83.
+The report records436/436 static and1875/1875 interaction captures,8483 unique
+differences,389202 occurrences,205 source findings and inputEquivalent=false.
+These are capture counts,not completed inspection or rendering acceptance.
+Evidence-session verification read3464183185 bytes,collectors1,diskHits1,
+invalidated0. Section comparison completed exit0 in
+capture-availability-candidate-sections-20261030.log using the authenticated
+predecessor receipts below:80 sections,72 unchanged,eight changed,none added or
+removed. Fixed-shape comparison completed exit0 in
+capture-availability-candidate-receipt-leaves-20261030.log (raw SHA256
+9fbd18b6aaef1ca47c43f5f005ca2bafda4d5864f97b6570a44e3d35ce62fb67):147
+changed values across five sections. They include98 direct producer hashes,
+48 control-proof hashes and one motion-report hash. Independent reconciliation
+completed exit0 in capture-availability-derived-receipts-20261030.log:all147
+are explained by exact predecessor producer recovery,48 recomputed control
+proofs and one recomputed motion report;no rendering acceptance is implied.
+Metadata conservation completed exit0 in capture-availability-candidate-metadata-
+check-20261030.log without retaining another decoded metadata artifact:all1137
+prior sources preserved (four authenticated transitions),five sources added,
+all463 prior proofs preserved,seven proofs added,and exactly16 availability
+updates among2311 cases;all other coverage fields conserved. Inspection remains
+partial and current rendering unverified.
+Cold comparison has started using
+--capture-availability --check and ASTYLAR_AUDIT_COLD=1,with separate
+capture-availability-independent-cold-20261030.log/.stderr.log. Isolated
+candidate import and verification completed exit0 in
+capture-availability-candidate-store-20261030 with separate
+capture-availability-candidate-import-20261030.log. Candidate index SHA256
+baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059;
+verification confirms8483 discrepancies,205 source findings,39904 controls,
+389202 occurrences,zero unresolved scalar attributions and2311 partial cases.
+The accepted pointer was unchanged by this diagnostic. Accepted
+pointer remains e107;complete conservation,
+independent cold validation and isolated/accepted import remain required.
+
 October30 export interruption recovery:the original process/session disappeared;
 its last recorded phase is join-case-obligations,with no terminal result. Windows
 LastBootUpTime is2026-10-30 14:50:08,after the old stderr log's last write13:31:36.
@@ -34,6 +71,12 @@ or focus transitions. The existing accepted join binds this sequence only to
 auto-dismiss;open-case activation remains pending. Next assess a bounded reuse
 for opening separately from the missing paired-focus evidence after export
 reconciliation;do not infer focus equivalence or create a duplicate capture.
+The authenticated original e01 runner performs pointer move/down/up for the
+open path;the supplemental driver clicks the native locator or the Astylar
+measured button center and settles. The supplemental result is therefore a
+separate trusted-click visibility observation,not an exact original replay;
+its first-open captures were about67ms and412ms after click respectively. This
+timing and the missing paired focus observation remain explicit limitations.
 
 October30 capture-availability canonical export launched with the existing
 launcher --capture-availability,ASTYLAR_AUDIT_PROGRESS=1,ASTYLAR_AUDIT_COLD=0.

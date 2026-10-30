@@ -1,5 +1,14 @@
 # Audit artifact retention
 
+Retain capture-availability-candidate-sections-20261030.log,
+capture-availability-candidate-receipt-leaves-20261030.log,
+capture-availability-derived-receipts-20261030.log,
+capture-availability-candidate-metadata-check-20261030.log,
+capture-availability-candidate-import-20261030.log and its isolated store,the independent
+cold-check logs and both post-reboot export logs. Candidate73c84aef is not
+accepted merely because export succeeded;
+preserve e107 backup until conservation,cold validation and verified imports.
+
 Keep the interrupted capture-availability-canonical-export-20261030 logs and
 distinct capture-availability-post-reboot-export-20261030.log/.stderr.log.
 Original process was absent after a Windows restart;no terminal success was
