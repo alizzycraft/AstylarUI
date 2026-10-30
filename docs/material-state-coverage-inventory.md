@@ -4,6 +4,38 @@
 
 ### Current next action and publication status
 
+October30 read-only Snackbar open follow-up while export inputs are frozen:
+authenticated single-open report1cc0846c and both first-open screenshot/tree
+receipts. Direct visual inspection of retained light-reference-first-open.png
+(9309b0328bb9fc6b96822e28b0914ab56372739292568a783baa9246060648a4)
+and light-astylar-first-open.png
+(664e2735f480c0fc9e2fb9f463fd7819e175cc07a7658af907853d975da72f08)
+under snackbar-single-open-20261027 shows an on-screen bottom Snackbar on both
+sides at1440x1000/DPR1,Chrome155.0.8059.85. This supports visibility for these
+specific historical endpoints,not a current rendering/paint parity claim or
+the original user-reported execution. PopupCount alone would not prove this.
+The native first-open observation has one trusted click on snack-bar-primary;
+candidate events name that opener for pointerdown,focus,pointerup,click. However
+native events are null and neither authenticated input tree contains focus or
+activeElement fields. Thus the diagnostic cannot resolve paired focus identity
+or focus transitions. The existing accepted join binds this sequence only to
+auto-dismiss;open-case activation remains pending. Next assess a bounded reuse
+for opening separately from the missing paired-focus evidence after export
+reconciliation;do not infer focus equivalence or create a duplicate capture.
+
+October30 capture-availability canonical export launched with the existing
+launcher --capture-availability,ASTYLAR_AUDIT_PROGRESS=1,ASTYLAR_AUDIT_COLD=0.
+It is not yet a completed/accepted result. Hash-verified originals are retained
+in capture-availability-pre-export-e107-20261030:manifest a2305cb9,payload
+e1072ead,readable d6ac346f. Logs are capture-availability-canonical-export-
+20261030.log/.stderr.log. Reuse the existing predecessor80-section record
+badge-label-candidate-section-digests-20261029.log:raw SHA256
+de24e6f4433c3d7d799f0ec646e8481460394a54cec9a6308c21c7f8a8d330a2;
+its current.manifest exactly matches this backup. Do not decode the old2.37GB
+payload again just to recover these receipts. No accepted pointer was changed.
+Next observe this export to a terminal result,then perform conservation/cold/
+validated import;do not start a duplicate because its progress output is quiet.
+
 October30 capture-availability registration is now live. Direct Badge restoration
 and its historical reader first peel only the authenticated capture-availability
 transition; the new wrapper also recovers the exact predecessor Badge helper

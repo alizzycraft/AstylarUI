@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain capture-availability-pre-export-e107-20261030 and the distinct
+capture-availability-canonical-export-20261030.log/.stderr.log. The backup
+copies match accepted e1072ead and preserve original manifest/readable report.
+Export launch alone authorizes neither deletion nor accepted-store promotion;
+conservation,cold comparison and validated import remain required.
+
 Retain capture-availability-registered-reader-20261030.log:actual live source
 reader completed exit0 with2311 cases/18636 dependencies and accepted pointer
 unchanged. It supersedes staged routing only for live-source applicability;
