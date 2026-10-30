@@ -85,6 +85,22 @@ test('historical range evidence replays with exact retained dependency bytes', (
   assert.equal(proof.renderingEquivalent, false);
 });
 
+test('current installed range capture authenticates failures without asserting parity', () => {
+  const currentRoot = path.resolve('artifacts/material-parity/public-range-drag-retry-20261030');
+  const historicalRoot = path.resolve(rangeDragArtifactRoot);
+  const bytes = readFileSync(path.join(currentRoot, 'latest-report.json'));
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), '8a69377d7f2580d2a69263617d660f5b64fa9c7ca6ce292008e5ed2ab8b0aaf6');
+  const read = file => readFileSync(file.startsWith(historicalRoot + path.sep)
+    ? path.join(currentRoot, path.relative(historicalRoot, file)) : file);
+  const proof = validateRangeDragEvidence(JSON.parse(bytes), { root: process.cwd(), read });
+  assert.equal(proof.cases, 32);
+  assert.equal(proof.pairedBoundaries, 416);
+  assert.equal(proof.screenshots, 256);
+  assert.equal(proof.failedChecks, 488);
+  assert.equal(proof.tracedCauseCases, 8);
+  assert.equal(proof.renderingEquivalent, false);
+});
+
 test('range cause proof rejects mismatched inputs, fabricated timing, altered state and unbound stack frames', () => {
   const base = report.results.find(e => e.update === 'held-equivalent' && e.stackTracing);
   const mutations = [

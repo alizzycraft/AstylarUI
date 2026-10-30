@@ -46,6 +46,12 @@ not proof of Material swapped-thumb cause, visual smoothness, source-build
 equivalence or whole-case acceptance. Source commit was `11ad8197`; the runner
 and test fingerprints changed separately and still require canonical integration.
 Preserve the prior incomplete and injected-failure captures independently.
+The unmodified existing `validateRangeDragEvidence` also replays the fresh
+capture through a path-only reader: 32 cases, 416 boundaries, 256 screenshots,
+488 failing checks and eight traced causes, with renderingEquivalent=false.
+An added focused test pins the report hash and this result; paired historical
+and fresh focused tests pass 2/2. This establishes bounded validator coverage,
+not canonical registration or Material case acceptance.
 
 October 30 current-dependency public range diagnostic was incomplete: command
 `node scripts/audit-public-range-drag.mjs --output=artifacts/material-parity/public-range-drag-current-20261030`
