@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+October 31 passive receipt boundary diagnosis: the existing static-semantic
+historical loader deliberately applies its passive producer transition only to
+named reviewer entry points; the standalone Availability receipt-load process
+is not one of them. A read-only scoped probe confirmed current producer hash
+`afa38baa...`, retained producer hash `8cbbb5d1...`, and rejection of an
+unrecognized current edit. This identifies how to compose the exact transition
+for a receipt load without making the global loader permissive. It does not
+yet prove the remaining 18,000-plus receipts or modify the reader/export.
+
 October 31 Availability full receipt load: the actual nested reader constructed
 the expected `2f609608...` review with 2,311 groups, but the subsequent
 `loadCaseObligationReview` exited 1 at `scripts/capture-passive-static-ax.mjs`:
