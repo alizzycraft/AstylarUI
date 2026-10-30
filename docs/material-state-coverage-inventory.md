@@ -54,6 +54,12 @@ supplementary visibility sequence only to the light desktop auto-dismiss case.
 It does not bind the separate open case. A separate binding would need to retain
 the driver and timing differences and the missing paired-focus observation; it
 must not imply completed inspection or parity. No new binding has been made.
+The original retained light desktop open row records normalized focus IDs
+`snack-bar-primary` on both sides in current-full-20261005/latest-report.json
+(SHA256 ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62).
+The authenticated original runner gates focus comparison only for `focus` states,
+so its `matches` flag on `open` is not an equality assertion. This observation
+does not establish raw ownership, transition timing, or current-build behavior.
 
 October30 export interruption recovery:the original process/session disappeared;
 its last recorded phase is join-case-obligations,with no terminal result. Windows
