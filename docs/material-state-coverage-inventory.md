@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+October 31 static semantic integration: the existing unfiltered
+`node --test tests/material-parity/static-semantic-inputs.spec.mjs` now passes
+4/4, exit 0, in 291.1 seconds. It covers authenticated historical population,
+predecessor policy, nine retained reviewer replays and the complete retained
+case join. Reviewer replay and join take 131.7 and 153.6 seconds respectively;
+reuse this result for unchanged dependencies rather than rerunning for prose.
+This is historical integration evidence, not current rendering acceptance,
+canonical export or complete inspection of any case.
+
 October 31 static semantic join integration: the named historical predecessor
 reader now authenticates current and Git-retained bytes for the five changed
 activation, tooltip, helper and passive-AX source receipts. A complete census
