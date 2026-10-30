@@ -1,5 +1,21 @@
 # Material comparison/state coverage inventory
 
+October 31 refreshed source-fingerprint census: the accepted gzip still hashes
+to `73c84aef8e91a98f5aeb04a07426473ef6d24fb1811a5b0f2aa519dfc38cf484`.
+Its 1,142 listed source fingerprints were compared to current workspace bytes
+using the producer's UTF-8/CRLF normalization: none missing, **12 changed**.
+They are `capture-availability-registration.mjs` and its spec,
+`badge-label-paint-registration.mjs` and its spec,
+`scripts/join-material-tooltip-open.mjs`, `static-semantic-inputs.spec.mjs`,
+`static-semantic-registration.mjs`, `scripts/static-semantic-historical-loader.mjs`,
+`scripts/check-passive-static-ax.mjs`, `scripts/capture-passive-static-ax.mjs`,
+`text-backing-case-review-source.mjs`, and `scripts/audit-overlay-layout-stage.mjs`
+(unprefixed names are under `tests/material-parity`). This supersedes the older
+one-difference census, which predates subsequent changes. Presence/hash checks
+do not establish historical replay, unlisted dependency applicability, full
+receipt validation, current rendering or canonical conservation. Reconcile
+these transitions as a coherent batch rather than exporting per metadata edit.
+
 October 31 nested Availability reader: the actual
 `createCaptureAvailabilityReviewReader` completed exit 0 and reconstructed
 the expected review
