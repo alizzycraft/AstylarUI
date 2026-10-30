@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+October 30 Slider alignment follow-up: authenticated finding
+`8cd4c227ca3568d9272549843250b05d591dad13541eecef64a5b3d71f6917e1`
+(canonical decoded SHA256 `64df3f3e355dc79264097b6816e5fa37e811b409db84a11f7d86d0394405dd83`,
+row SHA256 `ef84dd96bbef62a381dc933ea772d005d912eb00df9387b9f3788d9df1d62913`)
+records `alignContent` normal versus stretch over 78 occurrences. The recovered
+authored examples also differ in range input positioning and width. They do not
+establish the container's used layout or whether alignment affects rendering;
+the finding's harness-defect label is not a demonstrated causal diagnosis.
+Do not normalize or close this discrepancy without matching layout context and
+constraints. This observation does not explain swapped or jerky slider drags.
+
+October 30 Snackbar focus probe: the supplemental Chrome 156 single-click
+capture in `artifacts/material-parity/snackbar-open-focus-20261030/latest-report.json`
+(SHA256 `9fb984825a101254a7a877bff1dc714085d1e1d3ac98d4759a4731fadc38160f`)
+records both DOM active elements settled on their opener, with one reference and
+seven Astylar focus events. The manifest, three capture-source hashes, and all
+519 reference/520 Astylar runtime asset receipts matched; runtime errors were
+empty and pointer events trusted. This is a retained served build, not an
+original-browser replay or proof of current rendering, logical-focus parity,
+popup visibility, or causation. The standard supplemental validator cannot
+validate this focus-only report because it lacks the required input trees; do
+not register it as a fully validated case. Next determine whether collecting
+the missing trees and open-state evidence is justified for a specific remaining
+obligation; preserve this report and its producer until that decision.
+The existing open-case gap concerns the original interaction's paired focus
+and opening observation; the Chrome 156 probe uses a different browser and
+driver and does not record popup visibility. Adding trees to a fresh run would
+not recover the original transition or, by itself, close that obligation. Do
+not recapture solely to satisfy the supplemental validator: first establish a
+specific independently useful current-build question and its required state,
+or find applicable original-procedure evidence. The existing Chrome 155
+first-open screenshots remain bounded visibility evidence, not focus proof.
+
 October 30 capture-availability checkpoint is accepted locally: independent cold
 comparison completed successfully (capture-availability-independent-cold-20261030.log;
 disk hits 0, invalidations 0), and verified store import reused generation
