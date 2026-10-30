@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+October 30 chip historical reviewer replay: the existing restricted historical
+loader now supplies the exact retained passive producer and Git-recovered server
+helper only when launched for the hash-authenticated chip reviewer. It checks
+both known live hashes and both original receipt hashes; all other processes
+retain normal filesystem reads. The reviewer output matches its original
+`chip-orientation-input-review-20261022.log` byte-for-byte. An arbitrary policy
+entry-point import remains rejected. This is historical replay only; the
+bottom-sheet child verifier, other reviewers, changed-loader fingerprint and
+canonical integration remain unverified. No current rendering or case closure
+is claimed and original receipts are unchanged.
+
 October 30 static semantic historical loader: the pre-hook import of the
 registration graph caused its current policy module to be cached before the
 restricted loader could replace it; two historical reviewers therefore saw
