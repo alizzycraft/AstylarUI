@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+October 30 passive AX downstream integration check: the existing
+`join-static-passive-ax-evidence.mjs` and `review-passive-main-landmarks.mjs`
+execute the verifier and compare its complete output bytes to the retained
+log; the verifier's new source receipt and explicit replay-mode field cannot
+equal that historical output. The focused command
+`node --test --test-name-pattern='passive static AX and initial landmark history replay retained observations' tests/material-parity/passive-main-landmark-input.spec.mjs`
+exits 1 before executing the selected test: module initialization calls
+`retainedStaticSemanticPopulation`, which expects 192 definitions but receives
+205. This is a separate predecessor-population mismatch, not a failure of the
+new historical replay or evidence of current semantic parity. Integrating the
+new mode therefore requires preserving the old verifier's exact output identity
+and reconciling that older population through the existing historical chain;
+do not replace retained logs or silently treat changed output as the old run.
+
 October 30 passive AX verifier historical mode: the existing verifier now
 supports explicit `ASTYLAR_AUDIT_PASSIVE_HISTORICAL_REPLAY=1`. It accepts only
 the exact known live producer/helper hashes and then checks the retained
