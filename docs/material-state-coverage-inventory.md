@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 30 source-fingerprint census: stream the accepted `73c84aef` payload's
+`sourceFingerprints` section and hash every listed workspace path using the
+producer's UTF-8/CRLF-normalization rule. Of 1,142 entries, none are missing
+and one differs: `scripts/capture-passive-static-ax.mjs` changed from
+`8cbbb5d1b64a879bd0e47bb123c23d8979bc10bbfeecee7158c008b363a2e1b0`
+to `afa38baaaacb06b69fcbdfc66185ae2f44cd314bb278064af6f0b12bf512ea8a`.
+The retained historical producer and bounded replay are described below.
+This census neither covers unlisted dependencies (including the calendar proof
+file) nor validates build/runtime/browser applicability, nested reader
+transitions, current rendering or case closure. The accepted payload was read
+only; no export or pointer change occurred.
+
 October 30 calendar table reduction: the existing public-package browser proof
 now mirrors authored `colspan`/`rowspan` onto reference cells and asserts the
 resulting DOM values. A diagnostic 280px fixed table has one week with a
