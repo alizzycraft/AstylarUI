@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+October 31 table runtime trace: the existing provenance-bound diagnostic runner
+has an explicit calendar-only trace mode. It wraps three methods in the exact
+installed table-service bytes, records the original source and instrumentation
+hashes and executes the same two equal-input cases; it does not alter layout
+inputs or return values. At `calculateTotalColumnCount`, the single week with
+one colspan-4 label and three day cells returns **4**, not the seven logical
+columns; `resolveColumnWidths` returns four 70px tracks and the cell processor
+receives those tracks. Adding a normal seven-cell second week returns **7** and
+seven 40px tracks, with the first week's authored cells unchanged. The failing
+and passing assertions exactly match the preceding uninstrumented run; no page
+errors occurred. This demonstrates the first observed width-calculation
+divergence and why a later row masks it in this reduction, not the cause of the
+original multiweek datepicker symptom. The independent auto-height failure is
+not attributed to colspan. Retain `calendar-table-runtime-trace-20261031`:
+result SHA256 `2acad8b7e567f6e5373f31ab1d0d6b0e6562b0253a792a42b5a65309f2d8c12a`,
+provenance SHA256 `43e51a47b60044b721342cec8acb7ad89bd9198b10546b1ce385ba06ad6ecda8`.
+The modified runner's fingerprint and downstream applicability remain pending;
+no renderer, comparison fixture, canonical export or case disposition changed.
+
 October 31 provenance-bound table browser reduction: the existing overlay
 diagnostic runner accepts the exact `calendar table first week` filter, with
 the older divider filter unchanged. Its first preflight against the older

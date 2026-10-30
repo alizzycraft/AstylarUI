@@ -16,6 +16,8 @@ const dpr = Number(process.argv[3] ?? 1);
 const spec = process.argv[5] ?? 'src/parity/overlay-layout-stage.audit.spec.ts';
 const materialReduction = 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts';
 const inspectionConsumer = 'examples/angular-consumer/src/app/style-inspection.browser.spec.ts';
+const tableTrace = process.env.ASTYLAR_AUDIT_TABLE_TRACE === '1';
+assert.ok(!tableTrace || spec === materialReduction && process.env.ASTYLAR_AUDIT_SPEC_FILTER === 'calendar table first week', 'Table tracing requires the exact calendar reduction');
 assert.ok(['src/parity/overlay-layout-stage.audit.spec.ts', 'src/parity/rounded-radius.audit.spec.ts', materialReduction, inspectionConsumer].includes(spec));
 const packedRoot = process.argv[6] ? path.resolve(process.argv[6]) : null;
 assert.ok(!packedRoot || spec === inspectionConsumer, 'Explicit packed root is bounded to the public inspection suite');
@@ -49,6 +51,24 @@ const aliases = new Map([
   ['../app/services/css-layout-geometry', path.join(packageRoot, '../app/services/css-layout-geometry.js')],
   ['../app/services/dom/elements/flex.service', path.join(packageRoot, '../app/services/dom/elements/flex.service.js')],
 ]);
+const tableFile = path.resolve(packageRoot, '../app/services/dom/elements/table.service.js');
+const tableTraceSource = `
+for (const name of ['calculateTotalColumnCount','resolveColumnWidths','processTableCells']) {
+  const original = TableService.prototype[name];
+  TableService.prototype[name] = function (...args) {
+    const value = original.apply(this, args);
+    if (name === 'calculateTotalColumnCount') {
+      const rows = args[0].flatMap(section => section.children || []).filter(row => row.type === 'tr');
+      if (rows.some(row => row.id === 'calendar-week')) console.info('TABLE_AUDIT_TRACE ' + JSON.stringify({name, rows: rows.map(row => ({id: row.id, cells: (row.children || []).map(cell => ({id: cell.id, colspan: cell.colspan || 1}))})), result: value}));
+    } else if (name === 'resolveColumnWidths' && args[1] === 280) {
+      console.info('TABLE_AUDIT_TRACE ' + JSON.stringify({name, width: args[1], columnCount: args[2], result: value}));
+    } else if (name === 'processTableCells' && args[2].some(cell => cell.id === 'month-label')) {
+      console.info('TABLE_AUDIT_TRACE ' + JSON.stringify({name, cells: args[2].map(cell => ({id: cell.id, colspan: cell.colspan || 1})), widths: args[5]}));
+    }
+    return value;
+  };
+}
+`;
 const built = await consumer('esbuild').build({ absWorkingDir: root,
   stdin: { contents: `${spec === inspectionConsumer ? "import 'zone.js'; import 'zone.js/testing';" : ''}
     import '@angular/compiler';
@@ -62,6 +82,12 @@ const built = await consumer('esbuild').build({ absWorkingDir: root,
   bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true,
   ...(packedRoot ? { nodePaths: [path.join(root, 'examples/material-showcase/node_modules')] } : {}),
   plugins: [{ name: 'installed-audit-package', setup(build) {
+    if (tableTrace) build.onLoad({ filter: /table\.service\.js$/ }, args => {
+      if (path.resolve(args.path) !== tableFile) return;
+      const bytes = readFileSync(args.path);
+      assert.equal(hash(bytes), 'ed47ea57566bfe77b884453487f2b34296adea23ad74041883ce8c4afb5f7fec');
+      return { contents: bytes.toString('utf8') + tableTraceSource, loader: 'js' };
+    });
     build.onResolve({ filter: /^astylarui$/ }, () => ({ path: packageResolver.resolve('astylarui') }));
     build.onResolve({ filter: /^\.\.\/(lib\/(index|astylar)|app\/services\/(css-layout-geometry|dom\/elements\/flex.service))$/ }, args => ({ path: aliases.get(args.path) }));
     build.onResolve({ filter: /^(@angular\/|@babylonjs\/core)/ }, args => ({ path: consumer.resolve(args.path) }));
@@ -81,6 +107,7 @@ const assets = new Map([
 const html = '<!doctype html><html><body><script src="/jasmine.js"></script><script src="/jasmine-html.js"></script><script src="/boot0.js"></script><script type="module" src="/audit.js"></script></body></html>';
 const provenance = { commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
   specFilter: process.env.ASTYLAR_AUDIT_SPEC_FILTER ?? '',
+  tableTrace: tableTrace ? { source: tableFile, originalSha256: hash(readFileSync(tableFile)), instrumentationSha256: hash(tableTraceSource) } : null,
   freshBuild, compiledReceipts, packedRoot,
   runnerSha256: hash(readFileSync('scripts/audit-overlay-layout-stage.mjs')),
   htmlSha256: hash(html), runtimeAssets: [...assets].map(([url, bytes]) => ({ url, sha256: hash(bytes) })),
@@ -179,7 +206,10 @@ try {
     }
   });
   page.on('pageerror', error => errors.push(String(error)));
-  page.on('console', message => { if (message.text().startsWith('OVERLAY_LAYOUT_STAGE ')) observations.push(JSON.parse(message.text().slice(21))); });
+  page.on('console', message => {
+    if (message.text().startsWith('OVERLAY_LAYOUT_STAGE ')) observations.push(JSON.parse(message.text().slice(21)));
+    if (message.text().startsWith('TABLE_AUDIT_TRACE ')) observations.push(JSON.parse(message.text().slice(18)));
+  });
   await page.goto(`http://127.0.0.1:${server.address().port}`);
   try {
     await page.waitForFunction(() => !!window.auditDone, undefined, { timeout: 120000 });
