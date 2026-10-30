@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October30 capture-availability routing is verified but activation is withheld.
+`capture-availability-staged-routing-20261030.log` authenticates all2311 cases
+and18636 dependencies with the proposed three source files supplied in memory;
+exit0,22802 reads,accepted pointer unchanged. Raw log SHA256:
+e870f7fc6a3852dfd07f9a2473bbaabde36fafbd1fc010cd9e0b4b6701c89492.
+New reader wraps only predecessor reads; runner staging keeps current source
+collection raw. Seven focused availability tests passed both before and during
+temporary activation; launcher dry-run and runner syntax also passed.
+However `node --test tests/material-parity/badge-label-paint-registration.spec.mjs`
+failed3/3 during activation: direct source reads bypass the successor wrapper,
+so restoreBadgeLabelPaintRegistration at line80 rejects unmatched fragments
+(actual occurrence count1,expected2). This is a distinct historical-test
+compatibility gap,not a rendering failure. Reverted only the three new live
+registration changes through exact authenticated restoration. Combined Badge
+and availability registration tests then passed6/6. The source/export
+registration remains staged; accepted e1072ead is unchanged. Next resolve this
+direct-reader compatibility at its guarded boundary before reactivation; do not
+repeat the expensive full dependency check unless its relevant inputs change.
+
 October30 staged capture-availability historical reader now restores only the
 three recognized registration changes with complete predecessor hash checks.
 Focused registration tests pass3/3 via `node --test tests/material-parity/capture-availability-registration.spec.mjs`:

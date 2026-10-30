@@ -69,7 +69,8 @@ test('availability reader preserves predecessor routing and returns only the exa
   const sentinel = Buffer.from('predecessor-owned-read'), applicability = { mode: 'pinned-test-parent' };
   let calls = 0;
   const predecessorFactory = options => {
-    calls++; assert.equal(options.root, root); assert.equal(options.read, readFileSync);
+    calls++; assert.equal(options.root, root); assert.notEqual(options.read, readFileSync);
+    assert.deepEqual(options.read('package.json'), readFileSync('package.json'));
     return { file: priorFile, sourceApplicability: applicability,
       read: name => path.resolve(root, name) === priorFile ? priorBytes : sentinel };
   };

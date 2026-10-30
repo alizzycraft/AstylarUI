@@ -37,9 +37,11 @@ const changes = {
   ],
   runner: [
     ["import { badgeLabelPaintReview, createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';",
-      "import { badgeLabelPaintReview, createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';\nimport { captureAvailabilityReview, createCaptureAvailabilityReviewReader } from './join-material-capture-availability.mjs';"],
+      "import { badgeLabelPaintReview, createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';\nimport { captureAvailabilityReview, createCaptureAvailabilityReviewReader } from './join-material-capture-availability.mjs';\nimport { createCaptureAvailabilityHistoricalRead } from '../tests/material-parity/capture-availability-registration.mjs';"],
     ['const applicability=badgeLabelPaintReaderFactory?.',
       'const captureAvailabilityReaderFactory = options.caseObligationReviewSha256===captureAvailabilityReview ? createCaptureAvailabilityReviewReader : badgeLabelPaintReaderFactory;\n    const applicability=captureAvailabilityReaderFactory?.'],
+    ['const applicability=captureAvailabilityReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});',
+      'const captureAvailabilityEvidenceRead = options.caseObligationReviewSha256===captureAvailabilityReview ? auditReadFileSync : createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync});\n    const applicability=captureAvailabilityReaderFactory?.({root,read:captureAvailabilityEvidenceRead,reviewSha256:options.caseObligationReviewSha256});'],
   ],
   launcher: [
     ["const badgeLabelPaint = rawRequested.includes('--badge-label-paint');",

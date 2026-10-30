@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain capture-availability-staged-routing-20261030.log:exit0 verifies proposed
+source routing for2311 cases/18636 dependencies without replacing the accepted
+pointer. Activation was reverted after the separate direct Badge test-reader
+failure documented in the current ledger. This log does not establish that
+direct-test compatibility or authorize canonical replacement or evidence removal.
+
 Retain capture-availability-live-reader-20261030.log:actual ancestry/dependency
 check completed exit0,2311 cases/18636 dependencies,accepted pointer unchanged.
 Do not overwrite it or rerun for prose. Source/export registration remains pending;

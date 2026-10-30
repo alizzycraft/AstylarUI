@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { validateSupplementalCapture } from '../tests/material-parity/supplemental-capture-evidence.mjs';
 import { createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';
+import { createCaptureAvailabilityHistoricalRead } from '../tests/material-parity/capture-availability-registration.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const captureAvailabilityPredecessor = '3cb9fe23409d103230b7d2f9e842d9f3dfd984fd579e5cf2cfc4c32bcef52b60';
@@ -17,7 +18,7 @@ const boundary = 'Exact configured case in authenticated supplemental capture ma
 
 export function createCaptureAvailabilityReviewReader({ root, read,
   predecessorFactory = createBadgeLabelPaintReviewReader }) {
-  const prior = predecessorFactory({ root, read });
+  const prior = predecessorFactory({ root, read: createCaptureAvailabilityHistoricalRead({ root, read }) });
   const joined = joinCaptureAvailability(JSON.parse(prior.read(prior.file)).review,
     (name, options) => read(path.resolve(root, name), options));
   assert.equal(joined.sha256, captureAvailabilityReview);

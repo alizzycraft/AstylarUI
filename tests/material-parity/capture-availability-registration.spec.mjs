@@ -14,7 +14,7 @@ test('availability historical reader restores only authenticated registration ch
   const files = { producer: 'tests/material-parity/input-equivalence-audit.mjs',
     runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' };
   for (const [kind, file] of Object.entries(files)) {
-    const before = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const before = restoreCaptureAvailabilityRegistration(readFileSync(file), kind);
     let current = Buffer.from(prepareCaptureAvailabilityRegistration(before, kind));
     const raw = (name, options) => {
       assert.equal(path.resolve(root, name), path.resolve(root, file));
@@ -43,8 +43,8 @@ test('availability historical reader restores only authenticated registration ch
 
 test('availability staged inventory preserves every predecessor source proof and plan', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs', bytes = readFileSync(file);
-  const before = bytes.toString().replaceAll('\r\n', '\n');
-  const after = prepareCaptureAvailabilityRegistration(bytes, 'producer');
+  const before = restoreCaptureAvailabilityRegistration(bytes, 'producer');
+  const after = prepareCaptureAvailabilityRegistration(before, 'producer');
   assert.equal(restoreCaptureAvailabilityRegistration(after, 'producer'), before);
   const inventory = source => {
     const ast = ts.createSourceFile(file, source, 99, true); assert.deepEqual(ast.parseDiagnostics, []);
@@ -77,7 +77,7 @@ test('availability staged inventory preserves every predecessor source proof and
 test('availability staged selector preserves older routes and rejects mixed supplements', () => {
   for (const [kind, file] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs',
     launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
-    const before = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const before = restoreCaptureAvailabilityRegistration(readFileSync(file), kind);
     const after = prepareCaptureAvailabilityRegistration(before, kind);
     assert.equal(restoreCaptureAvailabilityRegistration(after, kind), before);
     assert.throws(() => restoreCaptureAvailabilityRegistration(after + '\n// drift', kind));
@@ -88,6 +88,14 @@ test('availability staged selector preserves older routes and rejects mixed supp
       const current = () => {}, previous = () => {};
       assert.equal(choose({ caseObligationReviewSha256: captureAvailabilityReview }, captureAvailabilityReview, current, previous), current);
       assert.equal(choose({ caseObligationReviewSha256: 'old' }, captureAvailabilityReview, current, previous), previous);
+      const readBranch = after.match(/const captureAvailabilityEvidenceRead = (.*?);/)[1];
+      const raw = () => {}, historical = () => {};
+      const selectRead = Function('options', 'captureAvailabilityReview', 'auditReadFileSync', 'createCaptureAvailabilityHistoricalRead', 'root', `return ${readBranch}`);
+      const wrap = options => { assert.equal(options.root, process.cwd()); assert.equal(options.read, raw); return historical; };
+      assert.equal(selectRead({ caseObligationReviewSha256: captureAvailabilityReview }, captureAvailabilityReview, raw, wrap, process.cwd()), raw);
+      assert.equal(selectRead({ caseObligationReviewSha256: 'old' }, captureAvailabilityReview, raw, wrap, process.cwd()), historical);
+      assert.ok(after.indexOf('const audit = buildMaterialInputAudit(parityReport, { ...options, root });') < after.indexOf('const captureAvailabilityEvidenceRead = '));
+      assert.ok(after.includes('const applicability=captureAvailabilityReaderFactory?.({root,read:captureAvailabilityEvidenceRead,reviewSha256:options.caseObligationReviewSha256});'));
       continue;
     }
     const execute = (source, flags) => {
