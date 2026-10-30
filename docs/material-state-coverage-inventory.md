@@ -60,6 +60,9 @@ The original retained light desktop open row records normalized focus IDs
 The authenticated original runner gates focus comparison only for `focus` states,
 so its `matches` flag on `open` is not an equality assertion. This observation
 does not establish raw ownership, transition timing, or current-build behavior.
+In the original runner these focus reads occur after interaction-image capture
+and after any held pointer release, so they are post-action observations, not
+continuous focus evidence or a snapshot at the instant of opening.
 
 October30 export interruption recovery:the original process/session disappeared;
 its last recorded phase is join-case-obligations,with no terminal result. Windows
