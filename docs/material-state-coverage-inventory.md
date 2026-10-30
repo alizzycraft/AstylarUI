@@ -8,7 +8,7 @@ baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059.
 The 16 historical capture-availability updates do not establish current rendering
 parity or complete inspection; all 2311 cases remain partial.
 
-## Current audit pointer — October26
+## Current audit pointer — October 30
 
 ### Current next action and publication status
 
@@ -36,7 +36,7 @@ prior sources preserved (four authenticated transitions),five sources added,
 all463 prior proofs preserved,seven proofs added,and exactly16 availability
 updates among2311 cases;all other coverage fields conserved. Inspection remains
 partial and current rendering unverified.
-Cold comparison has started using
+Cold comparison completed successfully using
 --capture-availability --check and ASTYLAR_AUDIT_COLD=1,with separate
 capture-availability-independent-cold-20261030.log/.stderr.log. Isolated
 candidate import and verification completed exit0 in
@@ -45,9 +45,15 @@ capture-availability-candidate-import-20261030.log. Candidate index SHA256
 baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059;
 verification confirms8483 discrepancies,205 source findings,39904 controls,
 389202 occurrences,zero unresolved scalar attributions and2311 partial cases.
-The accepted pointer was unchanged by this diagnostic. Accepted
-pointer remains e107;complete conservation,
-independent cold validation and isolated/accepted import remain required.
+The isolated diagnostic did not change the accepted pointer. Subsequently,
+the accepted store was verified and promoted to generation 73c84aef; commit
+afa9b28d publishes this checkpoint. Next assess bounded Snackbar opening
+evidence without treating it as paired-focus or current-rendering proof.
+The existing `join-material-snackbar-single-open.mjs` binds its authenticated
+supplementary visibility sequence only to the light desktop auto-dismiss case.
+It does not bind the separate open case. A separate binding would need to retain
+the driver and timing differences and the missing paired-focus observation; it
+must not imply completed inspection or parity. No new binding has been made.
 
 October30 export interruption recovery:the original process/session disappeared;
 its last recorded phase is join-case-obligations,with no terminal result. Windows
