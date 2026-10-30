@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+October 31 retained geometry receipt recheck: without changing files, the
+corrected report's complete SHA256, checkpoint manifest SHA256, and producer
+SHA256 were checked against the retained report; the producer bytes recovered
+directly from `dc0bb349` match its receipt. The seven weekday and 31 numbered
+day geometry entries are present. This is a bounded receipt/presence check,
+not a full independent replay or a fresh capture. The shared producer remains
+at its restored historical-compatible bytes; a reusable isolated verifier and
+all downstream source-fingerprint reconciliation remain open.
+
 October 31 capture producer reconciliation: the calendar-only extension added
 in `dc0bb349` changed the shared activation producer to SHA256 `862155fe...`,
 outside historical readers' authenticated source chain. Its addition was unsafe
