@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+October 30 Chips keyboard source trace: current component SHA256
+`71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd`
+authors focusable `div` options; its click callback invokes `handleClick`,
+which toggles chip selection, while its keydown callback invokes
+`handleKeydown`, which returns for keys other than Escape. The retained
+configured-keyboard observations record Space delivered without selection
+change. This identifies the application handler boundary, but does not alone
+prove whether core should synthesize an activation for this authored role or
+establish equal-input renderer failure. Verify the public interaction contract
+and captured event sequence before classifying ownership or closing cases.
+Current `InputElementService.canActivateWithSpace` only accepts registered,
+enabled checkbox, radio, button, and submit inputs; the interaction runtime
+uses that result to schedule a synthetic activation on keyup. The authored
+chip is a `div` with `role=option`, not one of those input types. Existing
+service tests cover button and checkbox, not role-only option activation.
+This explains the current source path conditional on registration but is not
+itself a public-contract or captured-build proof. Distinguish native role-only
+semantics from Material's authored keyboard behavior before attribution.
+An independent Chrome 156.0.8078.79 diagnostic focused a bare
+`div role=option tabindex=0 aria-selected=false` inside a listbox and pressed
+Space: trusted keydown/keyup occurred, no click was synthesized, and selection
+stayed false. A native button positive control received a trusted click on
+Space. Thus the browser role-only baseline agrees with the observed candidate
+nonactivation; Material's selection behavior requires additional behavior, so
+this comparison does not establish an equal-input core activation defect.
+This small diagnostic is not a full chip parity or captured-build proof.
+
 October 30 current-source applicability check for retained Slider motion:
 `Get-FileHash -Algorithm SHA256` matches the retained component source
 `71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd`
