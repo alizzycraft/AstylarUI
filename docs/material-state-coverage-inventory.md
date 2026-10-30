@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+October 31 original calendar structure check: in the retained contrast desktop
+DPR1 `activate/reference-input-tree.json` from `current-full-20261005` (SHA256
+`af20570aa3de7e0b1a5ea23d31485630017b3420a2edd2f98943ddadb624a5ca`), the
+browser's table computed size is 280x234px. Its header has a seven-cell row
+at 25px and a colspan-7 row at 9px; its body has five 40px rows. The first
+body row contains a colspan-4 cell and three ordinary cells, and each of the
+other four has seven ordinary cells. This supports the existing warning that
+the isolated physical-column-count defect cannot be assumed to explain this
+multiweek capture: other rows have seven physical cells. The candidate capture
+uses a grid rather than the reference table, so the reduction's 360px table
+height is also not an observed height for the candidate in this case. The
+record is historical, clock-sensitive, and not current-rendering or full-case
+acceptance; no new capture or renderer change was made.
+
 October 31 calendar table height branch: the exact installed dimension method,
 with a read-only trace immediately before its unique return, reports
 `heightSource=parent-content`, `height=contentHeight=360`, `display=table`, no
