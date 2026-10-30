@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+October 31 source recovery census: for all 12 changed entries in the refreshed
+accepted fingerprint census below, a read-only `git log`/`git show` search
+found a version whose normalized SHA256 exactly matches the accepted receipt.
+Recovery points, in the same order as that list, are `a0d6c962` (Availability
+reader and spec), `a0d6c962` and `fc24b382` (Badge reader and spec),
+`7adbc051` (tooltip), `2e1d435c`, `e8c0add9`, `03fafef8` (static semantic
+spec, registration, loader), `3e546fd4` (both passive AX files), `9abfc2f7`
+(text backing), and `1cfc3863` (overlay runner). This establishes exact old
+source availability, not semantic applicability, complete consumer replay,
+receipt conservation or current rendering. No files or receipts were changed.
+
 October 31 refreshed source-fingerprint census: the accepted gzip still hashes
 to `73c84aef8e91a98f5aeb04a07426473ef6d24fb1811a5b0f2aa519dfc38cf484`.
 Its 1,142 listed source fingerprints were compared to current workspace bytes
