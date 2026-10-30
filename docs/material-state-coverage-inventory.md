@@ -3,6 +3,24 @@
 October 30 Tooltip history check: `f3c8254c` ("complete showcase interaction
 parity") replaced a top-level absolute tooltip with a child in a column-flex
 anchor, initially retaining `translate(93px, 37px)` and `marginLeft:16px`.
+Its immediate predecessor authored `tooltipTransform` as a CSS `translate`
+string whose pixel values branched on devicePixelRatio, theme typographyScale,
+and density (for example 47.5/11.5px versus 92/39px). This is a historical
+CSS input adjustment, not a world-space computation; its branching is a
+compensation suspect but does not demonstrate its original motivation or a
+specific renderer-coordinate defect.
+Git history identifies the introduction as `662c179399121a8d05d9235dac42c560eb255e93`
+("normalize css transform coordinates"): that same commit changed core CSS
+transform code and replaced the showcase's earlier fixed negative margins and
+`translate(-183px, -81px)` with absolute top/left plus the DPR/theme-dependent
+CSS translation. The co-occurrence is a concrete audit lead, not proof that
+the fixture adjustment was necessary or that the core change was incorrect.
+The commit's new `css-transform.spec.ts` contains three calculation-level
+tests: fractional translate parsing, mirrored render offsets at scales 2/4,
+and normalized 0.5px vertical displacement across those scales. It does not
+exercise the tooltip, browser geometry, transformed hit testing, or the
+conditional showcase offsets. These historical tests cannot alone establish
+the correctness or necessity of that fixture adjustment.
 `899c7417` ("anchor snackbar and tooltip overlays") removed both values and
 changed the anchor's cross-axis alignment to center; it retained relative
 flow and a fixed 107px popup width.
