@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+October 30 historical range reader reconciliation: the unmodified focused suite
+reports 4/5 passes; its complete evidence test fails at the runner source
+hash because partial-capture instrumentation changed that file. Git object
+`5e948fb7:scripts/audit-public-range-drag.mjs` reproduces its captured SHA256
+`fd946b67d20eb70eb4beb792d5a20a4fa6791e3bad0d4ab1ef4a178abc5abf06`.
+Of 2516 historical bundle inputs, 27 differ from the current installation; all
+27 retained counterparts in `node_modules.audit-prior-junction` match the
+historical hashes. A read-only adapter supplied only those 27 exact-hash bytes
+and the recovered runner to the unmodified `validateRangeDragEvidence`: it
+passed for 32 cases, 416 paired boundaries, 256 screenshots, 16 premature
+releases and 8 traced causes. No dependencies were switched or guard weakened.
+This verifies the historical capture against recovered dependencies; the normal
+reader still fails against today's files and canonical reconciliation remains
+pending. The separate current-installed retry has its own provenance.
+
 October 30 current-installed public range retry completed 32 cases with exit 1
 because every case recorded failing parity checks; no case errors or runtime
 errors were recorded. `artifacts/material-parity/public-range-drag-retry-20261030/latest-report.json`
