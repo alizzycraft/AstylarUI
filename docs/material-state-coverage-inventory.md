@@ -10,6 +10,13 @@ for that unchanged served-build byte set only. The captured browser was Chrome
 current sources, runtime/font equivalence, current AX behavior or case closure.
 Original capture/report/checkpoint hashes and the recorded one-versus-three
 main-landmark discrepancy remain unchanged.
+The two showcase component sources in the authenticated build's source maps
+also match current files after CRLF normalization: Astylar component SHA256
+`b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f`,
+reference component SHA256
+`debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa`.
+This authenticates only those two application sources, not all dependencies,
+styles, installed renderer bytes, browser state or live accessibility output.
 
 October 30 exact-case triage of accepted index `73c84aef` (index SHA256
 `baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059`):
