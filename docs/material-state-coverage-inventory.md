@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+October 30 current-source applicability check for retained Slider motion:
+`Get-FileHash -Algorithm SHA256` matches the retained component source
+`71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd`
+and plugin source `dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e`
+in the integration checkout. The existing retained-motion focused test passes
+1/1. These two unchanged source files support reuse of the traced application
+callback, not equivalence of the entire current build, browser, interaction
+timing, or rendering; those remain separate obligations.
+The source-map native Slider content hashes to `eb678c269f735c72265e31899713f089d9b62d09955f2d498bc70790249b17bb`;
+the installed `@angular/material/fesm2022/slider.mjs` hashes to
+`b64564b1fc362e1e9b238fc322d2cea6517ebcf3139e58b775484a2218faba48`.
+They are not byte-identical. The installed file contains the 80ms duration
+string, but this alone does not reconcile their transformations, actual served
+reference build, or prove current runtime motion; keep that applicability open.
+Normalizing line endings and removing source-map comments still leaves unequal
+source text (92108 versus 96060 characters; first difference at 1207). The
+retained mapped content and installed module differ beyond those simple
+transformations; this comparison alone cannot determine whether bundling or a
+dependency change caused it, or whether motion behavior differs.
+
 October 30 Slider alignment follow-up: authenticated finding
 `8cd4c227ca3568d9272549843250b05d591dad13541eecef64a5b3d71f6917e1`
 (canonical decoded SHA256 `64df3f3e355dc79264097b6816e5fa37e811b409db84a11f7d86d0394405dd83`,
