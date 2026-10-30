@@ -16,8 +16,11 @@ assert.equal(existsSync(output), false);
 const reportFile = 'artifacts/material-parity/current-full-20261005/latest-report.json';
 const reportBytes = readFileSync(reportFile);
 assert.equal(hash(reportBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
-const rows = JSON.parse(reportBytes).results.filter(row => ['sidenav', 'grid-list', 'table'].includes(row.family));
-assert.equal(rows.length, 36);
+const allRows = JSON.parse(reportBytes).results.filter(row => ['sidenav', 'grid-list', 'table'].includes(row.family));
+assert.equal(allRows.length, 36);
+const selectedCase = process.env.ASTYLAR_AUDIT_PASSIVE_AX_CASE;
+const rows = selectedCase ? allRows.filter(row => `${row.family}/${row.profile}/${row.viewport.id}` === selectedCase) : allRows;
+if (selectedCase) assert.equal(rows.length, 1, 'case selector must match exactly one configured static case');
 if (process.argv[3]) assert.ok(process.argv[3].startsWith('--checkpoint='));
 const checkpointFile = process.argv[3]?.slice('--checkpoint='.length)
   ?? 'artifacts/material-parity/divider-current-browser-20261020/checkpoint/manifest.json';
@@ -78,13 +81,14 @@ try {
       } finally { await page.close(); }
     }
   }, {}, { checkpointFile });
-  assert.equal(observations.length, 72);
+  assert.equal(observations.length, rows.length * 2);
   for (const r of [provenance.producer, provenance.report, provenance.checkpoint, provenance.serverHelper, provenance.checkpointHelper])
     assert.equal(hash(readFileSync(r.file)), r.sha256);
   assert.deepEqual(fingerprintDirectory(path.resolve('examples/material-showcase/dist/material-showcase/browser')),
     JSON.parse(readFileSync(checkpointFile)).provenance.browserFiles);
   writeFileSync(path.join(output, 'latest-report.json'), JSON.stringify({ provenance, observations,
-    boundary: 'Full actual AX trees and referenced backend DOM nodes for36 pinned static sidenav/grid-list/table contexts. No interaction-state replay,AT behavior,current source/build equivalence,pixel parity or complete case closure.' }));
+    ...(selectedCase ? { selectedCase } : {}),
+    boundary: selectedCase ? 'Focused actual AX trees for one selected static context. No aggregate coverage, interaction-state replay, AT behavior, current source/build equivalence, pixel parity or complete case closure.' : 'Full actual AX trees and referenced backend DOM nodes for36 pinned static sidenav/grid-list/table contexts. No interaction-state replay,AT behavior,current source/build equivalence,pixel parity or complete case closure.' }));
 } catch (error) {
   writeFileSync(path.join(output, 'failure.json'), JSON.stringify({ error: String(error), stack: error.stack, observations }));
   throw error;

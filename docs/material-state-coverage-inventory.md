@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+October 30 focused sidenav AX capture: the existing passive collector now accepts
+an exact static case selector; default remains 36 cases/72 observations and an
+invalid selector fails before capture. `ASTYLAR_AUDIT_PASSIVE_AX_CASE=sidenav/light/desktop`
+produced two observations in `artifacts/material-parity/sidenav-focused-ax-20261030`,
+report SHA256 `8e74b7b36668d430396cf7ed9f4fab2dc14ced063578a18e99d48de9edc29a6f`.
+Each AX file hash matches the report; Chrome 156.0.8078.79 records one reference
+and three Astylar main landmarks, without page errors. The full 1887-file
+served-build checkpoint was verified by the collector before/after capture.
+This repeats the discrepancy under the newer browser on that retained build;
+it is not a fresh current-package build, full semantic review or case closure.
+The additive collector selector changes its fingerprint; historical receipts
+remain preserved and need reconciliation before canonical integration.
+
 October 30 sidenav AX capture build applicability: every one of 1887 browser
 files in the `divider-current-browser-20261020/checkpoint/manifest.json` used
 by `passive-static-ax-20261021` still hashes identically under the present

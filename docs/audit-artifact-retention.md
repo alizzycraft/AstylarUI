@@ -1,5 +1,9 @@
 # Audit artifact retention
 
+Keep `artifacts/material-parity/sidenav-focused-ax-20261030`: the paired AX
+trees, report, producer and provenance document the Chrome 156 focused
+observation. It supplements rather than replaces the 36-case historical capture.
+
 Keep `artifacts/material-parity/public-range-drag-retry-20261030`: its report,
 provenance, bundle and 256 screenshots are required by the current-installed
 range failure replay. Separately retain `public-range-drag-current-20261030`
