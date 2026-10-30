@@ -24,6 +24,40 @@ the correctness or necessity of that fixture adjustment.
 `899c7417` ("anchor snackbar and tooltip overlays") removed both values and
 changed the anchor's cross-axis alignment to center; it retained relative
 flow and a fixed 107px popup width.
+That commit also changed the snackbar surface from 294x41px to 344x48px and
+changed overlay padding syntax, plus showcase tests and the Material parity
+runner. Its changed-file list contains no core renderer source. This history
+does not establish why the user-observed snackbar was missing or whether the
+new dimensions match equivalent reference inputs.
+The commit's added showcase spec asserts those snackbar style values and, for
+tooltip, centered flex alignment/gap, width/height, and an absent transform in
+generated SiteData. It does not itself render pixels or assert viewport
+visibility, reference-equivalent inputs, or fallback behavior. Separate
+historical runner changes must be assessed at their own observation boundary.
+The same commit's runner added a snackbar placement check requiring the
+candidate box within the canvas, bottom-gap difference at most 2px, and
+normalized semantic role/live/name equivalence; it excluded two dynamic
+snackbar IDs from the generic semantic comparator for specified open states.
+This is a measured placement/semantic check when its target exists, not proof
+of original click-to-open timing, all state transitions, equal authored
+inputs, or a complete local raster. Inspect a particular report before claiming
+that the check executed or passed.
+The hash-authenticated October5 light/desktop-DPR1 `open` row actually records
+that check: both boxes are approximately x548/y944/344x48 in a 1440x1000 canvas,
+with 8px bottom gaps, candidate withinCanvas=true and semanticsMatch=true.
+This is a historical measured endpoint, not proof of visible candidate pixels,
+equal authored input, earlier reported execution, or current-build parity.
+The local file at `current-full-20261005/interactions/snack-bar/light/desktop-dpr1/open/astylar.png`
+visually contains the snackbar surface and text at the bottom; its observed
+SHA256 is `b84a7d6101f2d24a1373196051735bf83b2df9c607f55d5015bf730bc1dc40e0`.
+Its independent original-capture receipt has not been reconciled here, so this
+visual observation initially lacked an independently reconciled receipt. The
+hash-authenticated accepted index's exact light/desktop-DPR1 open case contains
+the same SHA256 as its `localPaint.retainedSnackbarSurface` raster receipt at
+the `current-ancestry-audit` alias. This binds the bytes to that accepted
+historical case receipt, not independently to the original capture event; it
+does not certify current behavior, equal-input paint, or the user's earlier
+missing-panel execution.
 Later `f324bd18` changed the anchor width and popup typography/box while the
 relative flow placement remained. This is source history, not proof that either
 version was equivalent to the reference or that a core coordinate defect was
