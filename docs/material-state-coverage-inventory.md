@@ -4,6 +4,18 @@
 
 ### Current next action and publication status
 
+October30 export interruption recovery:the original process/session disappeared;
+its last recorded phase is join-case-obligations,with no terminal result. Windows
+LastBootUpTime is2026-10-30 14:50:08,after the old stderr log's last write13:31:36.
+No export process remains in the process inventory. Original accepted manifest,
+payload and readable report still hash-match the e107 backup;accepted pointer
+is unchanged. Preserve the interrupted logs,do not label that run passed.
+C:13.50GiB/D:2.89GiB free and about12GiB virtual-memory headroom were checked
+before one retry with new capture-availability-post-reboot-export-20261030.log/
+.stderr.log using the unchanged launcher/settings and existing verified backup.
+This retry is pending;no duplicate of a live process was started. After its
+terminal result,continue the original conservation/cold/import requirements.
+
 October30 read-only Snackbar open follow-up while export inputs are frozen:
 authenticated single-open report1cc0846c and both first-open screenshot/tree
 receipts. Direct visual inspection of retained light-reference-first-open.png

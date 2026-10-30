@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep the interrupted capture-availability-canonical-export-20261030 logs and
+distinct capture-availability-post-reboot-export-20261030.log/.stderr.log.
+Original process was absent after a Windows restart;no terminal success was
+recorded. The e107 pre-export backup remains authenticated and is reused,not
+duplicated. A retry does not authorize deleting interrupted or original evidence.
+
 Retain capture-availability-pre-export-e107-20261030 and the distinct
 capture-availability-canonical-export-20261030.log/.stderr.log. The backup
 copies match accepted e1072ead and preserve original manifest/readable report.
