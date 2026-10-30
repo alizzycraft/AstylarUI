@@ -1,5 +1,13 @@
 # Material comparison/state coverage inventory
 
+October 30 gutter source-applicability check: the installed scroll runtime
+still hashes to the retained public proof's
+`eea5e26c692dec9f59d635e91422b01bee00360574cba1e38c563f0cfb706c40`.
+Using the proof's transpilation and whitespace-normalized method comparison,
+installed `createContainer` and `createScrollbar` match current source.
+This supports reuse at those method boundaries; it does not authenticate all
+current dependencies, rerun Chrome, or prove current rendering behavior.
+
 October 30 retained timepicker geometry check: the hash-authenticated October5
 light/desktop-DPR1 open row records reference and candidate popup widths of
 720px, each offset 56px below its 720px primary host, within projection noise.
