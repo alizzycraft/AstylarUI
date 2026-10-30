@@ -37,6 +37,11 @@ identical complete 24,626-character JS for the transpiled current source and
 installed module, including constructor, fields and import declarations. This
 supports that module's source-to-installed syntax boundary, not the contents of
 its imported dependencies, actual live AX behavior or whole-case currentness.
+The bridge has one static JS import, `astylar-reconciliation-identity`.
+Its captured source-map content and current installed module print identically
+with TypeScript's comment-free printer (2,318 characters); the installed
+identity module has no static import declarations. This checks that immediate
+module boundary only, not dynamic/global dependencies or the full renderer.
 
 October 30 exact-case triage of accepted index `73c84aef` (index SHA256
 `baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059`):
