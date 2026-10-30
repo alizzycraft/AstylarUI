@@ -9,7 +9,12 @@ recomputed all case checks, verified each screenshot and served document/script
 receipt, the provenance hash and all 2516 bundle-input hashes. In all 16
 no-update cases intermediate values diverged and final owner release count
 failed; in all 16 equivalent-held-update cases an early release was observed
-and subsequent values diverged. These are public equal-authored-input results,
+and subsequent values diverged. The existing `inspectRangeDragCause` replay
+also passed on all 32 fresh rows using the captured bundle lines: in the eight
+stack-traced held-update rows, the recorded path joins semantic focus, canvas
+blur and core pointer-up handling; native pointer-up had not yet occurred.
+This authenticates the recorded causal path for these tested cases, not every
+application drag or current source-tree build. These are public equal-authored-input results,
 not proof of Material swapped-thumb cause, visual smoothness, source-build
 equivalence or whole-case acceptance. Source commit was `11ad8197`; the runner
 and test fingerprints changed separately and still require canonical integration.
