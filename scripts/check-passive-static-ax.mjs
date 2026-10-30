@@ -1,12 +1,31 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const receipt = file => ({ file, sha256: hash(readFileSync(file)) });
 const root = 'artifacts/material-parity/passive-static-ax-20261021';
 const reportFile = `${root}/latest-report.json`, report = JSON.parse(readFileSync(reportFile));
-for (const value of Object.values(report.provenance).filter(v => v?.file && v?.sha256))
-  assert.equal(hash(readFileSync(value.file)), value.sha256, value.file);
+const historicalReplay = process.env.ASTYLAR_AUDIT_PASSIVE_HISTORICAL_REPLAY === '1';
+const historicalTransitions = {
+  'scripts/capture-passive-static-ax.mjs': {
+    current: 'afa38baaaacb06b69fcbdfc66185ae2f44cd314bb278064af6f0b12bf512ea8a',
+    load: () => readFileSync(`${root}/producer.mjs`),
+  },
+  'tests/material-parity/sort-focus-structure.spec.mjs': {
+    current: '1e07ad431df8cc0c76bb8821a1f3d0c26841d57a353278bffa1d19a5000d3386',
+    load: () => execFileSync('git', ['show', '35807a5a8dc51ccefa3e38026daae397a7af6dc7:tests/material-parity/sort-focus-structure.spec.mjs']),
+  },
+};
+for (const value of Object.values(report.provenance).filter(v => v?.file && v?.sha256)) {
+  let bytes = readFileSync(value.file);
+  if (historicalReplay && hash(bytes) !== value.sha256 && historicalTransitions[value.file]) {
+    const transition = historicalTransitions[value.file];
+    assert.equal(hash(bytes.toString().replaceAll('\r\n', '\n')), transition.current, `Unrecognized live source: ${value.file}`);
+    bytes = transition.load();
+  }
+  assert.equal(hash(bytes), value.sha256, value.file);
+}
 assert.equal(hash(readFileSync(`${root}/producer.mjs`)), report.provenance.producer.sha256);
 assert.equal(hash(report.provenance.helperSource), report.provenance.helperSha256);
 assert.equal(report.provenance.checkpoint.sha256, '9d0f1220ea6c2ca95cbfb143d94f7f5680a0d8cb11e074db879768f9763fd5b0');
@@ -78,6 +97,7 @@ const pairs = inventory.map(r => {
 });
 console.log(JSON.stringify({ kind: 'passive-static-actual-ax-review', producer: receipt('scripts/check-passive-static-ax.mjs'),
   report: receipt(reportFile), sourceBindingReuse: receipt(bindingFile), rows, pairs,
+  provenanceMode: historicalReplay ? 'historical-replay-only' : 'current-files',
   counts: { pairedStaticCases: 36, captures: 72, matchingTableGridProjections: 24,
     additionalSharedPageMains: 36, additionalSidenavContentMains: 12 },
   boundary: 'Actual AX role/name/property/child topology after explicitly omitting ignored,generic and InlineTextBox wrappers only. All raw trees preserved. No full generic equivalence,AT/header associations,interaction-state,paint or complete case acceptance.' }));

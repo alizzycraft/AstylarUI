@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 30 passive AX verifier historical mode: the existing verifier now
+supports explicit `ASTYLAR_AUDIT_PASSIVE_HISTORICAL_REPLAY=1`. It accepts only
+the exact known live producer/helper hashes and then checks the retained
+producer and Git-recovered helper against the original capture receipts.
+The mode returned 36 pairs/72 captures (exit 0); default current-file mode
+still fails on the changed producer (exit 1). In-memory mutation controls for
+each live producer and helper were rejected. Output labels the new mode
+`historical-replay-only`; this is not a current build or rendering result.
+The verifier itself changed, so its historical consumer/source fingerprint
+still needs bounded reconciliation before canonical integration. The accepted
+pointer and capture receipts are unchanged; no full case is closed.
+
 October 30 source-fingerprint census: stream the accepted `73c84aef` payload's
 `sourceFingerprints` section and hash every listed workspace path using the
 producer's UTF-8/CRLF-normalization rule. Of 1,142 entries, none are missing
