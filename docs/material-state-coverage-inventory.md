@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 31 retained text-backing dependency census: one read-only traversal of
+all 2,311 review groups found 15,144 distinct authenticated receipt paths. With
+the existing tooltip/datepicker activation restoration applied, exactly two
+paths differed and none were missing: tooltip theme ownership and the
+sort-focus suite. Existing popup-depth and scrollbar restoration rules recover
+their exact recorded bytes. A second probe composing all three bounded source
+transitions with the existing divider reader passed `loadCaseObligationReview`:
+2,311 cases, 15,144 dependencies, `inspectionComplete:false`,
+`currentRenderingAccepted:false`. This composition is not yet wired into the
+production join; it does not reclassify evidence, prove current rendering, close
+cases, or publish a canonical export. No retained receipt was rewritten.
+
 October 31 activation source reconciliation: existing tooltip and datepicker
 historical readers compose without changes, authenticating live `f97c4459...`,
 intermediate `837098a2...`, and retained `26d7a294...` activation bytes; an
