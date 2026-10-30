@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+October 31 scoped Availability receipt retry: with the passive capture producer
+restored read-only by exact current/retained hash, the expected 2,311-group
+review constructed, but the full receipt load exited 1 at the next dependency,
+`scripts/check-passive-static-ax.mjs` (current `faa3e832...`, retained
+`87dfdd40...`). This confirms that restoring one receipt at a time is not yet
+sufficient. Before another expensive full retry, census the remaining receipt
+dependencies and compose all verified transitions as a batch. No accepted
+pointer, recorded evidence or case status changed.
+
 October 31 passive receipt boundary diagnosis: the existing static-semantic
 historical loader deliberately applies its passive producer transition only to
 named reviewer entry points; the standalone Availability receipt-load process
