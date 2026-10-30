@@ -17,16 +17,15 @@ pending. The separate current-installed retry has its own provenance.
 The existing range evidence suite now has an explicitly historical replay test
 using this hash-checked adapter; focused execution passes 1/1. The original
 current-files test remains unchanged and still detects the fingerprint mismatch.
-The replay requires the retained prior junction and Git object, so their
-availability is part of its evidence dependency; it is not a portable archival
-replacement or a new current-build pass. Test-source fingerprint reconciliation
-remains pending for canonical integration.
-Read-only junction inspection resolves that dependency to
-`D:/dev/github/AstylarUI-material/examples/material-showcase/node_modules`;
-the 27 matched bytes are therefore in a separate worktree's dependency tree,
-not independently archived in this audit's evidence store. Do not treat that
-target or junction as disposable during cleanup before preserving those exact
-bytes and updating the replay references. No cleanup was performed here.
+The 27 changed dependencies (4,027,270 bytes) were copied without overwriting
+from the prior junction's target into
+`artifacts/material-parity/retained-evidence/public-range-v2-dependencies`,
+with each source and copy verified against its captured SHA256. The focused
+replay now reads those retained copies and passes 1/1; it no longer depends on
+the other worktree's junction. It still needs the Git object, all other captured
+dependencies and local retained evidence; this is not a portable checked-in
+archive or a current-build pass. No originals were removed. Test-source
+fingerprint reconciliation remains pending for canonical integration.
 
 October 30 current-installed public range retry completed 32 cases with exit 1
 because every case recorded failing parity checks; no case errors or runtime

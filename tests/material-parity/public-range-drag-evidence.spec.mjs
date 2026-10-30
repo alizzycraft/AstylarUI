@@ -69,8 +69,9 @@ test('historical range evidence replays with exact retained dependency bytes', (
     let bytes = readFileSync(file);
     const hash = expected.get(file);
     if (hash && digest(bytes) !== hash) {
-      const prior = file.replace(`node_modules${path.sep}`, `node_modules.audit-prior-junction${path.sep}`);
-      assert.notEqual(prior, file, 'only retained package inputs may be recovered');
+      const relative = path.relative(path.resolve('examples/material-showcase/node_modules'), file);
+      assert.ok(relative && !relative.startsWith('..') && !path.isAbsolute(relative), 'only retained package inputs may be recovered');
+      const prior = path.resolve('artifacts/material-parity/retained-evidence/public-range-v2-dependencies', relative);
       bytes = readFileSync(prior);
       assert.equal(digest(bytes), hash, file);
       recovered++;

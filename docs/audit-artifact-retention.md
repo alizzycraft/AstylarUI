@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep `artifacts/material-parity/retained-evidence/public-range-v2-dependencies`:
+its 27 hash-verified files are required by the historical range evidence replay.
+They replace a cross-worktree dependency for that replay, not original captures.
+Do not remove the prior junction or its target based on this fact alone; other
+consumers may still reference them and require separate closure checks.
+
 The capture-availability cold comparison and verified accepted-store import have
 completed. Generation 73c84aef is accepted locally; its 86 store files are hard
 links to the isolated candidate and must not be mutated. Retain the cold logs,
