@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+October 31 Availability full receipt load: the actual nested reader constructed
+the expected `2f609608...` review with 2,311 groups, but the subsequent
+`loadCaseObligationReview` exited 1 at `scripts/capture-passive-static-ax.mjs`:
+current SHA256 `afa38baa...` versus retained receipt `8cbbb5d1...`. Thus the
+constructor success below is not full dependency authentication. The exact
+historical producer is available in Git (`3e546fd4`); its bounded historical
+replay was separately checked, but must be composed into this reader's receipt
+path before retrying the full load. No canonical publication or case acceptance
+occurred.
+
 October 31 source recovery census: for all 12 changed entries in the refreshed
 accepted fingerprint census below, a read-only `git log`/`git show` search
 found a version whose normalized SHA256 exactly matches the accepted receipt.
