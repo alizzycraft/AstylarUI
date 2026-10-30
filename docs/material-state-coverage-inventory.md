@@ -100,6 +100,29 @@ current-rendering acceptance remain unproved. Next reconcile only this bounded
 capture availability after the Badge milestone;do not upgrade case completeness
 or current rendering. No source or canonical data changed in this read-only check.
 
+October30 follow-up rehashes today's served directory with the existing
+fingerprintDirectory helper:all1887 files exactly match the Chips manifest's
+29de7da0 vector,no changed/added/removed files. All ten recorded harness files
+and the one diagnostic source also match their raw-byte receipts. Thus the
+eight-case capture-availability omission is not explained by served-build or
+recorded harness drift. This does not establish today's browser/driver,installed
+package equivalence,original action timing or full runtime/input applicability.
+The retained browser is155.0.8059.85,Playwright-core1.62.1,headless Chrome with
+native scrollbars not hidden. Keep these limitations when reconciling the stale
+availability field;do not upgrade inspection/currentRendering or recapture merely
+because the old three-report census omitted this exact evidence.
+
+The same read-only follow-up verifies installed Playwright-core1.62.1 and its
+lib/coreBundle.js SHA9393fa79e1c67c74edc26b610d65a4f7ed73d345a762465cc88340a33a2454ac
+match the capture exactly. However the installed Chrome executable at
+C:/Program Files/Google/Chrome/Application/chrome.exe reports156.0.8078.49,
+not captured155.0.8059.85 (registry agrees). No browser was launched. Thus
+capture availability and served/harness/driver matching are established,but
+browser-version drift is a concrete reason not to label this current-runtime
+rendering evidence. Preserve that distinction in the eventual canonical field
+correction;reuse historical findings while retaining the original final-browser
+gate. No repeat capture is justified merely to prove capture availability.
+
 October29 Badge live integration is verified locally but not yet canonical.
 Explicit --badge-label-paint selects3cb9fe23;the actual launcher dry-run confirms
 the exact review path/digest. Registry now has1137 sources/463 proofs/72 plans.
