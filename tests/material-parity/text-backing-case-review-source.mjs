@@ -103,10 +103,34 @@ export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
     }
     assert.equal(currentSourceChecks.length,12);
   }
-  return {read:trackedRead,sourceApplicability:{
+  // Only the retained static-semantic join predecessor needs these three
+  // later source transitions. Authenticate current and historical bytes; the
+  // supplied reader still observes current files for session drift detection.
+  const extraTransitions = reviewSha256 === tabsMenuSheetReview ? new Map([
+    ['scripts/audit-material-configured-control-activation.mjs', ['f97c4459373bcca113d05842aec5179425a551d7c8ccd064e62d0693d9438fda', '26d7a294d0c5b4aaa2179fa7a697178b099391493ba28f9ac0261a04bd2d6d46', '96368b59a3f0ddb5e2621eaf468ae1d3c8670863']],
+    ['scripts/audit-material-tooltip-applied-theme-ownership.mjs', ['98347c3b5ef0fa585747c399bcac78ed9fafbfb804fab56c993f2a1d819d0613', 'ee4f273b041dec7f2dd0e242e4441b6cc6690b72d7a27d01270682c98e30d10a', '9f7dc468']],
+    ['tests/material-parity/sort-focus-structure.spec.mjs', ['1e07ad431df8cc0c76bb8821a1f3d0c26841d57a353278bffa1d19a5000d3386', '9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa', '35807a5a8dc51ccefa3e38026daae397a7af6dc7']],
+    ['scripts/check-passive-static-ax.mjs', ['faa3e832365152bf7d5b66be1ccdbbc4444eaa1f4ca371aad6c09d4b3fc65657', '87dfdd40238896a1c5ffe9aa51442ca701e8edb0266592f02128001d6fcde46a', '3e546fd464c3eb7c68572736b5794d01b0da244b']],
+    ['scripts/capture-passive-static-ax.mjs', ['afa38baaaacb06b69fcbdfc66185ae2f44cd314bb278064af6f0b12bf512ea8a', '8cbbb5d1b64a879bd0e47bb123c23d8979bc10bbfeecee7158c008b363a2e1b0', '3e546fd464c3eb7c68572736b5794d01b0da244b']],
+  ].map(([file, values])=>[path.resolve(root,file),{file,values}])) : new Map();
+  const recovered = new Map();
+  const scopedRead = (name, options) => {
+    const transition = extraTransitions.get(path.resolve(name));
+    if (!transition) return trackedRead(name, options);
+    const current = read(name);
+    assert.equal(hash(current.toString().replaceAll('\r\n','\n')), transition.values[0], `Unrecognized current source: ${transition.file}`);
+    if (!recovered.has(transition.file)) {
+      const old = execFileSync('git',['show',`${transition.values[2]}:${transition.file}`],{cwd:root,maxBuffer:8000000});
+      assert.equal(hash(old),transition.values[1],`Historical source changed: ${transition.file}`);
+      recovered.set(transition.file,old);
+    }
+    const bytes = recovered.get(transition.file), encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  };
+  return {read:scopedRead,sourceApplicability:{
     mode:'explicit-reviewed-divider-boundaries-historical-review',reviewSha256,
     ...(currentSourceChecks.length?{currentSourceChecks}:{}),
-    transitions:[...baseReader.sourceApplicability.transitions,{
+    transitions:[...baseReader.sourceApplicability.transitions,...[...extraTransitions.values()].map(({file,values})=>({logicalFile:file,currentSha256:values[0],historicalSha256:values[1]})),{
       logicalFile:suite,currentSha256:hash(read(path.resolve(root,suite))),
       historicalSha256:hash(trackedRead(path.resolve(root,suite))),
     }],boundaryOwner:{file:owner,sha256:hash(source)},boundarySha256:hash(boundary),

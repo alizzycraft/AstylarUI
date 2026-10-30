@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+October 31 static semantic join integration: the named historical predecessor
+reader now authenticates current and Git-retained bytes for the five changed
+activation, tooltip, helper and passive-AX source receipts. A complete census
+of the joined 2,311-group proposal found 16,180 distinct receipts and no missing
+files; the two passive-AX files were the only mismatches after the first three
+restorations. The existing static-semantic case-join test now passes 1/1 and
+reproduces its retained output exactly. A focused check authenticates all five
+historical endpoints and rejects current-source drift. The reader's own changed
+fingerprint still needs reconciliation in later consumers; no canonical
+publication, current-rendering acceptance or full case closure follows.
+
 October 31 retained text-backing dependency census: one read-only traversal of
 all 2,311 review groups found 15,144 distinct authenticated receipt paths. With
 the existing tooltip/datepicker activation restoration applied, exactly two
