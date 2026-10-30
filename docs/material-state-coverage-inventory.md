@@ -21,6 +21,12 @@ The replay requires the retained prior junction and Git object, so their
 availability is part of its evidence dependency; it is not a portable archival
 replacement or a new current-build pass. Test-source fingerprint reconciliation
 remains pending for canonical integration.
+Read-only junction inspection resolves that dependency to
+`D:/dev/github/AstylarUI-material/examples/material-showcase/node_modules`;
+the 27 matched bytes are therefore in a separate worktree's dependency tree,
+not independently archived in this audit's evidence store. Do not treat that
+target or junction as disposable during cleanup before preserving those exact
+bytes and updating the replay references. No cleanup was performed here.
 
 October 30 current-installed public range retry completed 32 cases with exit 1
 because every case recorded failing parity checks; no case errors or runtime
