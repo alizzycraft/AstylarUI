@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+October 31 nested Availability reader: the actual
+`createCaptureAvailabilityReviewReader` completed exit 0 and reconstructed
+the expected review
+`2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1`
+with 2,311 groups. This verifies nested construction, not a full independent
+dependency receipt load, current-browser execution, equal inputs, case closure
+or canonical publication. Changed Availability reader/test fingerprints and
+the export/conservation gates remain open.
+
 October 31 Capture Availability source boundary: its historical registration
 suite initially failed 1/3 because the Badge reader changed after its frozen
 shared-source hash. The existing restoration now recognizes that exact new
