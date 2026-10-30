@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+October 31 nested Badge reader integration: the actual
+`createBadgeLabelPaintReviewReader` completed with exit 0 after the tooltip
+source transition, reconstructing the expected review
+`3cb9fe23409d103230b7d2f9e842d9f3dfd984fd579e5cf2cfc4c32bcef52b60`
+and 2,311 groups. This validates construction and its nested joins, not an
+independent full dependency receipt load, full glyph paint, current rendering,
+case closure, or canonical export. The changed Badge reader and test source
+fingerprints and downstream conservation remain open.
+
 October 31 tooltip reader receipt boundary: the existing Badge historical
 reader now accepts only the exact pre-change or post-change tooltip reader
 hash and, for the latter, recovers the pre-change bytes from Git after checking
