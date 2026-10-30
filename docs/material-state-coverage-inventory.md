@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+October 30 static semantic reviewer replay: the historical loader now scopes
+the two authenticated source transitions to its nine exact allowlisted
+reviewers and the hash-bound bottom-sheet verifier; the bottom-sheet reviewer
+passes the loader to its child explicitly. The existing restricted reviewer test
+reproduces all nine retained logs byte-for-byte and rejects an arbitrary policy
+import: 1/1 test passed in 118.7 seconds, exit 0. This supersedes the narrower
+chip-only scope below. Original receipts remain unchanged. Other historical
+joins, loader/reader fingerprints, canonical export, current rendering and
+case closure remain unverified.
+
 October 30 chip historical reviewer replay: the existing restricted historical
 loader now supplies the exact retained passive producer and Git-recovered server
 helper only when launched for the hash-authenticated chip reviewer. It checks

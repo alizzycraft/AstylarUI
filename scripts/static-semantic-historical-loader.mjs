@@ -19,12 +19,20 @@ const allowed = new Map([
   ['scripts/check-static-widget-state-ax.mjs', '41b60b756c719e0065e89ce31f92b7c3c8ae9b25e74fd05656592685d1b8dbdf'],
 ].map(([file, sha256]) => [pathToFileURL(path.resolve(file)).href, { file, sha256 }]));
 const policyFile = 'tests/material-parity/input-equivalence-policy.mjs', policyUrl = pathToFileURL(path.resolve(policyFile)).href;
-// Only the exact retained chip reviewer may replay these two historical file
+// Exact retained reviewers and the bottom-sheet verifier may replay these two
 // receipts. Production, other reviewers and arbitrary imports stay untouched.
-const chipReviewer = path.resolve('scripts/review-chip-orientation-inputs.mjs');
-if (process.argv[1] && path.resolve(process.argv[1]) === chipReviewer) {
+const bottomReviewer = path.resolve('scripts/review-bottom-sheet-name-inputs.mjs');
+const bottomVerifier = path.resolve('scripts/check-bottom-sheet-activate-ax.mjs');
+const entry = process.argv[1] && path.resolve(process.argv[1]);
+const allowedReviewer = entry && allowed.get(pathToFileURL(entry).href);
+if (allowedReviewer || entry === bottomVerifier) {
   const read = fs.readFileSync.bind(fs);
-  assert.equal(hash(read(chipReviewer)), allowed.get(pathToFileURL(chipReviewer).href).sha256);
+  const expected = entry === bottomVerifier ? 'c4db8c3d0f34c2aec2f4c39f1bfe847d4f830cbcd' + 'a82810b5ca191dd661bf65d' : allowedReviewer.sha256;
+  assert.equal(hash(read(entry)), expected);
+  if (entry === bottomReviewer) {
+    const loader = pathToFileURL(path.resolve('scripts/static-semantic-historical-loader.mjs')).href;
+    if (!process.env.NODE_OPTIONS?.includes(loader)) process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS ?? ''} --import=${loader}`.trim();
+  }
   const transitions = new Map([
     [path.resolve('scripts/capture-passive-static-ax.mjs'), ['afa38baaaacb06b69fcbdfc66185ae2f44cd314bb278064af6f0b12bf512ea8a', '8cbbb5d1b64a879bd0e47bb123c23d8979bc10bbfeecee7158c008b363a2e1b0', () => read('artifacts/material-parity/passive-static-ax-20261021/producer.mjs')]],
     [path.resolve('tests/material-parity/sort-focus-structure.spec.mjs'), ['1e07ad431df8cc0c76bb8821a1f3d0c26841d57a353278bffa1d19a5000d3386', '9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa', () => execFileSync('git', ['show', '35807a5a8dc51ccefa3e38026daae397a7af6dc7:tests/material-parity/sort-focus-structure.spec.mjs'])]],
