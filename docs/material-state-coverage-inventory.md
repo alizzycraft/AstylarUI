@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 31 paired calendar preceding boxes: in the same retained case, all
+seven reference weekday header cells run y289.546875–314.546875 (25px);
+candidate weekday boxes run y277.559998–317.559998 (40px). Reference day 1
+starts 9px after the weekday bottom, while candidate day 1 starts 40px after
+its weekday bottom. The day-top delta therefore consists of about 3.013px in
+weekday-bottom placement plus 31px in the following gap. The captured reference
+has a 9px second header row and the candidate has a separate 40px full-span
+month-marker row; these unequal structures are consistent with that gap
+difference, but the capture does not measure the marker box or prove its
+individual causal contribution. Text baselines/ring paint and current-source
+applicability remain open; no authored geometry was adjusted.
+
 October 31 paired calendar geometry population: a read-only comparison of the
 31 numbered day-cell pairs in the authenticated corrected report below finds
 the same horizontal delta (approximately zero) and the same vertical delta
