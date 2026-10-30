@@ -10,6 +10,12 @@ import { chromium } from 'playwright-core';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const count = (events, type) => events.filter(e => e.type === type).length;
+export function makePartialRangeReport(results, runtimeErrors, error, provenanceSha256) {
+  return { schemaVersion: 1, kind: 'public-range-pointer-drag-partial', complete: false,
+    provenance: { file: 'provenance.json', sha256: provenanceSha256 },
+    error: { name: error?.name ?? 'Error', message: String(error?.message ?? error) },
+    runtimeErrors, results };
+}
 export function inspectRangeDrag(entry) {
   const errors = [], checks = {};
   try {
@@ -129,6 +135,11 @@ async function main() {
     const invalid = results.filter(r => r.errors.length), failed = results.filter(r => Object.values(r.checks).some(pass => !pass));
     console.log(JSON.stringify({ cases: results.length, invalid: invalid.length, failed: failed.length, runtimeErrors, output }));
     process.exitCode = invalid.length || runtimeErrors.length ? 2 : failed.length ? 1 : 0;
+  } catch (error) {
+    writeFileSync(path.join(output, 'partial-report.json'), JSON.stringify(
+      makePartialRangeReport(results, runtimeErrors, error,
+        hash(readFileSync(path.join(output, 'provenance.json')))), null, 2) + '\n', { flag: 'wx' });
+    throw error;
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href)

@@ -2,9 +2,21 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
+import { makePartialRangeReport } from '../../scripts/audit-public-range-drag.mjs';
 import { rangeDragArtifactRoot, inspectRangeDragCause, validateRangeDragEvidence } from './public-range-drag-evidence.mjs';
 const report = JSON.parse(readFileSync(`${rangeDragArtifactRoot}/latest-report.json`));
 const lines = readFileSync(`${rangeDragArtifactRoot}/audit.js`, 'utf8').split('\n');
+
+test('partial range capture preserves completed cases without claiming completion', () => {
+  const results = [{ target: 'first', checks: { value: false } }];
+  const partial = makePartialRangeReport(results, [{ type: 'pageerror' }], new Error('navigation timeout'), 'digest');
+  assert.equal(partial.complete, false);
+  assert.equal(partial.kind, 'public-range-pointer-drag-partial');
+  assert.deepEqual(partial.results, results);
+  assert.deepEqual(partial.error, { name: 'Error', message: 'navigation timeout' });
+  assert.deepEqual(partial.provenance, { file: 'provenance.json', sha256: 'digest' });
+  assert.equal(partial.runtimeErrors.length, 1);
+});
 
 test('retained range timestamps are settled action samples, not continuous visual motion evidence', () => {
   const travel = JSON.parse(readFileSync('docs/material-public-range-travel-audit.json'));

@@ -9,6 +9,12 @@ new directory retains the bundled producer, provenance and 240 PNGs but no
 differences, but their structured traces were not published and are not a
 current-runtime finding. Investigate the navigation/resource failure before
 any bounded retry; do not overwrite the partial evidence or weaken checks.
+The existing runner now writes a distinct `partial-report.json` on an exception
+after browser launch, containing completed cases, runtime errors, error message
+and provenance hash, then rethrows. A focused shape test passes 1/1; it does
+not exercise a real browser navigation failure or explain the earlier timeout.
+This instrumentation changes runner/test fingerprints; historical receipts
+remain historical and require reconciliation before canonical integration.
 
 October 30 datepicker placement provenance: the authenticated October5
 light/desktop-DPR1 open row records a pointerdown/up/click on both sides and
