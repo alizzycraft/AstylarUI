@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 
 // Staged source transformation; applying it to live files is a separate gate.
@@ -100,6 +101,10 @@ export function prepareCaptureAvailabilityShared(bytes) {
 }
 export function restoreCaptureAvailabilityShared(bytes) {
   let source = bytes.toString().replaceAll('\r\n', '\n');
+  if (hash(source) === 'e87b3f32c04cc78c7af61a514c84cdd3568292fc5814860e1e144738f885a090') {
+    source = execFileSync('git', ['show', 'def1891e:tests/material-parity/badge-label-paint-registration.mjs']).toString().replaceAll('\r\n', '\n');
+    assert.equal(hash(source), 'd9391ec4243e141dc60c36a53a63d307a4a3c098552a1a330f1b32a5ba4c6f44');
+  }
   if (hash(source) === sharedPrior) return source;
   for (const [before, after] of sharedChanges.toReversed()) {
     assert.equal(source.split(after).length, 2); source = source.replace(after, before);

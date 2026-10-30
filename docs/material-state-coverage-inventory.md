@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+October 31 Capture Availability source boundary: its historical registration
+suite initially failed 1/3 because the Badge reader changed after its frozen
+shared-source hash. The existing restoration now recognizes that exact new
+Badge source, recovers the exact prior bytes from Git and verifies both hashes
+before applying the older restoration. The focused suite passes 3/3, including
+an unknown-edit rejection on the new source. This changes the Availability
+reader and test, creating their own downstream receipt transitions; nested
+integration and canonical conservation remain open. No recorded evidence or
+acceptance status changed.
+
 October 31 nested Badge reader integration: the actual
 `createBadgeLabelPaintReviewReader` completed with exit 0 after the tooltip
 source transition, reconstructing the expected review

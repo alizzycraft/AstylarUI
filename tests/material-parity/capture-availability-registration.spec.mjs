@@ -13,6 +13,7 @@ import { captureAvailabilityReview } from '../../scripts/join-material-capture-a
 test('availability historical reader restores only authenticated registration changes', () => {
   const root = process.cwd();
   const sharedBefore = restoreCaptureAvailabilityShared(readFileSync(captureAvailabilitySharedFile));
+  assert.throws(() => restoreCaptureAvailabilityShared(Buffer.concat([readFileSync(captureAvailabilitySharedFile), Buffer.from('\n// unknown edit')] )));
   const sharedAfter = prepareCaptureAvailabilityShared(sharedBefore);
   assert.equal(restoreCaptureAvailabilityShared(sharedAfter), sharedBefore);
   assert.throws(() => restoreCaptureAvailabilityShared(sharedAfter + '\n// drift'));
