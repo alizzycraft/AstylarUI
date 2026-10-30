@@ -21,9 +21,11 @@ const packedRoot = process.argv[6] ? path.resolve(process.argv[6]) : null;
 assert.ok(!packedRoot || spec === inspectionConsumer, 'Explicit packed root is bounded to the public inspection suite');
 if (spec === inspectionConsumer) assert.equal(process.env.ASTYLAR_AUDIT_SPEC_FILTER ?? '', '', 'Run the complete public inspection suite');
 if (spec === materialReduction) {
-  assert.equal(process.env.ASTYLAR_AUDIT_SPEC_FILTER,
+  assert.ok([
     'paragraph flow places a divider without absolute text or separator offsets',
-    'Material reduction execution requires the exact audited divider filter');
+    'calendar table first week',
+  ].includes(process.env.ASTYLAR_AUDIT_SPEC_FILTER),
+  'Material reduction execution requires an exact audited filter');
 }
 assert.ok(dpr === 1 || dpr === 2, 'DPR must be 1 or 2');
 assert.ok(process.argv[2] && !existsSync(output), 'Supply a new evidence directory');

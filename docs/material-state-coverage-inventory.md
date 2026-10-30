@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+October 31 provenance-bound table browser reduction: the existing overlay
+diagnostic runner accepts the exact `calendar table first week` filter, with
+the older divider filter unchanged. Its first preflight against the older
+`overlay-source-build-bb5a07c` failed before capture because installed
+`astylar.js` differs; no provenance assertion was bypassed. Using the retained
+`divider-context-angular-source-build-20261013` checkpoint, the runner checked
+the build, installed package and `dist/lib` emitted files, recorded all bundle
+inputs, and served the recorded `audit.js` bundle. The input inventory includes
+installed `table.service.js` SHA256 `ed47ea57...`, matching the checkpoint and
+current `table.service.ts` source receipt `0d96f98c...`. Chrome 156.0.8078.79,
+Angular 20.3.31, Babylon 8.56.2, AstylarUI 0.2.0, 900x800/DPR1: the one-week
+equal-input table failed with the previously recorded width/height mismatches;
+the following-seven-cell-week horizontal control passed. There were no page
+errors; exit 1 reflects the retained failure. Result and provenance are in
+`artifacts/material-parity/calendar-table-provenance-20261031`, SHA256
+`a371a9dc698609678dd8df240dee321027c6585175902e1c52c1d044b93ee419` and
+`b6c564f8f1bb168bdc399c6e8886ccf644d272eeb4dee25052110af15aafc0ce`.
+This does not trace the first bad runtime calculation, prove the original
+multiweek datepicker symptom, or establish full paint/semantic parity. The
+runner's changed fingerprint requires historical-reader reconciliation.
+
 October 31 table diagnostic source applicability: current `table.service.ts`
 (SHA256 `0d96f98c3bdcfbba71a1eaa839cfa34d19e5621471b27929574334535e7733c9`)
 was transpiled to ES2022 with TypeScript experimental decorators and compared
