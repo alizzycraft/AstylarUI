@@ -8,6 +8,12 @@ report SHA256 `8e74b7b36668d430396cf7ed9f4fab2dc14ced063578a18e99d48de9edc29a6f`
 Each AX file hash matches the report; Chrome 156.0.8078.79 records one reference
 and three Astylar main landmarks, without page errors. The full 1887-file
 served-build checkpoint was verified by the collector before/after capture.
+The raw AX/backend-DOM join identifies reference frame `MAIN` versus candidate
+frame `MAIN`, semantic `page` `MAIN`, and semantic `sidenav-content` `MAIN`.
+Current matching component source authors both candidate `type: 'main'` nodes;
+the reference authors `mat-sidenav-content`, whose captured AX role is generic.
+This reproduces an unequal authored semantic structure, not an equal-input
+semantic-bridge defect. It does not resolve full accessibility mapping.
 This repeats the discrepancy under the newer browser on that retained build;
 it is not a fresh current-package build, full semantic review or case closure.
 The additive collector selector changes its fingerprint; historical receipts
