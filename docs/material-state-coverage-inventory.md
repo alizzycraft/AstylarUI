@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 30 exact-case triage of accepted index `73c84aef` (index SHA256
+`baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059`):
+all 2311 cases have partial `inputStyleStructure`, `semantics`,
+`historyOwnership` and `sourceCurrentness` obligations. Counting top-level
+`partial`/`pending` dispositions also yields 1362 localPaint, 577 editing,
+549 activation, 386 programmaticFocus and 128 keyboardInteraction obligations.
+The minimum is four outstanding top-level obligations per case; the first
+examples are static sidenav profiles. These counts describe ledger dispositions,
+not missing captures, unique defects or parity failures. No case is closed by
+this tally. Prioritize shared evidence and source-currentness reconciliation;
+inspect each exact case before claiming a complete review.
+
 October 30 range source-transition integration probe: accepting exact old,
 intermediate and new test-file hashes in the existing snackbar reader made its
 three direct/nested checks pass, including a separately verified intermediate
