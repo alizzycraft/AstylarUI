@@ -8922,6 +8922,11 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/join-material-capture-availability.mjs",
+    "tests/material-parity/capture-availability-join.spec.mjs",
+    "tests/material-parity/capture-availability-registration.mjs",
+    "tests/material-parity/capture-availability-registration.spec.mjs",
+    "artifacts/material-parity/capture-availability-live-reader-20261030.log",
     "scripts/join-material-badge-label-paint.mjs",
     "scripts/audit-material-badge-label-crop-context.mjs",
     "scripts/audit-material-badge-texture-observation.mjs",
@@ -10066,6 +10071,13 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/capture-availability-join.spec.mjs", new RegExp("test\\('capture availability corrects only 16 exact cases and recovers the complete predecessor'"), "capture availability corrects only 16 exact cases and recovers the complete predecessor", "Exact retained capture availability and recorded-build matching only;not current-browser execution,input equivalence,rendering acceptance or case closure."),
+    proof(root, "tests/material-parity/capture-availability-join.spec.mjs", new RegExp("test\\('availability matcher rejects wrong builds, browsers, duplicate assets and nonexact cases'"), "availability matcher rejects wrong builds, browsers, duplicate assets and nonexact cases", "Exact retained capture availability and recorded-build matching only;not current-browser execution,input equivalence,rendering acceptance or case closure."),
+    proof(root, "tests/material-parity/capture-availability-join.spec.mjs", new RegExp("test\\('availability join rejects predecessor drift and corrupted reports without publishing'"), "availability join rejects predecessor drift and corrupted reports without publishing", "Exact retained capture availability and recorded-build matching only;not current-browser execution,input equivalence,rendering acceptance or case closure."),
+    proof(root, "tests/material-parity/capture-availability-join.spec.mjs", new RegExp("test\\('availability reader preserves predecessor routing and returns only the exact successor envelope'"), "availability reader preserves predecessor routing and returns only the exact successor envelope", "Exact retained capture availability and recorded-build matching only;not current-browser execution,input equivalence,rendering acceptance or case closure."),
+    proof(root, "tests/material-parity/capture-availability-registration.spec.mjs", new RegExp("test\\('availability staged inventory preserves every predecessor source proof and plan'"), "availability staged inventory preserves every predecessor source proof and plan", "Exact retained capture availability and recorded-build matching only;not current-browser execution,input equivalence,rendering acceptance or case closure."),
+    proof(root, "tests/material-parity/capture-availability-registration.spec.mjs", new RegExp("test\\('availability staged selector preserves older routes and rejects mixed supplements'"), "availability staged selector preserves older routes and rejects mixed supplements", "Exact retained capture availability and recorded-build matching only;not current-browser execution,input equivalence,rendering acceptance or case closure."),
+    proof(root, "tests/material-parity/capture-availability-registration.spec.mjs", new RegExp("test\\('availability historical reader restores only authenticated registration changes'"), "availability historical reader restores only authenticated registration changes", "Exact retained capture availability and recorded-build matching only;not current-browser execution,input equivalence,rendering acceptance or case closure."),
     proof(root, "tests/material-parity/badge-label-paint-join.spec.mjs", new RegExp("test\\('Badge label join preserves whole predecessor and bounds paint evidence to 40 interactions'"), "Badge label join preserves whole predecessor and bounds paint evidence to 40 interactions", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
     proof(root, "tests/material-parity/badge-label-paint-join.spec.mjs", new RegExp("test\\('Badge label join rejects changed predecessor and corrupt evidence without writing'"), "Badge label join rejects changed predecessor and corrupt evidence without writing", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),
     proof(root, "tests/material-parity/badge-label-paint-registration.spec.mjs", new RegExp("test\\('Badge staged registration preserves complete source proof and plan inventories'"), "Badge staged registration preserves complete source proof and plan inventories", "Historical Badge label-region diagnostics and bounded contrast prefix raster attribution;not equal full inputs,complete glyphs,action replay,current rendering or whole-case acceptance."),

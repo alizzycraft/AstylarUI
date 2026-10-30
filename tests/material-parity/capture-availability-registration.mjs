@@ -70,22 +70,57 @@ export function restoreCaptureAvailabilityRegistration(bytes, kind) {
   assert.equal(hash(source), priors[kind]); return source;
 }
 
+export function restoreCaptureAvailabilityIfPresent(bytes, kind) {
+  const marker = { producer: '"scripts/join-material-capture-availability.mjs",',
+    runner: 'const captureAvailabilityReaderFactory = ',
+    launcher: "const captureAvailability = rawRequested.includes('--capture-availability');" }[kind];
+  return marker && bytes.toString().includes(marker) ? restoreCaptureAvailabilityRegistration(bytes, kind) : bytes;
+}
+
+export const captureAvailabilitySharedFile = 'tests/material-parity/badge-label-paint-registration.mjs';
+const sharedPrior = 'e66373948416d062af1fc2cd5238487750ed3e78946cb65f29d8ea45d83693cd';
+const sharedImport = "import { restoreCaptureAvailabilityIfPresent, createCaptureAvailabilityHistoricalRead } from './capture-availability-registration.mjs';\n";
+const sharedChanges = [
+  ["import assert from 'node:assert/strict';\nimport { createHash } from 'node:crypto';",
+    sharedImport + "import assert from 'node:assert/strict';\nimport { createHash } from 'node:crypto';"],
+  ['export function restoreBadgeLabelPaintRegistration(bytes, kind) {',
+    'export function restoreBadgeLabelPaintRegistration(bytes, kind) {\n  bytes = restoreCaptureAvailabilityIfPresent(bytes, kind);'],
+  ['export function restoreBadgeLabelPaintIfPresent(bytes, kind) {',
+    'export function restoreBadgeLabelPaintIfPresent(bytes, kind) {\n  bytes = restoreCaptureAvailabilityIfPresent(bytes, kind);'],
+  ['export function createBadgeLabelPaintHistoricalRead({ root, read }) {',
+    'export function createBadgeLabelPaintHistoricalRead({ root, read }) {\n  read = createCaptureAvailabilityHistoricalRead({ root, read });'],
+];
+export function prepareCaptureAvailabilityShared(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(source), sharedPrior);
+  for (const [before, after] of sharedChanges) {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  }
+  return source;
+}
+export function restoreCaptureAvailabilityShared(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  if (hash(source) === sharedPrior) return source;
+  for (const [before, after] of sharedChanges.toReversed()) {
+    assert.equal(source.split(after).length, 2); source = source.replace(after, before);
+  }
+  assert.equal(hash(source), sharedPrior); return source;
+}
+
 // For predecessor evidence readers only. Current source collection must retain
 // its raw reader so registration changes remain visible in the new inventory.
 export function createCaptureAvailabilityHistoricalRead({ root, read }) {
   const kinds = new Map(Object.entries({ producer: 'tests/material-parity/input-equivalence-audit.mjs',
     runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })
     .map(([kind, file]) => [path.resolve(root, file), kind]));
-  const markers = { producer: '"scripts/join-material-capture-availability.mjs",',
-    runner: 'const captureAvailabilityReaderFactory = ',
-    launcher: "const captureAvailability = rawRequested.includes('--capture-availability');" };
   return (name, options) => {
     const kind = kinds.get(path.resolve(root, name));
-    if (!kind) return read(name, options);
+    const shared = path.resolve(root, name) === path.resolve(root, captureAvailabilitySharedFile);
+    if (!kind && !shared) return read(name, options);
     const input = read(name);
     // Leave earlier generations to their existing, independently guarded readers.
-    const restored = input.toString().includes(markers[kind])
-      ? restoreCaptureAvailabilityRegistration(input, kind) : input;
+    const restored = shared ? (input.toString().includes(sharedImport.trim()) ? restoreCaptureAvailabilityShared(input) : input)
+      : restoreCaptureAvailabilityIfPresent(input, kind);
     const bytes = Buffer.from(restored);
     const encoding = typeof options === 'string' ? options : options?.encoding;
     return encoding ? bytes.toString(encoding) : bytes;

@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain capture-availability-registered-reader-20261030.log:actual live source
+reader completed exit0 with2311 cases/18636 dependencies and accepted pointer
+unchanged. It supersedes staged routing only for live-source applicability;
+canonical export/conservation/cold/import remain pending. Preserve both prior
+logs and the direct-reader failure explanation in the coverage ledger.
+
 Retain capture-availability-staged-routing-20261030.log:exit0 verifies proposed
 source routing for2311 cases/18636 dependencies without replacing the accepted
 pointer. Activation was reverted after the separate direct Badge test-reader

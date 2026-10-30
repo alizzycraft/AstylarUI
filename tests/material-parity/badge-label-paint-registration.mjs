@@ -1,3 +1,4 @@
+import { restoreCaptureAvailabilityIfPresent, createCaptureAvailabilityHistoricalRead } from './capture-availability-registration.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -74,6 +75,7 @@ export function prepareBadgeLabelPaintRegistration(bytes, kind) {
 }
 
 export function restoreBadgeLabelPaintRegistration(bytes, kind) {
+  bytes = restoreCaptureAvailabilityIfPresent(bytes, kind);
   let source = bytes.toString().replaceAll('\r\n', '\n');
   if (hash(source) === priors[kind]) return source;
   for (const [before, after] of changes[kind].toReversed()) {
@@ -121,11 +123,13 @@ export function restoreBadgeLabelPaintShared(bytes, file) {
   assert.equal(hash(source), entry.prior); return source;
 }
 export function restoreBadgeLabelPaintIfPresent(bytes, kind) {
+  bytes = restoreCaptureAvailabilityIfPresent(bytes, kind);
   const marker = { producer: '"scripts/join-material-badge-label-paint.mjs",',
     runner: 'const badgeLabelPaintReaderFactory = ', launcher: "const badgeLabelPaint = rawRequested.includes('--badge-label-paint');" }[kind];
   return marker && bytes.toString().includes(marker) ? restoreBadgeLabelPaintRegistration(bytes, kind) : bytes;
 }
 export function createBadgeLabelPaintHistoricalRead({ root, read }) {
+  read = createCaptureAvailabilityHistoricalRead({ root, read });
   const kinds = new Map(Object.entries({ producer: 'tests/material-parity/input-equivalence-audit.mjs',
     runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })
     .map(([kind, file]) => [path.resolve(root, file), kind]));

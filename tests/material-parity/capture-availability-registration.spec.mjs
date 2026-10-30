@@ -6,11 +6,18 @@ import vm from 'node:vm';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { prepareCaptureAvailabilityRegistration, restoreCaptureAvailabilityRegistration,
-  captureAvailabilitySources, captureAvailabilityProofs, createCaptureAvailabilityHistoricalRead } from './capture-availability-registration.mjs';
+  captureAvailabilitySources, captureAvailabilityProofs, createCaptureAvailabilityHistoricalRead,
+  captureAvailabilitySharedFile, prepareCaptureAvailabilityShared, restoreCaptureAvailabilityShared } from './capture-availability-registration.mjs';
 import { captureAvailabilityReview } from '../../scripts/join-material-capture-availability.mjs';
 
 test('availability historical reader restores only authenticated registration changes', () => {
   const root = process.cwd();
+  const sharedBefore = restoreCaptureAvailabilityShared(readFileSync(captureAvailabilitySharedFile));
+  const sharedAfter = prepareCaptureAvailabilityShared(sharedBefore);
+  assert.equal(restoreCaptureAvailabilityShared(sharedAfter), sharedBefore);
+  assert.throws(() => restoreCaptureAvailabilityShared(sharedAfter + '\n// drift'));
+  const sharedReader = createCaptureAvailabilityHistoricalRead({ root, read: () => Buffer.from(sharedAfter) });
+  assert.equal(sharedReader(captureAvailabilitySharedFile, 'utf8'), sharedBefore);
   const files = { producer: 'tests/material-parity/input-equivalence-audit.mjs',
     runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' };
   for (const [kind, file] of Object.entries(files)) {

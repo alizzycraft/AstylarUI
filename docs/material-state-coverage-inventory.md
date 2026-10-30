@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October30 capture-availability registration is now live. Direct Badge restoration
+and its historical reader first peel only the authenticated capture-availability
+transition; the new wrapper also recovers the exact predecessor Badge helper
+(normalized SHA256 e66373948416d062af1fc2cd5238487750ed3e78946cb65f29d8ea45d83693cd).
+This corrects the bypass identified below without relaxing drift rejection or
+changing raw current source collection. The initial shared-import matcher hit
+three textual copies; it was narrowed to the unique two-line import header.
+Focused checks pass23/23: capture-availability registration/join, Badge
+registration, Tooltip history and Snackbar registration. Live launcher dry-run
+selects review2f609608 and runner syntax passes. Current inventory1142 sources,
+470 proofs,205 findings,72 implementation tracks; original entries preserved.
+`capture-availability-registered-reader-20261030.log` completed exit0 against
+actual live files:2311 cases,18636 dependencies,22802 reads,accepted pointer
+unchanged,currentRenderingAccepted=false. Earlier activation-withheld entries
+are historical. Next perform one coherent canonical export/conservation/cold/
+import milestone; accepted e1072ead is not claimed current for these new sources.
+All2311 cases remain partial/current-rendering unverified. No renderer/fixture
+changes, fresh browser capture, evidence deletion or acceptance change occurred.
+
 October30 capture-availability routing is verified but activation is withheld.
 `capture-availability-staged-routing-20261030.log` authenticates all2311 cases
 and18636 dependencies with the proposed three source files supplied in memory;
