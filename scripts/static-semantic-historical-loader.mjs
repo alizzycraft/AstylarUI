@@ -19,6 +19,7 @@ const allowed = new Map([
   ['scripts/check-static-widget-state-ax.mjs', '41b60b756c719e0065e89ce31f92b7c3c8ae9b25e74fd05656592685d1b8dbdf'],
 ].map(([file, sha256]) => [pathToFileURL(path.resolve(file)).href, { file, sha256 }]));
 const policyFile = 'tests/material-parity/input-equivalence-policy.mjs', policyUrl = pathToFileURL(path.resolve(policyFile)).href;
+const historicalPolicyUrl = `${policyUrl}?retained-static-semantic-review`;
 // Exact retained reviewers and the bottom-sheet verifier may replay these two
 // receipts. Production, other reviewers and arbitrary imports stay untouched.
 const bottomReviewer = path.resolve('scripts/review-bottom-sheet-name-inputs.mjs');
@@ -53,13 +54,24 @@ registerHooks({
   resolve(specifier, context, next) {
     const result = next(specifier, context);
     if (result.url === policyUrl) {
-      const owner = allowed.get(context.parentURL); assert.ok(owner, 'Historical policy only for exact retained reviewers;not production,capture or arbitrary imports');
+      const liveDependencies = new Map([
+        ['scripts/join-material-menu-composite-evidence.mjs', 'a40c216868f8f7cd0ef713e8384e94ee65d82ffab155a57c691bdd6b45bd8661'],
+        ['scripts/join-material-snackbar-single-open.mjs', '53753650ee73d2e83a6d8242ccd0b17dd6a1887a495dd00e1d6a830b9011ad1f'],
+      ].map(([file, digest]) => [pathToFileURL(path.resolve(file)).href, { file, digest }]));
+      const liveDependency = liveDependencies.get(context.parentURL);
+      if (entry === path.resolve('scripts/join-static-semantic-input-evidence.mjs') && liveDependency) {
+        assert.equal(hash(fs.readFileSync('scripts/join-static-semantic-input-evidence.mjs')), '7f46ceb152f3d93ef8b58485b79676829bbf3117d21d53911c4552e9aecfce27');
+        assert.equal(hash(fs.readFileSync(liveDependency.file)), liveDependency.digest);
+        return result;
+      }
+      const owner = allowed.get(context.parentURL); assert.ok(owner, `Historical policy only for exact retained reviewers;not production,capture or arbitrary imports: ${context.parentURL}`);
       assert.equal(hash(fs.readFileSync(owner.file)), owner.sha256, 'Historical reviewer changed');
+      return { ...result, url: historicalPolicyUrl };
     }
     return result;
   },
   load(url, context, next) {
-    const result = next(url, context); if (url !== policyUrl) return result;
+    const result = next(url, context); if (url !== historicalPolicyUrl) return result;
     const live = result.source.toString().replaceAll('\r\n', '\n');
     const accepted = new Set([
       '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f',

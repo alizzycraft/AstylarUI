@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+October 30 static semantic join integration: the loader now gives the exact
+hash-bound menu and snackbar join dependencies the live policy in the exact
+static-semantic join process, while retained reviewers receive a separately
+keyed historical policy module. The chip reviewer still reproduces its log;
+arbitrary policy entry-point import remains rejected. The existing join test
+now passes initialization and the reviewer replay, but exits 1 at its older
+text-backing reader: `benchmark-config.spec.mjs` hashes to `f383821e...` while
+that reader requires `a270e3d3...`. This is a further historical dependency
+transition, not a case or rendering result. Full join, loader fingerprint and
+canonical publication remain pending; original evidence remains unchanged.
+
 October 30 static semantic reviewer replay: the historical loader now scopes
 the two authenticated source transitions to its nine exact allowlisted
 reviewers and the hash-bound bottom-sheet verifier; the bottom-sheet reviewer
