@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+October 31 exact Snackbar case triage: the authenticated historical
+`current-full-20261005/latest-report.json` (SHA256 `ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62`)
+contains `interaction:snack-bar@light/desktop-dpr1/activate-twice`. It records
+two normalized pointerdown/up/click sequences on both sides, opener focus on
+both, no runtime errors, and a 344x48 snackbar at x=548/y=944 on both sides
+within a 1440x1000 canvas (8px bottom gap); its recorded output gate passes.
+The interaction-state comparator is an uncompared default and normalized event
+arrays do not establish actual targets, timer reset, dismissal or equivalent
+inputs. This is the October 5 captured build, not a current-code reproduction
+of the user's missing snackbar. The accepted case still has pending activation
+evidence and partial structure, paint, semantics, ownership and currentness;
+the separate single-open auto-dismiss capture does not close activate-twice.
+
 October 31 static semantic integration: the existing unfiltered
 `node --test tests/material-parity/static-semantic-inputs.spec.mjs` now passes
 4/4, exit 0, in 291.1 seconds. It covers authenticated historical population,
