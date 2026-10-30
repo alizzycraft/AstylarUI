@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+October 31 exact Snackbar activate-twice input check: the paired October 5
+input trees authenticate to the case receipts (`a2b8b3a5...` reference,
+`d1018ee4...` candidate). On the reference snackbar surface, the recorded
+active rule requests `min-width:344px; max-width:672px`; its computed width is
+344px. Candidate `snack-bar-surface` instead resolves an explicit `width:344px`
+and `height:48px`. The reference surface has padding `0 8px 0 0` and
+`justify-content:flex-start`; candidate resolves `padding:0 18px` and
+`justify-content:space-between`. Native label/live-region/action wrappers also
+differ from the candidate's direct span and button. Thus the recorded matching
+344x48 output is not equal-input evidence; this comparison alone cannot assign
+the user's missing-popup symptom to core or establish current source/runtime
+behavior. These are captured styles and authored-tree differences, not a full
+mapping of anonymous boxes, computed inherited typography, semantics or paint.
+
 October 31 exact Snackbar case triage: the authenticated historical
 `current-full-20261005/latest-report.json` (SHA256 `ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62`)
 contains `interaction:snack-bar@light/desktop-dpr1/activate-twice`. It records
