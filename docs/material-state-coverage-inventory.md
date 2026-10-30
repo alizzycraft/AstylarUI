@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+October 30 retained timepicker geometry check: the hash-authenticated October5
+light/desktop-DPR1 open row records reference and candidate popup widths of
+720px, each offset 56px below its 720px primary host, within projection noise.
+This does not reproduce the user's earlier wider-dropdown report and does not
+establish equal authored box-model inputs, scrollbar gutter/paint, current
+build behavior, or full case acceptance. The separate public equal-input
+gutter reduction remains a demonstrated core geometry gap; do not conflate
+its mobile client-width finding with this outer-popup width observation.
+
 October 30 Tooltip history check: `f3c8254c` ("complete showcase interaction
 parity") replaced a top-level absolute tooltip with a child in a column-flex
 anchor, initially retaining `translate(93px, 37px)` and `marginLeft:16px`.
