@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+October 31 historical reader reconciliation: the focused datepicker historical
+reader test initially failed because the direct tooltip reader encountered the
+newer Badge layer in the snackbar shared source and suite before restoring its
+own predecessor. Composing the existing hash-checked Badge restorations before
+the tooltip restorations for shared files and producer/runner/launcher resolves
+the focused test (1/1, including unknown-edit rejection). The two focused
+tooltip registry/driver tests also pass (2/2). No receipts were rewritten and
+no case or current rendering was accepted. The tooltip reader itself changed;
+its downstream fingerprint and full integration/export conservation still
+require reconciliation before canonical publication.
+
 October 31 retained geometry verifier: `node
 scripts/verify-calendar-geometry-retained.mjs` runs the exact `dc0bb349`
 producer in memory while authenticating and preserving the restored live

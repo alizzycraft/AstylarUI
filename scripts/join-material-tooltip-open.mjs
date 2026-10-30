@@ -5,6 +5,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { materialCaseKey } from '../tests/material-parity/run-checkpoint.mjs';
 import { createDatepickerOpeningReviewReader } from '../tests/material-parity/datepicker-opening-registration.mjs';
+import { restoreBadgeLabelPaintIfPresent, restoreBadgeLabelPaintShared } from '../tests/material-parity/badge-label-paint-registration.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const tooltipOpenPredecessor = 'cd9631f0dc9f7ca63b35c5d11d11611ebd3f98930166352ff56b3016d7989894';
@@ -133,24 +134,24 @@ export function createTooltipOpenHistoricalRead({ root, read }) {
   let previous;
   return (name, options) => {
     if (path.resolve(root, name) === path.resolve(root, 'tests/material-parity/snackbar-single-open-registration.spec.mjs')) {
-      const bytes = Buffer.from(restoreTooltipSnackbarSuite(read(name)));
+      const bytes = Buffer.from(restoreTooltipSnackbarSuite(restoreBadgeLabelPaintShared(read(name), 'tests/material-parity/snackbar-single-open-registration.spec.mjs')));
       const encoding = typeof options === 'string' ? options : options?.encoding;
       return encoding ? bytes.toString(encoding) : bytes;
     }
     if (path.resolve(root, name) === path.resolve(root, 'tests/material-parity/snackbar-single-open-registration.mjs')) {
-      const bytes = Buffer.from(restoreTooltipSharedBoundary(read(name)));
+      const bytes = Buffer.from(restoreTooltipSharedBoundary(restoreBadgeLabelPaintShared(read(name), 'tests/material-parity/snackbar-single-open-registration.mjs')));
       const encoding = typeof options === 'string' ? options : options?.encoding;
       return encoding ? bytes.toString(encoding) : bytes;
     }
     const kind = path.resolve(root, name) === path.resolve(root, 'scripts/run-material-input-audit.mjs') ? 'runner'
       : path.resolve(root, name) === path.resolve(root, 'scripts/export-material-input-audit-current-ancestry.mjs') ? 'launcher' : null;
     if (kind) {
-      const bytes = Buffer.from(restoreTooltipOpenSelection(read(name), kind));
+      const bytes = Buffer.from(restoreTooltipOpenSelection(restoreBadgeLabelPaintIfPresent(read(name), kind), kind));
       const encoding = typeof options === 'string' ? options : options?.encoding;
       return encoding ? bytes.toString(encoding) : bytes;
     }
     if (path.resolve(root, name) === path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs')) {
-      const bytes = Buffer.from(restoreTooltipOpenRegistry(read(name)));
+      const bytes = Buffer.from(restoreTooltipOpenRegistry(restoreBadgeLabelPaintIfPresent(read(name), 'producer')));
       const encoding = typeof options === 'string' ? options : options?.encoding;
       return encoding ? bytes.toString(encoding) : bytes;
     }
