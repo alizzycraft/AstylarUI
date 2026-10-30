@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+October 31 downstream historical integration: after the tooltip restoration
+composition, `node --test --test-name-pattern='static semantic case join
+preserves the complete predecessor after registration'
+tests/material-parity/static-semantic-inputs.spec.mjs` passes 1/1 (exit 0,
+113.5s). This is the retained predecessor join, not a fresh canonical export,
+current rendering check, or closure of all case obligations. Other consumers
+and the changed reader's source receipt remain to be reconciled before the
+full conservation/export milestone.
+
 October 31 historical reader reconciliation: the focused datepicker historical
 reader test initially failed because the direct tooltip reader encountered the
 newer Badge layer in the snackbar shared source and suite before restoring its
