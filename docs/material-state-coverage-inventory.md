@@ -17,6 +17,13 @@ reference component SHA256
 `debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa`.
 This authenticates only those two application sources, not all dependencies,
 styles, installed renderer bytes, browser state or live accessibility output.
+The same build's `chunk-XOU37TRR.js.map` embeds
+`node_modules/astylarui/dist/lib/lib/astylar-semantic-bridge.js` SHA256
+`590d49a2a4d5e205c10cf18a1e2e45a3f768079afad86f5ea330f7c6136088e8`
+after CRLF normalization; the currently installed corresponding file hashes
+`7c892095300b0eb8f03a9f38ce421143579a5d90e687e3e80a045b48be8f5aee`.
+Those bytes differ. Without a narrower behavioral equivalence proof or fresh
+capture, the old AX observation must not be promoted to current-package AX.
 
 October 30 exact-case triage of accepted index `73c84aef` (index SHA256
 `baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059`):
