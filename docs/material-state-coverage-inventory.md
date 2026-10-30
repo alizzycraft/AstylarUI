@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+October 30 range source-transition integration probe: accepting exact old,
+intermediate and new test-file hashes in the existing snackbar reader made its
+three direct/nested checks pass, including a separately verified intermediate
+replay. However, that reader edit changed its own source fingerprint and the
+downstream Badge historical-boundary test failed (2/3 pass). The experimental
+reader edit was reverted; Badge checks then pass 3/3, while the previously
+recorded snackbar current-source mismatch remains. No guard was weakened or
+canonical pointer changed. Next reconcile the reader transition through the
+existing staged historical chain as one batch before export, rather than
+changing one historical boundary in isolation.
+
 October 30 historical range reader reconciliation: the unmodified focused suite
 reports 4/5 passes; its complete evidence test fails at the runner source
 hash because partial-capture instrumentation changed that file. Git object
