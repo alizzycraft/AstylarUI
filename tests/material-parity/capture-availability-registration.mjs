@@ -1,0 +1,67 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+
+// Staged source transformation; applying it to live files is a separate gate.
+const review = '2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1';
+const hash = value => createHash('sha256').update(value).digest('hex');
+const priors = {
+  producer: '6e8db2faa61eb96a69c7d43eac20f95e377651a5489612d9f311907d206fccd5',
+  runner: 'cffae75a36eeffe9bda5d799d43565c4833a3bbb751077420ac741528f8dd3a8',
+  launcher: 'bd12f66374002fd4897769e03c373f26c812744c44d5e18a35d1b39b9e4df05a',
+};
+export const captureAvailabilitySources = Object.freeze([
+  'scripts/join-material-capture-availability.mjs',
+  'tests/material-parity/capture-availability-join.spec.mjs',
+  'tests/material-parity/capture-availability-registration.mjs',
+  'tests/material-parity/capture-availability-registration.spec.mjs',
+  'artifacts/material-parity/capture-availability-live-reader-20261030.log',
+]);
+export const captureAvailabilityProofs = Object.freeze([
+  ['capture-availability-join', 'capture availability corrects only 16 exact cases and recovers the complete predecessor'],
+  ['capture-availability-join', 'availability matcher rejects wrong builds, browsers, duplicate assets and nonexact cases'],
+  ['capture-availability-join', 'availability join rejects predecessor drift and corrupted reports without publishing'],
+  ['capture-availability-join', 'availability reader preserves predecessor routing and returns only the exact successor envelope'],
+  ['capture-availability-registration', 'availability staged inventory preserves every predecessor source proof and plan'],
+  ['capture-availability-registration', 'availability staged selector preserves older routes and rejects mixed supplements'],
+]);
+const boundary = 'Exact retained capture availability and recorded-build matching only;not current-browser execution,input equivalence,rendering acceptance or case closure.';
+const changes = {
+  producer: [
+    ['function sourceFingerprints(root) {\n  const files = [\n',
+      'function sourceFingerprints(root) {\n  const files = [\n' + captureAvailabilitySources.map(f => `    ${JSON.stringify(f)},\n`).join('')],
+    ['function focusedProofInventory(root) {\n  return [\n',
+      'function focusedProofInventory(root) {\n  return [\n' + captureAvailabilityProofs.map(([suite, title]) =>
+        `    proof(root, ${JSON.stringify(`tests/material-parity/${suite}.spec.mjs`)}, new RegExp(${JSON.stringify("test\\('" + title + "'")}), ${JSON.stringify(title)}, ${JSON.stringify(boundary)}),\n`).join('')],
+  ],
+  runner: [
+    ["import { badgeLabelPaintReview, createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';",
+      "import { badgeLabelPaintReview, createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';\nimport { captureAvailabilityReview, createCaptureAvailabilityReviewReader } from './join-material-capture-availability.mjs';"],
+    ['const applicability=badgeLabelPaintReaderFactory?.',
+      'const captureAvailabilityReaderFactory = options.caseObligationReviewSha256===captureAvailabilityReview ? createCaptureAvailabilityReviewReader : badgeLabelPaintReaderFactory;\n    const applicability=captureAvailabilityReaderFactory?.'],
+  ],
+  launcher: [
+    ["const badgeLabelPaint = rawRequested.includes('--badge-label-paint');",
+      "const captureAvailability = rawRequested.includes('--capture-availability');\nassert.ok(!captureAvailability || rawRequested.every(argument => ['--capture-availability', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\nconst badgeLabelPaint = rawRequested.includes('--badge-label-paint');"],
+    ['const requested = rawRequested.filter(', "const requested = rawRequested.filter(argument => argument !== '--capture-availability').filter("],
+    ['|--badge-label-paint]', '|--badge-label-paint|--capture-availability]'],
+    ['for (const [name, relative] of Object.entries(inputs)) {', `if (captureAvailability) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${review}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+    ['tooltipOpen || badgeLabelPaint)', 'tooltipOpen || badgeLabelPaint || captureAvailability)'],
+    ["if (requested.includes('--dry-run'))", `if (captureAvailability) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${review}';\nif (requested.includes('--dry-run'))`],
+  ],
+};
+export function prepareCaptureAvailabilityRegistration(bytes, kind) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(source), priors[kind]);
+  for (const [before, after] of changes[kind]) {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  }
+  return source;
+}
+export function restoreCaptureAvailabilityRegistration(bytes, kind) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  if (hash(source) === priors[kind]) return source;
+  for (const [before, after] of changes[kind].toReversed()) {
+    assert.equal(source.split(after).length, 2); source = source.replace(after, before);
+  }
+  assert.equal(hash(source), priors[kind]); return source;
+}

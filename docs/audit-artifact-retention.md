@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Retain capture-availability-live-reader-20261030.log:actual ancestry/dependency
+check completed exit0,2311 cases/18636 dependencies,accepted pointer unchanged.
+Do not overwrite it or rerun for prose. Source/export registration remains pending;
+this does not authorize removal of original evidence.
+
 Keep badge-label-pre-export-080b-20261029 and the separate
 badge-label-canonical-export-20261029.log/.stderr.log. Backup copies authenticate
 the accepted080b1dd5 payload and original manifest/readable report. Export launch

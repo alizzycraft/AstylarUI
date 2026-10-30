@@ -170,6 +170,24 @@ injects the authenticated accepted parent;it is not a full live ancestry replay.
 Live reader/source-registration integration remains pending as a coherent batch;
 the accepted canonical package and exporter selection are still unchanged.
 
+Full live ancestry/dependency validation completed exit0 in
+capture-availability-live-reader-20261030.log. It constructed the actual Badge
+chain,then used loadCaseObligationReview with a workspace-relative path and the
+composed reader. All2311 cases/18636 dependencies authenticate,with16 new
+availability children and107 recorded-build capture matches. Accepted pointer
+is unchanged;inspectionComplete/currentRenderingAccepted remain false. Reuse
+this result for unchanged inputs. Source/export registration is next;no new
+canonical export has been started.
+
+Staged capture-availability registration passes2/2 focused tests:whole source
+recovery,complete1137-source/463-proof/72-plan predecessor inventory conservation,
+five exact source additions/six proof additions,and preservation of every older
+launcher route. New --capture-availability selects2f609608 for export/check/dry-run
+separately and rejects mixed supplements. Proposed inventory1142/469/72 is not
+live yet. Next provide guarded historical source recovery through the existing
+reader chain before applying these three source transitions;do not bypass
+predecessor fingerprints or repeat the completed unchanged-input live check.
+
 October29 Badge live integration is verified locally but not yet canonical.
 Explicit --badge-label-paint selects3cb9fe23;the actual launcher dry-run confirms
 the exact review path/digest. Registry now has1137 sources/463 proofs/72 plans.
