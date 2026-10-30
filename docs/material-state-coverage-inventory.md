@@ -16,6 +16,11 @@ This reproduces an unequal authored semantic structure, not an equal-input
 semantic-bridge defect. It does not resolve full accessibility mapping.
 This repeats the discrepancy under the newer browser on that retained build;
 it is not a fresh current-package build, full semantic review or case closure.
+The focused component AX projection (role, name and child topology, excluding
+ignored/generic/inline nodes) is identical between Chrome 155 and 156 for each
+side: reference contains the two text nodes; Astylar nests `Main content` in
+a `main` landmark. This is a bounded cross-browser reproduction, not equivalence
+of full raw AX properties, assistive technology, or other cases.
 The additive collector selector changes its fingerprint; historical receipts
 remain preserved and need reconciliation before canonical integration.
 Running the unchanged historical verifier now fails at the changed collector
