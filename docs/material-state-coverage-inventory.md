@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+October 31 paired calendar geometry: the existing configured activation capture
+now has an opt-in single contrast/desktop-DPR1 datepicker geometry mode. A fresh
+checkpoint fingerprints the retained served build, installed browser and capture
+sources; the existing verifier passes one case/three paired action boundaries.
+At settlement, 7 reference weekday boxes and 31 numbered reference/candidate day
+boxes are present. For October days 1–3, the reference cells start at x233/273/
+313, y323.546875; candidate boxes start at x233/273/313, y357.559998, with
+40px sizes and canvas origin (0,0). Thus those boxes are approximately 34.013px
+lower on the candidate in this unequal-input captured composition. This is not
+a causal attribution to core, evidence of current source parity, or full-case
+acceptance. Retain `calendar-paired-geometry-corrected-20261031/latest-report.json`
+SHA256 `a8305e790a662ede13eeab265188b708b00f3a96852f6bb6f849adfe5b5b1b09`.
+The initial `calendar-paired-geometry-20261031` run is retained: its incorrect
+reference-day selector returned no days, so it is not day-geometry evidence.
+
 October 31 original calendar candidate input: the paired retained contrast
 desktop DPR1 activate Astylar tree SHA256
 `a285f3ba27c0a9201d72aaf230a772e8e2ac8968c908aef0faceaf6eb9946c9a`
