@@ -13,9 +13,16 @@ and `a133fbb3bfde80aa1ca8b3fb4cc296b85e6c5ebfb506004b218641b2b6c489a3`.
 Commit `c64397c1` introduced the application-side viewport clamp and changed
 popup placement and dimensions while aligning the showcase; it does not prove
 which renderer behavior, if any, required compensation. Current source still
-contains that calculation. Next compare equivalent connected-overlay inputs
-and fallback behavior in a focused public reproduction; current rendering,
-manual-case applicability and the underlying cause remain unverified.
+contains that calculation. The existing `fixture-rendered-geometry-feeds-layout`
+finding is stronger than that historical uncertainty: current `measure` still
+projects `vectorsWorld` through `Vector3.Project`, and `connectedOverlayTop`
+feeds the result into authored top. That is a confirmed CSS-first architectural
+violation, not proof that it caused the user's particular visual discrepancy.
+Existing handoff records no public generic connected-anchor/collision primitive;
+edge fallback and first-open/update behavior remain unverified. Next distinguish
+this known ownership gap from renderer defects using equivalent-input public
+reproductions where the necessary contract exists. Current rendering and
+manual-case applicability remain unverified.
 
 October 30 gutter source-applicability check: the installed scroll runtime
 still hashes to the retained public proof's
