@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+October 31 tooltip reader receipt boundary: the existing Badge historical
+reader now accepts only the exact pre-change or post-change tooltip reader
+hash and, for the latter, recovers the pre-change bytes from Git after checking
+their full hash. Its focused registration suite passes 3/3, including explicit
+prior/current and unknown-drift controls. This preserves the retained tooltip
+receipt without rewriting it. The Badge reader and its test have themselves
+changed; actual nested-reader integration and their downstream fingerprints
+remain pending before any canonical export or case acceptance.
+
 October 31 tooltip reader source transition: the checked-in tooltip reader
 changed from normalized SHA256
 `bc84dda1fed11bd18aadc7eec369d3f917fbdeed4d7e1b22d3db97010cad4ba7`

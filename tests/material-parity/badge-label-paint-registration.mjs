@@ -1,6 +1,7 @@
 import { restoreCaptureAvailabilityIfPresent, createCaptureAvailabilityHistoricalRead } from './capture-availability-registration.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 // Literal avoids a cycle through the legacy shared historical reader. The
 // selector and reader tests bind this to the actual join's exported digest.
@@ -130,12 +131,27 @@ export function restoreBadgeLabelPaintIfPresent(bytes, kind) {
 }
 export function createBadgeLabelPaintHistoricalRead({ root, read }) {
   read = createCaptureAvailabilityHistoricalRead({ root, read });
+  const tooltipFile = 'scripts/join-material-tooltip-open.mjs';
+  let tooltipPrior;
   const kinds = new Map(Object.entries({ producer: 'tests/material-parity/input-equivalence-audit.mjs',
     runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })
     .map(([kind, file]) => [path.resolve(root, file), kind]));
   const sharedPaths = new Map(badgeLabelPaintSharedFiles.map(file => [path.resolve(root, file), file]));
   return (name, options) => {
     const absolute = path.resolve(root, name), kind = kinds.get(absolute), file = sharedPaths.get(absolute);
+    if (absolute === path.resolve(root, tooltipFile)) {
+      const input = read(name);
+      const current = hash(input.toString().replaceAll('\r\n', '\n'));
+      const previous = 'bc84dda1fed11bd18aadc7eec369d3f917fbdeed4d7e1b22d3db97010cad4ba7';
+      assert.ok([previous, 'd3a52854a77b3fe7e57e7bd1dfb185403eec7c94a51586ae9ef1ca277ea9eec2'].includes(current), 'Unrecognized tooltip reader revision');
+      if (current !== previous && !tooltipPrior) {
+        tooltipPrior = execFileSync('git', ['show', `5eccecc2:${tooltipFile}`], { cwd: root });
+        assert.equal(hash(tooltipPrior), previous);
+      }
+      const bytes = current === previous ? Buffer.from(input) : Buffer.from(tooltipPrior);
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? bytes.toString(encoding) : bytes;
+    }
     if (!kind && !file) return read(name, options);
     const input = read(name);
     // Older nested generations belong to their existing readers. Only a

@@ -35,6 +35,11 @@ test('Badge historical boundary restores exact sources and rejects unrecognized 
   }
   const sentinel = Buffer.from('unchanged');
   assert.equal(createBadgeLabelPaintHistoricalRead({ root, read: () => sentinel })('unrelated.json'), sentinel);
+  const tooltip = 'scripts/join-material-tooltip-open.mjs', current = readFileSync(tooltip);
+  const historic = createBadgeLabelPaintHistoricalRead({ root, read: readFileSync })(tooltip);
+  assert.notDeepEqual(historic, current);
+  assert.deepEqual(createBadgeLabelPaintHistoricalRead({ root, read: () => historic })(tooltip), historic);
+  assert.throws(() => createBadgeLabelPaintHistoricalRead({ root, read: () => Buffer.concat([current, Buffer.from('\n// drift')]) })(tooltip), /Unrecognized tooltip/);
 });
 
 test('Badge staged registration preserves complete source proof and plan inventories', () => {
