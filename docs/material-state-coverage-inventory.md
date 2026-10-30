@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 30 static semantic historical loader: the pre-hook import of the
+registration graph caused its current policy module to be cached before the
+restricted loader could replace it; two historical reviewers therefore saw
+205 definitions instead of 180. The loader now avoids importing that graph,
+authenticates the permitted live policy hashes and exact Git predecessor bytes,
+and retains its exact-reviewer allowlist. Both reviewers pass their old
+180-definition boundary and next reject the changed capture-producer receipt;
+direct arbitrary policy import is rejected. Full reviewer replay is still
+failing and was not recorded as a pass. The loader's own changed fingerprint
+and downstream receipt transitions remain to be reconciled; no current
+rendering, canonical publication or case closure follows.
+
 October 30 static semantic predecessor: the 205-definition current registry
 is exactly the authenticated 204-definition predecessor plus the final
 datepicker-opening focus finding. The existing historical population reader

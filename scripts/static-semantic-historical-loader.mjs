@@ -2,10 +2,10 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { registerHooks } from 'node:module';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
-import { restoreStaticSemanticPolicy } from '../tests/material-parity/static-semantic-registration.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const allowed = new Map([
   ['scripts/review-bottom-sheet-name-inputs.mjs', 'ce978558e4bc12e78f7138f226779fce63c811412ba3516153ca2faa0aaf5e65'],
@@ -30,6 +30,15 @@ registerHooks({
   },
   load(url, context, next) {
     const result = next(url, context); if (url !== policyUrl) return result;
-    return { ...result, source: restoreStaticSemanticPolicy(result.source) };
+    const live = result.source.toString().replaceAll('\r\n', '\n');
+    const accepted = new Set([
+      '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f',
+      'a38dc20ab17b392fcd1eeac4e8ff693859c3dbfaf4395ae0e0a782326bd72a6c',
+      'b85f901b0b19ce6422ba4194aef63f558b6ca476f0e20b9f903b3a51c0bff0b3',
+    ]);
+    assert.ok(accepted.has(hash(live)), 'Unrecognized historical policy source');
+    const historical = execFileSync('git', ['show', '729e6ef3:tests/material-parity/input-equivalence-policy.mjs'], { maxBuffer: 8_000_000 }).toString().replaceAll('\r\n', '\n');
+    assert.equal(hash(historical), 'b85f901b0b19ce6422ba4194aef63f558b6ca476f0e20b9f903b3a51c0bff0b3');
+    return { ...result, source: historical };
   },
 });
