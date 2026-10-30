@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+October 31 tooltip reader source transition: the checked-in tooltip reader
+changed from normalized SHA256
+`bc84dda1fed11bd18aadc7eec369d3f917fbdeed4d7e1b22d3db97010cad4ba7`
+to `d3a52854a77b3fe7e57e7bd1dfb185403eec7c94a51586ae9ef1ca277ea9eec2`
+when the Badge restoration was composed. It is in the canonical producer's
+source list. The focused tooltip open join test passes 1/1 and rejects changed
+receipts; the previously recorded static-semantic join also passes. Neither
+test reconciles this reader's own historical source receipt or proves complete
+canonical conservation. Keep the old bytes in Git and do not publish a new
+canonical export until that explicit boundary and remaining gates are addressed.
+
 October 31 downstream historical integration: after the tooltip restoration
 composition, `node --test --test-name-pattern='static semantic case join
 preserves the complete predecessor after registration'
