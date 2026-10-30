@@ -26,10 +26,14 @@ Those bytes differ. Without a narrower behavioral equivalence proof or fresh
 capture, the old AX observation must not be promoted to current-package AX.
 Narrow source reconciliation: parsing both JS files with TypeScript and
 printing with comments removed produces identical 24,626-character output;
-all 22 class methods also match after whitespace normalization. This identifies
+all 21 class methods also match after whitespace normalization. This identifies
 the byte difference as non-executable formatting/comments at that module
 boundary, but does not authenticate imports, other renderer modules, browser
 conditions, actual live AX behavior or complete case currentness.
+Separately transpiling the current TypeScript semantic bridge to ES2022 and
+comparing the 21 class methods with the installed JS gives no method differences
+after whitespace normalization. That supports the current source-to-installed
+method boundary, not constructor/field/import equivalence or live AX behavior.
 
 October 30 exact-case triage of accepted index `73c84aef` (index SHA256
 `baa0f45a89a4ece6c95903e712c9761bd16c5ff1ef823085aa4828333b041059`):
