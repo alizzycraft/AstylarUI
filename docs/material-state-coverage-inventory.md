@@ -14,6 +14,13 @@ releases and 8 traced causes. No dependencies were switched or guard weakened.
 This verifies the historical capture against recovered dependencies; the normal
 reader still fails against today's files and canonical reconciliation remains
 pending. The separate current-installed retry has its own provenance.
+The existing range evidence suite now has an explicitly historical replay test
+using this hash-checked adapter; focused execution passes 1/1. The original
+current-files test remains unchanged and still detects the fingerprint mismatch.
+The replay requires the retained prior junction and Git object, so their
+availability is part of its evidence dependency; it is not a portable archival
+replacement or a new current-build pass. Test-source fingerprint reconciliation
+remains pending for canonical integration.
 
 October 30 current-installed public range retry completed 32 cases with exit 1
 because every case recorded failing parity checks; no case errors or runtime

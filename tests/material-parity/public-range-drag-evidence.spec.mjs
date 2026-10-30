@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import path from 'node:path';
 import test from 'node:test';
 import { makePartialRangeReport } from '../../scripts/audit-public-range-drag.mjs';
 import { rangeDragArtifactRoot, inspectRangeDragCause, validateRangeDragEvidence } from './public-range-drag-evidence.mjs';
@@ -51,6 +53,34 @@ test('public range reduction binds every case, source, served bundle, screenshot
   assert.equal(proof.cases, 32); assert.equal(proof.pairedBoundaries, 416); assert.equal(proof.screenshots, 256);
   assert.equal(proof.prematureReleaseCases, 16); assert.equal(proof.missingOutsideReleaseCases, 16);
   assert.equal(proof.tracedCauseCases, 8); assert.equal(proof.materialSwappedThumbCauseProven, false);
+  assert.equal(proof.renderingEquivalent, false);
+});
+
+test('historical range evidence replays with exact retained dependency bytes', () => {
+  const root = process.cwd();
+  const provenance = JSON.parse(readFileSync(`${rangeDragArtifactRoot}/provenance.json`));
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const oldRunner = execFileSync('git', ['show', '5e948fb7:scripts/audit-public-range-drag.mjs']);
+  assert.equal(digest(oldRunner), provenance.script.sha256);
+  const expected = new Map(provenance.bundleInputs.map(entry => [path.resolve(entry.file), entry.sha256]));
+  let recovered = 0;
+  const read = file => {
+    if (file === path.resolve(provenance.script.file)) return oldRunner;
+    let bytes = readFileSync(file);
+    const hash = expected.get(file);
+    if (hash && digest(bytes) !== hash) {
+      const prior = file.replace(`node_modules${path.sep}`, `node_modules.audit-prior-junction${path.sep}`);
+      assert.notEqual(prior, file, 'only retained package inputs may be recovered');
+      bytes = readFileSync(prior);
+      assert.equal(digest(bytes), hash, file);
+      recovered++;
+    }
+    return bytes;
+  };
+  const proof = validateRangeDragEvidence(report, { root, read });
+  assert.equal(recovered, 27);
+  assert.equal(proof.cases, 32);
+  assert.equal(proof.pairedBoundaries, 416);
   assert.equal(proof.renderingEquivalent, false);
 });
 
