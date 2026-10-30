@@ -1,16 +1,35 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { validateSupplementalCapture } from '../tests/material-parity/supplemental-capture-evidence.mjs';
+import { createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const captureAvailabilityPredecessor = '3cb9fe23409d103230b7d2f9e842d9f3dfd984fd579e5cf2cfc4c32bcef52b60';
+export const captureAvailabilityReview = '2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1';
 const childKey = 'supplementaryCaptureAvailability';
 const specs = {
   chips: ['supplementaryAlternateSelection', 'activate-alternate', 'scripts/audit-material-chips-alternate.mjs'],
   stepper: ['supplementaryLeaveSelection', 'activate-leave', 'scripts/audit-material-stepper-leave.mjs'],
 };
 const boundary = 'Exact configured case in authenticated supplemental capture matching the predecessor recorded served build. Captured browser only; not current-browser execution, whole-library applicability, equal inputs, rendering parity or case closure.';
+
+export function createCaptureAvailabilityReviewReader({ root, read,
+  predecessorFactory = createBadgeLabelPaintReviewReader }) {
+  const prior = predecessorFactory({ root, read });
+  const joined = joinCaptureAvailability(JSON.parse(prior.read(prior.file)).review,
+    (name, options) => read(path.resolve(root, name), options));
+  assert.equal(joined.sha256, captureAvailabilityReview);
+  const file = path.resolve(root, `artifacts/material-parity/working-audit/proposals/${joined.sha256}.json`);
+  const bytes = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256: joined.sha256, review: joined.review }));
+  return { ...joined, file, read(name, options) {
+    if (path.resolve(root, name) !== file) return prior.read(name, options);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  }, sourceApplicability: { mode: 'exact-supplementary-capture-availability',
+    predecessorApplicability: prior.sourceApplicability, boundary } };
+}
 
 // Pure matcher: later capture dates and report-level references are insufficient.
 export function inspectCaptureAvailability(caseKey, report, provenance, servedFiles) {

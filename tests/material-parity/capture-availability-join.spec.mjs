@@ -2,8 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
 import { joinCaptureAvailability, restoreCaptureAvailability, inspectCaptureAvailability,
-  captureAvailabilityPredecessor } from '../../scripts/join-material-capture-availability.mjs';
+  captureAvailabilityPredecessor, captureAvailabilityReview,
+  createCaptureAvailabilityReviewReader } from '../../scripts/join-material-capture-availability.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const base = 'artifacts/material-parity/working-audit';
@@ -59,4 +61,29 @@ test('availability join rejects predecessor drift and corrupted reports without 
     reached = true; return Buffer.concat([data, Buffer.from('changed')]);
   }));
   assert.equal(reached, true);
+});
+
+test('availability reader preserves predecessor routing and returns only the exact successor envelope', () => {
+  const root = process.cwd(), priorFile = path.resolve(root, 'prior-review.json');
+  const priorBytes = Buffer.from(JSON.stringify({ review: parent }));
+  const sentinel = Buffer.from('predecessor-owned-read'), applicability = { mode: 'pinned-test-parent' };
+  let calls = 0;
+  const predecessorFactory = options => {
+    calls++; assert.equal(options.root, root); assert.equal(options.read, readFileSync);
+    return { file: priorFile, sourceApplicability: applicability,
+      read: name => path.resolve(root, name) === priorFile ? priorBytes : sentinel };
+  };
+  const reader = createCaptureAvailabilityReviewReader({ root, read: readFileSync, predecessorFactory });
+  assert.equal(calls, 1); assert.equal(reader.sha256, captureAvailabilityReview);
+  assert.equal(reader.sourceApplicability.predecessorApplicability, applicability);
+  assert.equal(reader.read('unrelated.json'), sentinel);
+  const raw = reader.read(reader.file), envelope = JSON.parse(raw);
+  assert.equal(envelope.status, 'proposal-not-canonical');
+  assert.equal(hash(JSON.stringify(envelope.review)), captureAvailabilityReview);
+  assert.equal(reader.read(path.relative(root, reader.file), 'utf8'), raw.toString());
+  assert.equal(reader.read(reader.file, { encoding: 'utf8' }), raw.toString());
+  raw[0] = 0; assert.notEqual(reader.read(reader.file)[0], 0, 'Caller mutated reader buffer');
+  assert.throws(() => createCaptureAvailabilityReviewReader({ root, read: readFileSync,
+    predecessorFactory: () => ({ file: priorFile, read: () => Buffer.from(JSON.stringify({ review: { ...parent, scope: 'drift' } })) }),
+  }));
 });

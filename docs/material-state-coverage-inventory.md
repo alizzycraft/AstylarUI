@@ -161,6 +161,15 @@ registered/exported and has not changed accepted canonicale1072ead. Next integra
 this bounded correction in a coherent batch with source applicability preserved;
 do not rerun the full canonical/browser gates for this standalone preparation.
 
+The availability successor now exposes createCaptureAvailabilityReviewReader,
+composing the existing Badge reader and preserving its source-applicability/read
+routing. Four focused tests pass in27.66s,including a pinned-parent reader test
+for exact envelope digest,relative/absolute and encoding reads,buffer isolation,
+unrelated-read delegation and predecessor-drift rejection. That focused test
+injects the authenticated accepted parent;it is not a full live ancestry replay.
+Live reader/source-registration integration remains pending as a coherent batch;
+the accepted canonical package and exporter selection are still unchanged.
+
 October29 Badge live integration is verified locally but not yet canonical.
 Explicit --badge-label-paint selects3cb9fe23;the actual launcher dry-run confirms
 the exact review path/digest. Registry now has1137 sources/463 proofs/72 plans.
