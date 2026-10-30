@@ -1,5 +1,21 @@
 # Material comparison/state coverage inventory
 
+October 30 Chips width history: current state-dependent fixed widths trace to
+`db8f74321496c9a5253fa358528b00c173636d51` ("correct check marks and chip
+selection"), which changed 98/94px fixed widths to selected/unselected 98/68px
+and 94/64px. `00de46ceffc78850115fca006a9680f8044efe75` ("align chip labels
+and spacing") changed selected widths to 97/93px and removed a -2px label top
+offset. The commit titles and diff indicate parity-oriented fixture changes,
+but do not establish the underlying renderer cause or that these dimensions
+are equivalent to the reference. Preserve as a compensation candidate pending
+equal-input intrinsic-sizing proof; do not adjust fixture values during audit.
+The current compact index already classifies four chip width discrepancies as
+`reviewed-control-fixed-width-authoring`: chip-0 97.422/97px and 73.422/68px,
+chip-1 92.75/93px and 68.75/64px (reference/candidate respectively). These are
+recorded resolved-value examples, not proof that the core intrinsic-sizing
+path succeeds on equivalent inputs. Reuse that attribution; the history above
+adds commit context rather than a new width finding.
+
 October 30 chip paint join reconciliation: the current pointer names generation
 `73c84aef8e91a98f5aeb04a07426473ef6d24fb1811a5b0f2aa519dfc38cf484`.
 Its index bytes match the pointer SHA256
