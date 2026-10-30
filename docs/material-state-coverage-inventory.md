@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+October 31 original calendar candidate input: the paired retained contrast
+desktop DPR1 activate Astylar tree SHA256
+`a285f3ba27c0a9201d72aaf230a772e8e2ac8968c908aef0faceaf6eb9946c9a`
+records `datepicker-grid` as an absolutely positioned div at top 64px/left
+8px with authored-resolved `width:280px;height:280px` and seven 40px grid
+columns and rows. The reference table in the paired record is a static table
+with computed 280x234px and distinct header/body rows (details below). These
+are different structures and declared versus computed values, not a direct
+box-to-box parity measurement or proof that the 46px difference causes the
+historical failure. They do establish that the reduced native-table height
+defect cannot be applied to this captured grid as if the same inputs were used.
+Reconcile coordinate ownership and the corresponding header/day boxes before
+assigning that case's visual cause; the capture is historical, clock-sensitive,
+and not current acceptance.
+
 October 31 original calendar structure check: in the retained contrast desktop
 DPR1 `activate/reference-input-tree.json` from `current-full-20261005` (SHA256
 `af20570aa3de7e0b1a5ea23d31485630017b3420a2edd2f98943ddadb624a5ca`), the
