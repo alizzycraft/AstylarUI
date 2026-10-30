@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+October 31 calendar capture source applicability: the retained build's
+`chunk-JPEJK334.js.map` (SHA256 `47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e`)
+embeds `src/app/astylar.component.ts` with SHA256
+`71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd`,
+identical to that current source file. The paired capture's candidate runtime
+records loading `chunk-JPEJK334.js` SHA256
+`e9b44703e281947d6af365b4d10615857623fc066678e88bb9e9330201b1e7d9`,
+matching the retained build. This supports applicability of that one component's
+authored source to the captured bundle, not a complete proof of the source map's
+build provenance, all dependencies, reference-side inputs, clock state, current
+renderer or current-case parity. No historical evidence was rewritten.
+
 October 31 calendar grid history clarification: `git log -S
 datepicker-month-marker` and the original `87f7f830` diff show the candidate
 calendar grid was introduced with the picker overlay, not demonstrated to be a
