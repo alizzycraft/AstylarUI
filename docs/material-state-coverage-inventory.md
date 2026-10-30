@@ -10,6 +10,14 @@ recorded snackbar current-source mismatch remains. No guard was weakened or
 canonical pointer changed. Next reconcile the reader transition through the
 existing staged historical chain as one batch before export, rather than
 changing one historical boundary in isolation.
+An independent read-only wrapper instead authenticated the live range-test
+SHA `0f96338387d0946b90c655e6c8132a4938611b2a8953455e79ec54bda0c9e03e`,
+recovered exact intermediate `0d94003d2214b849ba89035d5757a4ec9c30d4bfd7b47e0ca763d18bc10368b1`
+from Git, and passed it to the unmodified snackbar reader. Direct and nested
+reads both reproduced historical `355928ad9eabe639c8b838b4bd7d23a6890ceb13835a0dfeb6f323f1eb1e8653`;
+an altered live source was rejected. This proves a bounded adapter is possible,
+not that the production collector uses it or that other dependencies/export
+are reconciled. No source file or historical guard was modified by this probe.
 
 October 30 historical range reader reconciliation: the unmodified focused suite
 reports 4/5 passes; its complete evidence test fails at the runner source
