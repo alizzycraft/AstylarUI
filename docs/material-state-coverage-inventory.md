@@ -148,6 +148,19 @@ Correct it in a batched successor review while preserving the historical
 three-report census and all prior obligations;do not edit frozen captures or
 claim that checkpoint-bound means current-browser accepted.
 
+October30 standalone correction implemented in join-material-capture-availability.mjs.
+Pinned predecessor3cb9fe23 yields proposal2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1.
+Exactly16 Chips/Stepper sourceCurrentness availability entries change;the old
+census fields are retained for exact whole-predecessor recovery. All other
+obligations,remaining work,partial inspection and unverified rendering preserve.
+Existing supplemental validation is reused;no new capture or validation framework.
+node --test tests/material-parity/capture-availability-join.spec.mjs passes3/3:
+full conservation/pointer immutability,wrong-build/browser/duplicate/nonexact-state
+controls,and changed-parent/corrupt-report rejection. The transformation is not
+registered/exported and has not changed accepted canonicale1072ead. Next integrate
+this bounded correction in a coherent batch with source applicability preserved;
+do not rerun the full canonical/browser gates for this standalone preparation.
+
 October29 Badge live integration is verified locally but not yet canonical.
 Explicit --badge-label-paint selects3cb9fe23;the actual launcher dry-run confirms
 the exact review path/digest. Registry now has1137 sources/463 proofs/72 plans.
