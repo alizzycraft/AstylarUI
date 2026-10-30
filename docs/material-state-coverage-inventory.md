@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+October 30 focused `flex-auto-main-size` baseline attempt did not reach its
+fixture: `npm run parity` with `ASTYLAR_PARITY_FIXTURE=flex-auto-main-size`
+and isolated `ASTYLAR_PARITY_ARTIFACTS=artifacts/parity-chip-intrinsic-baseline-20261030`
+timed out waiting for `http://127.0.0.1:4300/parity/fixtures.json` (fetch
+failed). The runner process is no longer present. This is not a sizing test
+pass or failure; investigate server startup before retrying, preserving any
+failure evidence and avoiding duplicate runs.
+Direct startup diagnostic reached `Building...` but did not become ready;
+esbuild grew to 5527584768 bytes working set while Windows reported 476692 KiB
+free physical memory. The diagnostic was interrupted to avoid further memory
+pressure; both Node and esbuild process IDs are now absent. No fixture result
+was produced. Do not repeat this startup unchanged; investigate build resource
+use or use a verified available server with sufficient headroom.
+
 October 30 Chips width history: current state-dependent fixed widths trace to
 `db8f74321496c9a5253fa358528b00c173636d51` ("correct check marks and chip
 selection"), which changed 98/94px fixed widths to selected/unselected 98/68px
