@@ -1,5 +1,22 @@
 # Material comparison/state coverage inventory
 
+October 30 datepicker placement provenance: the authenticated October5
+light/desktop-DPR1 open row records a pointerdown/up/click on both sides and
+matching popup bounds (296x354px, 56px below the primary host's top). The
+reference input tree records a CDK overlay pane at viewport top 237.078px;
+the candidate tree records a child popup with absolute top 56px. The matching
+output is therefore not an equal-input proof and does not reproduce the
+earlier manually reported higher reference placement. Report SHA256
+`ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62`;
+reference/candidate input-tree hashes respectively `f3540f06df99c8b170f4845567a6d6141969acf399fd535f662303071eac32c8`
+and `a133fbb3bfde80aa1ca8b3fb4cc296b85e6c5ebfb506004b218641b2b6c489a3`.
+Commit `c64397c1` introduced the application-side viewport clamp and changed
+popup placement and dimensions while aligning the showcase; it does not prove
+which renderer behavior, if any, required compensation. Current source still
+contains that calculation. Next compare equivalent connected-overlay inputs
+and fallback behavior in a focused public reproduction; current rendering,
+manual-case applicability and the underlying cause remain unverified.
+
 October 30 gutter source-applicability check: the installed scroll runtime
 still hashes to the retained public proof's
 `eea5e26c692dec9f59d635e91422b01bee00360574cba1e38c563f0cfb706c40`.
