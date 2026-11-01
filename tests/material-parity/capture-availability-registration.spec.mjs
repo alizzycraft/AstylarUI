@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import vm from 'node:vm';
 import { pathToFileURL, fileURLToPath } from 'node:url';
@@ -41,6 +43,33 @@ test('availability historical reader restores only authenticated registration ch
     assert.equal(historical(file, 'utf8'), before);
     current = Buffer.from('earlier source owned by an earlier reader');
     assert.deepEqual(historical(file), current);
+  }
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  for (const [file, expected] of [
+    ['scripts/check-passive-static-ax.mjs', '87dfdd40238896a1c5ffe9aa51442ca701e8edb0266592f02128001d6fcde46a'],
+    ['scripts/capture-passive-static-ax.mjs', '8cbbb5d1b64a879bd0e47bb123c23d8979bc10bbfeecee7158c008b363a2e1b0'],
+  ]) {
+    const prior = execFileSync('git', ['show', `3e546fd4:${file}`]);
+    assert.equal(hash(prior), expected);
+    let bytes = readFileSync(file);
+    const raw = (name, options) => {
+      assert.equal(path.resolve(root, name), path.resolve(root, file));
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+    };
+    const historical = createCaptureAvailabilityHistoricalRead({ root, read: raw });
+    assert.equal(hash(historical(file)), expected);
+    assert.equal(historical(path.resolve(file), 'utf8'), prior.toString());
+    assert.equal(historical(file, { encoding: 'utf8' }), prior.toString());
+    assert.notEqual(hash(raw(file)), expected); // Raw source collection remains current.
+    historical(file).fill(0);
+    assert.equal(hash(historical(file)), expected);
+    const nested = createCaptureAvailabilityHistoricalRead({ root, read: historical });
+    assert.equal(hash(nested(file)), expected);
+    bytes = Buffer.concat([bytes, Buffer.from('\n// unknown passive edit')]);
+    assert.throws(() => historical(file), /Unrecognized passive historical source/);
+    bytes = prior;
+    assert.equal(hash(historical(file)), expected);
   }
   const options = { encoding: 'utf8' }, sentinel = {};
   const delegated = createCaptureAvailabilityHistoricalRead({ root, read: (name, received) => {

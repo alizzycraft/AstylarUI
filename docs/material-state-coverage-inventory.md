@@ -1,5 +1,33 @@
 # Material comparison/state coverage inventory
 
+November 1 passive-AX exporter prerequisite is wired in the EXISTING
+createCaptureAvailabilityHistoricalRead,not a global filesystem patch. Its two
+exact path mappings accept recorded normalized current bytes or exact prior
+receipt bytes;current input recovers Git3e546fd4 and authenticates both prior
+hashes before return. Unknown edits reject. The existing reader already feeds
+the nested review's read function,and runner lines91-95 pass applicability.read
+to attachCaseObligationCoverage,so the exporter path now carries the composition
+previously applied only at the standalone validation entry point. Raw current
+fingerprint collection remains separate and unmodified.
+
+Existing registration test adds current/prior,absolute/relative,string/object
+encoding,defensive-copy,nested-reader,unknown-edit and raw-source controls for
+both passive paths. Combined owning command over capture-availability-registration,
+capture-availability-join and slider-retained-state-layer suites passes14/14,
+zero skips/failures,23210.37ms. This verifies focused wiring and output equivalence
+to the two previously validated transitions;it is not another full live receipt
+read or a completed export. Do not relabel the prior standalone gate as a run of
+this changed helper. Next use the wired path in the coherent exporter gate.
+
+Current normalized helper/spec hashes are
+`af5152a67ff0575b092ae590e42edde0ee9089a02c0aac8456d6e7a22609ab50` and
+`0e5c09de77d02c9564e9b0656266b9e0b19c4b254a5daca90be675ae3b890d3c`,
+superseding2adf08b4/509153fd in the last source census. Both are already among
+the15 changed paths;no inventory path added/removed by this wiring. The old
+complete vector digest2d814085 is historical after these two edits,not today's
+current-vector hash. Accepted73c84aef,pointer/case statuses and original final
+gates remain unchanged. No renderer/fixture edits or new capture occurred.
+
 November 1 live Slider source/receipt reconciliation checkpoint: complete accepted
 gzip73c84aef authenticated before bounded extraction of its1142-source vector.
 Only589824 decoded prefix bytes were needed;no decoded package was saved. The

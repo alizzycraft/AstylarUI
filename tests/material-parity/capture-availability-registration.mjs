@@ -119,16 +119,32 @@ export function restoreCaptureAvailabilityShared(bytes) {
 // its raw reader so registration changes remain visible in the new inventory.
 export function createCaptureAvailabilityHistoricalRead({ root, read }) {
   read = createSliderTrackHistoricalRead({ root, read });
+  const passiveSources = new Map([
+    ['scripts/check-passive-static-ax.mjs', 'faa3e832365152bf7d5b66be1ccdbbc4444eaa1f4ca371aad6c09d4b3fc65657',
+      '87dfdd40238896a1c5ffe9aa51442ca701e8edb0266592f02128001d6fcde46a'],
+    ['scripts/capture-passive-static-ax.mjs', 'afa38baaaacb06b69fcbdfc66185ae2f44cd314bb278064af6f0b12bf512ea8a',
+      '8cbbb5d1b64a879bd0e47bb123c23d8979bc10bbfeecee7158c008b363a2e1b0'],
+  ].map(([file, current, previous]) => [path.resolve(root, file), { file, current, previous }]));
   const kinds = new Map(Object.entries({ producer: 'tests/material-parity/input-equivalence-audit.mjs',
     runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })
     .map(([kind, file]) => [path.resolve(root, file), kind]));
   return (name, options) => {
-    const kind = kinds.get(path.resolve(root, name));
-    const shared = path.resolve(root, name) === path.resolve(root, captureAvailabilitySharedFile);
-    if (!kind && !shared) return read(name, options);
+    const absolute = path.resolve(root, name), kind = kinds.get(absolute);
+    const shared = absolute === path.resolve(root, captureAvailabilitySharedFile);
+    const passive = passiveSources.get(absolute);
+    if (!kind && !shared && !passive) return read(name, options);
     const input = read(name);
     // Leave earlier generations to their existing, independently guarded readers.
-    const restored = shared ? (input.toString().includes(sharedImport.trim()) ? restoreCaptureAvailabilityShared(input) : input)
+    let restored;
+    if (passive) {
+      if (hash(input) === passive.previous) restored = input;
+      else {
+        assert.equal(hash(input.toString().replaceAll('\r\n', '\n')), passive.current,
+          `Unrecognized passive historical source: ${passive.file}`);
+        restored = execFileSync('git', ['show', `3e546fd4:${passive.file}`], { cwd: root, maxBuffer: 8000000 });
+        assert.equal(hash(restored), passive.previous, `Retained passive source changed: ${passive.file}`);
+      }
+    } else restored = shared ? (input.toString().includes(sharedImport.trim()) ? restoreCaptureAvailabilityShared(input) : input)
       : restoreCaptureAvailabilityIfPresent(input, kind);
     const bytes = Buffer.from(restored);
     const encoding = typeof options === 'string' ? options : options?.encoding;
