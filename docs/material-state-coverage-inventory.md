@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+November 1 closure-readiness triage (accepted `73c84aef` / index `baa0f45a`;
+complete index SHA authenticated before the census): all 2,311 input/style,
+semantics, history/ownership and source-currentness obligations remain partial
+with nonempty remaining work. Paint has 949 evidence-join-pending and 1,362
+partial records; activation has 1,408 pending, 549 partial and 354 authored
+exclusions; focus has 1,571 pending, 386 partial, 40 inspected-failure and 314
+exclusions. Editing has 577 partial and 1,734 exclusions. These are recorded
+obligation dispositions, not newly inspected cases, unique defects or independent
+confirmation of every historical assessment. All 2,311 cases remain partial.
+Legacy input/style, paint, semantics, history and currentness records also lack
+the schema-2 top-level conclusion/evidence closure fields; nested evidence is
+present. Filling those fields or migrating schema alone cannot discharge the
+recorded substantive remaining tasks.
+
+The 134 editing records with not-applicable applicability but partial disposition
+are bounded retained-target exclusions, not established complete exclusions:
+94 Select and eight each Form-Field/Input/Autocomplete/Datepicker/Timepicker.
+Example `static:select@light/desktop` records no native writable target and one
+readonly candidate text input (`select-control`), while explicitly retaining
+source-wide/uncaptured-state and disabled/readonly applicability work. Thus do
+not promote these 134 through a mechanical disposition rewrite or treat them
+as 134 new editing failures. Selection/copy, keyboard navigation, value change
+and focus remain separate requirements.
+
+Concrete Divider closure review: `static:divider@light/desktop` already maps all
+nine recorded owners one-to-one; the existing owner census inventories 104 native
+properties on each of five outside-scalar owners but does not classify them all.
+Existing bounded joins cover subsets. The unresolved task is property/line-box
+and paint correspondence, not discovery of additional missing owner captures.
+Prioritize that exact input-mapping gap before another broad source export or
+schema migration. Existing causal/paint/lifecycle uncertainties must still be
+resolved independently. No closure status or acceptance gate changed.
+
 November 1 Tooltip animation-phase follow-up: Snackbar's demonstrated incomplete
 reference enter phase does not also appear in the retained Tooltip state report.
 Authenticated `supplemental-current-ancestry-audit/tooltip-state-audit-v2/latest-report.json`
