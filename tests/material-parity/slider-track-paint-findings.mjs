@@ -84,6 +84,15 @@ const producerChanges = [
     `    proof(root, ${JSON.stringify(trackSuite)}, new RegExp(${JSON.stringify("test\\('" + title + "'")}), ${JSON.stringify(title)}, ${JSON.stringify(sliderTrackPaintFinding.boundary)}),\n`).join('')],
   ['function implementationPlan() {\n  return [\n', `    ${JSON.stringify(trackPlan)},\n`],
 ];
+// Exact final diagnostic-read plumbing is part of this unpublished producer
+// generation. Historical readers must recover the whole predecessor, not
+// silently accept an arbitrary validator change.
+const diagnosticChanges = [
+  ['export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {',
+    'export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd(), diagnosticRead = readFileSync } = {}) {'],
+  ["createHash('sha256').update(readFileSync(absolute)).digest('hex') !== receipt.sha256",
+    "createHash('sha256').update(diagnosticRead(absolute)).digest('hex') !== receipt.sha256"],
+];
 
 export function prepareSliderTrackProducer(bytes) {
   let source = bytes.toString().replaceAll('\r\n', '\n');
@@ -92,12 +101,22 @@ export function prepareSliderTrackProducer(bytes) {
     assert.equal(source.split(anchor).length, 2, 'Ambiguous Slider-track producer boundary');
     source = source.replace(anchor, anchor + addition);
   }
+  for (const [before, after] of diagnosticChanges) {
+    assert.equal(source.split(before).length, 2, 'Ambiguous diagnostic-read boundary');
+    source = source.replace(before, after);
+  }
   return source;
 }
 
 export function restoreSliderTrackProducer(bytes) {
   let source = bytes.toString().replaceAll('\r\n', '\n');
   if (policyHash(source) === sliderTrackProducerPriorSha256) return source;
+  if (source.includes('diagnosticRead = readFileSync')) {
+    for (const [before, after] of diagnosticChanges.toReversed()) {
+      assert.equal(source.split(after).length, 2, 'Unrecognized diagnostic-read change');
+      source = source.replace(after, before);
+    }
+  }
   for (const [anchor, addition] of producerChanges.toReversed()) {
     assert.equal(source.split(anchor + addition).length, 2, 'Unrecognized Slider-track producer addition');
     source = source.replace(anchor + addition, anchor);

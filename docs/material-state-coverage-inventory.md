@@ -1,5 +1,37 @@
 # Material comparison/state coverage inventory
 
+November 2 final diagnostic-read boundary correction is focused-tested, NOT yet
+canonical-published. validateMaterialInputAudit now accepts diagnosticRead with
+raw readFileSync as its default. The runner explicitly supplies the existing
+exact-source historical reader only for the selected capture-availability review;
+all other review routes keep raw diagnostic reads. This option is used only by
+the immutable diagnostic receipt hash check, not sourceFingerprints, source
+scanning, report construction, classification comparison or other validators.
+Original finding receipt paths/hashes and conclusions remain unchanged.
+
+The EXISTING availability registration test executes the actual producer's final
+diagnostic loop and evaluates the actual runner's validation-call options. Across
+all206 definitions, raw reads reproduce exactly THREE failures; selected historical
+reads produce zero. It also checks raw-default/other-review routing, changed
+classification rejection, both unknown passive-source edits rejecting, outside-root
+receipt rejection and raw files still producing the original three failures after
+replay. This closes the demonstrated focused-test gap rather than assuming nested
+review construction proves final validation. Reversible producer/runner recipes
+recover complete predecessor sources and reject unrelated source changes.
+
+Focused command: node --max-old-space-size=8192 --test
+tests/material-parity/capture-availability-registration.spec.mjs
+tests/material-parity/capture-availability-join.spec.mjs
+tests/material-parity/slider-retained-state-layer.spec.mjs
+Result14/14, zero failed/skipped,21050.9568ms. Producer/runner node --check and
+exporter --capture-availability --dry-run pass; scoped git diff --check passes.
+No new source path or proof title added. The runner is now an additional changed
+existing fingerprint versus the prior15-path census; do not reuse that census's
+current vector digest. Freeze this coherent instrumentation correction for ONE
+new export log, then conservation/cold/import only if export succeeds. Failed
+November1 logs and accepted73c84aef/pre-export backup remain untouched; no
+renderer/fixture change, new browser capture, acceptance or case closure.
+
 November 2 Slider canonical export FAILED; do not retry unchanged. Original
 session97819 exited1 after3862858ms, following build, case-obligation join,
 validate-audit, evidence-session verification and render-markdown. The terminal

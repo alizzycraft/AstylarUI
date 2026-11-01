@@ -97,7 +97,9 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   }
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);
-  const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial });
+  const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial,
+    diagnosticRead: options.caseObligationReviewSha256===captureAvailabilityReview
+      ? createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync}) : readFileSync });
   progress('verify-evidence-session');
   return { audit, errors };
 }, { root, cold: process.env.ASTYLAR_AUDIT_COLD === '1', onMetrics: metrics => console.log(JSON.stringify({ evidenceSession: metrics })) });

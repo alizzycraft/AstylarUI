@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -11,6 +11,7 @@ import { prepareCaptureAvailabilityRegistration, restoreCaptureAvailabilityRegis
   captureAvailabilitySources, captureAvailabilityProofs, createCaptureAvailabilityHistoricalRead,
   captureAvailabilitySharedFile, prepareCaptureAvailabilityShared, restoreCaptureAvailabilityShared } from './capture-availability-registration.mjs';
 import { captureAvailabilityReview } from '../../scripts/join-material-capture-availability.mjs';
+import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 
 test('availability historical reader restores only authenticated registration changes', () => {
   const root = process.cwd();
@@ -76,6 +77,60 @@ test('availability historical reader restores only authenticated registration ch
     assert.equal(name, 'unrelated.json'); assert.equal(received, options); return sentinel;
   } });
   assert.equal(delegated('unrelated.json', options), sentinel);
+
+  // Exercise the ACTUAL final diagnostic loop and ACTUAL runner call, not only
+  // the nested review reader. This is the boundary missed by the first export.
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const producerAst = ts.createSourceFile(producerFile, readFileSync(producerFile, 'utf8'), 99, true);
+  const validator = producerAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'validateMaterialInputAudit');
+  const loops = validator.body.statements.filter(n => ts.isForOfStatement(n) &&
+    n.getText(producerAst).includes('source diagnostic receipt missing, changed or outside root'));
+  assert.equal(loops.length, 1);
+  const diagnosticLoop = new Function('sourceAuditDefinitions', 'report', 'root', 'path', 'existsSync',
+    'createHash', 'diagnosticRead', 'errors', loops[0].getText(producerAst));
+  const runLoop = (read, definitions = sourceAuditDefinitions, report = { sourceFindings: definitions }) => {
+    const errors = [];
+    diagnosticLoop(definitions, report, root, path, existsSync, createHash, read, errors);
+    return errors;
+  };
+  const rawErrors = runLoop(readFileSync);
+  assert.equal(rawErrors.length, 3);
+  assert.ok(rawErrors.every(e => /source diagnostic receipt missing, changed or outside root/.test(e)));
+
+  const runnerFile = 'scripts/run-material-input-audit.mjs';
+  const runnerAst = ts.createSourceFile(runnerFile, readFileSync(runnerFile, 'utf8'), 99, true);
+  const calls = [];
+  const visit = n => {
+    if (ts.isCallExpression(n) && n.expression.getText(runnerAst) === 'validateMaterialInputAudit') calls.push(n);
+    ts.forEachChild(n, visit);
+  };
+  visit(runnerAst); assert.equal(calls.length, 1);
+  const runnerOptions = new Function('allowPartial', 'options', 'captureAvailabilityReview',
+    'createCaptureAvailabilityHistoricalRead', 'root', 'auditReadFileSync', 'readFileSync',
+    `return (${calls[0].arguments[1].getText(runnerAst)});`);
+  const selected = review => runnerOptions(false, { caseObligationReviewSha256: review }, captureAvailabilityReview,
+    createCaptureAvailabilityHistoricalRead, root, readFileSync, readFileSync);
+  const historicalDiagnostic = selected(captureAvailabilityReview).diagnosticRead;
+  assert.deepEqual(runLoop(historicalDiagnostic), []);
+  assert.equal(selected('another-review').diagnosticRead, readFileSync);
+  assert.match(validator.parameters[1].getText(producerAst), /diagnosticRead = readFileSync/);
+  const definition = sourceAuditDefinitions.find(d => d.id === 'fixture-sidenav-content-promoted-to-main-landmark');
+  const changedConclusion = structuredClone(definition); changedConclusion.classification = 'equivalent-representation';
+  assert.ok(runLoop(historicalDiagnostic, [definition], { sourceFindings: [changedConclusion] })
+    .some(e => /differs from policy/.test(e)));
+  for (const file of ['scripts/check-passive-static-ax.mjs', 'scripts/capture-passive-static-ax.mjs']) {
+    const receipt = definition.evidence.find(r => r.file === file) ?? sourceAuditDefinitions
+      .flatMap(d => d.evidence ?? []).find(r => r.file === file);
+    const unknownRead = createCaptureAvailabilityHistoricalRead({ root, read: (name, opts) => {
+      if (path.resolve(root, name) === path.resolve(root, file))
+        return Buffer.concat([readFileSync(name), Buffer.from('\n// unknown diagnostic source edit')]);
+      return readFileSync(name, opts);
+    } });
+    assert.throws(() => runLoop(unknownRead, [{ ...definition, evidence: [receipt] }]), /Unrecognized passive historical source/);
+  }
+  const escaped = { ...definition, evidence: [{ file: '../outside-root', sha256: '0'.repeat(64) }] };
+  assert.ok(runLoop(historicalDiagnostic, [escaped]).some(e => /outside root/.test(e)));
+  assert.equal(runLoop(readFileSync).length, 3); // Historical replay never mutates current files.
 });
 
 test('availability staged inventory preserves every predecessor source proof and plan', () => {

@@ -38,6 +38,8 @@ const changes = {
         `    proof(root, ${JSON.stringify(`tests/material-parity/${suite}.spec.mjs`)}, new RegExp(${JSON.stringify("test\\('" + title + "'")}), ${JSON.stringify(title)}, ${JSON.stringify(boundary)}),\n`).join('')],
   ],
   runner: [
+    ['const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial });',
+      'const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial,\n    diagnosticRead: options.caseObligationReviewSha256===captureAvailabilityReview\n      ? createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync}) : readFileSync });'],
     ["import { badgeLabelPaintReview, createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';",
       "import { badgeLabelPaintReview, createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';\nimport { captureAvailabilityReview, createCaptureAvailabilityReviewReader } from './join-material-capture-availability.mjs';\nimport { createCaptureAvailabilityHistoricalRead } from '../tests/material-parity/capture-availability-registration.mjs';"],
     ['const applicability=badgeLabelPaintReaderFactory?.',

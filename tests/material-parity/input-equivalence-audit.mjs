@@ -559,7 +559,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   return report;
 }
 
-export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
+export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd(), diagnosticRead = readFileSync } = {}) {
   const errors = [];
   try { assertCaseObligationCoverage(report.coverage); }
   catch (cause) { errors.push(`case-obligation coverage is invalid: ${cause.message}`); }
@@ -1046,7 +1046,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     for (const receipt of definition.evidence) {
       const absolute = path.resolve(root, receipt.file), relative = path.relative(path.resolve(root), absolute);
       if (relative.startsWith('..') || path.isAbsolute(relative) || !existsSync(absolute) ||
-          createHash('sha256').update(readFileSync(absolute)).digest('hex') !== receipt.sha256) {
+          createHash('sha256').update(diagnosticRead(absolute)).digest('hex') !== receipt.sha256) {
         errors.push(`${definition.id}: source diagnostic receipt missing, changed or outside root`);
       }
     }
