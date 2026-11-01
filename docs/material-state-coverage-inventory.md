@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+November 1 Availability receipt census: the read-only nested reader rebuilt
+`2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1`
+with 2,311 groups. A traversal of 18,636 distinct receipt paths found exactly
+two hash mismatches: `scripts/check-passive-static-ax.mjs` (expected
+`87dfdd40238896a1c5ffe9aa51442ca701e8edb0266592f02128001d6fcde46a`, actual
+`faa3e832365152bf7d5b66be1ccdbbc4444eaa1f4ca371aad6c09d4b3fc65657`) and
+`scripts/capture-passive-static-ax.mjs` (expected
+`8cbbb5d1b64a879bd0e47bb123c23d8979bc10bbfeecee7158c008b363a2e1b0`, actual
+`afa38baaaacb06b69fcbdfc66185ae2f44cd314bb278064af6f0b12bf512ea8a`). No
+paths were missing and no paths had conflicting expected hashes. The census
+hashes receipt objects and report receipts; it is not the full obligation
+validator. Next compose both exact historical transitions in a scoped read
+and run the existing complete validator once. This does not establish current
+rendering, case closure or canonical conservation.
+
 October 31 scoped Availability receipt retry: with the passive capture producer
 restored read-only by exact current/retained hash, the expected 2,311-group
 review constructed, but the full receipt load exited 1 at the next dependency,
