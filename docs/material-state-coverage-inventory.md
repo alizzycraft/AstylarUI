@@ -1,5 +1,40 @@
 # Material comparison/state coverage inventory
 
+November 2 Slider canonical export FAILED; do not retry unchanged. Original
+session97819 exited1 after3862858ms, following build, case-obligation join,
+validate-audit, evidence-session verification and render-markdown. The terminal
+errors are exactly THREE source-diagnostic receipt mismatches across TWO files:
+shared duplicate-MAIN finding references capture-passive-static-ax and
+check-passive-static-ax; sidenav content-MAIN finding also references the checker.
+Independent direct enumeration of all206 definitions reproduces exactly those
+three mismatches, with no other missing/changed diagnostic receipt.
+
+First divergence is now demonstrated: input-equivalence-audit.mjs lines1046-1050
+uses raw readFileSync for diagnostic receipts, whereas the recently wired
+createCaptureAvailabilityHistoricalRead applies only to the nested review read
+path. Therefore the14 focused registration/join/Slider tests did NOT cover the
+final raw-file diagnostic validation boundary. Do not treat successful historical
+review construction as proof of the whole exporter. Current capture/check hashes
+are respectively afa38baaaacb06b69fcbdfc66185ae2f44cd314bb278064af6f0b12bf512ea8a
+and faa3e832365152bf7d5b66be1ccdbbc4444eaa1f4ca371aad6c09d4b3fc65657;
+the immutable expected prior hashes remain8cbbb5d1/87dfdd40 as recorded below.
+
+Next question: how should immutable historical diagnostic source receipts be
+resolved at THIS final boundary without disguising current source fingerprints?
+Use a focused test of the actual source-diagnostic validator before changing or
+rerunning the expensive exporter. Preserve exact old evidence, reject unknown
+edits, keep raw current-source collection separate, and do not replace expected
+hashes with live hashes merely to pass. A nested-reader-only fix is insufficient.
+No renderer/fixture changes, candidate publication, cold check or import occurred.
+Accepted manifest remains73c84aef and all case statuses/final gates unchanged.
+
+Retain failed stdout `artifacts/material-parity/slider-track-canonical-export-20261101.log`
+(raw SHA256 bda4b140d7e4926a3736414839781d7aaf928c01eaec9b315bdd99e0dc1c86e9)
+and stderr `artifacts/material-parity/slider-track-canonical-export-20261101.stderr.log`
+(raw SHA256 2f8a9c87a304f40b8a6d656ec9a735618626bf0d986e7023d0de622faa1c437c).
+The hash-verified pre-export three-file backup remains at
+`artifacts/material-parity/slider-track-pre-export-73c8-20261101`; no overwrite.
+
 November 1 passive-AX exporter prerequisite is wired in the EXISTING
 createCaptureAvailabilityHistoricalRead,not a global filesystem patch. Its two
 exact path mappings accept recorded normalized current bytes or exact prior
