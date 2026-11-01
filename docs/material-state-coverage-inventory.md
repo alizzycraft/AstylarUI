@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+November 1 staged Slider historical-consumer integration passes. The pending
+module's opt-in `createSliderTrackHistoricalRead` reverses only the exact staged
+policy/producer additions and recovers the accepted Slider test53de2d93 from
+Git79761467 after authenticating current test57a130a4. Existing suite controls
+verify relative/absolute paths,string/object encodings,defensive copies,prior
+test acceptance,unrelated-reader option/identity delegation and rejection of
+unknown edits to all three staged sources. Raw collection remains separate.
+Owning suite passes7/7,zero skips/failures,11448.42ms.
+
+One in-memory integration then imported the staged206-definition policy through
+Node's module loader (not merely restored file reads) and supplied staged policy/
+producer bytes through the scoped historical reader to the ACTUAL nested
+`createCaptureAvailabilityReviewReader`. It reconstructed exact review
+`2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1`
+with2311 groups,exit0. Read instrumentation recorded4151 reads/2878858974 bytes;
+this is not unique bytes or a timing benchmark. Log
+`artifacts/material-parity/slider-track-staged-consumer-20261101.log`, SHA256
+`2eefc18162a7b6849656b2cee259acfbe4ad90dd0df6a8771f5b8f83469a03fb`.
+This answers imported-policy versus historical-read construction compatibility;
+it is NOT a full18,636-receipt validation,source-vector reconciliation,current
+rendering or canonical publication. No live policy/producer/selector/pointer changed.
+Pending-module/test raw hashes are respectively
+`7c85e26972f6a501148073dacc1b2b8260a8e76f39b57d96f29d255e91a20b71` and
+`57a130a4d76592799259629510e8351625833c263e32115b7acb2e6d63ff2189`.
+Freeze these verified transitions for actual historical-consumer wiring and
+coherent source/proof/policy/plan registration;do not repeat this unchanged nested
+construction for prose. Remaining13 prior source changes,two passive receipt
+transitions,complete dependency validation and original final gates remain open.
+
 November 1 Slider staged registration recipe is now executable/reversible inside
 the existing pending-finding module. `prepareSliderTrackPolicy` accepts only
 complete prior policy7381e8fb and adds one literal definition; its reverse recovers

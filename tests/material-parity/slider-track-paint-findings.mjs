@@ -1,6 +1,8 @@
 // Pending audit finding: not registered in the accepted canonical policy/counts.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import path from 'node:path';
 
 const captureEvidence = Object.freeze({
   report: Object.freeze({ file: 'artifacts/material-parity/current-full-20261005/latest-report.json',
@@ -102,4 +104,39 @@ export function restoreSliderTrackProducer(bytes) {
   }
   assert.equal(policyHash(source), sliderTrackProducerPriorSha256, 'Complete prior producer must recover');
   return source;
+}
+
+const sliderTrackPriorTestSha256 = '53de2d93dbb9502a13b2786d0afbfb17a26c368395c728d01cb48ade5317e3d9';
+const sliderTrackCurrentTestSha256 = '57a130a4d76592799259629510e8351625833c263e32115b7acb2e6d63ff2189';
+
+// Explicitly opt-in for historical consumers. Never wrap current fingerprint
+// collection: it must see the new policy, producer, test and finding module.
+export function createSliderTrackHistoricalRead({ root, read }) {
+  const policy = path.resolve(root, 'tests/material-parity/input-equivalence-policy.mjs');
+  const producer = path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs');
+  const test = path.resolve(root, trackSuite);
+  return (name, options) => {
+    const absolute = path.resolve(root, name);
+    if (![policy, producer, test].includes(absolute)) return read(name, options);
+    const input = read(name);
+    let restored;
+    if (absolute === policy && input.toString().includes('fixture-slider-track-thickness-substitution'))
+      restored = restoreSliderTrackPolicy(input);
+    else if (absolute === producer && input.toString().includes(JSON.stringify(trackFile)))
+      restored = restoreSliderTrackProducer(input);
+    else if (absolute === test) {
+      const source = input.toString().replaceAll('\r\n', '\n');
+      if (policyHash(source) === sliderTrackPriorTestSha256) restored = source;
+      else {
+        assert.equal(policyHash(source), sliderTrackCurrentTestSha256, 'Unrecognized Slider track test source');
+        const prior = execFileSync('git', ['show', `79761467:${trackSuite}`], { cwd: root, maxBuffer: 8000000 });
+        assert.equal(policyHash(prior), sliderTrackPriorTestSha256, 'Retained Slider test changed');
+        restored = prior;
+      }
+    }
+    if (restored === undefined) return read(name, options);
+    const bytes = Buffer.from(restored);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : bytes;
+  };
 }

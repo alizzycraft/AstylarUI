@@ -13,7 +13,7 @@ import { Scene } from '@babylonjs/core/scene.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
 import { materialStaticCases, materialInteractionCases } from './benchmark.config.mjs';
 import { sliderTrackPaintFinding, prepareSliderTrackPolicy, restoreSliderTrackPolicy,
-  prepareSliderTrackProducer, restoreSliderTrackProducer } from './slider-track-paint-findings.mjs';
+  prepareSliderTrackProducer, restoreSliderTrackProducer, createSliderTrackHistoricalRead } from './slider-track-paint-findings.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -105,6 +105,39 @@ test('pending Slider track finding fits the existing source scanner without cano
   }
   assert.equal(sourceAuditDefinitions.length, 205);
   assert.ok(!sourceAuditDefinitions.some(row => row.id === sliderTrackPaintFinding.id));
+  const suiteFile = 'tests/material-parity/slider-retained-state-layer.spec.mjs';
+  const priorSuite = execFileSync('git', ['show', `79761467:${suiteFile}`]);
+  assert.equal(hash(priorSuite), '53de2d93dbb9502a13b2786d0afbfb17a26c368395c728d01cb48ade5317e3d9');
+  const virtual = new Map([
+    [path.resolve(policyFile), Buffer.from(stagedPolicy)],
+    [path.resolve(file), Buffer.from(stagedProducer)],
+    [path.resolve(suiteFile), readFileSync(suiteFile)],
+  ]);
+  const raw = (name, options) => {
+    const bytes = virtual.get(path.resolve(name));
+    assert.ok(bytes);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  };
+  const historical = createSliderTrackHistoricalRead({ root: process.cwd(), read: raw });
+  for (const [name, expected] of [[policyFile, originalPolicy], [file, originalProducer], [suiteFile, priorSuite]]) {
+    assert.equal(historical(name, 'utf8'), expected.toString().replaceAll('\r\n', '\n'));
+    assert.equal(historical(path.resolve(name), { encoding: 'utf8' }), expected.toString().replaceAll('\r\n', '\n'));
+    const copy = historical(name); copy.fill(0);
+    assert.equal(historical(name, 'utf8'), expected.toString().replaceAll('\r\n', '\n'));
+    const current = virtual.get(path.resolve(name));
+    virtual.set(path.resolve(name), Buffer.concat([current, Buffer.from('\n// unrelated drift')]));
+    assert.throws(() => historical(name));
+    virtual.set(path.resolve(name), current);
+    assert.notEqual(raw(name, 'utf8'), historical(name, 'utf8'));
+  }
+  virtual.set(path.resolve(suiteFile), priorSuite);
+  assert.equal(historical(suiteFile, 'utf8'), priorSuite.toString());
+  const options = { encoding: 'utf8' }, sentinel = {};
+  const delegated = createSliderTrackHistoricalRead({ root: process.cwd(), read: (name, received) => {
+    assert.equal(name, 'unrelated.json'); assert.equal(received, options); return sentinel;
+  } });
+  assert.equal(delegated('unrelated.json', options), sentinel);
   assert.deepEqual(readFileSync(policyFile), originalPolicy);
   assert.deepEqual(readFileSync(file), originalProducer);
 });
