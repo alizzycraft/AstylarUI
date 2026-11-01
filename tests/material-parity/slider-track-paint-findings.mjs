@@ -1,4 +1,7 @@
 // Pending audit finding: not registered in the accepted canonical policy/counts.
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+
 const captureEvidence = Object.freeze({
   report: Object.freeze({ file: 'artifacts/material-parity/current-full-20261005/latest-report.json',
     sha256: 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62' }),
@@ -40,3 +43,63 @@ export const sliderTrackPaintFinding = Object.freeze({
   currentRenderingAccepted: false,
   canonicalStatus: 'pending-not-registered',
 });
+
+// Stage/reverse only this exact addition. These functions never write live files.
+export const sliderTrackPolicyPriorSha256 = '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f';
+const policyHash = source => createHash('sha256').update(source).digest('hex');
+const policyAnchor = ']);\n\nexport const pluginBoundaryVerdict';
+const { captureEvidence: _captureEvidence, canonicalStatus: _canonicalStatus, ...policyDefinition } = sliderTrackPaintFinding;
+const policyAddition = `  Object.freeze(${JSON.stringify(policyDefinition, null, 2).replaceAll('\n', '\n  ')}),\n`;
+
+export function prepareSliderTrackPolicy(bytes) {
+  const source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(policyHash(source), sliderTrackPolicyPriorSha256, 'Unrecognized pre-Slider-track policy');
+  assert.equal(source.split(policyAnchor).length, 2, 'Ambiguous policy insertion boundary');
+  return source.replace(policyAnchor, policyAddition + policyAnchor);
+}
+
+export function restoreSliderTrackPolicy(bytes) {
+  const source = bytes.toString().replaceAll('\r\n', '\n');
+  if (policyHash(source) === sliderTrackPolicyPriorSha256) return source;
+  assert.equal(source.split(policyAddition + policyAnchor).length, 2, 'Unrecognized Slider-track policy addition');
+  const prior = source.replace(policyAddition + policyAnchor, policyAnchor);
+  assert.equal(policyHash(prior), sliderTrackPolicyPriorSha256, 'Complete prior policy must recover');
+  return prior;
+}
+
+export const sliderTrackProducerPriorSha256 = '89e3475e7e4df473b3f0a1ea51b7335b6cfc4c1570be91d90488f0fdf33a1877';
+const trackFile = 'tests/material-parity/slider-track-paint-findings.mjs';
+const trackSuite = 'tests/material-parity/slider-retained-state-layer.spec.mjs';
+const trackProofTitles = [
+  'pending Slider track finding fits the existing source scanner without canonical mutation',
+  'retained Slider track thickness diverges before coordinate projection',
+];
+const trackPlan = { priority: 2.05, rootCause: 'Range plugin substitutes host-relative track thickness for native track geometry',
+  action: sliderTrackPaintFinding.recommendation + ' ' + sliderTrackPaintFinding.verificationPlan };
+const producerChanges = [
+  ['function sourceFingerprints(root) {\n  const files = [\n', `    ${JSON.stringify(trackFile)},\n`],
+  ['function focusedProofInventory(root) {\n  return [\n', trackProofTitles.map(title =>
+    `    proof(root, ${JSON.stringify(trackSuite)}, new RegExp(${JSON.stringify("test\\('" + title + "'")}), ${JSON.stringify(title)}, ${JSON.stringify(sliderTrackPaintFinding.boundary)}),\n`).join('')],
+  ['function implementationPlan() {\n  return [\n', `    ${JSON.stringify(trackPlan)},\n`],
+];
+
+export function prepareSliderTrackProducer(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(policyHash(source), sliderTrackProducerPriorSha256, 'Unrecognized pre-Slider-track producer');
+  for (const [anchor, addition] of producerChanges) {
+    assert.equal(source.split(anchor).length, 2, 'Ambiguous Slider-track producer boundary');
+    source = source.replace(anchor, anchor + addition);
+  }
+  return source;
+}
+
+export function restoreSliderTrackProducer(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  if (policyHash(source) === sliderTrackProducerPriorSha256) return source;
+  for (const [anchor, addition] of producerChanges.toReversed()) {
+    assert.equal(source.split(anchor + addition).length, 2, 'Unrecognized Slider-track producer addition');
+    source = source.replace(anchor + addition, anchor);
+  }
+  assert.equal(policyHash(source), sliderTrackProducerPriorSha256, 'Complete prior producer must recover');
+  return source;
+}

@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+November 1 Slider staged registration recipe is now executable/reversible inside
+the existing pending-finding module. `prepareSliderTrackPolicy` accepts only
+complete prior policy7381e8fb and adds one literal definition; its reverse recovers
+the complete prior bytes. Staged policy SHA256
+`8f1acb6af64b5cfdcddba911a4b3ddf61e241edfea74eec241d2276617fe1ea3`.
+`prepareSliderTrackProducer` accepts only complete prior producer89e3475e and
+adds one module source,two existing-suite proof declarations and one prioritized
+track-geometry implementation item. Staged producer SHA256
+`f33bb2d7f2b5367daa767ca1ad37c02250158e8e7da974725c248252bfeb3145`.
+Both recipes reject unknown prior edits; reversals reject changed additions and
+unrelated drift. They never write live files. All205 prior definitions and all
+1142/470/72 prior source/proof/plan declarations preserve in full; staged totals
+are206/1143/472/73. Actual scanner detects the sole added source location; both
+new proof patterns match exactly once. This is staged syntax/declaration/scan
+validation,not a complete source-fingerprint vector or dependency/export gate.
+
+Existing owning Slider suite passes7/7,zero skips/failures,10482.88ms. Current
+normalized pending-module/test hashes are respectively
+`d5193ec40f5eb8a3f3dbdf76e78c4703ad83336c5a8336c26bd4db2fa0674fad` and
+`cc6bf66b08d01f5e9b232b81131a9d3c488447baa559daffe32a2e3c10530801`.
+They supersedee80fa579/7d5b90d6. Live policy/producer and accepted73c84aef remain
+unchanged; no export,case closure or renderer/fixture change. Before applying
+this recipe, compose its exact prior-policy/producer/test restoration with the
+historical consumers and outstanding13 changed existing paths plus the new
+module. Do not replace old receipts or run another large export before that
+coherent applicability preflight. Original scope and final gates remain intact.
+
 November 1 Slider finding collector preflight: existing pending-evidence registry
 transforms source/proof inventories and historical readers; it does not provide
 a generic pending source-finding overlay. The staged finding now uses the
