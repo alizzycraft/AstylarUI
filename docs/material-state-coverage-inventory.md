@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+November 1 Tooltip animation-phase follow-up: Snackbar's demonstrated incomplete
+reference enter phase does not also appear in the retained Tooltip state report.
+Authenticated `supplemental-current-ancestry-audit/tooltip-state-audit-v2/latest-report.json`
+(SHA256 `1a554bf3b3bd477a2e7fe148640b07fe539731e4611e32b1e8f7ed2289e68a61`)
+and all 30 reference tree receipts. All 12 referenceShown endpoints (three
+cohorts, DPR1/2, hover/press) have popup opacity `1` and identity transform;
+the surface has opacity `1` and transform `none`. Their panel transform is
+`matrix(1, 0, 0, 1, 0, 8)`, matching authored inline `translateY(8px)`, not a
+nonidentity popup scale. Exact first sample is
+`benchmark-open-dpr1-reference-hover-input-tree.json` in that directory, SHA256
+`692b6b3401c613cd201abd272f69762b76cf6264d183e52907af7326994d920f`;
+popup/surface keys are `overlay:0/0/0/0/0` and `overlay:0/0/0/0/0/0`.
+Focused assertions passed for the report hash, every reference tree, all shown
+popup/surface styles and panel translations. These endpoints do not establish
+continuous animation completion, screenshot/tree simultaneity, original case
+applicability or current rendering. The already documented measure-then-disable-
+animations screenshot ordering remains a separate limitation, not proof of a
+Tooltip defect. Do not generalize Snackbar's phase mismatch to Tooltip or
+normalize away the authored panel translation. Retain the existing independent
+Tooltip positioning/text findings and remaining exact-case obligations; no
+recapture, source change, new canonical join or case-status upgrade occurred.
+
 November 1 Snackbar opening reuse assessment: exact report `1cc0846c...` and
 four first-open/before-expiry input-tree receipts authenticate. The reference
 first-open container `overlay:0/0/0/0` has opacity `0.743816` and transform
