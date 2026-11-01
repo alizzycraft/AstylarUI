@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+November 1 Slider track first-divergence proof: original held light desktop DPR1
+checkpoint and original report `ab42dbec` agree exactly. All six checkpoint files
+authenticate. Original `slider-visual` geometry records BOTH reference and
+candidate hosts as720x48CSSpx; native track height and active-fill border width
+are4px. Original captured `main.js.map` is retained under
+`retained-evidence/component-map-recovery-20261011/`, SHA256
+`c0764b03e6a2e5332dc927a63b2f45396678ceb45abe23378377f343ab622473`,
+matching the original checkpoint browser vector. Its plugin source hashes to
+`dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e`.
+Executing that source's actual MaterialRangeVisualRenderer track expressions
+requests `max(4,min(16,48*.16))=7.68CSSpx` from `toRenderSize`. Projection-scale
+controls1 and10 preserve that incoming CSS request. Thus unequal application-
+plugin paint geometry exists before projection; no equal-input core projection
+defect is needed to explain why the candidate track is thicker. Classification:
+application-plugin-authoring-defect, owning MaterialRangeVisualRenderer track
+geometry. Do not substitute another tuned fixture height as a renderer fix.
+Exact7-row raster footprint,edge antialiasing/halo and current-browser behavior
+remain separate;this does not claim complete screenshot causality or case closure.
+
+Regression added to EXISTING `tests/material-parity/slider-retained-state-layer.spec.mjs`:
+`retained Slider track thickness diverges before coordinate projection`.
+Focused command with that test-name pattern passes1/1; unfiltered owning-file
+command `node --max-old-space-size=8192 --test tests/material-parity/slider-retained-state-layer.spec.mjs`
+passes6/6,zero skips/failures (8518.45ms). No renderer or fixture edits.
+This standalone proof is not yet registered as a new canonical proof declaration.
+Its existing listed source has changed normalized SHA256 from
+`53de2d93dbb9502a13b2786d0afbfb17a26c368395c728d01cb48ade5317e3d9` to
+`e2ccd23f0343d3331e7700398fe8c1f9d4ff4ae85e522743ad4b0cf0d058bdea`.
+Reconcile this additional source transition with the previously recorded12
+before any coherent canonical export; do not reuse the earlier full receipt
+check as validation of this changed test. Accepted73c84aef and all case/final
+acceptance dispositions remain unchanged.
+
 November 1 bounded Slider paint inspection: after recognizing the Divider
 shaping/bidi/property-domain checks as already investigated, changed approach
 to an actual pending paint record, `interaction:slider@light/desktop-dpr1/held`.

@@ -26,6 +26,62 @@ const find = (ast, predicate) => {
   visit(ast); assert.equal(matches.length, 1); return matches[0];
 };
 
+test('retained Slider track thickness diverges before coordinate projection', t => {
+  const directory = 'artifacts/material-parity/current-full-20261005';
+  const report = load({ file: `${directory}/latest-report.json`,
+    sha256: 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62' });
+  const checkpoint = load({
+    file: `${directory}/checkpoint/d849e7301ec5d9b03dca3df31e27e294f3f0e086b24a95ea1d1e00a709997988.json`,
+    sha256: '74e2ef9521bb94e80774ac356ebe931ab7708b224511465cf36ef2a47b7a69c5' });
+  assert.equal(hash(JSON.stringify(checkpoint.result)), checkpoint.sha256);
+  for (const receipt of checkpoint.files)
+    assert.equal(hash(readFileSync(`${directory}/${receipt.file}`)), receipt.sha256);
+  const row = report.interactions.find(row => row.family === 'slider' && row.profile === 'light' &&
+    row.viewport.id === 'desktop-dpr1' && row.state === 'held');
+  assert.deepEqual(row, checkpoint.result);
+  const reference = load(row.inputTrees.reference);
+  const track = reference.nodes.find(node =>
+    node.attributes?.class?.split(/\s+/).includes('mdc-slider__track'));
+  const fill = reference.nodes.find(node =>
+    node.attributes?.class?.split(/\s+/).includes('mdc-slider__track--active_fill'));
+  assert.ok(track && fill);
+  assert.equal(reference.styles[track.style].height, '4px');
+  assert.equal(reference.styles[fill.style].borderTopWidth, '4px');
+  const host = row.geometry.elements.find(row => row.id === 'slider-visual');
+  assert.deepEqual([host.expected.width, host.expected.height, host.actual.width, host.actual.height],
+    [720, 48, 720, 48]);
+
+  const manifest = JSON.parse(readFileSync(`${directory}/checkpoint/manifest.json`));
+  const receipt = manifest.provenance.browserFiles.find(row => row.file === 'main.js.map');
+  assert.equal(receipt.sha256, 'c0764b03e6a2e5332dc927a63b2f45396678ceb45abe23378377f343ab622473');
+  const map = load({ file: 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/main.js.map',
+    sha256: receipt.sha256 });
+  const index = map.sources.indexOf('src/app/material-plugin/material-showcase.plugin.ts');
+  assert.ok(index >= 0);
+  const source = map.sourcesContent[index];
+  assert.equal(hash(source), 'dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e');
+  const ast = ts.createSourceFile('captured-plugin.ts', source, 99, true);
+  const owner = find(ast, node => ts.isClassDeclaration(node) && node.name?.text === 'MaterialRangeVisualRenderer');
+  const render = find(owner, node => ts.isMethodDeclaration(node) && node.name.getText(ast) === 'render');
+  const statements = ['widthCss', 'trackHeightCss', 'trackSize'].map(name =>
+    find(render, node => ts.isVariableDeclaration(node) && node.name.getText(ast) === name).parent.parent.getText(ast));
+  const calculate = new Function('context', compile(statements.join('\n')) + ';return {trackHeightCss,trackSize};');
+  // Execute captured expressions, intercepting the final conversion boundary.
+  // Changing projection scale cannot change the CSS dimensions passed to it.
+  for (const scale of [1, 10]) {
+    const requests = [];
+    const result = calculate({ dimensions: { width: host.actual.width, height: host.actual.height },
+      coordinates: { toRenderSize: size => {
+        requests.push({ ...size }); return { width: size.width * scale, height: size.height * scale };
+      } } });
+    assert.equal(result.trackHeightCss, 7.68);
+    assert.deepEqual(requests, [{ width: 720, height: 7.68 }]);
+    assert.equal(result.trackSize.height, 7.68 * scale);
+    assert.notEqual(result.trackHeightCss, Number.parseFloat(reference.styles[track.style].height));
+  }
+  t.diagnostic('Original light desktop DPR1 held case: native track/fill 4CSSpx versus captured application-plugin request 7.68CSSpx from the same 48CSSpx visual-host height. First divergence precedes coordinate projection. Unequal plugin paint geometry,not an equal-input renderer/projection failure;not exact edge/halo/compositing causality,current-browser parity or whole-case closure.');
+});
+
 test('retained Slider motion uses native CSS transition versus synchronous application plugin positions', () => {
   const manifest = load({ file: 'artifacts/material-parity/stepper-leave-observed-20261027-provenance/checkpoint/manifest.json',
     sha256: 'c5fef6257a5ba75ac46f2e3cdc66b1154c6a85b7a548f4da4ddf76e7e3c493ee' });
