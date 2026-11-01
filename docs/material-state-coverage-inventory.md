@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+November 1 composed Availability receipt validation completed exit 0. Both
+passive-AX sources were read from Git `3e546fd4` and checked against the exact
+expected hashes in the census below. A local read wrapper accepts only the
+recorded current normalized source or exact retained source, rejects unknown
+edits, and preserves encoding; six current/retained/unknown controls passed.
+No global loader, source file, receipt or accepted pointer was modified.
+`createCaptureAvailabilityReviewReader` reconstructed `2f609608...`; the existing
+`loadCaseObligationReview` then authenticated all 18,636 dependencies and 2,311
+cases. It reports `inspectionComplete=false` and `currentRenderingAccepted=false`.
+Elapsed 325,696.85 ms; the instrumented underlying reader observed 22,800 reads
+and 4,701,708,695 bytes (not a unique-byte count). Retained log:
+`artifacts/material-parity/availability-composed-receipt-validation-20261101.log`,
+SHA256 `0186601e5c41fd8c47b0604b61b7b4bbddbfc27f2f05245808ea274a0dfa9296`.
+This closes the scoped retained-review receipt-load question, not the 12 changed
+canonical source fingerprints, export/conservation gates, current rendering or
+case inspection. Do not repeat this unchanged dependency load for prose. Resume
+the recorded bounded Snackbar open-evidence assessment; any later export must
+explicitly preserve this historical applicability rather than treating it as
+current source equality.
+
 November 1 Availability receipt census: the read-only nested reader rebuilt
 `2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1`
 with 2,311 groups. A traversal of 18,636 distinct receipt paths found exactly
