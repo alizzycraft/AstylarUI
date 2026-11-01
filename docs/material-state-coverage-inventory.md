@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+November 1 bounded Slider paint inspection: after recognizing the Divider
+shaping/bidi/property-domain checks as already investigated, changed approach
+to an actual pending paint record, `interaction:slider@light/desktop-dpr1/held`.
+Authenticated the original checkpoint result digest and all six artifact hashes:
+`current-full-20261005/checkpoint/d849e7301ec5d9b03dca3df31e27e294f3f0e086b24a95ea1d1e00a709997988.json`,
+complete SHA256 `74e2ef9521bb94e80774ac356ebe931ab7708b224511465cf36ef2a47b7a69c5`.
+The paired `slider-primary-raster-{reference,astylar}.png` crops under
+`current-full-20261005/interactions/slider/light/desktop-dpr1/held/` hash to
+`cae03c5a1909d0ca708e284548714f4e7925cfd73497479246bb552e2a870c72` and
+`b6300aed3937981e9db5a76157f5387c507e94d87ca2ea918fc3ed0bdff00558`.
+Direct inspection shows different track thickness and halo appearance. A fixed
+crop-column sample (x=150, purple predicate R<150/G<120/B>120) covers reference
+rows48..51 versus candidate47..53. These are decoded pixel samples, not inferred
+CSS track heights or generalized all-state geometry.
+
+Existing `evaluateFocusedRaster` replay exactly reproduces SSIM
+0.917233743445342, phase(0,1), matches=true, sharpness.meetsTarget=false and
+sharpness edge alignment0.5986159486586449. The current owning metric explicitly
+gates matches on SSIM>=0.80 only; sharpness is diagnostic. Therefore the stored
+pass is consistent with its existing gate, not evidence of complete local paint
+equivalence or a newly diagnosed gate defect. No threshold was changed.
+This supplies bounded retained endpoint inspection for one of the62 Slider
+paint-pending records, not whole-obligation closure or a new canonical join.
+Original measurement/screenshot timing, equal-input applicability and source
+causality remain separate. Next distinguish unequal native/plugin track requests
+from projection/compositing using exact captured producer inputs before assigning
+a renderer cause. Do not repeat settled range hit-owner/motion/halo-input proofs
+or recapture these same images to reproduce the stored metric.
+
 November 1 closure-readiness triage (accepted `73c84aef` / index `baa0f45a`;
 complete index SHA authenticated before the census): all 2,311 input/style,
 semantics, history/ownership and source-currentness obligations remain partial
