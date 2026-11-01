@@ -1,5 +1,37 @@
 # Material comparison/state coverage inventory
 
+November 1 live Slider source/receipt reconciliation checkpoint: complete accepted
+gzip73c84aef authenticated before bounded extraction of its1142-source vector.
+Only589824 decoded prefix bytes were needed;no decoded package was saved. The
+ACTUAL current sourceFingerprints collector returns1143 unique paths:exactly one
+addition (Slider finding helper),zero removals and15 changed existing paths.
+The complete before/current vector digests are respectively
+`e7803229d5d3622bf095e8cc6235e890fe5861688d2bac79f53020deab48ac0a` and
+`2d814085a8a92a015ae8227d68ccb19ae8dc680b70e7bc50fd203b29619d4f22`.
+All15 accepted normalized source versions are recoverable at exact recorded
+hashes. The prior12 recovery points below still match;Slider test uses79761467,
+and producer/policy use35bd6ddc. Current15 hashes still match the census after
+recovery checks. This proves byte availability and vector accounting,not current
+semantic equivalence of all historical evidence.
+Retained census `artifacts/material-parity/slider-track-source-census-20261101.log`,
+raw SHA256 `290e858966b2b0a999015ad72d3fcb8c0f694a23364b407600b5f830952e8a97`.
+
+Actual live createCaptureAvailabilityReviewReader reconstructs exact2f609608;
+the existing loadCaseObligationReview then passes2311 cases/18636 dependencies
+with the two passive-AX transitions composed at this validation entry point.
+Six prior/current/unknown passive-source controls pass;unknown edits reject.
+InspectionComplete=false/currentRenderingAccepted=false remain. Elapsed374872.21ms,
+23024 instrumented reads/4954076705 bytes (not unique bytes). Retained log
+`artifacts/material-parity/slider-track-live-receipt-validation-20261101.log`,
+raw SHA256 `247fdc23e3d00ea7c95b8844833715a818645cdf41f47f38791759aec80d1f8d`.
+No sources changed during these checks. This supersedes the earlier pre-live
+reader gate for the checked source set,but is NOT proof that the exporter wires
+the two passive transitions:that composition remains an explicit prerequisite.
+Next wire/reject-test that exact historical path,then freeze for the existing
+coherent export/conservation/independent-cold/import gates. Do not repeat this
+unchanged census/full receipt read merely for documentation. Accepted package,
+pointer,case statuses,renderer/fixtures and original final acceptance stay intact.
+
 November 1 Slider track registration is LIVE IN WORKING SOURCES,not canonical
 publication. Applied the verified exact policy8f1acb6a and producerf33bb2d7
 recipes. Current declarations:206 findings/1143 sources/472 proofs/73 plan items;
