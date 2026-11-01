@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { PNG } from 'pngjs';
 import { execFileSync } from 'node:child_process';
+import path from 'node:path';
 import { Color3 } from '@babylonjs/core/Maths/math.color.js';
 import { Material as BabylonMaterial } from '@babylonjs/core/Materials/material.js';
 import { NullEngine } from '@babylonjs/core/Engines/nullEngine.js';
@@ -12,6 +13,7 @@ import { Scene } from '@babylonjs/core/scene.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
 import { materialStaticCases, materialInteractionCases } from './benchmark.config.mjs';
 import { sliderTrackPaintFinding } from './slider-track-paint-findings.mjs';
+import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const load = receipt => {
@@ -28,6 +30,35 @@ const find = (ast, predicate) => {
   visit(ast); assert.equal(matches.length, 1); return matches[0];
 };
 
+test('pending Slider track finding fits the existing source scanner without canonical mutation', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const ast = ts.createSourceFile(file, readFileSync(file, 'utf8'), 99, true);
+  const scan = find(ast, node => ts.isFunctionDeclaration(node) && node.name?.text === 'scanMaterialSources');
+  const execute = definitions => new Function('sourceAuditDefinitions', 'path', 'readFileSync',
+    scan.getText(ast) + ';return scanMaterialSources(process.cwd());')(definitions, path, readFileSync);
+  const before = execute(sourceAuditDefinitions);
+  assert.equal(before.length, 205);
+  assert.ok(!before.some(row => row.id === sliderTrackPaintFinding.id));
+  const next = execute([...sourceAuditDefinitions, sliderTrackPaintFinding]);
+  assert.deepEqual(next.slice(0, before.length), before);
+  assert.equal(next.length, 206);
+  const added = next.at(-1);
+  assert.equal(added.detected, true);
+  assert.equal(added.locations.length, 1);
+  assert.equal(added.locations[0].file, sliderTrackPaintFinding.file);
+  assert.equal(added.classification, 'application-plugin-authoring-defect');
+  for (const key of ['id', 'introducedBy', 'owner', 'focusedProof', 'justification', 'recommendation', 'boundary'])
+    assert.ok(typeof added[key] === 'string' && added[key].trim(), key);
+  assert.deepEqual(added.evidence, Object.values(added.captureEvidence));
+  for (const receipt of added.evidence) {
+    assert.equal(typeof receipt.file, 'string');
+    assert.match(receipt.sha256, /^[a-f0-9]{64}$/);
+    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  }
+  assert.equal(sourceAuditDefinitions.length, 205);
+  assert.ok(!sourceAuditDefinitions.some(row => row.id === sliderTrackPaintFinding.id));
+});
+
 test('retained Slider track thickness diverges before coordinate projection', t => {
   const finding = sliderTrackPaintFinding;
   assert.equal(finding.id, 'fixture-slider-track-thickness-substitution');
@@ -36,9 +67,9 @@ test('retained Slider track thickness diverges before coordinate projection', t 
   assert.equal(finding.inputEquivalent, false);
   assert.equal(finding.currentRenderingAccepted, false);
   const directory = 'artifacts/material-parity/current-full-20261005';
-  assert.equal(finding.evidence.report.sha256, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
-  const report = load(finding.evidence.report);
-  const checkpoint = load(finding.evidence.heldCheckpoint);
+  assert.equal(finding.captureEvidence.report.sha256, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = load(finding.captureEvidence.report);
+  const checkpoint = load(finding.captureEvidence.heldCheckpoint);
   assert.equal(hash(JSON.stringify(checkpoint.result)), checkpoint.sha256);
   for (const receipt of checkpoint.files)
     assert.equal(hash(readFileSync(`${directory}/${receipt.file}`)), receipt.sha256);
@@ -60,8 +91,8 @@ test('retained Slider track thickness diverges before coordinate projection', t 
   const manifest = JSON.parse(readFileSync(`${directory}/checkpoint/manifest.json`));
   const receipt = manifest.provenance.browserFiles.find(row => row.file === 'main.js.map');
   assert.equal(receipt.sha256, 'c0764b03e6a2e5332dc927a63b2f45396678ceb45abe23378377f343ab622473');
-  assert.equal(finding.evidence.capturedSourceMap.sha256, receipt.sha256);
-  const map = load(finding.evidence.capturedSourceMap);
+  assert.equal(finding.captureEvidence.capturedSourceMap.sha256, receipt.sha256);
+  const map = load(finding.captureEvidence.capturedSourceMap);
   const index = map.sources.indexOf('src/app/material-plugin/material-showcase.plugin.ts');
   assert.ok(index >= 0);
   const source = map.sourcesContent[index];

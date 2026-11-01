@@ -1,5 +1,29 @@
 # Material comparison/state coverage inventory
 
+November 1 Slider finding collector preflight: existing pending-evidence registry
+transforms source/proof inventories and historical readers; it does not provide
+a generic pending source-finding overlay. The staged finding now uses the
+canonical receipt-array shape (`evidence`) while retaining named capture receipts
+separately. Required report fields include introducedBy,justification,owner and
+recommendation; unknown introduction/motive remains explicit rather than omitted.
+The existing Slider suite executes the ACTUAL `scanMaterialSources` function
+with the205 live definitions and then those same definitions plus the pending
+track finding. Complete preceding205 results deep-equal; the206th detects one
+exact plugin source location. All three evidence receipts authenticate and the
+live policy array remains205/unmodified. This is compatible staged collection,
+not live/canonical registration,final export conservation or broader validation.
+
+Owning suite passes7/7,zero skips/failures (8782.02ms). Current normalized hashes:
+Slider test `7d5b90d67ee2f314cedc746d6718d553534f0ef84004523958e9efb507b8f03b`;
+pending finding `e80fa57916e3cd3c05ee9df3600faa03efc718c7030f5083f158c8a7a95f5961`.
+These supersede04a9ee9e/b9a0cbd9; original accepted test remains53de2d93.
+Next integration prerequisite is an exact policy-definition/inventory/proof/plan
+transition with complete prior-source restoration for historical consumers,
+composed with the already outstanding source reconciliation. Do not run a large
+export merely for this metadata preflight or treat the earlier18,636-receipt
+validation as covering the changed test/new module. No canonical bytes,pointer,
+source-finding count,case disposition,renderer,fixture or acceptance gate changed.
+
 November 1 pending Slider track finding is now machine-readable in
 `tests/material-parity/slider-track-paint-findings.mjs`, ID
 `fixture-slider-track-thickness-substitution`. It follows the existing standalone
