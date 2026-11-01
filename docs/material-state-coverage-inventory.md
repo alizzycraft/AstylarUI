@@ -1,5 +1,30 @@
 # Material comparison/state coverage inventory
 
+November 1 Slider track scope/history extension: the existing focused regression
+now verifies exact original-to-current-config case membership:78 Slider cases,
+12 static and66 interaction. All156 paired tree receipts authenticate; all78
+native tracks and active-fill borders are4px, candidate resolved visual height
+and both recorded visual-host heights are48px. Executing the authenticated
+captured plugin expressions with each recorded candidate width requests7.68CSSpx
+track thickness for every case. This extends the pre-projection unequal-geometry
+finding,not the count of fully inspected cases or independently inspected rasters.
+The earlier62 figure is only the pending-paint subset,not total Slider scope.
+
+History control pins pre-coordinate-boundary plugin revision
+`1399edfb43618eb71a1d40214a48b04f1f9f3b71`, raw source SHA256
+`b07e7788472892b776936512b9d74bf0699db352cfd8488c8244ec8ec9c99c8f`.
+Its actual track expression already computes the same16%-of-host-height
+algorithm with world scale included; scales0.1/1/10 all correspond to7.68CSSpx.
+Thus the CSS-coordinate boundary refactor `e4ca3db4` did not introduce this
+thickness algorithm. No original author intent or introduction commit is inferred.
+Existing owning-file suite passes6/6,zero skips/failures (8029.99ms); no browser
+capture,renderer/fixture edit or acceptance change. The same listed test source
+now hashes to `4272c8c698d0b2a07890421a764bd0d8528b63ff2c22d3c035d5e0f9c2aacf81`
+(normalized), superseding intermediate `e2ccd23f...`; preserve original accepted
+`53de2d93...` for the outstanding coherent fingerprint reconciliation. This
+extends one pending source transition,not a second new changed path. Standalone
+proof registration,canonical publication and remaining Slider obligations stay open.
+
 November 1 Slider track first-divergence proof: original held light desktop DPR1
 checkpoint and original report `ab42dbec` agree exactly. All six checkpoint files
 authenticate. Original `slider-visual` geometry records BOTH reference and

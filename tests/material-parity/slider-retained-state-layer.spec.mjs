@@ -10,6 +10,7 @@ import { Material as BabylonMaterial } from '@babylonjs/core/Materials/material.
 import { NullEngine } from '@babylonjs/core/Engines/nullEngine.js';
 import { Scene } from '@babylonjs/core/scene.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
+import { materialStaticCases, materialInteractionCases } from './benchmark.config.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const load = receipt => {
@@ -79,7 +80,48 @@ test('retained Slider track thickness diverges before coordinate projection', t 
     assert.equal(result.trackSize.height, 7.68 * scale);
     assert.notEqual(result.trackHeightCss, Number.parseFloat(reference.styles[track.style].height));
   }
-  t.diagnostic('Original light desktop DPR1 held case: native track/fill 4CSSpx versus captured application-plugin request 7.68CSSpx from the same 48CSSpx visual-host height. First divergence precedes coordinate projection. Unequal plugin paint geometry,not an equal-input renderer/projection failure;not exact edge/halo/compositing causality,current-browser parity or whole-case closure.');
+  const key = (kind, row) => `${kind}:slider@${row.profile}/${row.viewport.id}${kind === 'interaction' ? '/' + row.state : ''}`;
+  const cases = [
+    ...report.results.filter(row => row.family === 'slider').map(row => ({ kind: 'static', row })),
+    ...report.interactions.filter(row => row.family === 'slider').map(row => ({ kind: 'interaction', row })),
+  ];
+  const configured = [
+    ...materialStaticCases.filter(row => row.family === 'slider').map(row => key('static', row)),
+    ...materialInteractionCases.filter(row => row.family === 'slider').map(row => key('interaction', row)),
+  ];
+  assert.deepEqual(cases.map(({ kind, row }) => key(kind, row)).sort(), configured.sort());
+  assert.deepEqual([cases.filter(row => row.kind === 'static').length,
+    cases.filter(row => row.kind === 'interaction').length], [12, 66]);
+  for (const { kind, row } of cases) {
+    const id = key(kind, row), native = load(row.inputTrees.reference), candidate = load(row.inputTrees.astylar);
+    const nativeTrack = native.nodes.find(node => node.attributes?.class?.split(/\s+/).includes('mdc-slider__track'));
+    const nativeFill = native.nodes.find(node => node.attributes?.class?.split(/\s+/).includes('mdc-slider__track--active_fill'));
+    const visual = candidate.nodes.find(node => node.authored?.id === 'slider-visual');
+    assert.ok(nativeTrack && nativeFill && visual, id);
+    assert.equal(native.styles[nativeTrack.style].height, '4px', id);
+    assert.equal(native.styles[nativeFill.style].borderTopWidth, '4px', id);
+    assert.equal(visual.resolvedStyle.height, '48px', id);
+    const box = row.geometry.elements.find(row => row.id === 'slider-visual');
+    assert.ok(box && !box.missing, id);
+    assert.equal(box.expected.height, 48, id);
+    assert.equal(box.actual.height, 48, id);
+    const requests = [];
+    calculate({ dimensions: { width: box.actual.width, height: box.actual.height },
+      coordinates: { toRenderSize: size => { requests.push({ ...size }); return size; } } });
+    assert.deepEqual(requests, [{ width: box.actual.width, height: 7.68 }], id);
+  }
+  const oldBytes = execFileSync('git', ['show',
+    '1399edfb43618eb71a1d40214a48b04f1f9f3b71:examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts'],
+  { maxBuffer: 8000000 });
+  assert.equal(hash(oldBytes), 'b07e7788472892b776936512b9d74bf0699db352cfd8488c8244ec8ec9c99c8f');
+  const oldAst = ts.createSourceFile('before-css-boundary.ts', oldBytes.toString(), 99, true);
+  const oldOwner = find(oldAst, node => ts.isClassDeclaration(node) && node.name?.text === 'MaterialRangeVisualRenderer');
+  const oldTrack = find(oldOwner, node => ts.isVariableDeclaration(node) && node.name.getText(oldAst) === 'trackHeight');
+  const oldCalculate = new Function('context', 'scale',
+    compile(oldTrack.parent.parent.getText(oldAst)) + ';return trackHeight;');
+  for (const scale of [.1, 1, 10])
+    assert.ok(Math.abs(oldCalculate({ dimensions: { height: 48 } }, scale) / scale - 7.68) < 1e-12);
+  t.diagnostic('78 original/configured Slider cases (12 static,66 interaction),156 authenticated trees: native track/fill 4CSSpx versus captured application-plugin request 7.68CSSpx from the same 48CSSpx visual-host height. Pre-CSS-boundary source already has the same thickness algorithm. First divergence precedes coordinate projection. Unequal plugin paint geometry,not an equal-input renderer/projection failure;not exact edge/halo/compositing causality,78 independently inspected rasters,current-browser parity or whole-case closure.');
 });
 
 test('retained Slider motion uses native CSS transition versus synchronous application plugin positions', () => {
