@@ -1,4 +1,4 @@
-// Pending audit finding: not registered in the accepted canonical policy/counts.
+// Registered in current audit sources; not yet published in accepted canonical counts.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -43,7 +43,7 @@ export const sliderTrackPaintFinding = Object.freeze({
   boundary: 'Confirmed unequal captured input geometry, not an equal-input renderer/projection defect, exact pixel-edge/compositing cause, 78 independently inspected rasters, current rendering parity or whole-case inspection closure.',
   inputEquivalent: false,
   currentRenderingAccepted: false,
-  canonicalStatus: 'pending-not-registered',
+  canonicalStatus: 'source-registered-not-canonical-published',
 });
 
 // Stage/reverse only this exact addition. These functions never write live files.
@@ -107,7 +107,7 @@ export function restoreSliderTrackProducer(bytes) {
 }
 
 const sliderTrackPriorTestSha256 = '53de2d93dbb9502a13b2786d0afbfb17a26c368395c728d01cb48ade5317e3d9';
-const sliderTrackCurrentTestSha256 = '57a130a4d76592799259629510e8351625833c263e32115b7acb2e6d63ff2189';
+const sliderTrackCurrentTestSha256 = '0083aee38f68159cf0933803ce545cb78835033e022914e8280266769d76a12d';
 
 // Explicitly opt-in for historical consumers. Never wrap current fingerprint
 // collection: it must see the new policy, producer, test and finding module.

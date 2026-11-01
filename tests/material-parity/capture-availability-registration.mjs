@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
+import { createSliderTrackHistoricalRead, restoreSliderTrackProducer } from './slider-track-paint-findings.mjs';
 
 // Staged source transformation; applying it to live files is a separate gate.
 const review = '2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1';
@@ -63,6 +64,8 @@ export function prepareCaptureAvailabilityRegistration(bytes, kind) {
   return source;
 }
 export function restoreCaptureAvailabilityRegistration(bytes, kind) {
+  if (kind === 'producer' && bytes.toString().includes('"tests/material-parity/slider-track-paint-findings.mjs",'))
+    bytes = restoreSliderTrackProducer(bytes);
   let source = bytes.toString().replaceAll('\r\n', '\n');
   if (hash(source) === priors[kind]) return source;
   for (const [before, after] of changes[kind].toReversed()) {
@@ -115,6 +118,7 @@ export function restoreCaptureAvailabilityShared(bytes) {
 // For predecessor evidence readers only. Current source collection must retain
 // its raw reader so registration changes remain visible in the new inventory.
 export function createCaptureAvailabilityHistoricalRead({ root, read }) {
+  read = createSliderTrackHistoricalRead({ root, read });
   const kinds = new Map(Object.entries({ producer: 'tests/material-parity/input-equivalence-audit.mjs',
     runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })
     .map(([kind, file]) => [path.resolve(root, file), kind]));

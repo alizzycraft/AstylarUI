@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+November 1 Slider track registration is LIVE IN WORKING SOURCES,not canonical
+publication. Applied the verified exact policy8f1acb6a and producerf33bb2d7
+recipes. Current declarations:206 findings/1143 sources/472 proofs/73 plan items;
+complete prior205/1142/470/72 definitions/declarations preserve through reversal.
+The existing capture-availability reader now composes the scoped Slider source
+restoration; its direct producer reversal peels the new inventory before older
+registration stages. Current collection stays raw. Owning Slider tests support
+both prior and registered policy/producer sources without weakening prior hashes.
+Combined command `node --max-old-space-size=8192 --test tests/material-parity/slider-retained-state-layer.spec.mjs tests/material-parity/capture-availability-registration.spec.mjs`
+passes10/10,zero skips/failures,9980.14ms. Both producer/policy Node syntax checks
+and existing launcher `--capture-availability --dry-run` pass;it still selects
+the exact2f609608 review. Dry-run is routing only,not complete dependency proof.
+
+Current normalized SHA256 values: capture-availability helper
+`2adf08b4491e8f64c3a68dc74dc1aca9cc1b241ccc6856a7c31f5ae42ec11b81`,
+Slider finding/registration helper
+`f08516d54cdc4bed359f1730bbdf616ee1f8bb1a51a7770c319ad6c91bcbfdda`,
+Slider test `0083aee38f68159cf0933803ce545cb78835033e022914e8280266769d76a12d`.
+Policy/producer retain their staged full hashes recorded below. Standalone status
+now explicitly says source-registered/not-canonical-published. No accepted package,
+pointer,case disposition,renderer,fixture or acceptance gate changed;accepted
+73c84aef still records205 findings. Freeze this coherent registration for complete
+source-vector and receipt reconciliation. The old12 changed paths plus Slider
+test,policy and producer give15 known changed existing paths and one new module;
+verify the actual vector before export rather than treating this accounting as
+a fresh census. The prior staged-consumer success is construction evidence only,
+not a new full receipt check. Two exact passive-AX receipt transitions and all
+original export/conservation/cold/import/final acceptance gates remain required.
+
 November 1 staged Slider historical-consumer integration passes. The pending
 module's opt-in `createSliderTrackHistoricalRead` reverses only the exact staged
 policy/producer additions and recovers the accepted Slider test53de2d93 from

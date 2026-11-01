@@ -34,24 +34,30 @@ const find = (ast, predicate) => {
 test('pending Slider track finding fits the existing source scanner without canonical mutation', () => {
   const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
   const originalPolicy = readFileSync(policyFile);
-  const stagedPolicy = prepareSliderTrackPolicy(originalPolicy);
-  assert.equal(restoreSliderTrackPolicy(stagedPolicy), originalPolicy.toString().replaceAll('\r\n', '\n'));
-  assert.equal(restoreSliderTrackPolicy(originalPolicy), originalPolicy.toString().replaceAll('\r\n', '\n'));
-  assert.throws(() => prepareSliderTrackPolicy(originalPolicy + '\n// unrelated edit'));
+  const priorPolicy = restoreSliderTrackPolicy(originalPolicy);
+  const stagedPolicy = prepareSliderTrackPolicy(priorPolicy);
+  assert.equal(restoreSliderTrackPolicy(stagedPolicy), priorPolicy);
+  assert.equal(restoreSliderTrackPolicy(priorPolicy), priorPolicy);
+  assert.throws(() => prepareSliderTrackPolicy(priorPolicy + '\n// unrelated edit'));
   assert.throws(() => restoreSliderTrackPolicy(stagedPolicy + '\n// unrelated edit'));
   assert.throws(() => restoreSliderTrackPolicy(stagedPolicy.replace('fixture-slider-track-thickness-substitution', 'forged-track-finding')));
   const stagedAst = ts.createSourceFile(policyFile, stagedPolicy, 99, true);
   assert.deepEqual(stagedAst.parseDiagnostics, []);
   const declaration = find(stagedAst, node => ts.isVariableDeclaration(node) && node.name.getText(stagedAst) === 'sourceAuditDefinitions');
   const stagedDefinitions = new Function('return ' + declaration.initializer.getText(stagedAst))();
-  assert.deepEqual(stagedDefinitions.slice(0, 205), sourceAuditDefinitions);
+  const priorAst = ts.createSourceFile(policyFile, priorPolicy, 99, true);
+  const priorDeclaration = find(priorAst, node => ts.isVariableDeclaration(node) && node.name.getText(priorAst) === 'sourceAuditDefinitions');
+  const priorDefinitions = new Function('return ' + priorDeclaration.initializer.getText(priorAst))();
+  assert.deepEqual(stagedDefinitions.slice(0, 205), priorDefinitions);
+  assert.deepEqual(sourceAuditDefinitions, originalPolicy.toString().includes(sliderTrackPaintFinding.id) ? stagedDefinitions : priorDefinitions);
   assert.equal(stagedDefinitions.length, 206);
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
   const originalProducer = readFileSync(file);
-  const stagedProducer = prepareSliderTrackProducer(originalProducer);
-  assert.equal(restoreSliderTrackProducer(stagedProducer), originalProducer.toString().replaceAll('\r\n', '\n'));
-  assert.equal(restoreSliderTrackProducer(originalProducer), originalProducer.toString().replaceAll('\r\n', '\n'));
-  assert.throws(() => prepareSliderTrackProducer(originalProducer + '\n// unrelated edit'));
+  const priorProducer = restoreSliderTrackProducer(originalProducer);
+  const stagedProducer = prepareSliderTrackProducer(priorProducer);
+  assert.equal(restoreSliderTrackProducer(stagedProducer), priorProducer);
+  assert.equal(restoreSliderTrackProducer(priorProducer), priorProducer);
+  assert.throws(() => prepareSliderTrackProducer(priorProducer + '\n// unrelated edit'));
   assert.throws(() => restoreSliderTrackProducer(stagedProducer + '\n// unrelated edit'));
   assert.throws(() => restoreSliderTrackProducer(stagedProducer.replace('host-relative track thickness', 'forged thickness')));
   const inventory = source => {
@@ -65,7 +71,7 @@ test('pending Slider track finding fits the existing source scanner without cano
       return [name, array.elements.map(node => node.getText(ast))];
     }));
   };
-  const priorInventory = inventory(originalProducer.toString()), nextInventory = inventory(stagedProducer);
+  const priorInventory = inventory(priorProducer), nextInventory = inventory(stagedProducer);
   assert.deepEqual([priorInventory.sourceFingerprints.length, priorInventory.focusedProofInventory.length,
     priorInventory.implementationPlan.length], [1142, 470, 72]);
   assert.deepEqual(nextInventory.sourceFingerprints.slice(1), priorInventory.sourceFingerprints);
@@ -82,7 +88,7 @@ test('pending Slider track finding fits the existing source scanner without cano
   const scan = find(ast, node => ts.isFunctionDeclaration(node) && node.name?.text === 'scanMaterialSources');
   const execute = definitions => new Function('sourceAuditDefinitions', 'path', 'readFileSync',
     scan.getText(ast) + ';return scanMaterialSources(process.cwd());')(definitions, path, readFileSync);
-  const before = execute(sourceAuditDefinitions);
+  const before = execute(priorDefinitions);
   assert.equal(before.length, 205);
   assert.ok(!before.some(row => row.id === sliderTrackPaintFinding.id));
   const next = execute(stagedDefinitions);
@@ -103,8 +109,8 @@ test('pending Slider track finding fits the existing source scanner without cano
     assert.match(receipt.sha256, /^[a-f0-9]{64}$/);
     assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
   }
-  assert.equal(sourceAuditDefinitions.length, 205);
-  assert.ok(!sourceAuditDefinitions.some(row => row.id === sliderTrackPaintFinding.id));
+  assert.equal(priorDefinitions.length, 205);
+  assert.ok(!priorDefinitions.some(row => row.id === sliderTrackPaintFinding.id));
   const suiteFile = 'tests/material-parity/slider-retained-state-layer.spec.mjs';
   const priorSuite = execFileSync('git', ['show', `79761467:${suiteFile}`]);
   assert.equal(hash(priorSuite), '53de2d93dbb9502a13b2786d0afbfb17a26c368395c728d01cb48ade5317e3d9');
@@ -120,7 +126,7 @@ test('pending Slider track finding fits the existing source scanner without cano
     return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
   };
   const historical = createSliderTrackHistoricalRead({ root: process.cwd(), read: raw });
-  for (const [name, expected] of [[policyFile, originalPolicy], [file, originalProducer], [suiteFile, priorSuite]]) {
+  for (const [name, expected] of [[policyFile, priorPolicy], [file, priorProducer], [suiteFile, priorSuite]]) {
     assert.equal(historical(name, 'utf8'), expected.toString().replaceAll('\r\n', '\n'));
     assert.equal(historical(path.resolve(name), { encoding: 'utf8' }), expected.toString().replaceAll('\r\n', '\n'));
     const copy = historical(name); copy.fill(0);
@@ -146,7 +152,7 @@ test('retained Slider track thickness diverges before coordinate projection', t 
   const finding = sliderTrackPaintFinding;
   assert.equal(finding.id, 'fixture-slider-track-thickness-substitution');
   assert.equal(finding.classification, 'application-plugin-authoring-defect');
-  assert.equal(finding.canonicalStatus, 'pending-not-registered');
+  assert.equal(finding.canonicalStatus, 'source-registered-not-canonical-published');
   assert.equal(finding.inputEquivalent, false);
   assert.equal(finding.currentRenderingAccepted, false);
   const directory = 'artifacts/material-parity/current-full-20261005';
