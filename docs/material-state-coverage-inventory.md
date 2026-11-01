@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+November 1 Snackbar opening reuse assessment: exact report `1cc0846c...` and
+four first-open/before-expiry input-tree receipts authenticate. The reference
+first-open container `overlay:0/0/0/0` has opacity `0.743816` and transform
+`matrix(0.948763, 0, 0, 0.948763, 0, 0)` at 66.70 ms after click. Candidate
+`snack-bar-surface` has opacity `1.0` and no resolved transform at 412.40 ms.
+At before-expiry, reference opacity is `1` with identity scale (4017.10 ms),
+and candidate opacity remains `1.0` (4038.80 ms). Thus differing first-open
+animation phases are directly observed, not merely a timing hypothesis.
+Reference tree hashes are `2fa0f8686506d4cf7aa651729fba587dbd8abd2946017b6c630dfb4daee9bad0`
+(first-open) and `23d7073b3f67e321e3a4443d555a687376f68792551c7f7b5cf711985e28660c`
+(before-expiry); both candidate trees hash to
+`09a5127ae74b351af817a37955acea28606080b0138c66edb24c806cd73bf8fd`.
+Paths are under `artifacts/material-parity/snackbar-single-open-20261027/`,
+named `light-{reference,astylar}-{first-open,before-expiry}.json`.
+The report-bound diagnostic producer still matches raw SHA256
+`dab25c42bfad778b5d5b5dbd43b56cf87be52cdb255bfd199dfaee6c438c397e`;
+its settle function waits for candidate settlement, fonts and two frames,
+not completion of the reference enter animation. Focus is also absent from
+these trees as previously recorded. Therefore reuse is limited to supplementary
+trusted-click visibility observations; it cannot discharge synchronized opening,
+paired focus, paint or original-procedure inspection for the separate open case.
+No additional canonical join or duplicate capture is justified solely to repeat
+that visibility fact. Keep the open case partial. The remaining decisive evidence
+is paired focus/action observations and an explicitly matched animation phase
+under the configured opening procedure, with current-runtime applicability
+checked separately. No renderer cause or original missing-Snackbar cause is
+proved by this supplementary phase mismatch. No source, receipt, canonical
+pointer or acceptance criteria changed; existing final gates remain open.
+
 November 1 composed Availability receipt validation completed exit 0. Both
 passive-AX sources were read from Git `3e546fd4` and checked against the exact
 expected hashes in the census below. A local read wrapper accepts only the
