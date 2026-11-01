@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+November 1 pending Slider track finding is now machine-readable in
+`tests/material-parity/slider-track-paint-findings.mjs`, ID
+`fixture-slider-track-thickness-substitution`. It follows the existing standalone
+pending-finding pattern, not a new audit/report framework. Classification is
+application-plugin-authoring-defect; recorded scope is12 static/66 interaction
+cases with156 paired trees and4px versus7.68px track geometry. Report/checkpoint/
+captured-map receipts, first divergence, pre-coordinate-boundary history,
+implementation recommendation and verification plan are explicit. It does not
+claim a core projection defect,78 raster inspections,current parity or closure.
+Later implementation must carry equivalent resolved track geometry through the
+public CSS-space paint contract and remove the host-height-derived substitute;
+any missing general capability needs its own reduced core/public-API proof.
+Do not tune the host height,offsets,camera or reference styling to hide the mismatch.
+
+The existing Slider test imports this definition and asserts its classification,
+pending status,scope,values,source matcher,evidence and history against the actual
+captured-source execution. Unfiltered owning suite passes6/6,zero skips/failures,
+4598.65ms. New finding module normalized SHA256
+`b9a0cbd9bf6f31513990deb988a34e95de29f1ea44807800f9f8671c51a063ae`;
+the already changed test now hashes to
+`04a9ee9ef67947fd5e664062643eee7cc94495b3ea7cd1f430ee35f8af94888e`,
+superseding4272c8c6. Original accepted test remains53de2d93. Pending integration
+must register the new module/finding/proof and reconcile the existing changed
+test with the other12 source transitions. No live canonical policy,producer,
+export selector,pointer,count or acceptance disposition changed. Accepted205
+source findings remain205; this is one additional pending finding,not publication.
+
 November 1 Slider track scope/history extension: the existing focused regression
 now verifies exact original-to-current-config case membership:78 Slider cases,
 12 static and66 interaction. All156 paired tree receipts authenticate; all78

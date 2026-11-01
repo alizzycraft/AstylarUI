@@ -11,6 +11,7 @@ import { NullEngine } from '@babylonjs/core/Engines/nullEngine.js';
 import { Scene } from '@babylonjs/core/scene.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
 import { materialStaticCases, materialInteractionCases } from './benchmark.config.mjs';
+import { sliderTrackPaintFinding } from './slider-track-paint-findings.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const load = receipt => {
@@ -28,12 +29,16 @@ const find = (ast, predicate) => {
 };
 
 test('retained Slider track thickness diverges before coordinate projection', t => {
+  const finding = sliderTrackPaintFinding;
+  assert.equal(finding.id, 'fixture-slider-track-thickness-substitution');
+  assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  assert.equal(finding.canonicalStatus, 'pending-not-registered');
+  assert.equal(finding.inputEquivalent, false);
+  assert.equal(finding.currentRenderingAccepted, false);
   const directory = 'artifacts/material-parity/current-full-20261005';
-  const report = load({ file: `${directory}/latest-report.json`,
-    sha256: 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62' });
-  const checkpoint = load({
-    file: `${directory}/checkpoint/d849e7301ec5d9b03dca3df31e27e294f3f0e086b24a95ea1d1e00a709997988.json`,
-    sha256: '74e2ef9521bb94e80774ac356ebe931ab7708b224511465cf36ef2a47b7a69c5' });
+  assert.equal(finding.evidence.report.sha256, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = load(finding.evidence.report);
+  const checkpoint = load(finding.evidence.heldCheckpoint);
   assert.equal(hash(JSON.stringify(checkpoint.result)), checkpoint.sha256);
   for (const receipt of checkpoint.files)
     assert.equal(hash(readFileSync(`${directory}/${receipt.file}`)), receipt.sha256);
@@ -55,12 +60,13 @@ test('retained Slider track thickness diverges before coordinate projection', t 
   const manifest = JSON.parse(readFileSync(`${directory}/checkpoint/manifest.json`));
   const receipt = manifest.provenance.browserFiles.find(row => row.file === 'main.js.map');
   assert.equal(receipt.sha256, 'c0764b03e6a2e5332dc927a63b2f45396678ceb45abe23378377f343ab622473');
-  const map = load({ file: 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/main.js.map',
-    sha256: receipt.sha256 });
+  assert.equal(finding.evidence.capturedSourceMap.sha256, receipt.sha256);
+  const map = load(finding.evidence.capturedSourceMap);
   const index = map.sources.indexOf('src/app/material-plugin/material-showcase.plugin.ts');
   assert.ok(index >= 0);
   const source = map.sourcesContent[index];
   assert.equal(hash(source), 'dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e');
+  assert.equal([...source.matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
   const ast = ts.createSourceFile('captured-plugin.ts', source, 99, true);
   const owner = find(ast, node => ts.isClassDeclaration(node) && node.name?.text === 'MaterialRangeVisualRenderer');
   const render = find(owner, node => ts.isMethodDeclaration(node) && node.name.getText(ast) === 'render');
@@ -92,6 +98,9 @@ test('retained Slider track thickness diverges before coordinate projection', t 
   assert.deepEqual(cases.map(({ kind, row }) => key(kind, row)).sort(), configured.sort());
   assert.deepEqual([cases.filter(row => row.kind === 'static').length,
     cases.filter(row => row.kind === 'interaction').length], [12, 66]);
+  assert.deepEqual([finding.observation.staticCases, finding.observation.interactionCases,
+    finding.observation.pairedTrees, finding.observation.referenceCssPx,
+    finding.observation.astylarCssPx, finding.observation.visualHostHeightCssPx], [12, 66, 156, 4, 7.68, 48]);
   for (const { kind, row } of cases) {
     const id = key(kind, row), native = load(row.inputTrees.reference), candidate = load(row.inputTrees.astylar);
     const nativeTrack = native.nodes.find(node => node.attributes?.class?.split(/\s+/).includes('mdc-slider__track'));
@@ -114,6 +123,8 @@ test('retained Slider track thickness diverges before coordinate projection', t 
     '1399edfb43618eb71a1d40214a48b04f1f9f3b71:examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts'],
   { maxBuffer: 8000000 });
   assert.equal(hash(oldBytes), 'b07e7788472892b776936512b9d74bf0699db352cfd8488c8244ec8ec9c99c8f');
+  assert.equal(hash(oldBytes), finding.history.pluginSourceSha256);
+  assert.equal(finding.history.beforeCoordinateBoundaryRevision, '1399edfb43618eb71a1d40214a48b04f1f9f3b71');
   const oldAst = ts.createSourceFile('before-css-boundary.ts', oldBytes.toString(), 99, true);
   const oldOwner = find(oldAst, node => ts.isClassDeclaration(node) && node.name?.text === 'MaterialRangeVisualRenderer');
   const oldTrack = find(oldOwner, node => ts.isVariableDeclaration(node) && node.name.getText(oldAst) === 'trackHeight');
