@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+November2 original Snackbar hover/held light desktop-DPR1 paint now has bounded
+checkpoint/input/pixel inspection. Native persistent pseudo requests white .08/
+.12 over rgb(103,80,164);candidate has no layer child and instead requests host
+#735eab/#7965af. One opaque interior per side matches [115,94,171]/[121,101,175]
+exactly and is explained by that known base/white blend. This is NOT complete
+composition equivalence,all pixels,edges/glyph/ripple/animation or other themes.
+Retained held candidate frame inspected directly;native held is the same encoded
+frame as the already-inspected focus frame,hover frames match inspected expired
+frames. Their distinct checkpoint/result/tree/frame hashes authenticate.
+
+Authenticated original captureInteractionCase places image capture BEFORE held
+release and event-list reads AFTER release. Post-release pointerup/click in the
+record is not evidence that the held frame was post-click;recipe ordering is not
+an original elapsed/action timeline. No new timer or focus-causality claim.
+Owning focused batch(timer blind spot,expired residual,focus mismatch,hover/held
+requests) passes4/4,0skip/failure,6429.9622ms;snackbar-trigger-paint-batch-20261102.log
+raw SHA256f212db33120f48c726b91158fc386724083bb2ca777149337fd1df2196c1de22.
+Suite normalized source1a11aa84 becomesb8faac81. No capture,fixture/core edit,
+threshold change,case promotion or new canonical generation. Next coherent
+integration must reconcile the two changed registered sources since695dea7b,
+classify the bounded focus-input/harness mismatch and join these exact paint
+records with their remaining full-paint/currentness limits;not repeat captures.
+
 November2 inspected original interaction:snack-bar@light/desktop-dpr1/focus
 paint rather than repeating Divider inventories. Native and candidate both
 record focused trigger and closed popup,but native persistent-ripple ::before

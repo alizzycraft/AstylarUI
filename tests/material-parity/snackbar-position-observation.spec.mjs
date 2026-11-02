@@ -189,6 +189,64 @@ test('retained snackbar focus-layer inputs differ while the original paint compa
     boundary: 'One original focus case:unequal native pseudo-layer versus candidate focus inputs and a paint-comparator coverage gap. Not an equal-input core failure,all button families/themes,complete glyph/edge/ripple paint,current rendering or permission to patch fixture colors.' }));
 });
 
+test('original snackbar hover and held fill samples do not establish equivalent layer composition', async t => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const root = 'artifacts/material-parity/current-full-20261005/';
+  const bytes = readFileSync(root + 'latest-report.json');
+  assert.equal(hash(bytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(bytes), observations = [];
+  for (const [state, checkpointId, checkpointSha, alpha, background] of [
+    ['hover', '006f2470f55df7e5216eda18f2faa95ea9e9eafae3ba03b9256462351e9a5bc5', '25f829bf709f91f46a361cc2117b5718077f53e925525a8ff8da64bcb09eb1e9', .08, '#735eab'],
+    ['held', '7edef9b8fd31da13635660bff8d86d6635efc007a751e96a4b5585b370d36928', 'ccf1117e742b485101b59b357efe61ccacdd62098db3803303f1bf574499bf16', .12, '#7965af'],
+  ]) {
+    const row = report.interactions.find(r => r.family === 'snack-bar' && r.profile === 'light' && r.viewport.id === 'desktop-dpr1' && r.state === state); assert.ok(row);
+    const checkpointFile = root + 'checkpoint/' + checkpointId + '.json', checkpointBytes = readFileSync(checkpointFile);
+    assert.equal(hash(checkpointBytes), checkpointSha);
+    const checkpoint = JSON.parse(checkpointBytes);
+    assert.deepEqual(checkpoint.result, row); assert.equal(hash(JSON.stringify(row)), checkpoint.sha256);
+    for (const receipt of checkpoint.files) assert.equal(hash(readFileSync(root + receipt.file)), receipt.sha256);
+    const trees = Object.fromEntries(['reference', 'astylar'].map(side => {
+      const receipt = row.inputTrees[side], b = readFileSync(receipt.file); assert.equal(hash(b), receipt.sha256);
+      return [side, JSON.parse(b)];
+    }));
+    const nativeButton = trees.reference.nodes.find(n => n.attributes?.id === 'snack-bar-primary'); assert.ok(nativeButton);
+    assert.equal(trees.reference.styles[nativeButton.style].backgroundColor, 'rgb(103, 80, 164)');
+    const ripple = trees.reference.nodes.find(n => n.attributes?.class === 'mat-mdc-button-persistent-ripple mdc-button__ripple'); assert.ok(ripple);
+    const pseudo = ripple.pseudoElements.find(p => p.pseudo === '::before'); assert.ok(pseudo?.generated);
+    const layer = trees.reference.styles[pseudo.style];
+    assert.equal(layer.backgroundColor, 'rgb(255, 255, 255)'); assert.equal(Number(layer.opacity), alpha);
+    const button = trees.astylar.nodes.find(n => n.authored?.id === 'snack-bar-primary'); assert.ok(button);
+    assert.equal(button.normalResolvedStyle.background, '#6750a4');
+    assert.equal(button.interactionResolvedStyle.background, background);
+    assert.equal(trees.astylar.nodes.filter(n => n.parent === button.key).length, 0);
+    const samples = [];
+    // One retained opaque base/white-layer interior only,not a color parser or
+    // general compositing model. Raw requests remain separately represented.
+    const expectedRGB = [103, 80, 164].map(value => Math.round(value * (1 - alpha) + 255 * alpha));
+    for (const side of ['reference', 'astylar']) {
+      const receipt = checkpoint.files.find(f => f.file.endsWith('/' + side + '.png')); assert.ok(receipt);
+      const png = PNG.sync.read(readFileSync(root + receipt.file)); assert.equal(png.width, 1440); assert.equal(png.height, 1000);
+      const box = row.geometry.elements.find(e => e.id === 'snack-bar-primary')[side === 'reference' ? 'expected' : 'actual'];
+      const x = Math.floor(box.left) + 12, y = Math.floor(box.top + box.height / 2);
+      const rgba = [...png.data.subarray((y * png.width + x) * 4, (y * png.width + x) * 4 + 4)];
+      assert.deepEqual(rgba, [...expectedRGB, 255]);
+      samples.push({ side, file: root + receipt.file, sha256: receipt.sha256, x, y, rgba });
+    }
+    assert.equal(row.astylarState.open, false);
+    observations.push({ state, checkpoint: { file: checkpointFile, sha256: checkpointSha }, nativeWhiteLayerOpacity: layer.opacity,
+      candidateHostBackground: background, candidateLayerChildren: 0, samples });
+  }
+  const { gunzipSync } = await import('node:zlib'), { default: ts } = await import('typescript');
+  const original = gunzipSync(Buffer.from(readFileSync('docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8').replace(/\s/g, ''), 'base64'));
+  assert.equal(hash(original), 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
+  const ast = ts.createSourceFile('original.mjs', original.toString(), 99, true, ts.ScriptKind.JS);
+  const nodes = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'captureInteractionCase'); assert.equal(nodes.length, 1);
+  const capture = nodes[0].getText(ast), image = capture.indexOf('const [referenceBuffer, astylarBuffer]'), release = capture.indexOf('for (const release of heldReleases) await release();'), events = capture.indexOf('const referenceEvents =');
+  assert.ok(image >= 0 && release > image && events > release);
+  t.diagnostic(JSON.stringify({ observations, captureMethodSha256: hash(capture), imageBeforeReleaseBeforeEvents: true,
+    boundary: 'Two original light/DPR1 states and one opaque interior per side. Equal sampled RGB is mathematically accounted for but does not equate pseudo-layer/host composition,animation,ripple,edges,glyphs,other themes or current rendering. Source recipe order is not original elapsed timing;post-release event lists are not held-image event timelines. No case or raster acceptance promoted.' }));
+});
+
 test('supplementary single-open snackbar is present before expiry and absent afterwards', () => {
   const file = 'artifacts/material-parity/snackbar-single-open-20261027/latest-report.json';
   const bytes = readFileSync(file);

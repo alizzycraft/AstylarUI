@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Keep snackbar-trigger-paint-batch20261102 stdout/empty stderr (4/4 focused),
+original hover checkpoint25f829bf/held checkpointccf1117e and all their artifacts.
+Encoded-frame identity permits reuse of prior manual views,not replacement of
+the distinct checkpoint records or a claim of complete composition equivalence.
+
 Keep snackbar-focus-layer-input-proof20261102 failed stdout (two rules,not one),
 focus-layer-two-rules-proof20261102 failed stdout (unbound extracted normalizer),
 their stderr files,and focus-layer-bound-comparator-proof20261102 passing3/3
