@@ -310,7 +310,7 @@ test('Snackbar paint batch classifications preserve prior definitions proofs and
     visit(extract(source, name)); assert.ok(result);
     return result.elements.map(n => n.getText());
   };
-  for (const [name, additions, oldCount] of [['sourceFingerprints', 0, 1149], ['focusedProofInventory', 4, 477], ['implementationPlan', 2, 73]]) {
+  for (const [name, additions, oldCount] of [['sourceFingerprints', 2, 1149], ['focusedProofInventory', 7, 477], ['implementationPlan', 2, 73]]) {
     const before = entries(oldProducer, name), after = entries(currentProducer, name);
     assert.equal(before.length, oldCount); assert.equal(after.length, oldCount + additions);
     assert.deepEqual(after.slice(additions), before);
@@ -327,7 +327,7 @@ test('Snackbar paint batch classifications preserve prior definitions proofs and
     assert.equal([...source.matchAll(expression)].length, 1);
     assert.equal(new RegExp(row.pattern).test(source.replace(expression, '/* rejected detector control */')), false);
   }
-  console.log(JSON.stringify({ sources: 1149, proofs: 481, findings: 208, plans: 75,
+  console.log(JSON.stringify({ sources: 1151, proofs: 484, findings: 208, plans: 75,
     priorDefinitionsPreserved: 206, priorProofEntriesPreserved: 477, newFindingIds: expected,
     newDetectorControls: 2, canonicalPublished: false, casePromoted: false }));
 });

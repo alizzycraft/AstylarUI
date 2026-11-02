@@ -8922,6 +8922,8 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/join-material-trigger-paint-inputs.mjs',
+    'artifacts/material-parity/trigger-paint-clipping-producer-20261102.mjs',
     "scripts/check-divider-omitted-owner-consumers.mjs",
     "scripts/join-material-divider-consumer-inputs.mjs",
     "tests/material-parity/divider-consumer-input-join.spec.mjs",
@@ -10078,6 +10080,12 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/snackbar-position-observation.spec.mjs', /test\('trigger paint historical reader restores exact accepted sources and rejects drift'/,
+      'trigger paint historical reader restores exact accepted sources and rejects drift', 'Four whole-source guarded Git predecessors and rejecting drift controls;not current source equivalence or canonical publication.'),
+    proof(root, 'tests/material-parity/snackbar-position-observation.spec.mjs', /test\('trigger paint successor passes the complete existing receipt loader'/,
+      'trigger paint successor passes the complete existing receipt loader', 'Complete existing receipt-loader integration for the bounded successor;all case inspection and current-rendering acceptance remain unverified.'),
+    proof(root, 'tests/material-parity/snackbar-position-observation.spec.mjs', /test\('retained trigger paint join conserves all accepted parents and source generations'/,
+      'retained trigger paint join conserves all accepted parents and source generations', 'Exact parent restoration and nonconflicting dependency union for24 Divider/four Snackbar children;not whole-case closure or current rendering.'),
     proof(root, 'tests/material-parity/snackbar-position-observation.spec.mjs', /test\('Snackbar paint batch classifications preserve prior definitions proofs and plans'/,
       'Snackbar paint batch classifications preserve prior definitions proofs and plans', 'Exact accepted inventory-prefix conservation and rejecting source-detector controls;not canonical publication,case closure or current rendering.'),
     proof(root, 'tests/material-parity/snackbar-position-observation.spec.mjs', /test\('original snackbar expired frames leave no residual paint outside the focused trigger'/,

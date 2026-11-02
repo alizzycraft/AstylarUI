@@ -1,5 +1,23 @@
 # Material comparison/state coverage inventory
 
+November2 trigger-paint SOURCE/PROOF REGISTRATION passes3/3 focused checks,
+0skip/failure,10667.3774ms. Additive inventory now1151 sources/484 proofs/208
+findings/75 plans. Complete accepted1149 source entries/477 proofs/206 definitions/
+73 plans preserve. The two new paths are the join module and versioned clipping
+producer snapshot;three new proof declarations cover parent conservation,
+historical source rejection and the complete existing loader. Whole-source
+guards now bind the precise registered producer/suite while restoring their
+same c8095ca7 predecessors. No historical evidence receipt was rewritten.
+
+Evidence:trigger-paint-inventory-registration-20261102.log,raw SHA256
+51384b57c5b76e8d3025a74d75a7967c2a83f6d1936321048938eabfafd5d212.
+Current child case-array hash171aee3df3765ac4867432fa0010ad1b46147a90643bd4f0a31c9bd847c5bc85
+reflects new owning-source receipts only;prior reader validation is historical
+for its prior exact generation,not a current full-loader pass. Next add explicit
+export review routing with reversible older-selector compatibility,then verify
+the coherent registered generation before one canonical milestone. All2311 cases
+remain partial/current-rendering-unverified;no new closure or parity acceptance.
+
 November2 trigger-paint HISTORICAL READER integration passes3/3,0skip/failure,
 433030.5091ms. Exact c8095ca7 predecessors for four changed registered paths are
 whole-source hash guarded;four unknown-generation controls reject. The existing

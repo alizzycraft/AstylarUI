@@ -7,9 +7,9 @@ import { createDividerConsumerReviewReader } from './join-material-divider-consu
 
 const sourceTransitions = [
   ['scripts/check-divider-omitted-owner-consumers.mjs', 'b08c882e548ad27d76e39379ed64a15096352889d1389620a30cd818b6b9a277', 'cf989605fc7c727111431c0b2deb1dc3e733b39c07a4751aaf19c798625c2bcd'],
-  ['tests/material-parity/snackbar-position-observation.spec.mjs', 'a8bf420d925771d21804832fbdee3bd8cf83150fc6981828bb455aa32ffda405', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
+  ['tests/material-parity/snackbar-position-observation.spec.mjs', 'eee0a447f4d84f301f52deb6a56d0acdcce745fa601e1b8d20121e6e9b0a3827', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
   ['tests/material-parity/input-equivalence-policy.mjs', '43e758150e13d5da4876127b7ca6755c0c66957b092499587498c66bef1a4d52', '8f1acb6af64b5cfdcddba911a4b3ddf61e241edfea74eec241d2276617fe1ea3'],
-  ['tests/material-parity/input-equivalence-audit.mjs', 'e96a5675f424c340b5ce79fbccce3a53caf3b19ac9410cddafbd6a423f5cc64b', '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54'],
+  ['tests/material-parity/input-equivalence-audit.mjs', 'c91ce9d66ddacb947c5907ea9d5981e6f928970a8a347fb7a3e8906eb27691a6', '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54'],
 ];
 
 export function createTriggerPaintHistoricalRead({ root = process.cwd(), read = fs.readFileSync } = {}) {

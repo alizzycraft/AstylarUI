@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Keep trigger-paint-inventory-registration-20261102 stdout/empty stderr,passing
+3/3 source/proof inventory,parent restoration and historical drift checks.
+Its source generation supersedes only the prior staged source receipts,not
+accepted695dea7b or original/failure evidence. No new large report was generated.
+
 Keep trigger-paint-historical-reader-20261102 stdout/empty stderr,passing3/3
 including full18669-dependency validation. Retain accepted695dea7b index and
 c8095ca7 Git source predecessors;the virtual successor reader depends on both.
