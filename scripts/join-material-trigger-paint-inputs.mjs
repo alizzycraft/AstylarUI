@@ -6,8 +6,9 @@ import { execFileSync } from 'node:child_process';
 import { createDividerConsumerReviewReader } from './join-material-divider-consumer-inputs.mjs';
 
 const sourceTransitions = [
+  ['tests/material-parity/capture-availability-registration.mjs', 'ab859337f2585e35662ea2ece83228beabe7e4af3a00151d61b0389bd1d00d13', 'c7f8b931ab00939e6c65b4adca555a02e4622d4be9f25dbe2546797ecfdd3254'],
   ['scripts/check-divider-omitted-owner-consumers.mjs', 'b08c882e548ad27d76e39379ed64a15096352889d1389620a30cd818b6b9a277', 'cf989605fc7c727111431c0b2deb1dc3e733b39c07a4751aaf19c798625c2bcd'],
-  ['tests/material-parity/snackbar-position-observation.spec.mjs', '3e25eec7ed247f9ce15094c6c635c6e57558eecc02c874d4e67953b9dd3b7eb5', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
+  ['tests/material-parity/snackbar-position-observation.spec.mjs', '69af83212fc53b07b6326cf388250f8c35263b8ffb67ed456422439b8aa00956', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
   ['tests/material-parity/input-equivalence-policy.mjs', '43e758150e13d5da4876127b7ca6755c0c66957b092499587498c66bef1a4d52', '8f1acb6af64b5cfdcddba911a4b3ddf61e241edfea74eec241d2276617fe1ea3'],
   ['tests/material-parity/input-equivalence-audit.mjs', 'cfed52bc5d431d49709955afc990b69cfcc04a11e26d0ddc8d3748d9a28a4c51', '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54'],
 ];
@@ -17,6 +18,20 @@ export function createTriggerPaintHistoricalRead({ root = process.cwd(), read = 
   const cache = new Map();
   return (name, options) => {
     const absolute = path.resolve(root, name), transition = transitions.get(absolute);
+    const selectionKind = absolute === path.resolve(root, 'scripts/run-material-input-audit.mjs') ? 'runner'
+      : absolute === path.resolve(root, 'scripts/export-material-input-audit-current-ancestry.mjs') ? 'launcher' : undefined;
+    if (selectionKind) {
+      const source = read(absolute).toString().replaceAll('\r\n', '\n');
+      const marker = selectionKind === 'runner' ? 'const triggerPaintHistoricalRead = ' : 'const triggerPaint = ';
+      if (source.includes(marker)) {
+        const expression = selectionKind === 'runner' ? /const applicability=options.caseObligationReviewSha256==='([a-f0-9]{64})'/
+          : /if \(triggerPaint\) inputs\['case-obligation-review'\] = 'artifacts\/material-parity\/working-audit\/proposals\/([a-f0-9]{64})\.json'/;
+        const match = source.match(expression); assert.ok(match, 'Exact trigger-paint selection required');
+        const bytes = Buffer.from(restoreTriggerPaintSelection(source, selectionKind, match[1]));
+        const encoding = typeof options === 'string' ? options : options?.encoding;
+        return encoding ? bytes.toString(encoding) : bytes;
+      }
+    }
     if (!transition) return read(absolute, options);
     const current = read(absolute), normalized = hash(current.toString().replaceAll('\r\n', '\n'));
     assert.ok([transition[1], transition[2]].includes(normalized), `Unknown trigger-paint source generation: ${transition[0]}`);

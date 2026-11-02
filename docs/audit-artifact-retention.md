@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep trigger-paint-live-routing-integration20261102 passing5/5,shared-entry-
+preflight20261102 failing three older-entry restorations,shared-entry-corrected
+stdout/empty stderr,and shared-entry-focused20261102 passing4/4. First live
+reviewd4fbd534 is superseded by970ceb2c after the shared-adapter correction;
+retain its full-loader evidence as historical,not current acceptance. No new
+canonical generation or browser artifacts were created.
+
 Keep trigger-paint-staged-selection20261102 and staged-selection-integration
 stdout/empty stderr. These prove in-memory routing only;no live exporter change,
 physical proposal,new capture or canonical generation occurred.

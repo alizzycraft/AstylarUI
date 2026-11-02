@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { stripDividerConsumerRegistrationIfPresent, createDividerConsumerRegistrationHistoricalRead } from './divider-consumer-registration.mjs';
+import { createTriggerPaintHistoricalRead } from '../../scripts/join-material-trigger-paint-inputs.mjs';
 import { createSliderTrackHistoricalRead, restoreSliderTrackProducer } from './slider-track-paint-findings.mjs';
 
 // Staged source transformation; applying it to live files is a separate gate.
@@ -122,6 +123,7 @@ export function restoreCaptureAvailabilityShared(bytes) {
 // For predecessor evidence readers only. Current source collection must retain
 // its raw reader so registration changes remain visible in the new inventory.
 export function createCaptureAvailabilityHistoricalRead({ root, read }) {
+  read = createTriggerPaintHistoricalRead({ root, read });
   read = createDividerConsumerRegistrationHistoricalRead({ root, read });
   read = createSliderTrackHistoricalRead({ root, read });
   const passiveSources = new Map([

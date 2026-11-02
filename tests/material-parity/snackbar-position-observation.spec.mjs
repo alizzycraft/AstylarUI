@@ -14,10 +14,11 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { proveSnackbarPositionRequests, applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
 import { joinRetainedTriggerPaintInputs, restoreRetainedTriggerPaintInputs, triggerPaintPredecessor, createTriggerPaintHistoricalRead, createTriggerPaintReviewReader } from '../../scripts/join-material-trigger-paint-inputs.mjs';
 
-test('trigger paint historical reader restores exact accepted sources and rejects drift', () => {
+test('trigger paint historical reader restores exact accepted sources and rejects drift', async () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const read = createTriggerPaintHistoricalRead();
   const sources = [
+    ['tests/material-parity/capture-availability-registration.mjs', 'c7f8b931ab00939e6c65b4adca555a02e4622d4be9f25dbe2546797ecfdd3254'],
     ['scripts/check-divider-omitted-owner-consumers.mjs', 'cf989605fc7c727111431c0b2deb1dc3e733b39c07a4751aaf19c798625c2bcd'],
     ['tests/material-parity/snackbar-position-observation.spec.mjs', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
     ['tests/material-parity/input-equivalence-policy.mjs', '8f1acb6af64b5cfdcddba911a4b3ddf61e241edfea74eec241d2276617fe1ea3'],
@@ -29,6 +30,13 @@ test('trigger paint historical reader restores exact accepted sources and reject
     const forged = createTriggerPaintHistoricalRead({ read: name => String(name).replaceAll('\\', '/').endsWith(file) ? Buffer.from('unknown generation') : readFileSync(name) });
     assert.throws(() => forged(file), /Unknown trigger-paint source generation/);
   }
+  const { createCaptureAvailabilityHistoricalRead } = await import('./capture-availability-registration.mjs');
+  const shared = createCaptureAvailabilityHistoricalRead({ root: process.cwd(), read: readFileSync });
+  for (const [file, expected] of [
+    ['tests/material-parity/input-equivalence-audit.mjs', '6e8db2faa61eb96a69c7d43eac20f95e377651a5489612d9f311907d206fccd5'],
+    ['scripts/run-material-input-audit.mjs', 'cffae75a36eeffe9bda5d799d43565c4833a3bbb751077420ac741528f8dd3a8'],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', 'bd12f66374002fd4897769e03c373f26c812744c44d5e18a35d1b39b9e4df05a'],
+  ]) assert.equal(hash(shared(file)), expected, 'Shared historical entry must restore the exact older generation');
 });
 
 test('trigger paint staged selection preserves every older option and rejects mixtures', async () => {
@@ -37,12 +45,13 @@ test('trigger paint staged selection preserves every older option and rejects mi
   const { fileURLToPath, pathToFileURL } = await import('node:url');
   const review = '1'.repeat(64);
   for (const [kind, file] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
-    const original = readFileSync(file), staged = prepareTriggerPaintSelection(original, kind, review);
+    const live = readFileSync(file), historical = createTriggerPaintHistoricalRead();
+    const original = historical(file), staged = prepareTriggerPaintSelection(original, kind, review);
     assert.deepEqual(ts.createSourceFile(file, staged, 99, true, ts.ScriptKind.JS).parseDiagnostics, []);
     assert.equal(restoreTriggerPaintSelection(staged, kind, review), original.toString().replaceAll('\r\n', '\n'));
     assert.throws(() => restoreTriggerPaintSelection(staged + '\n// drift', kind, review));
     assert.throws(() => prepareTriggerPaintSelection(original, kind, 'not-a-review'));
-    assert.deepEqual(readFileSync(file), original, 'Staged selection must not mutate live exporter');
+    assert.deepEqual(readFileSync(file), live, 'Staged selection must not mutate live exporter');
     if (kind === 'runner') {
       const match = staged.match(/const applicability=([\s\S]*?);\n    assert.ok\(!applicability/); assert.ok(match);
       const choose = Function('options', 'createTriggerPaintReviewReader', 'auditReadFileSync', 'root', 'dividerConsumerReaderFactory', 'captureAvailabilityEvidenceRead', `return ${match[1]}`);

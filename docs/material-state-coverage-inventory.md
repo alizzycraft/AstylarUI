@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+November2 trigger-paint LIVE ROUTING now selects970ceb2ca4663edab7cda584d64150f2da240ca95c69a0d308bbd97563108b9b
+with --trigger-paint. Prior live generationd4fbd534 passed5/5 including complete
+18669-dependency validation in419923.1683ms;its log is
+trigger-paint-live-routing-integration-20261102.log,SHA256
+6c00dd1e7152f8c3595a692bae1c4917b60ee61d82fcda235400b28081ae16da.
+An additional direct shared-entry preflight then exposed a real integration gap:
+the new reader wrapper worked,but older shared collector entry rejected all
+three changed producer/runner/launcher generations. No canonical export started.
+
+Shared capture-availability entry now applies the same exact-generation adapter
+before older restoration. Five changed source paths recover exact c8095ca7
+bytes;the three shared entry outputs independently recover pinned older hashes.
+Corrected focused integration passes4/4,0skip/failure,22750.413ms,including all31
+older options,inventory conservation,parent restoration and rejecting controls.
+Log:trigger-paint-shared-entry-focused-20261102.log,SHA256
+c69f7618b58e6d93bbd4f58182fb72ec6bced432b6dcc863d41a9d79bba0f2a9.
+Keep failed preflight and corrected records. The source correction repins the
+review;the prior full-loader pass is NOT a current-generation pass. Next validate
+the corrected live generation/shared compatibility once,then the canonical
+milestone. Inventory1151/485/208/75 and all2311 partial/current-unverified case
+statuses preserve. No renderer,fixture,threshold or acceptance change occurred.
+
 November2 trigger-paint STAGED EXPORT SELECTION passes4/4 combined checks,
 0skip/failure,11373.0718ms. Reversible runner/launcher transformations preserve
 all31 older options plus default,route only the requested exact review digest,

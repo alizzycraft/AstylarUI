@@ -41,6 +41,7 @@ import { tooltipOpenReview, createTooltipOpenReviewReader } from './join-materia
 import { badgeLabelPaintReview, createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';
 import { captureAvailabilityReview, createCaptureAvailabilityReviewReader } from './join-material-capture-availability.mjs';
 import { createDividerConsumerReviewReader } from './join-material-divider-consumer-inputs.mjs';
+import { createTriggerPaintReviewReader, createTriggerPaintHistoricalRead } from './join-material-trigger-paint-inputs.mjs';
 import { dividerConsumerReview, createDividerConsumerRegistrationHistoricalRead } from '../tests/material-parity/divider-consumer-registration.mjs';
 import { createCaptureAvailabilityHistoricalRead } from '../tests/material-parity/capture-availability-registration.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
@@ -90,10 +91,13 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const tooltipOpenReaderFactory = options.caseObligationReviewSha256===tooltipOpenReview ? createTooltipOpenReviewReader : datepickerOpeningReaderFactory;
     const badgeLabelPaintReaderFactory = options.caseObligationReviewSha256===badgeLabelPaintReview ? createBadgeLabelPaintReviewReader : tooltipOpenReaderFactory;
     const captureAvailabilityReaderFactory = options.caseObligationReviewSha256===captureAvailabilityReview ? createCaptureAvailabilityReviewReader : badgeLabelPaintReaderFactory;
-    const dividerConsumerEvidenceRead = createDividerConsumerRegistrationHistoricalRead({root,read:auditReadFileSync});
+    const triggerPaintHistoricalRead = createTriggerPaintHistoricalRead({root,read:auditReadFileSync});
+    const dividerConsumerEvidenceRead = createDividerConsumerRegistrationHistoricalRead({root,read:triggerPaintHistoricalRead});
     const captureAvailabilityEvidenceRead = (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256===dividerConsumerReview) ? dividerConsumerEvidenceRead : createCaptureAvailabilityHistoricalRead({root,read:dividerConsumerEvidenceRead});
     const dividerConsumerReaderFactory = options.caseObligationReviewSha256===dividerConsumerReview ? createDividerConsumerReviewReader : captureAvailabilityReaderFactory;
-    const applicability=dividerConsumerReaderFactory?.({root,read:captureAvailabilityEvidenceRead,reviewSha256:options.caseObligationReviewSha256});
+    const applicability=options.caseObligationReviewSha256==='970ceb2ca4663edab7cda584d64150f2da240ca95c69a0d308bbd97563108b9b'
+      ? createTriggerPaintReviewReader({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256})
+      : dividerConsumerReaderFactory?.({root,read:captureAvailabilityEvidenceRead,reviewSha256:options.caseObligationReviewSha256});
     assert.ok(!applicability || typeof applicability.then !== 'function', 'Audit evidence readers must be synchronous within evidence session');
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
       options.caseObligationReviewSha256, { root, read: applicability?.read ?? auditReadFileSync });
@@ -102,7 +106,9 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);
   const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial,
-    diagnosticRead: (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256==='b49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21')
+    diagnosticRead: options.caseObligationReviewSha256==='970ceb2ca4663edab7cda584d64150f2da240ca95c69a0d308bbd97563108b9b'
+      ? createCaptureAvailabilityHistoricalRead({root,read:createTriggerPaintHistoricalRead({root,read:auditReadFileSync})})
+      : (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256==='b49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21')
       ? createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync}) : readFileSync });
   progress('verify-evidence-session');
   return { audit, errors };
