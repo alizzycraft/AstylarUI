@@ -1,5 +1,37 @@
 # Material comparison/state coverage inventory
 
+November2 coverage-led continuation authenticates accepted index2090dfe3 before
+reading obligations. Priority remains (1) material-property/anonymous-line-box
+correspondence, (2) equal-input paint causality and crop-producer applicability,
+(3) lifetime/remount/peer isolation and final current-code applicability. These
+are substantive gaps,not metadata-only closure. Accepted5e770758 remains unchanged.
+Since publication commit5ecb14b1,committed changes are confined to this ledger,
+retention and the omitted-owner check. A working-tree comparison with normal
+Git line-ending conversion finds no semantic diff under src,showcase src or
+tests/material-parity. This is source-change triage,not fresh rendering proof or
+complete transitive fingerprint validation. Recent standalone proofs still await
+a coherent canonical join;do not rerun the accepted full export for this note.
+
+Smallest decisive check of the text-topology gap extends the existing
+check-divider-owner-coverage.mjs rather than creating another collector. Competing
+explanations were unaccounted mixed direct-text/child-element ordering versus
+mapped leaf text with missing formatting-box observations. The24 retained pairs
+contain96 nonempty native text owners,all leaves,with exact matching authored
+candidate text. There are zero mixed direct-text/element owners in those trees.
+All previous structure/masking/box-request assertions still pass. This narrows
+the recorded structural question;it does NOT prove raw DOM text-node splitting,
+anonymous inline boxes,wrapping,baselines or glyph geometry. The input-tree nodes
+have no lineBoxes/textFragments observations. Next locate an applicable existing
+dedicated line-box trace and validate its exact source/state/owner receipts;
+do not infer missing line boxes from absent element-tree nodes or recapture a
+settled topology. All2311 cases remain partial/current-rendering unverified.
+
+Command:node scripts/check-divider-owner-coverage.mjs (exit0).
+Retained log:divider-recorded-text-topology-20261102.log,SHA256
+6079fa05ce0dff8d327a5828c85393038ed9cf1c3b2189131f0474b7c68c9961.
+No renderer/fixture changes,new defect count,case promotion or full export.
+
+
 November2 failed native owner property-domain trials are inconclusive, not
 passes. The frame trial failed its visible color positive control before reaching
 headings; the narrower retry failed on eyebrow before reaching title. Existing

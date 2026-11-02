@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-recorded-text-topology-20261102.log. It authenticates the existing
+24-pair trees and96 mapped leaf-text owners with the extended owner-coverage
+script. It does not replace raw trees or supply anonymous line-box/glyph geometry.
+Preserve earlier owner-coverage logs with their original script revisions.
+
+
 Retain both failed November2 directories divider-native-owner-property-domains-
 20261102 and divider-native-heading-property-domains-20261102, their stdout and
 stderr logs, and all partial PNGs. The latter directory holds failed-driver.mjs,

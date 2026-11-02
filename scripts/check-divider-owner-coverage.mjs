@@ -19,6 +19,7 @@ const inventory = collectFullTreeInventory(cases);
 for (const key of ['gaps', 'resolvedStyleGaps', 'stateStyleGaps', 'errors']) assert.deepEqual(inventory[key], []);
 assert.equal(inventory.cases.length, 48); assert.equal(inventory.envelopes.length, 24);
 const observations = [];
+let recordedTextLeaves = 0, mixedTextElementOwners = 0;
 const headingFindings = queryFindings('artifacts/material-parity/working-audit', 'divider')
   .filter(row => ['eyebrow', 'title'].includes(row.element));
 assert.equal(headingFindings.length, 96);
@@ -56,6 +57,18 @@ for (let index = 0; index < cases.length; index++) {
     add(native.nodes.find(node => node.key === leaf.parent), `${id}-row`);
   }
   assert.equal(mapped.size, 9); assert.equal(new Set([...mapped.values()].map(node => node.key)).size, 9);
+  const textLeaves = native.nodes.filter(node => node.ownText.trim());
+  assert.equal(textLeaves.length, 4);
+  for (const node of textLeaves) {
+    const childCount = native.nodes.filter(child => child.parent === node.key).length;
+    if (childCount) mixedTextElementOwners++;
+    assert.equal(childCount, 0, 'Mixed text/element topology requires separate ordered text-node evidence');
+    assert.equal(mapped.get(node.key).authored.textContent, node.ownText);
+    recordedTextLeaves++;
+  }
+  // Element-tree evidence cannot establish anonymous inline boxes or glyph
+  // fragments. In particular, absence of a node is not absence of a line box.
+  assert.ok(native.nodes.every(node => !Object.hasOwn(node, 'lineBoxes') && !Object.hasOwn(node, 'textFragments')));
   for (const node of native.nodes) {
     const other = mapped.get(node.key);
     if (node.parent !== null) assert.equal(other.parent, mapped.get(node.parent).key);
@@ -129,6 +142,9 @@ for (let index = 0; index < cases.length; index++) {
   observations.push({ case: mappings[0].case, scalarIds, outsideScalarTargets, frameBoxInputs, headingDomains, evidence: entry.inputTrees });
 }
 console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-owner-coverage.mjs', sha256: hash(readFileSync(import.meta.filename)) },
+  textTopology: { recordedTextLeaves, mixedTextElementOwners,
+    conclusion: '96 recorded nonempty text owners are mapped leaves with exact authored text; no mixed own-text/element owner occurs in these 24 retained pairs.',
+    boundary: 'Element topology only, not raw DOM text-node splitting, anonymous formatting boxes, line wrapping, baseline/glyph geometry or current rendering. Input trees have no lineBoxes/textFragments observations; reuse a receipt-bound dedicated line-box trace before closing that obligation.' },
   collector: { file: 'tests/material-parity/input-equivalence-audit.mjs', sha256: hash(readFileSync('tests/material-parity/input-equivalence-audit.mjs')) },
   report: { file, sha256: hash(bytes) }, cases: 24, completeOwnerPairs: 216,
   outsideScalarOwnerPairs: 120, referencePropertySlotsOutsideScalarTargets: 12480, observations,
