@@ -1,5 +1,42 @@
 # Material comparison/state coverage inventory
 
+November2 Divider consumer milestone is ACCEPTED LOCALLY as695dea7b/index23dc19f6.
+Corrected export,complete conservation,independent cold comparison and verified
+isolated/accepted imports pass. No process remains active for this milestone.
+Publication is next;this is not final audit or rendering acceptance.
+
+Inventory1149 sources/477 proofs/206 findings/73 plans. All1149 normalized source
+hashes authenticate;1143 prior paths,472 prior proof rows,all findings,plans and
+summary conserve. Six source additions/five bounded old changes and five new
+source-line-verified proofs are accounted for. Fingerprint-array SHA256
+daf7c042ff0887d815790058aaff2ce1f6b42169dd9c828fbd50ccae82d0ba8e.
+Complete80-section comparison proves five derived sections identical to first
+candidated9ce,so retained14085648-entry/147-change conservation and full receipt
+recomputation apply without rerun. Only sourceFingerprints,coverage,focusedProofs
+differ from that first candidate. Original/failure evidence and backups remain.
+
+All2311 predecessor cases restore exactly after removing24 expected consumer
+children. Coverage outside inspection and other inspection fields conserve.
+Dependency union is18636 prior plus11 scoped receipts=18647;no prior receipt
+removed/changed. Applicability predecessor preserves exactly. Every case remains
+partial/current-rendering unverified;inspectionComplete/currentRenderingAccepted
+remain false. Counts8483 differences/389202 occurrences/39904 controls unchanged.
+
+Commands:node scripts/export-material-input-audit-current-ancestry.mjs
+--divider-consumer-inputs;independent ASTYLAR_AUDIT_COLD=1 same command --check.
+Both exit0. Cold metrics:collectors2,memoryHits10,diskHits0,20204 files,
+4116245515 verified bytes. Elapsed13009124.518ms includes the long observation
+interruption;do not treat it as an unsuspended performance measurement.
+Existing importFindings/verifyFindings verify both stores;86 immutable files
+hard-linked for accepted promotion rather than duplicated. Accepted promotion
+record:artifacts/material-parity/divider-consumer-corrected-accepted-promotion-20261102.log.
+It binds all corrected section,metadata,coverage,dependency,import and cold log
+hashes. Earlier pending checkpoints below are historical,not retry instructions.
+After publication resume remaining exact-owner layout/anonymous-line-box/paint
+and original action/lifetime/current-code obligations;do not repeat this gate
+for prose or equate sparse declaration snapshots with computed browser defaults.
+
+
 November2 pinned-baseline instrumentation correction VERIFIED8/8,0skip,
 263058.7358ms. Existing complete loader authenticates18647 dependencies for
 reviewb49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21.

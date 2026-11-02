@@ -1,5 +1,30 @@
 # Audit artifact retention
 
+November2 corrected695dea7b/index23dc19f6 is accepted locally after all milestone
+gates,including independent cold exit0/diskHits0 and verified accepted import.
+No milestone process remains live. Keep corrected-accepted-promotion20261102.log
+and its hash-bound conservation/import/cold records. The86 immutable accepted
+files are hard links to the verified isolated store,not duplicate payload storage.
+Prior active/pending notes below are historical. Keep5e77/firstd9ce backups and
+original/failure evidence;no cleanup or final audit acceptance is implied.
+
+Corrected candidate695dea7b has passed export,authenticated80-section/metadata
+conservation,isolated import and complete coverage/dependency-union checks.
+Keep divider-consumer-corrected-sections-metadata,metadata-conservation,
+isolated-import,coverage-conservation and dependency-union20261102 logs plus
+the isolated candidate store. Five derived sections exactly match firstd9ce;
+retain/reuse its detailed leaf and receipt conservation instead of rerunning.
+The independent-cold20261102 stdout/stderr are ACTIVE;resume their existing
+process. Accepted5e77,firstd9ce backups and original/failure evidence remain.
+No accepted-pointer promotion or retention release before the cold gate passes.
+
+Keep active divider-consumer-pinned-baseline-export-20261102 stdout/stderr and
+resume its existing process. Accepted5e77 and first-candidated9ce8aee payload
+copies are both reauthenticated before the corrected export. Do not overwrite
+first-generation conservation records or treat them as current without checking
+the corrected candidate's exact section identity.
+
+
 divider-consumer-fixed-baseline-batch-20261102.log is complete,exit0,8/8 tests,
 18647 authenticated dependencies. Preserve it with first candidate d9ce8aee and
 accepted5e77 backups. No cold run or accepted import was performed on the first
