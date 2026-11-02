@@ -1,5 +1,39 @@
 # Material comparison/state coverage inventory
 
+November2 outside-owner size-default follow-up:the existing consumer-control
+script now authenticates360 minWidth/maxWidth/maxHeight slots across the same120
+owner pairs/24 cases. Native values are respectively0px/none/none;all candidate
+normal/effective fields are absent. This is checked from original tree bytes,
+not inferred from the triage's missing-field labels. MinHeight and authored
+width/height inputs are not silently included in that conclusion.
+
+Forty additional captured/current source-block controls execute actual
+calculateDimensions constraint statements and parseLength. Omitted maximum
+constraints skip the clamp;minWidth0 leaves a positive size unchanged. Numeric
+minimum/maximum,percentage,zero and minimum-over-maximum controls distinguish
+the paths. A separate source divergence is now demonstrated:explicit maximum
+none parses to0 and clamps80 to0 for both width/height in both generations.
+The first differing stage is the shared length parser before the maximum clamp,
+not world projection. Do NOT rewrite none as omission to make that control pass.
+
+This is NOT yet a confirmed public-API rendering defect:validation/support and
+actual package reachability still need checking. The120 recorded owner pairs
+omit these fields,so do not attribute their geometry to explicit-none clamping.
+Existing position72/mesh10 controls still pass. Script constraintExit0 means
+the known divergence and controls reproduce,not that none behavior is correct.
+Next check public support/reachability and reuse the existing diagnostic
+dialog-intrinsic *-nolimit/*-omitlimit reductions if their dependency/state
+applicability is adequate;otherwise reduce only this demonstrated evidence gap.
+No implementation fix or Material fixture change is authorized.
+
+Updated script raw SHA25624a8bcefffb4125bdf4702ac9259eb9c972c1be9662456e4d2573f5427251a85.
+Retain `artifacts/material-parity/divider-omitted-owner-constraints-20261102.log`,
+raw SHA256b6ce199d53cd82ebdca766d049e358744b1563d9ca81f9c92c7b4a27b94cb670,
+and empty stderr. Previous script/log remain historical at commita23d9280;
+no old evidence was overwritten. Canonical5e770758 and case dispositions remain
+unchanged;this pending proof belongs in a later coherent registration batch,
+not another full export after this focused edit.
+
 November2 omitted-owner consumer trace answers the next bounded position question.
 `node scripts/check-divider-omitted-owner-consumers.mjs` exits0 with72 position
 controls and10 NullEngine mesh-flag controls. It reauthenticates the prior120-pair

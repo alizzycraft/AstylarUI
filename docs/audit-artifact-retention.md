@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-omitted-owner-constraints-20261102.log and empty stderr. It binds
+360 omitted min/max slots and40 source-executed constraint controls,including
+explicit-none zero clamping. Public-API rendering reachability remains open;
+this is not an explicit-none input attribution to the recorded Divider owners.
+Preserve the prior position/visibility log and its historical script revision.
+
 Keep divider-omitted-owner-consumers-20261102.log and empty stderr. The checked-in
 source-executed proof binds captured/current position routing and NullEngine
 initial mesh flags to the prior120-owner-pair evidence. Its limits remain explicit:

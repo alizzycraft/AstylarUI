@@ -48,6 +48,70 @@ function expression(source, name) {
   const declaration = unique(source, n => ts.isVariableDeclaration(n) && n.name.getText() === name);
   return new Function('style', 'resolvedStyle', `return (${declaration.slice(declaration.indexOf('=') + 1)});`);
 }
+function constraintProbe(source, axis) {
+  const ast = ts.createSourceFile('constraints.ts', source, 99, true), methods = [];
+  const visit = n => { if (ts.isMethodDeclaration(n) && n.name?.getText() === 'calculateDimensions') methods.push(n); ts.forEachChild(n, visit); };
+  visit(ast); assert.equal(methods.length, 1);
+  const statements = methods[0].body.statements;
+  const start = statements.findIndex(n => ts.isVariableStatement(n) &&
+    n.declarationList.declarations.some(d => d.name.getText() === `min${axis}`));
+  assert.ok(start >= 0);
+  const selected = statements.slice(start, start + 4);
+  assert.ok(ts.isVariableStatement(selected[1]) && selected[1].declarationList.declarations[0].name.getText() === `max${axis}`);
+  assert.ok(ts.isIfStatement(selected[2]) && ts.isIfStatement(selected[3]));
+  const value = axis.toLowerCase(), reference = `content${axis}`;
+  const parse = unique(source, n => ts.isMethodDeclaration(n) && n.name?.getText() === 'parseLength');
+  const compiled = ts.transpileModule(`class Probe { ${parse}
+    constrain(style, ${value}, ${reference}) { let ${value}Source = 'control';
+      ${selected.map(n => n.getText(ast)).join('\n')} return ${value}; } }`, {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, removeComments: true },
+  }).outputText;
+  return new (new Function(`${compiled}; return Probe;`)())();
+}
+
+// Check actual omitted input slots, not inferred default values from the triage.
+let constraintOwnerPairs = 0, omittedConstraintSlots = 0;
+for (let i = 0; i < previous.treeReceipts.length; i += 2) {
+  const a = JSON.parse(fs.readFileSync(previous.treeReceipts[i].file));
+  const b = JSON.parse(fs.readFileSync(previous.treeReceipts[i + 1].file));
+  const owners = [['page', a.nodes.find(n => n.key === 'frame')],
+    ['eyebrow', a.nodes.find(n => n.attributes?.class === 'eyebrow')],
+    ['title', a.nodes.find(n => n.type === 'h1')],
+    ...['divider-above', 'divider-below'].map(id => {
+      const leaf = a.nodes.find(n => n.attributes?.id === id);
+      assert.ok(leaf); return [`${id}-row`, a.nodes.find(n => n.key === leaf.parent)];
+    })];
+  for (const [id, native] of owners) {
+    assert.ok(native);
+    const candidates = b.nodes.filter(n => n.authored?.id === id); assert.equal(candidates.length, 1);
+    for (const [property, reference] of [['minWidth', '0px'], ['maxWidth', 'none'], ['maxHeight', 'none']]) {
+      assert.equal(a.styles[native.style][property], reference);
+      assert.equal(candidates[0].resolvedStyle[property], undefined);
+      assert.equal(candidates[0].normalResolvedStyle[property], undefined);
+      omittedConstraintSlots++;
+    }
+    constraintOwnerPairs++;
+  }
+}
+assert.equal(constraintOwnerPairs, 120); assert.equal(omittedConstraintSlots, 360);
+let constraintControls = 0;
+const explicitNoneObservations = [];
+for (const [version, source] of sources('app/services/dom/elements/element-dimension.service.ts').entries()) {
+  for (const axis of ['Width', 'Height']) {
+    const probe = constraintProbe(source, axis);
+    const min = `min${axis}`, max = `max${axis}`;
+    for (const [style, initial, expected] of [
+      [{}, 80, 80], [{ [min]: '0px' }, 80, 80], [{ [max]: 'none' }, 80, 0],
+      [{ [max]: '40px' }, 80, 40], [{ [max]: '100px' }, 80, 80],
+      [{ [min]: '120px' }, 80, 120], [{ [min]: '120px', [max]: '40px' }, 80, 120],
+      [{ [max]: '50%' }, 150, 100], [{ [min]: '25%' }, 20, 50], [{ [max]: '0px' }, 80, 0],
+    ]) { assert.equal(probe.constrain(style, initial, 200), expected); constraintControls++; }
+    explicitNoneObservations.push({ version: version === 0 ? 'captured' : 'current', axis,
+      omittedResult: probe.constrain({}, 80, 200), explicitNoneResult: probe.constrain({ [max]: 'none' }, 80, 200),
+      firstDivergence: 'parseLength(none) returns 0 before the maximum-size clamp',
+      classification: 'source-demonstrated divergence; public-API rendering reproduction still required' });
+  }
+}
 let positionControls = 0;
 const parent = {}, viewport = {}, dom = { context: { elements: new Map([['root-body', viewport]]) } };
 for (const source of sources('app/services/dom/elements/element-dimension.service.ts')) {
@@ -100,7 +164,8 @@ console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-omitted-ow
   sha256: hash(fs.readFileSync('scripts/check-divider-omitted-owner-consumers.mjs')) },
   previous: { file: previousFile, sha256: hash(previousBytes) },
   sourceMap: { file: mapFile, sha256: hash(mapBytes) }, sources: receipts,
-  positionControls, meshControls,
+  positionControls, meshControls, constraintOwnerPairs, omittedConstraintSlots, constraintControls, explicitNoneObservations,
   conclusion: 'Omitted and explicit static share the inspected captured/current layout-parent, containing-block, block/flex-flow and stacking branches. Captured/current plane construction starts with visible flags; absence in declaration snapshots is not a hidden flag.',
-  boundary: 'Source-executed routing and NullEngine initial flags only. Not complete used geometry, CSS visibility inheritance/support, every visual owner, compositing/clipping, browser raster, current runtime or whole-case closure.',
+  constraintConclusion: 'The 360 recorded omitted constraint fields do not invoke a maximum clamp; minWidth:0 does not change the positive control size. Explicit maximum none instead clamps to zero in captured/current source blocks. This separate source divergence must not be hidden by rewriting none to omission; it is not an observed explicit-none input on these 120 owner pairs.',
+  boundary: 'Source-executed routing/constraint blocks and NullEngine initial flags only. Not complete used geometry, public-API explicit-none rendering, CSS visibility inheritance/support, every visual owner, compositing/clipping, browser raster, current runtime or whole-case closure.',
   inspectionPromoted: false, currentRenderingAccepted: false }, null, 2));
