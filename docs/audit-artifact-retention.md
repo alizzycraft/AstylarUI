@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep successful trigger-paint-direct-restoration-corrected-export20261103
+stdout/stderr,combined candidate-sections-metadata and metadata-conservation
+records. Keep the accepted695dea7b backup and pointer until derived conservation,
+independent cold and isolated/accepted imports pass. Pending derived-leaves and
+independent-cold logs must not be overwritten or treated as completed evidence.
+No browser captures or duplicate old-package section scan were generated.
+
 Keep direct-restoration-live-integration20261103 passing5/5 stdout/empty stderr.
 Its9105f2b3 review supersedes only staged source generations;accepted695dea7b
 and its three-file backup remain required for the one corrected export retry.

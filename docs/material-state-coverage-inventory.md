@@ -1,5 +1,33 @@
 # Material comparison/state coverage inventory
 
+November3 corrected --trigger-paint export is terminal0,candidate0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445,
+98616294 compressed/2370986030 decoded bytes,decoded SHA256
+f0b95d76dbca0b5d1b7e0dee2dcb5ee5c99d649453e186a73a9bf31899c16998.
+Complete3472541.2333ms;20228 files/4383355919 verification bytes. This is a
+candidate,not accepted promotion. Accepted pointer remains695dea7b/index23dc19f6.
+
+One authenticated candidate decode verifies all80 sections;69 equal the accepted
+section receipts exactly,11 changed. Complete2311-parent restoration and expected
+case hashc02a245f pass;18669 dependencies hash to
+0a3f3aa647f07ed78195e4275bd21bb2631915c6da1ce0948c3a506e7bd6f13b.
+Combined record:trigger-paint-candidate-sections-metadata-20261103.log,SHA256
+e839119f142652a59cda0ded481714836e6b924e990a78f0b3c5e76f72682a15.
+Metadata conservation separately preserves206 old findings,477 non-line proof
+declarations,73 plan entries and all old source paths;two sources/eight proofs/
+two findings/two plans are additive. Exactly seven old source hashes change;
+all1151 current normalized hashes verify. Summary differs only by208 findings,
+remaining8483 scalar groups/389202 occurrences/zero unresolved attributions.
+Metadata conservation record SHA256
+91d6f272468c1e624d03b96cd4f344967d7511ebead13447b863446ccc9a070a.
+
+Five changed derived sections still require exact leaf/receipt explanation:
+controlLineBoxes,discrepancies,ownerCaretInputs,reviewedSourceBatchInputs,
+controlTypography. Existing streamed comparator is running,not a pass yet.
+Independent COLD=1 --trigger-paint --check is also running under fresh cold logs;
+no cold result,isolated import or accepted promotion is claimed. These read-only
+checks share frozen sources/candidate. All2311 cases remain partial/current-
+rendering-unverified and original final acceptance gates remain open.
+
 November3 direct-restoration corrected live review9105f2b3 passes5/5 combined
 integration,0skip/failure,284550.5757ms. Existing complete loader validates18669
 dependencies/2311 partial,current-rendering-unverified cases. All four direct
