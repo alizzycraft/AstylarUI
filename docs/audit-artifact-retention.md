@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep trigger-paint-parent-conservation-20261102 and corrected parent-bound-batch
+stdout/empty stderr;the latter passes6/6 and binds the explicit focus checkpoint.
+Keep trigger-paint-clipping-producer-20261102.mjs byte-for-byte snapshot,b08c882e,
+because accepted historical receipts bind the older producer at its original
+path. These are bounded join evidence,not a new accepted canonical generation.
+No predecessor evidence or original/failure artifacts are released by this step.
+
 Keep trigger-paint-pre-registration-source-census20261102.log and Snackbar paint
 classification integration logs:initial ENOBUFS failure,buffered AST-array-shape
 failure,and corrected array-integration passing5/5 stdout/empty stderr. Keep

@@ -12,6 +12,7 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { proveSnackbarPositionRequests, applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
+import { joinRetainedTriggerPaintInputs, restoreRetainedTriggerPaintInputs, triggerPaintPredecessor } from '../../scripts/join-material-trigger-paint-inputs.mjs';
 
 test('original snackbar auto-dismiss comparator does not witness the timed transition', async () => {
   const { gunzipSync } = await import('node:zlib');
@@ -299,6 +300,38 @@ test('Snackbar paint batch classifications preserve prior definitions proofs and
   console.log(JSON.stringify({ sources: 1149, proofs: 481, findings: 208, plans: 75,
     priorDefinitionsPreserved: 206, priorProofEntriesPreserved: 477, newFindingIds: expected,
     newDetectorControls: 2, canonicalPublished: false, casePromoted: false }));
+});
+
+test('retained trigger paint join conserves all accepted parents and source generations', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const file = 'artifacts/material-parity/working-audit/695dea7b4cf15915138ac671c75edf2655587db4719c3be9fe7724b402ed6249/index.json';
+  const bytes = readFileSync(file);
+  assert.equal(hash(bytes), '23dc19f652886ea2c02b2a3e8aedb6074beb2046837223fbd222f36cbb3ea045');
+  const inspection = JSON.parse(bytes).metadata.coverage.inspectionEvidence, parents = inspection.cases;
+  assert.equal(hash(JSON.stringify(parents)), triggerPaintPredecessor);
+  const joined = joinRetainedTriggerPaintInputs(parents);
+  assert.deepEqual(joined.changed, { divider: 24, snackbar: 4 });
+  assert.deepEqual(restoreRetainedTriggerPaintInputs(joined.cases), parents);
+  const dependencies = new Map(inspection.evidenceFingerprints.map(r => [r.file, r.sha256]));
+  for (let i = 0; i < parents.length; i++) {
+    const row = joined.cases[i], before = parents[i];
+    assert.equal(row.inspection, before.inspection); assert.equal(row.currentRendering, before.currentRendering);
+    assert.deepEqual(row.obligations.inputStyleStructure.remaining, before.obligations.inputStyleStructure.remaining);
+    assert.deepEqual(row.obligations.localPaint.remaining, before.obligations.localPaint.remaining);
+    const children = [row.obligations.inputStyleStructure.retainedClippingCallerRouting, row.obligations.localPaint.retainedTriggerStatePaint].filter(Boolean);
+    if (!children.length) assert.equal(row, before);
+    for (const child of children) for (const receipt of child.evidence) {
+      if (dependencies.has(receipt.file)) assert.equal(dependencies.get(receipt.file), receipt.sha256, 'Never replace a historical source receipt');
+      dependencies.set(receipt.file, receipt.sha256);
+      assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    }
+  }
+  assert.throws(() => joinRetainedTriggerPaintInputs(joined.cases));
+  for (const suffix of ['divider-clipping-caller-routing-ancestry-bound-20261102.log', 'snackbar-paint-classification-array-integration-20261102.log', 'trigger-paint-clipping-producer-20261102.mjs'])
+    assert.throws(() => joinRetainedTriggerPaintInputs(parents, file => file.endsWith(suffix) ? Buffer.from('forged') : readFileSync(file)));
+  console.log(JSON.stringify({ predecessor: triggerPaintPredecessor, successorCasesSha256: joined.sha256,
+    cases: parents.length, changed: joined.changed, dependencies: dependencies.size, rejectedControls: 4,
+    canonicalPublished: false, inspectionPromoted: false, currentRenderingAccepted: false }));
 });
 
 test('supplementary single-open snackbar is present before expiry and absent afterwards', () => {

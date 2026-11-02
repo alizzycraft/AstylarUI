@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+November2 bounded trigger-paint CASE JOIN passes the coherent6/6 focused batch,
+0skip/failure,38059.6983ms. New pure join adds clipping caller-routing evidence
+to24 Divider input obligations and original state-paint evidence to four Snackbar
+light/desktop-DPR1 obligations (focus,hover,held,auto-dismiss). All2311 accepted
+parent records restore exactly to38aca39a;unchanged cases retain identity and
+all inspection/current-rendering statuses and remaining obligations preserve.
+The dependency union is18669 with no conflicting historical source receipts.
+Duplicate join and three forged evidence/snapshot controls reject. Successor
+case-array SHA256d65d6b25013f8bdee167d7702be652317e485bbbc9b0427a186b8d45b1e02d4d.
+
+Evidence:trigger-paint-parent-bound-batch-20261102.log,raw SHA256
+26ceab0a307a236e6940b9c350bdd3787a0d1ab14ce6d01e8b58e1359ba951bb.
+The versioned clipping producer snapshot preserves the newer source generation
+without replacing the accepted same-path historical receipt. Focus checkpoint
+af0cc215 is explicitly bound. Shared replay control counts are not per-case
+independent runtime observations. This is NOT canonical registration/publication,
+full reader validation,case closure or current rendering acceptance. Next compose
+the guarded historical reader,register the bounded additions,then validate the
+coherent integration before a single canonical milestone. Do not repeat settled
+captures,source probes or the accepted695dea7b milestone for bookkeeping.
+
 November2 bounded paint batch CLASSIFICATION/INVENTORY integration passes5/5,
 0skip/failure,14907.8795ms. Producer now lists1149 source paths/481 proofs/208
 findings/75 plans. All1149 prior path entries,477 proof declarations,206 complete
