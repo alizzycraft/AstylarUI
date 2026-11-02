@@ -1,5 +1,48 @@
 # Material comparison/state coverage inventory
 
+November2 public maximum-none reuse resolves the prior pending HISTORICAL height
+question without another browser run. This is NOT a newly discovered defect:
+commit2a6b8d07 already documents the September24 public height failure and both
+DPR traces in material-root-cause-implementation-handoff.md. Treat the earlier
+source-only notes below as the investigation's previous uncertainty,not a new
+defect count. Canonical source finding count remains206.
+
+Existing consumer script now passes8 captured/current validateStyle controls:
+maxWidth/maxHeight none are accepted unchanged without unsupported-property
+warnings,while an unknown-property control warns and malformed input rejects.
+Both retained dialog-sizing-trace-80efa42-v2-dpr1/-dpr2 report hashes equal the
+original handoff receipts9d543522/32871750. Their actual audit.js bundles match
+provenance and served-asset hashes. Runner source matches the recorded commit;
+both owning core source receipts are recovered at that commit. Crucially,the
+recorded commit80efa429 does NOT recover the fixture bytes used in the run:
+the exact provenance fixture hash7436b7d9 is recovered from2a6b8d07 instead.
+Do not infer a clean captured worktree from provenance.commit alone.
+
+At both DPRs,the explicit max-height:none/autowidth variant retains four panel
+heights0 in local CSS,viewport CSS and projected output versus native104. The
+otherwise corresponding omitted-limit control is104 in every representation
+and passes. Each failing trace records11 none-to-zero parser calls;the omission
+control records none. The historical first-divergence owner is FlexService's
+parseIntrinsicPixelLength/measureIntrinsicFlowChild max-height clamp,not world
+projection. The separate ElementDimensionService block controls remain valid
+but must not be substituted for the actual Flex trace attribution.
+
+This authenticates focused recipe/core-source/bundle and original trace reuse,
+NOT all transitive input receipts,fresh current-browser execution,independent
+public width-none rendering or attribution to the120 Divider owners that omit
+these fields. Preserve the known failure and general keyword/constraint repair
+recommendation;do not author omission instead of none as a fixture workaround.
+No duplicate finding,new capture,renderer change,case promotion or full export.
+
+`node scripts/check-divider-omitted-owner-consumers.mjs` reuseExit0;prior72
+position,10 mesh and40 constraint controls remain. Script raw SHA256
+a3bc0e20197283ddd118f2134a6e0ad0fb952119f1b9251930ea6e66e0e9724c.
+Keep divider-constraint-public-reuse-20261102.log (raw SHA256
+039f6c697e61ec735d9f14486022b91faf937be4275d2f30dac36855d35ade3c)
+and empty stderr. Next finish the exact-owner default-input accounting rather
+than reopening this already confirmed historical height investigation. A fresh
+current-rendering claim still requires the original current-code final gates.
+
 November2 outside-owner size-default follow-up:the existing consumer-control
 script now authenticates360 minWidth/maxWidth/maxHeight slots across the same120
 owner pairs/24 cases. Native values are respectively0px/none/none;all candidate

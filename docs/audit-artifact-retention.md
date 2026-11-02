@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep divider-constraint-public-reuse-20261102.log and empty stderr. It binds
+the existing September24 DPR1/2 maximum-none height failure and omission control
+to bundle,focused source and exact fixture receipts. The recorded commit alone
+does not recover the fixture;the exact source is at2a6b8d07. Preserve both
+original dialog-sizing-trace-80efa42-v2-dpr1/-dpr2 directories and their bundles,
+provenance,observations and screenshots. This is historical reuse,not a new
+defect or fresh current-browser acceptance;no cleanup of original traces follows.
+
 Keep divider-omitted-owner-constraints-20261102.log and empty stderr. It binds
 360 omitted min/max slots and40 source-executed constraint controls,including
 explicit-none zero clamping. Public-API rendering reachability remains open;

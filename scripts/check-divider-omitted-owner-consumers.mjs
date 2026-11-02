@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { NullEngine, Scene, MeshBuilder } from '@babylonjs/core';
 
@@ -37,12 +38,13 @@ function unique(source, predicate) {
   visit(ast); assert.equal(matches.length, 1);
   return matches[0].getText(ast);
 }
-function method(source, name) {
+function method(source, name, bindings = {}) {
   const text = unique(source, n => ts.isMethodDeclaration(n) && n.name?.getText() === name);
   const compiled = ts.transpileModule(`class Probe { ${text} }`, {
     compilerOptions: { target: ts.ScriptTarget.ES2022, removeComments: true },
   }).outputText;
-  return new (new Function('MeshBuilder', `${compiled}; return Probe;`)(MeshBuilder))();
+  return new (new Function('MeshBuilder', ...Object.keys(bindings), `${compiled}; return Probe;`)
+    (MeshBuilder, ...Object.values(bindings)))();
 }
 function expression(source, name) {
   const declaration = unique(source, n => ts.isVariableDeclaration(n) && n.name.getText() === name);
@@ -112,6 +114,65 @@ for (const [version, source] of sources('app/services/dom/elements/element-dimen
       classification: 'source-demonstrated divergence; public-API rendering reproduction still required' });
   }
 }
+let diagnosticControls = 0;
+for (const source of sources('lib/astylar-diagnostics.ts')) {
+  const declaration = unique(source, n => ts.isVariableDeclaration(n) && n.name.getText() === 'styleProperties');
+  const styleProperties = new Function(`return (${declaration.slice(declaration.indexOf('=') + 1)});`)();
+  const probe = method(source, 'validateStyle', { styleProperties }), warnings = [];
+  probe.report = value => warnings.push(value);
+  probe.fail = () => { throw new Error('malformed style control'); };
+  const input = { selector: '#box', maxWidth: 'none', maxHeight: 'none' };
+  probe.validateStyle(input, 'styles[0]');
+  assert.deepEqual(input, { selector: '#box', maxWidth: 'none', maxHeight: 'none' });
+  assert.deepEqual(warnings, []); diagnosticControls += 2;
+  probe.validateStyle({ selector: '#box', unknownConstraintControl: 'none' }, 'styles[0]');
+  assert.equal(warnings.length, 1); assert.equal(warnings[0].code, 'unsupported-style-property'); diagnosticControls++;
+  assert.throws(() => probe.validateStyle(null, 'styles[0]'), /malformed style control/); diagnosticControls++;
+}
+
+// Reuse the already-confirmed public height reduction, not another capture or
+// a new defect. Its recorded commit predates the dirty fixture used at capture.
+const historicalHeightEvidence = [];
+for (const [dpr, reportSha256] of [
+  [1, '9d543522ec810326a21a70f2380927e89004bdeaa76b1e39bb0e16e524384aaf'],
+  [2, '328717504126767c10146f819650f6de4afb905db948a80003b1b87a385dd058'],
+]) {
+  const directory = `artifacts/material-parity/dialog-sizing-trace-80efa42-v2-dpr${dpr}`;
+  const resultBytes = fs.readFileSync(`${directory}/result.json`); assert.equal(hash(resultBytes), reportSha256);
+  const report = JSON.parse(resultBytes), provenanceBytes = fs.readFileSync(`${directory}/provenance.json`);
+  const provenance = JSON.parse(provenanceBytes), bundle = fs.readFileSync(`${directory}/audit.js`);
+  assert.equal(hash(bundle), provenance.bundleSha256);
+  assert.equal(hash(bundle), provenance.runtimeAssets.find(r => r.url === '/audit.js').sha256);
+  const git = (revision, file) => execFileSync('git', ['show', `${revision}:${file}`], { maxBuffer: 8_000_000 });
+  assert.equal(hash(git(provenance.commit, 'scripts/audit-overlay-layout-stage.mjs')), provenance.runnerSha256);
+  const spec = 'src/parity/overlay-layout-stage.audit.spec.ts';
+  assert.equal(hash(git('2a6b8d07', spec)), provenance.inputs.find(r => r.file === spec).sha256);
+  assert.notEqual(hash(git(provenance.commit, spec)), provenance.inputs.find(r => r.file === spec).sha256);
+  for (const file of ['src/app/services/dom/elements/element-dimension.service.ts', 'src/app/services/dom/elements/flex.service.ts']) {
+    const receipt = provenance.compiledReceipts.find(r => r.source === file); assert.ok(receipt);
+    assert.equal(hash(git(provenance.commit, file)), receipt.sourceSha256);
+  }
+  assert.deepEqual(report.errors, []);
+  const noneName = 'dialog-intrinsic-explicit-autoheight-nolimit-autowidth';
+  const omittedName = 'dialog-intrinsic-explicit-autoheight-omitlimit-autowidth';
+  const none = report.observations.find(r => r.composition === noneName);
+  const omitted = report.observations.find(r => r.composition === omittedName);
+  assert.ok(none && omitted);
+  for (const id of ['wrapper', 'container', 'inner', 'pane']) {
+    const a = none.observations.find(r => r.id === id), b = omitted.observations.find(r => r.id === id);
+    assert.equal(a.reference.height, 104); assert.equal(a.local.height, 0); assert.equal(a.css.height, 0); assert.equal(a.projected.height, 0);
+    assert.equal(b.reference.height, 104); assert.equal(b.local.height, 104); assert.equal(b.css.height, 104); assert.equal(b.projected.height, 104);
+  }
+  const noneCalls = none.sizingTrace.find(r => r.method === 'parseIntrinsicPixelLength').calls.filter(r => r.value === 'none');
+  assert.equal(noneCalls.length, 11); assert.ok(noneCalls.every(r => r.result === 0));
+  assert.equal(omitted.sizingTrace.find(r => r.method === 'parseIntrinsicPixelLength').calls.filter(r => r.value === 'none').length, 0);
+  assert.equal(report.result.results.find(r => r.description.includes(`${noneName} at`)).status, 'failed');
+  assert.equal(report.result.results.find(r => r.description.includes(`${omittedName} at`)).status, 'passed');
+  historicalHeightEvidence.push({ directory, reportSha256, provenanceSha256: hash(provenanceBytes), bundleSha256: hash(bundle),
+    recordedCommit: provenance.commit, exactFixtureRevision: '2a6b8d07', browser: report.browser,
+    noneParserCalls: noneCalls.length, panels: 4, noneHeight: 0, omittedHeight: 104, nativeHeight: 104,
+    boundary: 'Previously confirmed historical public height reduction; focused recipe/core-source and bundle receipts checked, not all transitive inputs or fresh current-browser rendering. Width-none public rendering remains separate.' });
+}
 let positionControls = 0;
 const parent = {}, viewport = {}, dom = { context: { elements: new Map([['root-body', viewport]]) } };
 for (const source of sources('app/services/dom/elements/element-dimension.service.ts')) {
@@ -165,6 +226,7 @@ console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-omitted-ow
   previous: { file: previousFile, sha256: hash(previousBytes) },
   sourceMap: { file: mapFile, sha256: hash(mapBytes) }, sources: receipts,
   positionControls, meshControls, constraintOwnerPairs, omittedConstraintSlots, constraintControls, explicitNoneObservations,
+  diagnosticControls, historicalHeightEvidence,
   conclusion: 'Omitted and explicit static share the inspected captured/current layout-parent, containing-block, block/flex-flow and stacking branches. Captured/current plane construction starts with visible flags; absence in declaration snapshots is not a hidden flag.',
   constraintConclusion: 'The 360 recorded omitted constraint fields do not invoke a maximum clamp; minWidth:0 does not change the positive control size. Explicit maximum none instead clamps to zero in captured/current source blocks. This separate source divergence must not be hidden by rewriting none to omission; it is not an observed explicit-none input on these 120 owner pairs.',
   boundary: 'Source-executed routing/constraint blocks and NullEngine initial flags only. Not complete used geometry, public-API explicit-none rendering, CSS visibility inheritance/support, every visual owner, compositing/clipping, browser raster, current runtime or whole-case closure.',
