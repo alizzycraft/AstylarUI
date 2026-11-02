@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+November3 direct-restoration corrected live review9105f2b3 passes5/5 combined
+integration,0skip/failure,284550.5757ms. Existing complete loader validates18669
+dependencies/2311 partial,current-rendering-unverified cases. All four direct
+source-plan collectors separately bind259 groups (prior entry below). Log:
+trigger-paint-direct-restoration-live-integration-20261103.log,SHA256
+42d66debbb44c60029a500c905cd208b4e2eda2e4b30b629c16a6728a2820f81.
+Case-array hashc02a245f4c2c17eaa73be940d736ae09f2d20f06e9f20809ae6e9fd2bcd330b1.
+Freeze1151/485/208/75 for one direct-restoration-corrected export retry with a
+fresh log prefix. Reuse exact verified695dea7b backup;keep failed first attempt.
+D:514416640 bytes free at preflight. No original/browser investigation needs
+repeating for this bookkeeping. Canonical acceptance/conservation/cold/import
+remain pending;all original audit and final acceptance requirements preserve.
+
 November3 first --trigger-paint export is terminal1 BEFORE canonical writes.
 Evidence session authenticated20228 files/4383353899 bytes,then validation
 reported four unbound source-plan sections and259 unresolved style groups.

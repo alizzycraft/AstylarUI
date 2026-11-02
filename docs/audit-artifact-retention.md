@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Keep direct-restoration-live-integration20261103 passing5/5 stdout/empty stderr.
+Its9105f2b3 review supersedes only staged source generations;accepted695dea7b
+and its three-file backup remain required for the one corrected export retry.
+No retention release or acceptance follows from complete reader validation.
+
 Keep failed trigger-paint-canonical-export20261102 stdout/stderr and the exact
 accepted695dea7b three-file backup. Keep binding-failure-focused20261103 and
 binding-stack stdout/stderr,passing direct-restoration-focused,collectors and
