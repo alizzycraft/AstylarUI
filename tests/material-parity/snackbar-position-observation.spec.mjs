@@ -126,6 +126,69 @@ test('original snackbar expired frames leave no residual paint outside the focus
     boundary: 'Per-renderer original closed-versus-expired full-frame pixels only. Newly inspected checkpoint receipts match the pinned original report;not prior accepted-review dependencies. No first-open/timing/cause,current rendering,cross-renderer equal inputs or whole-case acceptance follows.' }));
 });
 
+test('retained snackbar focus-layer inputs differ while the original paint comparator accepts them', async t => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const root = 'artifacts/material-parity/current-full-20261005/';
+  const reportBytes = readFileSync(root + 'latest-report.json');
+  assert.equal(hash(reportBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes);
+  const row = report.interactions.find(r => r.family === 'snack-bar' && r.profile === 'light' && r.viewport.id === 'desktop-dpr1' && r.state === 'focus');
+  assert.ok(row);
+  const checkpointFile = root + 'checkpoint/aad85d65f08c81ab7b919738039cad8032be30219c31d907e50a1cf3541e72bc.json';
+  const checkpointBytes = readFileSync(checkpointFile);
+  assert.equal(hash(checkpointBytes), 'af0cc215d1602569193b84ee4255c4a4fcda1e79ccc6578698ae818935537749');
+  const checkpoint = JSON.parse(checkpointBytes);
+  assert.deepEqual(checkpoint.result, row); assert.equal(hash(JSON.stringify(row)), checkpoint.sha256);
+  for (const receipt of checkpoint.files) assert.equal(hash(readFileSync(root + receipt.file)), receipt.sha256);
+  assert.deepEqual(row.focus, { reference: 'snack-bar-primary', astylar: 'snack-bar-primary', matches: true });
+  const trees = Object.fromEntries(['reference', 'astylar'].map(side => {
+    const receipt = row.inputTrees[side], bytes = readFileSync(receipt.file);
+    assert.equal(hash(bytes), receipt.sha256); return [side, JSON.parse(bytes)];
+  }));
+  const ripple = trees.reference.nodes.find(n => n.attributes?.class === 'mat-mdc-button-persistent-ripple mdc-button__ripple');
+  assert.ok(ripple);
+  const pseudo = ripple.pseudoElements.find(p => p.pseudo === '::before'); assert.ok(pseudo?.generated);
+  const style = trees.reference.styles[pseudo.style];
+  assert.equal(style.backgroundColor, 'rgb(255, 255, 255)'); assert.equal(style.opacity, '0.12');
+  const focusRule = pseudo.rules.map(i => trees.reference.rules[i]).find(r => r.active && r.selector.includes('cdk-program-focused') && r.declarations.opacity);
+  assert.ok(focusRule);
+  const button = trees.astylar.nodes.find(n => n.authored?.id === 'snack-bar-primary'); assert.ok(button);
+  assert.equal(button.normalResolvedStyle.background, '#6750a4');
+  assert.equal(button.interactionResolvedStyle.background, '#6750a4');
+  assert.equal(button.interactionResolvedStyle.boxShadow, '0 0 0 1px rgba(0,0,0,0)');
+  assert.equal(trees.astylar.nodes.filter(n => n.parent === button.key).length, 0);
+  const candidateFocusRules = trees.astylar.rules.filter(r => r.selector === '.material-button:focus');
+  assert.equal(candidateFocusRules.length, 2);
+  for (const rule of candidateFocusRules) {
+    assert.equal(rule.boxShadow, '0 0 0 1px rgba(0,0,0,0)');
+    assert.equal(rule.background, undefined);
+  }
+  const pixels = [];
+  for (const side of ['reference', 'astylar']) {
+    const receipt = checkpoint.files.find(f => f.file.endsWith('/' + side + '.png')); assert.ok(receipt);
+    const png = PNG.sync.read(readFileSync(root + receipt.file)); assert.equal(png.width, 1440); assert.equal(png.height, 1000);
+    const box = row.geometry.elements.find(e => e.id === 'snack-bar-primary')[side === 'reference' ? 'expected' : 'actual'];
+    const x = Math.floor(box.left) + 12, y = Math.floor(box.top + box.height / 2);
+    pixels.push({ side, file: root + receipt.file, sha256: receipt.sha256, x, y, rgba: [...png.data.subarray((y * png.width + x) * 4, (y * png.width + x) * 4 + 4)] });
+  }
+  assert.deepEqual(pixels.map(p => p.rgba), [[121, 101, 175, 255], [103, 80, 164, 255]]);
+  const { gunzipSync } = await import('node:zlib'), { default: ts } = await import('typescript');
+  const original = gunzipSync(Buffer.from(readFileSync('docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8').replace(/\s/g, ''), 'base64'));
+  assert.equal(hash(original), 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
+  const ast = ts.createSourceFile('original.mjs', original.toString(), 99, true, ts.ScriptKind.JS);
+  const nodes = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'compareStatePaint'); assert.equal(nodes.length, 1);
+  const compare = new Function('normalizeColor', `return (${nodes[0].getText(ast)})`)(
+    () => { throw new Error('Unexpected normalization after denied measurement'); });
+  const reached = new Error('measurement read'), denied = new Proxy({}, { get() { throw reached; } });
+  assert.deepEqual(compare(denied, denied, 'snack-bar', 'light', 'focus'), { matches: true });
+  assert.throws(() => compare(denied, denied, 'button', 'light', 'activate-leave'), error => error === reached);
+  assert.deepEqual(row.statePaint, { matches: true });
+  t.diagnostic(JSON.stringify({ case: 'interaction:snack-bar@light/desktop-dpr1/focus', pixels,
+    nativeFocus: { selector: focusRule.selector, whiteOpacity: style.opacity }, candidateFocusRules,
+    comparatorSha256: hash(nodes[0].getText(ast)), rejectedMeasuredBranchControl: 1,
+    boundary: 'One original focus case:unequal native pseudo-layer versus candidate focus inputs and a paint-comparator coverage gap. Not an equal-input core failure,all button families/themes,complete glyph/edge/ripple paint,current rendering or permission to patch fixture colors.' }));
+});
+
 test('supplementary single-open snackbar is present before expiry and absent afterwards', () => {
   const file = 'artifacts/material-parity/snackbar-single-open-20261027/latest-report.json';
   const bytes = readFileSync(file);

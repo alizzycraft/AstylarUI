@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep snackbar-focus-layer-input-proof20261102 failed stdout (two rules,not one),
+focus-layer-two-rules-proof20261102 failed stdout (unbound extracted normalizer),
+their stderr files,and focus-layer-bound-comparator-proof20261102 passing3/3
+stdout/empty stderr. Preserve original focus checkpointaf0cc215 and its artifacts.
+No image generation,case closure or accepted-generation replacement occurred.
+
 Keep snackbar-original-auto-dismiss-paint20261102 empty stdout from the rejected
 accepted-dependency assumption,corrected checkpoint-bound20261102 record and
 original-expired-paint-focused20261102 passing test stdout/empty stderr. Keep

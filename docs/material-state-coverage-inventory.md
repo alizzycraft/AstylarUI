@@ -1,5 +1,37 @@
 # Material comparison/state coverage inventory
 
+November2 inspected original interaction:snack-bar@light/desktop-dpr1/focus
+paint rather than repeating Divider inventories. Native and candidate both
+record focused trigger and closed popup,but native persistent-ripple ::before
+requests white/.12 through active cdk-program-focused rule. Candidate childless
+button retains base#6750a4 and TWO .material-button:focus rules,both transparent
+shadow/no background (current component lines534/808 agree). Interior recorded
+pixels are native[121,101,175,255],candidate[103,80,164,255]. This is a bounded
+application-authoring focus-layer input mismatch,not equal-input core failure;
+do not patch sampled colors instead of equivalent composition/declarations.
+
+Original e01 compareStatePaint returns matches:true for this family/state WITHOUT
+reading either measurement. Actual function replay with denying measurement
+proxies proves that blind spot;a measured button/activate-leave control rejects.
+Thus the stored green statePaint flag cannot certify this focus paint. Existing
+touch-descendant omission is a separate finding;no new canonical source finding
+is registered yet. Full original focus checkpointaf0cc215/result/artifacts and
+paired trees authenticate. Direct frame inspection plus scoped fill pixels is
+not full text/edge/ripple acceptance or every theme/button-family attribution.
+
+Nearest owning spec adds the focused regression. First attempt rejected incorrect
+one-rule assumption;second reached an unbound extracted normalizeColor dependency
+in its measured-branch control. Preserve both failure logs. Corrected comparator
+dependency is rejecting,not a substitute color normalizer. Combined original
+timer-blindness,expired-paint and focus-input proofs pass3/3,0skip/failure,
+8767.3907ms;snackbar-focus-layer-bound-comparator-proof-20261102.log raw SHA256
+0702d88b8ab2454efaabe87497c46106c0ea4a09906002dd61c126dc58d11cba.
+Owning suite normalized source9cdab577 becomes1a11aa84;reconcile before any later
+coherent canonical integration. Hover/held original paint records were triaged
+but remain pending distinct paint inspection;no blanket three-state closure.
+No new capture,fixture/core edit,case promotion or canonical rebuild. Accepted
+695dea7b is historical to these standalone test-source extensions.
+
 November2 switched from already-investigated Divider shaping/bidi fields to
 pending localPaint of interaction:snack-bar@light/desktop-dpr1/auto-dismiss.
 Inspected both ORIGINAL full frames directly,then compared each renderer's
