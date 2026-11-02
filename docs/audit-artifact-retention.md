@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Keep divider-clipping-paint-trace-availability20261102.log with its two pinned
+trace/producer receipts. It records missing observations,not successful clip
+absence or a new capture. Existing texture/material/crop evidence remains required;
+no duplicate image generation or stale-run release follows from this check.
+
 Keep divider-clipping-caller-routing20261102 passing log and stricter
 clipping-caller-routing-ancestry-bound20261102 passing stdout/empty stderr.
 Both are bounded source replays,not browser captures or accepted canonical

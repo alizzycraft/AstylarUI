@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+November2 paint-trace availability resolves the next clipping-evidence question,
+not a clipping cause. Reauthenticated configured texture reporte7843435 and
+material-stateb2938726 plus their actual producers. Texture trace has8 Above/
+Below targets in4 contrast-DPR1 contexts;material trace has8 Above/Below targets
+in4 desktop-DPR1 themes with mesh ancestry/visibility/alpha. Neither producer
+records clip planes,overflow clip bounds/regions,clip plugin/uniform state or
+scissor state;neither targets heading textures. Missing fields are NOT observed
+empty runtime state. Original light/desktop crop containment remains its already
+proved pixel-only scope,not a fractional target or clip-state reconstruction.
+
+Read-only check exit0:divider-clipping-paint-trace-availability-20261102.log,
+SHA2563af0726d38cf2a341ee20f1f8ccd8cc4843236d69e8eeb35d1c26af9d09ab944.
+This checks two exact traces,not every artifact on disk. Precise missing evidence
+for actual clipping attribution is matched runtime target/ancestor clip state
+and a corresponding pixel observation;source guards and alpha/texture records
+cannot substitute. No established heading-specific clipping failure plus unequal
+opacity-masked native headings justifies a fresh speculative heading GPU probe.
+Preserve this uncertainty and move to the finite remaining owner-property/
+anonymous-line-box correspondence work;do not repeat clipping guards,these
+availability checks or the original four-crop proof without changed evidence.
+No capture,renderer/fixture change,canonical rebuild or case promotion.
+
 November2 clipping caller/ancestor-selection question answered at SOURCE-REPLAY
 scope only. Actual captured/current processChildren forwards resolver-returned
 style identity in432 checks;432 missing-style controls suppress apply. Actual
