@@ -4,7 +4,7 @@ import path from 'node:path';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const prior = '19dea13ed3eaf952b72171e12664ce180185aea863c52e187649c273f6782fc1';
-export const dividerConsumerReview = 'cf6132228dae0db2f2d07acf7fca15ba1d789fce8ea8dfc4f76751d3c2632eea';
+export const dividerConsumerReview = 'a4a63925b2b779bb71719935b4a2d9e28d7e8184ad67e78118feae6f82633273';
 export const dividerConsumerSources = Object.freeze([
   'scripts/check-divider-omitted-owner-consumers.mjs',
   'scripts/join-material-divider-consumer-inputs.mjs',
@@ -66,7 +66,7 @@ const selectionChanges = {
     ['const applicability=captureAvailabilityReaderFactory?.',
       'const dividerConsumerReaderFactory = options.caseObligationReviewSha256===dividerConsumerReview ? createDividerConsumerReviewReader : captureAvailabilityReaderFactory;\n    const applicability=dividerConsumerReaderFactory?.'],
     ['diagnosticRead: options.caseObligationReviewSha256===captureAvailabilityReview\n      ? createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync}) : readFileSync',
-      'diagnosticRead: (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256===dividerConsumerReview)\n      ? createCaptureAvailabilityHistoricalRead({root,read:createDividerConsumerRegistrationHistoricalRead({root,read:auditReadFileSync})}) : readFileSync'],
+      `diagnosticRead: (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256==='${dividerConsumerReview}')\n      ? createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync}) : readFileSync`],
   ],
   launcher: [
     ["const captureAvailability = rawRequested.includes('--capture-availability');",
@@ -93,13 +93,39 @@ export function restoreDividerConsumerSelection(bytes, kind) {
   }
   assert.equal(hash(source), selectionPriors[kind]); return source;
 }
+export function stripDividerConsumerRegistrationIfPresent(bytes, kind) {
+  const marker = { producer: '"scripts/check-divider-omitted-owner-consumers.mjs",',
+    runner: 'const dividerConsumerReaderFactory = ', launcher: 'const dividerConsumerInputs = ' }[kind];
+  if (!marker || !bytes.toString().includes(marker)) return bytes;
+  return kind === 'producer' ? restoreDividerConsumerProducer(bytes) : restoreDividerConsumerSelection(bytes, kind);
+}
+const legacyPrior = 'e53faef5e896f110f11155622cdbf427819acde7d22e01f658d0f0ccfe244e83';
+const legacyChanges = [
+  ["import path from 'node:path';", "import path from 'node:path';\nimport { stripDividerConsumerRegistrationIfPresent, createDividerConsumerRegistrationHistoricalRead } from './divider-consumer-registration.mjs';"],
+  ['export function restoreCaptureAvailabilityRegistration(bytes, kind) {', 'export function restoreCaptureAvailabilityRegistration(bytes, kind) {\n  bytes = stripDividerConsumerRegistrationIfPresent(bytes, kind);'],
+  ['export function createCaptureAvailabilityHistoricalRead({ root, read }) {', 'export function createCaptureAvailabilityHistoricalRead({ root, read }) {\n  read = createDividerConsumerRegistrationHistoricalRead({ root, read });'],
+];
+export function prepareDividerConsumerLegacyRegistration(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n'); assert.equal(hash(source), legacyPrior);
+  for (const [before, after] of legacyChanges) { assert.equal(source.split(before).length, 2); source = source.replace(before, after); }
+  return source;
+}
+export function restoreDividerConsumerLegacyRegistration(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  if (hash(source) === legacyPrior) return source;
+  for (const [before, after] of legacyChanges.toReversed()) { assert.equal(source.split(after).length, 2); source = source.replace(after, before); }
+  assert.equal(hash(source), legacyPrior); return source;
+}
 export function createDividerConsumerRegistrationHistoricalRead({ root, read }) {
   const kinds = new Map(Object.entries({ producer: 'tests/material-parity/input-equivalence-audit.mjs',
     runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })
     .map(([kind, file]) => [path.resolve(root, file), kind]));
   return (name, options) => {
-    const kind = kinds.get(path.resolve(root, name)); if (!kind) return read(name, options);
-    const bytes = Buffer.from(kind === 'producer' ? restoreDividerConsumerProducer(read(name)) : restoreDividerConsumerSelection(read(name), kind));
+    const absolute = path.resolve(root, name), kind = kinds.get(absolute);
+    const legacy = absolute === path.resolve(root, 'tests/material-parity/capture-availability-registration.mjs');
+    if (!kind && !legacy) return read(name, options);
+    const input = read(name);
+    const bytes = Buffer.from(legacy ? restoreDividerConsumerLegacyRegistration(input) : stripDividerConsumerRegistrationIfPresent(input, kind));
     const encoding = typeof options === 'string' ? options : options?.encoding;
     return encoding ? bytes.toString(encoding) : bytes;
   };

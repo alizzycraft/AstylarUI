@@ -8,7 +8,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dividerConsumerSources, dividerConsumerProofs, prepareDividerConsumerProducer,
   restoreDividerConsumerProducer, createDividerConsumerProducerHistoricalRead,
   dividerConsumerReview, prepareDividerConsumerSelection, restoreDividerConsumerSelection,
-  createDividerConsumerRegistrationHistoricalRead } from './divider-consumer-registration.mjs';
+  createDividerConsumerRegistrationHistoricalRead, prepareDividerConsumerLegacyRegistration,
+  restoreDividerConsumerLegacyRegistration } from './divider-consumer-registration.mjs';
 
 const file = 'tests/material-parity/input-equivalence-audit.mjs';
 function inventory(source) {
@@ -20,8 +21,10 @@ function inventory(source) {
   }));
 }
 test('Divider consumer staged inventory conserves all existing sources proofs and plans', () => {
-  const bytes = fs.readFileSync(file), before = bytes.toString().replaceAll('\r\n', '\n');
-  const staged = prepareDividerConsumerProducer(bytes), old = inventory(before), next = inventory(staged);
+  const bytes = fs.readFileSync(file), before = restoreDividerConsumerProducer(bytes);
+  const staged = prepareDividerConsumerProducer(before), old = inventory(before), next = inventory(staged);
+  if (bytes.toString().includes('"scripts/check-divider-omitted-owner-consumers.mjs",'))
+    assert.equal(bytes.toString().replaceAll('\r\n', '\n'), staged);
   assert.equal(old.sourceFingerprints.length, 1143); assert.equal(old.focusedProofInventory.length, 472);
   assert.equal(old.implementationPlan.length, 73);
   assert.deepEqual(next.sourceFingerprints.slice(dividerConsumerSources.length), old.sourceFingerprints);
@@ -43,8 +46,10 @@ test('Divider consumer staged inventory conserves all existing sources proofs an
 });
 test('Divider consumer staged routing preserves old flags and rejects mixed supplements', () => {
   for (const [kind, file] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
-    const before = fs.readFileSync(file).toString().replaceAll('\r\n', '\n');
+    const live = fs.readFileSync(file), before = restoreDividerConsumerSelection(live, kind);
     const staged = prepareDividerConsumerSelection(before, kind);
+    if (live.toString().includes(kind === 'runner' ? 'const dividerConsumerReaderFactory = ' : 'const dividerConsumerInputs = '))
+      assert.equal(live.toString().replaceAll('\r\n', '\n'), staged);
     assert.deepEqual(ts.createSourceFile(file, staged, 99, true).parseDiagnostics, []);
     assert.equal(restoreDividerConsumerSelection(staged, kind), before);
     assert.throws(() => restoreDividerConsumerSelection(staged + '\n// drift', kind));
@@ -57,7 +62,7 @@ test('Divider consumer staged routing preserves old flags and rejects mixed supp
       assert.equal(choose({ caseObligationReviewSha256: dividerConsumerReview }, dividerConsumerReview, next, prior), next);
       assert.equal(choose({ caseObligationReviewSha256: 'old' }, dividerConsumerReview, next, prior), prior);
       assert.ok(staged.indexOf('buildMaterialInputAudit(parityReport') < staged.indexOf('const dividerConsumerEvidenceRead ='));
-      assert.match(staged, /diagnosticRead: \(options.caseObligationReviewSha256===captureAvailabilityReview \|\| options.caseObligationReviewSha256===dividerConsumerReview\)/);
+      assert.ok(staged.includes(`diagnosticRead: (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256==='${dividerConsumerReview}')`));
       continue;
     }
     const execute = (source, flags) => {
@@ -80,11 +85,11 @@ test('Divider consumer staged routing preserves old flags and rejects mixed supp
       assert.equal(result.args.includes('--check'), flags.includes('--check'));
     }
     for (const flag of [...older, '--unknown']) assert.throws(() => execute(staged, ['--divider-consumer-inputs', flag, '--dry-run']));
-    assert.deepEqual(fs.readFileSync(file).toString().replaceAll('\r\n', '\n'), before);
+    assert.deepEqual(fs.readFileSync(file), live);
   }
 });
 test('Divider consumer historical producer read is exact reversible and drift rejecting', () => {
-  const before = fs.readFileSync(file).toString().replaceAll('\r\n', '\n');
+  const before = restoreDividerConsumerProducer(fs.readFileSync(file));
   let staged = Buffer.from(prepareDividerConsumerProducer(before));
   const raw = (_name, options) => options ? staged.toString(typeof options === 'string' ? options : options.encoding) : Buffer.from(staged);
   const read = createDividerConsumerProducerHistoricalRead({ root: process.cwd(), read: raw });
@@ -95,4 +100,10 @@ test('Divider consumer historical producer read is exact reversible and drift re
   staged = Buffer.from(prepareDividerConsumerProducer(before) + '\n// unknown drift');
   assert.throws(() => read(file)); assert.throws(() => prepareDividerConsumerProducer(before + '\n// drift'));
   assert.throws(() => restoreDividerConsumerProducer(before + '\n// drift'));
+  const legacyFile = 'tests/material-parity/capture-availability-registration.mjs';
+  const liveLegacy = fs.readFileSync(legacyFile), oldLegacy = restoreDividerConsumerLegacyRegistration(liveLegacy);
+  assert.equal(prepareDividerConsumerLegacyRegistration(oldLegacy), liveLegacy.toString().replaceAll('\r\n', '\n'));
+  const legacyRead = createDividerConsumerRegistrationHistoricalRead({ root: process.cwd(), read: fs.readFileSync });
+  assert.equal(legacyRead(legacyFile, 'utf8'), oldLegacy);
+  assert.throws(() => restoreDividerConsumerLegacyRegistration(liveLegacy.toString() + '\n// unknown drift'));
 });

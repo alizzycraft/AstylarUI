@@ -1,5 +1,86 @@
 # Material comparison/state coverage inventory
 
+November2 LIVE compatible consumer batch VERIFIED8/8,0skip,262042.214ms.
+Same existing process exited0. Complete loader authenticates18647 dependencies
+for exact reviewa4a63925b2b779bb71719935b4a2d9e28d7e8184ad67e78118feae6f82633273.
+All2311 records stay partial/current-unverified;24 bounded consumer children
+restore exactly to the accepted parent case array. Both older capture-availability
+and new consumer registration tests pass,including final diagnostic callback,
+unknown drift,old flag routing and complete live/staged source correspondence.
+
+Source/proof registration is now LIVE1149/477/206 findings/73 plans,not merely
+staged. Original plans/findings and prior inventory entries preserve. Shared
+historical restoration strips the newer consumer addition before older Slider/
+availability additions and preserves the legacy module's exact source receipt.
+Current source fingerprint collection remains raw;scoped evidence reads recover
+only guarded prior bytes. No renderer/fixture changes or input normalization.
+
+Command:node --max-old-space-size=8192 --test
+tests/material-parity/divider-consumer-registration.spec.mjs
+tests/material-parity/capture-availability-registration.spec.mjs
+tests/material-parity/divider-consumer-input-join.spec.mjs.
+Log:divider-consumer-live-compatible-batch-20261102.log,SHA256
+e3ef573c566e083e31226b500b25096660bebe0e13cc0b887fbf4a52bc66dbe3.
+Actual launcher dry-run and both runner/launcher Node syntax checks pass.
+
+Freeze this verified batch for one canonical export/conservation/independent-
+cold/import milestone after checking disk headroom. Accepted5e770758 remains
+historical until those gates pass;registration/loader checks are not publication
+or final rendering acceptance. Do not rerun settled source/receipt investigations
+for prose. All original coverage/root-cause/final browser gates remain intact.
+
+
+November2 live batch first returns5/5,0skip,256931.1257ms;18647 dependencies
+authenticate reviewa4a63925. Before committing,explicit legacy registration
+testing exposes an additional real ordering gap:old capture-availability reversal
+tries removing Slider additions before the newer consumer prefix. Fix is at
+that restoration boundary,not a changed old test or ignored hash. New consumer
+restoration strips only recognized additions first and delegates older source
+generations. The legacy registration module itself has exact reversible source
+recovery (prior raw SHAe53faef5);no receipt generation is rewritten.
+
+An intermediate combined test5/6 fails because a source-extracted diagnostic
+callback lacks a newly introduced closure binding. The runner diagnostic branch
+now uses its exact literal consumer digest and the existing historical helper,
+which itself performs guarded consumer restoration. Original older test remains
+unchanged. Corrected old/new registration suite6/6,0skip,7399.669ms;log
+divider-consumer-live-legacy-corrected-20261102.log,SHA256
+9389b02777c988212e964ca61785422fd0f62c7b20c9fd26561bfea20099ce20.
+Keep the failing divider-consumer-live-legacy-registration-20261102.log too.
+
+Final coherent old/new registration+consumer loader run is active in
+divider-consumer-live-compatible-batch-20261102.log. Resume that existing handle,
+not another run. Existing output proves exact case restoration;full loader
+verdict pending. Current edits still uncommitted. Do not substitute the earlier
+5/5 result for validation of changed shared restoration code. No accepted
+canonical generation,status,renderer/fixture inputs or final gates changed.
+
+
+November2 LIVE consumer registration applied,verification IN PROGRESS. Producer,
+runner and launcher now use the exact tested transformations. Actual launcher
+dry-run selects a4a63925b2b779bb71719935b4a2d9e28d7e8184ad67e78118feae6f82633273;
+both Node syntax checks pass. The review digest changed legitimately because
+live integration adds scoped historical restoration to receipt-bound reader/test
+sources. Earlier cf613222 validation remains historical,not the final live batch.
+
+Registration tests now restore the guarded prior source before preparing staged
+variants and assert actual live bytes equal the staged transformation. Initial
+direct prepare-on-live test failures were expected boundary misuse,not bypassed
+hash guards;corrected focused tests3/3 pass in1053.7102ms. Existing consumer join
+test now verifies exact SCOPED receipt bytes rather than mislabeling historical
+source receipts as current raw files. No meaningful values were normalized.
+
+Combined live registration/conservation/complete-loader command is running:
+node --max-old-space-size=8192 --test
+tests/material-parity/divider-consumer-registration.spec.mjs
+tests/material-parity/divider-consumer-input-join.spec.mjs.
+Retain divider-consumer-live-batch-20261102.log and resume its existing process
+handle,not another run. Current output confirms24 changed records and exact
+parent restoration with66 scoped receipts;complete loader verdict pending.
+Live edits remain uncommitted until this integration returns. Accepted5e770758,
+all2311 partial/current-unverified statuses and original final gates unchanged.
+
+
 November2 consumer runner/launcher routing is STAGED,3/3 focused tests pass,
 0skip,971.4979ms. Exact review cf613222 is selected only by the new
 --divider-consumer-inputs route. All existing rawRequested flag routes and default

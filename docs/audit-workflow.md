@@ -1,5 +1,14 @@
 # Efficient Material input-audit workflow
 
+November2 consumer batch is live1149 sources/477 proofs/206 findings/73 plans.
+Exact reviewa4a63925 passes8/8 combined old/new registration and complete reader
+tests,including18647 dependencies. Freeze for one export/conservation/independent
+cold/import milestone after disk preflight. Accepted5e770758 remains historical
+until those gates pass. All2311 cases stay partial/current-unverified. Reuse
+unchanged integration evidence;do not repeat captures,receipt routing diagnosis
+or full loader for prose. Original equal-input scope and final gates unchanged.
+
+
 October27 Chips milestone3252368b/indexff2b1a1d is accepted locally after export,
 complete conservation, independent cold check with diskHits0 and verified
 isolated/accepted imports. Counts1091 sources/418 proofs/203 findings/70 tracks.

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
+import { stripDividerConsumerRegistrationIfPresent, createDividerConsumerRegistrationHistoricalRead } from './divider-consumer-registration.mjs';
 import { createSliderTrackHistoricalRead, restoreSliderTrackProducer } from './slider-track-paint-findings.mjs';
 
 // Staged source transformation; applying it to live files is a separate gate.
@@ -66,6 +67,7 @@ export function prepareCaptureAvailabilityRegistration(bytes, kind) {
   return source;
 }
 export function restoreCaptureAvailabilityRegistration(bytes, kind) {
+  bytes = stripDividerConsumerRegistrationIfPresent(bytes, kind);
   if (kind === 'producer' && bytes.toString().includes('"tests/material-parity/slider-track-paint-findings.mjs",'))
     bytes = restoreSliderTrackProducer(bytes);
   let source = bytes.toString().replaceAll('\r\n', '\n');
@@ -120,6 +122,7 @@ export function restoreCaptureAvailabilityShared(bytes) {
 // For predecessor evidence readers only. Current source collection must retain
 // its raw reader so registration changes remain visible in the new inventory.
 export function createCaptureAvailabilityHistoricalRead({ root, read }) {
+  read = createDividerConsumerRegistrationHistoricalRead({ root, read });
   read = createSliderTrackHistoricalRead({ root, read });
   const passiveSources = new Map([
     ['scripts/check-passive-static-ax.mjs', 'faa3e832365152bf7d5b66be1ccdbbc4444eaa1f4ca371aad6c09d4b3fc65657',

@@ -40,6 +40,8 @@ import { datepickerOpeningReview, createDatepickerOpeningReviewReader } from '..
 import { tooltipOpenReview, createTooltipOpenReviewReader } from './join-material-tooltip-open.mjs';
 import { badgeLabelPaintReview, createBadgeLabelPaintReviewReader } from './join-material-badge-label-paint.mjs';
 import { captureAvailabilityReview, createCaptureAvailabilityReviewReader } from './join-material-capture-availability.mjs';
+import { createDividerConsumerReviewReader } from './join-material-divider-consumer-inputs.mjs';
+import { dividerConsumerReview, createDividerConsumerRegistrationHistoricalRead } from '../tests/material-parity/divider-consumer-registration.mjs';
 import { createCaptureAvailabilityHistoricalRead } from '../tests/material-parity/capture-availability-registration.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
@@ -88,8 +90,10 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const tooltipOpenReaderFactory = options.caseObligationReviewSha256===tooltipOpenReview ? createTooltipOpenReviewReader : datepickerOpeningReaderFactory;
     const badgeLabelPaintReaderFactory = options.caseObligationReviewSha256===badgeLabelPaintReview ? createBadgeLabelPaintReviewReader : tooltipOpenReaderFactory;
     const captureAvailabilityReaderFactory = options.caseObligationReviewSha256===captureAvailabilityReview ? createCaptureAvailabilityReviewReader : badgeLabelPaintReaderFactory;
-    const captureAvailabilityEvidenceRead = options.caseObligationReviewSha256===captureAvailabilityReview ? auditReadFileSync : createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync});
-    const applicability=captureAvailabilityReaderFactory?.({root,read:captureAvailabilityEvidenceRead,reviewSha256:options.caseObligationReviewSha256});
+    const dividerConsumerEvidenceRead = createDividerConsumerRegistrationHistoricalRead({root,read:auditReadFileSync});
+    const captureAvailabilityEvidenceRead = (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256===dividerConsumerReview) ? dividerConsumerEvidenceRead : createCaptureAvailabilityHistoricalRead({root,read:dividerConsumerEvidenceRead});
+    const dividerConsumerReaderFactory = options.caseObligationReviewSha256===dividerConsumerReview ? createDividerConsumerReviewReader : captureAvailabilityReaderFactory;
+    const applicability=dividerConsumerReaderFactory?.({root,read:captureAvailabilityEvidenceRead,reviewSha256:options.caseObligationReviewSha256});
     assert.ok(!applicability || typeof applicability.then !== 'function', 'Audit evidence readers must be synchronous within evidence session');
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
       options.caseObligationReviewSha256, { root, read: applicability?.read ?? auditReadFileSync });
@@ -98,7 +102,7 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);
   const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial,
-    diagnosticRead: options.caseObligationReviewSha256===captureAvailabilityReview
+    diagnosticRead: (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256==='a4a63925b2b779bb71719935b4a2d9e28d7e8184ad67e78118feae6f82633273')
       ? createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync}) : readFileSync });
   progress('verify-evidence-session');
   return { audit, errors };

@@ -8922,6 +8922,12 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/check-divider-omitted-owner-consumers.mjs",
+    "scripts/join-material-divider-consumer-inputs.mjs",
+    "tests/material-parity/divider-consumer-input-join.spec.mjs",
+    "tests/material-parity/divider-consumer-registration.mjs",
+    "tests/material-parity/divider-consumer-registration.spec.mjs",
+    "artifacts/material-parity/divider-consumer-check-divider-owner-coverage-20261102.mjs",
     "tests/material-parity/slider-track-paint-findings.mjs",
     "scripts/join-material-capture-availability.mjs",
     "tests/material-parity/capture-availability-join.spec.mjs",
@@ -10072,6 +10078,11 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/divider-consumer-input-join.spec.mjs", new RegExp("test\\('Divider consumer batch joins exact accepted parents and preserves every gap and status'"), "Divider consumer batch joins exact accepted parents and preserves every gap and status", "Exact retained owner inputs and source-method routing plus receipt-loader integration;not complete layout,current rendering or case closure."),
+    proof(root, "tests/material-parity/divider-consumer-input-join.spec.mjs", new RegExp("test\\('Divider consumer review passes the existing complete receipt loader without promoting cases'"), "Divider consumer review passes the existing complete receipt loader without promoting cases", "Exact retained owner inputs and source-method routing plus receipt-loader integration;not complete layout,current rendering or case closure."),
+    proof(root, "tests/material-parity/divider-consumer-registration.spec.mjs", new RegExp("test\\('Divider consumer staged inventory conserves all existing sources proofs and plans'"), "Divider consumer staged inventory conserves all existing sources proofs and plans", "Exact retained owner inputs and source-method routing plus receipt-loader integration;not complete layout,current rendering or case closure."),
+    proof(root, "tests/material-parity/divider-consumer-registration.spec.mjs", new RegExp("test\\('Divider consumer historical producer read is exact reversible and drift rejecting'"), "Divider consumer historical producer read is exact reversible and drift rejecting", "Exact retained owner inputs and source-method routing plus receipt-loader integration;not complete layout,current rendering or case closure."),
+    proof(root, "tests/material-parity/divider-consumer-registration.spec.mjs", new RegExp("test\\('Divider consumer staged routing preserves old flags and rejects mixed supplements'"), "Divider consumer staged routing preserves old flags and rejects mixed supplements", "Exact retained owner inputs and source-method routing plus receipt-loader integration;not complete layout,current rendering or case closure."),
     proof(root, "tests/material-parity/slider-retained-state-layer.spec.mjs", new RegExp("test\\('pending Slider track finding fits the existing source scanner without canonical mutation'"), "pending Slider track finding fits the existing source scanner without canonical mutation", "Confirmed unequal captured input geometry, not an equal-input renderer/projection defect, exact pixel-edge/compositing cause, 78 independently inspected rasters, current rendering parity or whole-case inspection closure."),
     proof(root, "tests/material-parity/slider-retained-state-layer.spec.mjs", new RegExp("test\\('retained Slider track thickness diverges before coordinate projection'"), "retained Slider track thickness diverges before coordinate projection", "Confirmed unequal captured input geometry, not an equal-input renderer/projection defect, exact pixel-edge/compositing cause, 78 independently inspected rasters, current rendering parity or whole-case inspection closure."),
     proof(root, "tests/material-parity/capture-availability-join.spec.mjs", new RegExp("test\\('capture availability corrects only 16 exact cases and recovers the complete predecessor'"), "capture availability corrects only 16 exact cases and recovers the complete predecessor", "Exact retained capture availability and recorded-build matching only;not current-browser execution,input equivalence,rendering acceptance or case closure."),

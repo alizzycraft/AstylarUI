@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createCaptureAvailabilityReviewReader } from './join-material-capture-availability.mjs';
+import { createDividerConsumerRegistrationHistoricalRead } from '../tests/material-parity/divider-consumer-registration.mjs';
 
 // A bounded successor over the accepted case ledger, not a new audit collector.
 const hash = b => createHash('sha256').update(b).digest('hex');
@@ -15,6 +16,7 @@ const records = [
   [base + 'divider-line-box-context-reuse-corrected-20261102.log', '449c148b3ea8f5e43b61638fa1d6e822f2709a08f87cce05ac0b5fe9ea3ceabd'],
 ];
 export function createDividerConsumerReviewReader({ root = process.cwd(), read = fs.readFileSync, reviewSha256 } = {}) {
+  read = createDividerConsumerRegistrationHistoricalRead({ root, read });
   const indexFile = path.resolve(root, 'artifacts/material-parity/working-audit/5e770758fa29941badd1003f008c86cca288884c4e62815e3fef9490dc8f3491/index.json');
   const indexBytes = read(indexFile);
   assert.equal(hash(indexBytes), '2090dfe307032486226a09d1c6da8c32084e27c40e2ef0e49ae5ded76c4a6ec3');

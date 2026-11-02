@@ -1,5 +1,25 @@
 # Audit artifact retention
 
+divider-consumer-live-compatible-batch-20261102.log is complete,exit0,8/8 tests,
+18647 dependencies. Preserve this verified final live-batch record and all earlier
+failed/intermediate logs with their source revisions. No running loader remains.
+Next publication requires an exact pre-export backup;no old evidence is replaced
+or released by this integration result. Accepted5e770758 remains unchanged.
+
+
+Keep divider-consumer-live-batch-20261102.log (first5/5),the failing
+divider-consumer-live-legacy-registration-20261102.log,corrected6/6
+divider-consumer-live-legacy-corrected-20261102.log,and the currently active
+divider-consumer-live-compatible-batch-20261102.log. Do not restart the last
+process or overwrite any attempt. Exact legacy source recovery remains required.
+
+
+Keep divider-consumer-live-registration-focused-20261102.log (corrected focused
+tests3/3) and currently running divider-consumer-live-batch-20261102.log. Resume
+the same live-batch handle. No canonical export/backup/new capture was created.
+Earlier staged and pre-live loader logs remain tied to their exact source versions.
+
+
 Keep divider-consumer-staged-routing-20261102.log. Its3/3 tests bind exact
 new-review selection,unchanged existing flag routes,rejection controls and
 producer/runner/launcher reversal without editing those live files. Earlier
