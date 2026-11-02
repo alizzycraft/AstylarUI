@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+November2 bounded paint batch CLASSIFICATION/INVENTORY integration passes5/5,
+0skip/failure,14907.8795ms. Producer now lists1149 source paths/481 proofs/208
+findings/75 plans. All1149 prior path entries,477 proof declarations,206 complete
+source definitions and73 plan entries conserve;four proofs/two findings/two
+priorities are additive. Both new actual source detectors match once and reject
+their altered-source controls;all208 existing/new anchors remain detected.
+IDs:fixture-filled-button-programmatic-focus-layer-omitted and
+audit-state-paint-unmeasured-family-returns-success. Their classifications are
+application-plugin-authoring-defect and parity-harness-defect respectively,
+not new core failures or permission to change fixture colors/gate criteria.
+
+Pre-registration source census proved1147/1149 unchanged before these additions:
+only consumer check and Snackbar suite differed,and both accepted predecessors
+recover exactly fromc8095ca7. Policy/producer additions now make FOUR known
+changed registered paths. No new source path is added. Keep trigger-paint-pre-
+registration-source-census20261102.log. Current staged producer/policy/suite
+still require exact historical-reader reconciliation and scoped case joins
+before one canonical milestone;accepted695dea7b remains historical,not current
+source/rendering acceptance. All2311 case statuses and final gates preserve.
+
+Initial integration4/5 failed Git's default output buffer reading the large
+predecessor producer. Buffered retry4/5 exposed an instrumentation assumption
+that implementationPlan returns a bare array;it returns the array through a
+sort. Existing AST-array inventory technique preserves every entry without
+changing the plan or validators. Keep both failures plus corrected
+snackbar-paint-classification-array-integration-20261102.log,raw SHA256
+271927651863a32c1a4ca76b3ec631644de2f5a0cd868e3100fac4ca0203e93c.
+No full export/capture is justified until the remaining receipt/case integration
+is verified. Do not rerun the settled paint/caller probes for metadata edits.
+
 November2 original Snackbar hover/held light desktop-DPR1 paint now has bounded
 checkpoint/input/pixel inspection. Native persistent pseudo requests white .08/
 .12 over rgb(103,80,164);candidate has no layer child and instead requests host

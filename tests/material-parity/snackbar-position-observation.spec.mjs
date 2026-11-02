@@ -6,7 +6,7 @@ import { execFileSync } from 'node:child_process';
 import { restoreCursorInspectorCaptureSource } from './public-cursor-defaults-evidence.mjs';
 import { PNG } from 'pngjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
-import { propertyGroups } from './input-equivalence-policy.mjs';
+import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
@@ -245,6 +245,60 @@ test('original snackbar hover and held fill samples do not establish equivalent 
   assert.ok(image >= 0 && release > image && events > release);
   t.diagnostic(JSON.stringify({ observations, captureMethodSha256: hash(capture), imageBeforeReleaseBeforeEvents: true,
     boundary: 'Two original light/DPR1 states and one opaque interior per side. Equal sampled RGB is mathematically accounted for but does not equate pseudo-layer/host composition,animation,ripple,edges,glyphs,other themes or current rendering. Source recipe order is not original elapsed timing;post-release event lists are not held-image event timelines. No case or raster acceptance promoted.' }));
+});
+
+test('Snackbar paint batch classifications preserve prior definitions proofs and plans', async () => {
+  const { default: ts } = await import('typescript'), path = await import('node:path');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const metadataFile = 'artifacts/material-parity/divider-consumer-corrected-sections-metadata-20261102.log';
+  const metadataBytes = readFileSync(metadataFile);
+  assert.equal(hash(metadataBytes), 'a9e837c7b1dd564e1f5a46dd008d1c255736c37e73a82cd6f253204875091cd6');
+  const accepted = JSON.parse((metadataBytes[0] === 255 ? metadataBytes.toString('utf16le') : metadataBytes.toString()).replace(/^\ufeff/, '')).current.metadata;
+  const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+  const priorPolicy = execFileSync('git', ['show', 'c8095ca7:' + policyFile], { maxBuffer: 8 * 1024 * 1024 });
+  assert.equal(hash(priorPolicy.toString().replace(/\r\n/g, '\n')), accepted.sourceFingerprints.find(r => r.file === policyFile).sha256);
+  const prior = await import('data:text/javascript;base64,' + priorPolicy.toString('base64'));
+  assert.equal(prior.sourceAuditDefinitions.length, 206); assert.equal(sourceAuditDefinitions.length, 208);
+  assert.deepEqual(sourceAuditDefinitions.slice(0, 206), prior.sourceAuditDefinitions);
+  for (const name of ['propertyGroups', 'inputDifferenceClassifications', 'pluginBoundaryVerdict']) {
+    const current = await import('./input-equivalence-policy.mjs'); assert.deepEqual(current[name], prior[name]);
+  }
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const currentProducer = readFileSync(producerFile, 'utf8').replace(/\r\n/g, '\n');
+  const oldProducer = execFileSync('git', ['show', 'c8095ca7:' + producerFile], { maxBuffer: 8 * 1024 * 1024 }).toString().replace(/\r\n/g, '\n');
+  assert.equal(hash(oldProducer.replace(/\r\n/g, '\n')), accepted.sourceFingerprints.find(r => r.file === producerFile).sha256);
+  const extract = (source, name) => {
+    const ast = ts.createSourceFile('audit.mjs', source, 99, true, ts.ScriptKind.JS);
+    assert.deepEqual(ast.parseDiagnostics, []);
+    const matches = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name); assert.equal(matches.length, 1);
+    return matches[0];
+  };
+  const entries = (source, name) => {
+    let result;
+    const visit = node => { if (!result && ts.isArrayLiteralExpression(node)) result = node; ts.forEachChild(node, visit); };
+    visit(extract(source, name)); assert.ok(result);
+    return result.elements.map(n => n.getText());
+  };
+  for (const [name, additions, oldCount] of [['sourceFingerprints', 0, 1149], ['focusedProofInventory', 4, 477], ['implementationPlan', 2, 73]]) {
+    const before = entries(oldProducer, name), after = entries(currentProducer, name);
+    assert.equal(before.length, oldCount); assert.equal(after.length, oldCount + additions);
+    assert.deepEqual(after.slice(additions), before);
+  }
+  const scan = new Function('sourceAuditDefinitions', 'path', 'readFileSync', `return (${extract(currentProducer, 'scanMaterialSources').getText()})`)(sourceAuditDefinitions, path, readFileSync);
+  const rows = scan(process.cwd()); assert.equal(rows.length, 208);
+  assert.ok(rows.every(r => r.detected), 'Every existing and new source anchor must still match');
+  const expected = ['fixture-filled-button-programmatic-focus-layer-omitted', 'audit-state-paint-unmeasured-family-returns-success'];
+  assert.deepEqual(rows.slice(-2).map(r => r.id), expected);
+  for (const row of rows.slice(-2)) {
+    assert.equal(row.locations.length, 1); assert.equal(row.inputEquivalent, false); assert.equal(row.currentRenderingAccepted, false);
+    for (const receipt of row.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    const source = readFileSync(row.file, 'utf8'), expression = new RegExp(row.pattern, 'g');
+    assert.equal([...source.matchAll(expression)].length, 1);
+    assert.equal(new RegExp(row.pattern).test(source.replace(expression, '/* rejected detector control */')), false);
+  }
+  console.log(JSON.stringify({ sources: 1149, proofs: 481, findings: 208, plans: 75,
+    priorDefinitionsPreserved: 206, priorProofEntriesPreserved: 477, newFindingIds: expected,
+    newDetectorControls: 2, canonicalPublished: false, casePromoted: false }));
 });
 
 test('supplementary single-open snackbar is present before expiry and absent afterwards', () => {

@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep trigger-paint-pre-registration-source-census20261102.log and Snackbar paint
+classification integration logs:initial ENOBUFS failure,buffered AST-array-shape
+failure,and corrected array-integration passing5/5 stdout/empty stderr. Keep
+accepted695dea7b package/index andc8095ca7 Git predecessors for exact historical
+read reconciliation. Staged208 findings/481 proofs are not a new accepted store.
+
 Keep snackbar-trigger-paint-batch20261102 stdout/empty stderr (4/4 focused),
 original hover checkpoint25f829bf/held checkpointccf1117e and all their artifacts.
 Encoded-frame identity permits reuse of prior manual views,not replacement of
