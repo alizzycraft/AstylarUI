@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-consumer-staged-registration-20261102.log. Its2/2 focused tests
+prove additive inventory conservation and exact historical reversal without
+changing live producer/export selection. No new canonical package or capture.
+The versioned producer copy is an explicit staged source dependency,not scratch.
+
+
 The divider-consumer-review-exact-dependency-loader-20261102.log is now complete,
 exit0,2/2 tests,18647 authenticated dependencies. Retain it and all failed prior
 loader logs;do not overwrite the completed successful record on resumption.

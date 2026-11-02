@@ -1,5 +1,29 @@
 # Material comparison/state coverage inventory
 
+November2 consumer source/proof registration is STAGED and verified2/2,0skip.
+New divider-consumer-registration.mjs follows the existing additive registration
+pattern against exact producer19dea13e. It adds six distinct sources(including
+the immutable producer copy) and four proof declarations. Complete old inventories
+preserve:1143 sources/472 proofs/73 plans become1149/476/73. Every prior source
+and proof expression remains in order;all plan entries remain exact. New proof
+patterns resolve uniquely against actual test sources. No duplicate source paths.
+
+Exact staged reversal recovers the entire prior producer. Historical reads return
+that producer in bytes/string/options forms without mutating raw collection;
+unknown drift rejects. Both owning tests pass in923.5345ms. Command:
+node --test tests/material-parity/divider-consumer-registration.spec.mjs.
+Keep divider-consumer-staged-registration-20261102.log. No live producer,
+runner,launcher,policy,accepted snapshot or selection was changed. This is not
+full live registration or export acceptance. The previously verified consumer
+review cf613222 remains unchanged because its source/test bytes were untouched.
+
+Next stage exact runner/launcher selection and historical restoration through
+this additive boundary,then verify the coherent live batch before publication.
+Preserve original older routes and reject mixed supplements. Do not repeat the
+18647-dependency loader for this isolated registration-preparation/prose change.
+All2311 cases remain partial/current-unverified;original final gates remain.
+
+
 November2 consumer review loader VERIFIED;the preceding in-progress entries are
 historical attempts. Same corrected process exited0:both tests pass,0skip,total
 272894.1559ms. Existing complete loader authenticates18647 dependencies across
