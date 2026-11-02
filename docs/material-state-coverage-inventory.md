@@ -1,5 +1,37 @@
 # Material comparison/state coverage inventory
 
+November2 next inspection question is outside-scalar Divider position/visibility
+consumption,not another owner census or wrapper-flow attribution. Accepted5e770758
+still records all2311 cases partial;the bounded outside-owner input child retains
+four explicit remaining domains. Source/export reconciliation has closed at this
+generation;it is not the next blocker. The shared five-owner/24-case input gap
+is prioritized ahead of recapturing settled Slider or popup visibility evidence.
+
+Focused retained check authenticates original reportab42dbec and all48 paired
+trees,then inspects120 mapped owner pairs/240 position+visibility slots. Across
+all24 cases:page has native static versus omitted candidate position;eyebrow/title
+both have relative;Above/Below wrappers have native static versus candidate
+absolute (already-known authored flow substitution). All120 native visibility
+values are visible while candidate normal/effective snapshot fields are omitted.
+Normal and effective candidate values agree for every selected slot.
+
+Captured helper is from authenticated chunk-JPEJK334 source map47654b64,source
+de0efefd;current whole helper521940b6 is separately authenticated. Their actual
+materialStyleSnapshot functions are identical. Executing both helpers passes8
+controls:omission remains omission,explicit static/visible and absolute/hidden
+remain supplied,and missing owner remains missing. This demonstrates a sparse
+declaration-snapshot boundary,NOT correct effective renderer defaults,an unseen
+visibility defect or a new wrapper-position finding. The current stylesheet
+defaults omit both fields,so assuming computed values from those snapshots alone
+would be invalid. Next trace exact captured/current consumers for omitted page
+position and visibility,retaining geometry/paint applicability as separate work.
+
+Retain `artifacts/material-parity/divider-outside-owner-position-visibility-boundary-20261102.log`,
+raw SHA256 `8036235d47e196f7e0ee6cdd1dca0c8496c36ea0e0e1bdc41a838745e42f838b`,
+boundaryExit0. No capture,renderer/fixture edit,canonical rebuild,normalization,
+new defect classification or case-status promotion occurred. This is bounded
+standalone investigation evidence for the next coherent join,not a final gate.
+
 November 2 Slider-track evidence package is ACCEPTED LOCALLY after corrected
 export, complete conservation, independent cold equality and verified imports.
 Generation `5e770758fa29941badd1003f008c86cca288884c4e62815e3fef9490dc8f3491`,

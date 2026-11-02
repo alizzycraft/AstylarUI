@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-outside-owner-position-visibility-boundary-20261102.log. It binds
+48 original trees,120 owner pairs/240 fields and captured/current serializer
+controls. Its bounded conclusion preserves unknown effective-default consumption;
+do not treat missing declaration snapshot fields as proven rendering failures or
+equivalence. No original evidence is replaced;exact hash is in the coverage ledger.
+
 November2 Slider-track generation5e770758/index2090dfe3 is accepted locally after
 corrected export,80-section/metadata/derived-receipt conservation,independent cold
 comparison(exit0,diskHits0),isolated import and accepted import. Retain
