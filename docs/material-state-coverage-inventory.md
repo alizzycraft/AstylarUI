@@ -1,5 +1,37 @@
 # Material comparison/state coverage inventory
 
+November2 omitted-owner consumer trace answers the next bounded position question.
+`node scripts/check-divider-omitted-owner-consumers.mjs` exits0 with72 position
+controls and10 NullEngine mesh-flag controls. It reauthenticates the prior120-pair
+evidence and all48 original tree receipts,plus captured core mapdba48404 and five
+captured/current source pairs. The reproducible script retains whole-source hashes
+for layout dimensions,element creation,flex classification,stacking and mesh
+construction;no helper/predicate is replaced with a handwritten implementation.
+
+In both captured/current code,omission and explicit static share layout-parent,
+positioned-containing-block,block out-of-flow,flex-flow and stacking-context
+branches. Explicit absolute/fixed/relative,z-index-auto,display-none and missing
+viewport-root controls distinguish those branches. Therefore the omitted page
+position is not an observed alternate-positioning route in these consumers.
+Full used geometry is a separate obligation;do not infer it from branch equality.
+
+Actual captured/current createPlane methods on installed Babylon start isVisible
+true,visibility1 and enabled;explicit flag changes are effective controls. This is
+construction-flag evidence,NOT browser paint,CSS visibility inheritance/support,
+every generated visual owner's state or proof against later clipping/compositing.
+It narrows the omission hypothesis without manufacturing a hidden default or
+claiming a new core defect. Known wrapper static/absolute input differences remain
+separate. Next inspect other missing used-size/default fields against these exact
+owners;do not repeat the settled position routing or owner census unchanged.
+
+Script raw SHA25627d11f185a760becf130af78328cb0b40f15c889cf84e84150844adcb3ff7364;
+retain `artifacts/material-parity/divider-omitted-owner-consumers-20261102.log`,raw
+SHA256acb7eae02c595918e5ca5d9ba473f40f165ad735c6e28b2711a00305c7fbceca,
+and its empty stderr. Source inspection and focused controls only;canonical
+generation5e770758 and all case statuses stay unchanged. This standalone proof
+awaits a later coherent registration/join;no full export is justified for the
+documentation checkpoint. No renderer/fixture change or new browser capture.
+
 November2 next inspection question is outside-scalar Divider position/visibility
 consumption,not another owner census or wrapper-flow attribution. Accepted5e770758
 still records all2311 cases partial;the bounded outside-owner input child retains

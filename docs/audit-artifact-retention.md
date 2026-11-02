@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-omitted-owner-consumers-20261102.log and empty stderr. The checked-in
+source-executed proof binds captured/current position routing and NullEngine
+initial mesh flags to the prior120-owner-pair evidence. Its limits remain explicit:
+not complete geometry,CSS visibility inheritance,browser paint or case closure.
+This standalone checkpoint does not replace canonical5e770758 or raw captures.
+
 Keep divider-outside-owner-position-visibility-boundary-20261102.log. It binds
 48 original trees,120 owner pairs/240 fields and captured/current serializer
 controls. Its bounded conclusion preserves unknown effective-default consumption;
