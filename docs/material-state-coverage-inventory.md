@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+November3 candidate0d7ff3c4 DERIVED CONSERVATION passes. Existing streamed
+comparator authenticates both complete packages and compares14085648 entries
+across the five changed derived sections;only147 values differ. Leaf record:
+trigger-paint-candidate-derived-leaves-20261103.log,SHA256
+45c56607c316f6227a9aed505cbe6fbd746e0e6f09c17de8f2b7709d1ad1031d.
+Exactly98 direct producer receipts change1bce9f85 tocfed52bc. Complete retained
+control rows are applicable because all five first-candidate/accepted section
+digests match;all48 prior row hashes verify and their recomputed successor
+hashes match after the sole currentModuleSha256 substitution. Fresh complete
+motion report hashes to the candidate receipt,and restoring its sole producer
+fingerprint recovers the exact accepted report hash. No pixels,styles,values,
+classifications or other container/leaf shapes change in these sections.
+Receipt conservation:trigger-paint-derived-receipt-conservation-20261103.log,
+SHA256cf58fe3766249ba5dfe9aa8146b216bd76b90dd04bb54222804db017b40d6ed1.
+Together with prior section/metadata/parent checks,this explains all11 changed
+sections. Independent cold remains live/pending;isolated and accepted imports
+and publication are not complete. Do not rerun this conservation for prose or
+promote before the remaining gates. All2311 partial/current-unverified statuses
+and original audit/final acceptance requirements preserve.
+
 November3 corrected --trigger-paint export is terminal0,candidate0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445,
 98616294 compressed/2370986030 decoded bytes,decoded SHA256
 f0b95d76dbca0b5d1b7e0dee2dcb5ee5c99d649453e186a73a9bf31899c16998.

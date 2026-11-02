@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep trigger-paint-candidate-derived-leaves20261103 and derived-receipt-
+conservation stdout/empty stderr. The latter authenticates/reuses complete48
+control rows from divider-consumer-derived-receipt-conservation20261102 only
+after all five accepted section digests prove applicability. No duplicate
+candidate decode was needed for receipt recomputation. Cold/import/promotion
+remain pending;neither accepted backup nor prior proof rows may be released.
+
 Keep successful trigger-paint-direct-restoration-corrected-export20261103
 stdout/stderr,combined candidate-sections-metadata and metadata-conservation
 records. Keep the accepted695dea7b backup and pointer until derived conservation,
