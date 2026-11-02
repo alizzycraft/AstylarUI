@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep divider-consumer-input-join-final-20261102.log and earlier local
+divider-consumer-input-join[-raw-receipts]-20261102 logs. Final integration
+authenticates66 raw receipts and exact parent restoration. No physical large
+proposal/canonical snapshot was created;the virtual successor is not accepted
+coverage. Preserve pinned raw consumer/topology evidence and all failures.
+
+
 Keep divider-outside-owner-transform-routing-20261102.log. It preserves120 raw
 native used origins/candidate omissions and14 captured/current parser controls.
 Do not replace original trees or reinterpret null parser routing as origin,

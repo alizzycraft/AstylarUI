@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+November2 standalone consumer batch now has a bounded reversible case-ledger
+join,not more isolated property capture. New join-material-divider-consumer-
+inputs.mjs consumes the two latest pinned consumer/topology logs and exact
+accepted5e770758 case-array digest24210a77ef405c0533ee5d8e407b69160cfb33b12ec7e5d4480084dd6210c1dc.
+It attaches retainedOutsideOwnerConsumerInputs to exactly24 Divider records,
+binding five exact transform owners and one natural-line-box input-context row
+per case. It retains source-method scope,raw origins,omissions and partial flags.
+
+Focused integration1/1 passes,0skip. Removing only those children restores all
+2311 original records exactly,including every parent gap/status;non-Divider
+records preserve identity. Duplicate joining and three forged evidence/producer
+controls reject. All66 distinct emitted receipts authenticate raw bytes;source
+method comparisons separately retain their declared LF-normalized boundary and
+captured modules authenticate inside the pinned source map. No normalized hash
+is mislabeled as a raw-file receipt. The join and owning test are receipt-bound.
+
+Virtual successor case-array digest:
+a71425dcd0d8f8c72b5fef5efe9bcc3a4363a3977532b4746dcc362849e6f769.
+This is NOT an existing review-envelope digest or selected/exported canonical
+generation. No physical200MB proposal or new snapshot is saved. Next integrate
+the coherent source/proof additions and reader selection through the existing
+registration path,then perform the justified publication milestone. Do not rerun
+the now-settled input checks merely to generate another log. Full loader/registry
+and canonical conservation/cold/import gates remain outstanding for this batch;
+all2311 cases stay partial/current-unverified and original final gates remain.
+
+Command:node --test tests/material-parity/divider-consumer-input-join.spec.mjs.
+Final log:divider-consumer-input-join-final-20261102.log,SHA256
+3c23dc15ee2861683eb54c41134eb364037fbd60ede6b9fe1f4ed28946649d2c.
+Earlier two successful local logs retain intermediate receipt checks;final log
+adds complete emitted raw-receipt verification. No renderer/fixture changes.
+
+
 November2 own-transform routing extends exact-owner input accounting without
 normalizing origins. All120 outside-scalar owners retain native transform:none
 and omitted candidate normal/effective transform. Candidate transformOrigin is
