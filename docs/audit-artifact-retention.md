@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep snackbar-original-auto-dismiss-paint20261102 empty stdout from the rejected
+accepted-dependency assumption,corrected checkpoint-bound20261102 record and
+original-expired-paint-focused20261102 passing test stdout/empty stderr. Keep
+both original static/expired checkpoints and all12 artifacts;no images were
+generated. New receipt inspection does not make them prior accepted dependencies.
+
 Keep divider-clipping-paint-trace-availability20261102.log with its two pinned
 trace/producer receipts. It records missing observations,not successful clip
 absence or a new capture. Existing texture/material/crop evidence remains required;

@@ -1,5 +1,39 @@
 # Material comparison/state coverage inventory
 
+November2 switched from already-investigated Divider shaping/bidi fields to
+pending localPaint of interaction:snack-bar@light/desktop-dpr1/auto-dismiss.
+Inspected both ORIGINAL full frames directly,then compared each renderer's
+expired frame against its own static light/desktop closed frame. All changed
+pixels lie inside the focused trigger:reference5404,candidate5388;zero outside.
+Both original trees have no snackbar surface;both overlay geometry entries are
+missing and candidate open:false. This is no-residual-overlay endpoint evidence,
+NOT a witness that it previously opened or that the timer caused disappearance.
+The existing original-comparator test still demonstrates that timing blind spot.
+
+Pinned original reportab42dbec;newly inspected static checkpoint275387fe and
+auto-dismiss checkpointf3905aa9 match its complete result objects exactly;all12
+checkpoint artifacts rehash. First check incorrectly required these previously
+uninspected checkpoints to be in accepted695dea7b dependency set;it rejected the
+static path before comparing pixels. Keep its empty original-auto-dismiss-paint
+20261102 stdout. Corrected checkpoint-bound record explicitly distinguishes new
+receipts from prior accepted-review dependencies;no existing validator relaxed.
+Log snackbar-original-auto-dismiss-paint-checkpoint-bound-20261102 SHA256
+28f73f1bd37ce5d4a7ef7774ba315207f61ebd379ea08fb5e6e3a5c8bf5eb9f8.
+
+Nearest existing snackbar-position-observation.spec.mjs now asserts exact
+per-renderer outside-trigger conservation and rejects a forged bottom-screen
+pixel on each side. Focused original comparator+new paint command passes2/2,
+zero skip/failure,4214.5852ms;not a full owning-suite or final gate claim.
+Command:node --max-old-space-size=4096 --test --test-name-pattern=
+'original snackbar (auto-dismiss comparator|expired frames)'
+tests/material-parity/snackbar-position-observation.spec.mjs.
+Focused log SHA256644a69b8c63f19e678a83e2de1fb9029124417ee5d472de5dda19ea72ae69c9c.
+Registered suite normalized source changes0fb3a5d5 to9cdab577;reconcile that
+transition before next coherent export. Standalone proof only,not yet joined
+into canonical695dea7b or a case-status promotion. Preserve separate single-open
+supplement applicability,unequal trigger/card inputs,current-code and lifetime
+gaps. No new capture,fixture/renderer edit or cross-renderer pixel acceptance.
+
 November2 paint-trace availability resolves the next clipping-evidence question,
 not a clipping cause. Reauthenticated configured texture reporte7843435 and
 material-stateb2938726 plus their actual producers. Texture trace has8 Above/

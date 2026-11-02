@@ -72,6 +72,60 @@ test('original snackbar auto-dismiss comparator does not witness the timed trans
   // prior visibility, timer origin, elapsed runtime, or the cause of dismissal.
 });
 
+test('original snackbar expired frames leave no residual paint outside the focused trigger', t => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const root = 'artifacts/material-parity/current-full-20261005/';
+  const reportBytes = readFileSync(root + 'latest-report.json');
+  assert.equal(hash(reportBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes);
+  const initial = report.results.find(r => r.family === 'snack-bar' && r.profile === 'light' && r.viewport.id === 'desktop');
+  const expired = report.interactions.find(r => r.family === 'snack-bar' && r.profile === 'light' && r.viewport.id === 'desktop-dpr1' && r.state === 'auto-dismiss');
+  const checkpoint = (kind, result, expected) => {
+    assert.ok(result);
+    const key = JSON.stringify({ kind, family: result.family, profile: result.profile, viewport: result.viewport, state: result.state ?? null });
+    const file = root + 'checkpoint/' + hash(key) + '.json', bytes = readFileSync(file);
+    assert.equal(hash(bytes), expected);
+    const value = JSON.parse(bytes); assert.equal(value.key, key);
+    assert.deepEqual(value.result, result); assert.equal(hash(JSON.stringify(value.result)), value.sha256);
+    for (const row of value.files) assert.equal(hash(readFileSync(root + row.file)), row.sha256);
+    return { file, sha256: expected, value };
+  };
+  const before = checkpoint('static', initial, '275387fe064602b9bd83be585e9902d24f74709b1aa379c92c1dd0e86b6d5b38');
+  const after = checkpoint('interaction', expired, 'f3905aa9641a912fdc90788f00501a548e66157280fdd42a4152c2a67c0c333d');
+  assert.equal(expired.astylarState.open, false);
+  const overlays = expired.geometry.elements.filter(r => ['snack-bar-overlay', 'snack-bar-surface'].includes(r.id));
+  assert.equal(overlays.length, 2); assert.ok(overlays.every(r => r.missing));
+  assert.deepEqual(expired.focus, { reference: 'snack-bar-primary', astylar: 'snack-bar-primary', matches: true });
+  const observations = [];
+  for (const side of ['reference', 'astylar']) {
+    const image = record => {
+      const receipt = record.value.files.find(r => r.file.endsWith('/' + side + '.png')); assert.ok(receipt);
+      return { receipt: { file: root + receipt.file, sha256: receipt.sha256 }, png: PNG.sync.read(readFileSync(root + receipt.file)) };
+    };
+    const a = image(before), b = image(after);
+    for (const png of [a.png, b.png]) { assert.equal(png.width, 1440); assert.equal(png.height, 1000); }
+    const trigger = expired.geometry.elements.find(r => r.id === 'snack-bar-primary'); assert.ok(trigger && !trigger.missing);
+    const box = side === 'reference' ? trigger.expected : trigger.actual;
+    const outsideChanges = data => {
+      let changed = 0, outside = 0;
+      for (let pixel = 0; pixel < 1440 * 1000; pixel++) {
+        if (a.png.data.subarray(pixel * 4, pixel * 4 + 4).equals(data.subarray(pixel * 4, pixel * 4 + 4))) continue;
+        changed++;
+        const x = pixel % 1440, y = Math.floor(pixel / 1440);
+        if (x < Math.floor(box.left) || x >= Math.ceil(box.right) || y < Math.floor(box.top) || y >= Math.ceil(box.bottom)) outside++;
+      }
+      return { changed, outside };
+    };
+    const actual = outsideChanges(b.png.data);
+    assert.ok(actual.changed > 0); assert.equal(actual.outside, 0);
+    const forged = Buffer.from(b.png.data); forged[(980 * 1440 + 720) * 4] ^= 1;
+    assert.equal(outsideChanges(forged).outside, 1, 'A residual bottom-screen pixel must be detected');
+    observations.push({ side, initial: a.receipt, expired: b.receipt, changedPixels: actual.changed, outsideTrigger: actual.outside, rejectedPixelControl: 1 });
+  }
+  t.diagnostic(JSON.stringify({ checkpoints: [before, after].map(({ file, sha256 }) => ({ file, sha256 })), observations,
+    boundary: 'Per-renderer original closed-versus-expired full-frame pixels only. Newly inspected checkpoint receipts match the pinned original report;not prior accepted-review dependencies. No first-open/timing/cause,current rendering,cross-renderer equal inputs or whole-case acceptance follows.' }));
+});
+
 test('supplementary single-open snackbar is present before expiry and absent afterwards', () => {
   const file = 'artifacts/material-parity/snackbar-single-open-20261027/latest-report.json';
   const bytes = readFileSync(file);
