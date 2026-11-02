@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+November2 own-container routing accounts for four further exact input fields
+without another capture. All120 outside-scalar owners retain display:block in
+native and both candidate normal/effective snapshots. Native flexDirection:row
+and flexWrap:nowrap match candidate tokens;native gridTemplateColumns/Rows:none
+are omitted in the candidate. These480 slots are recorded input/routing evidence,
+not480 completed inspections or a global none/omission normalization.
+
+Existing consumer script executes actual captured/current FlexService.
+isFlexContainer and GridService.isGridContainer. Thirty-two controls cover
+omission,block,inline,flex,inline-flex,grid,inline-grid and uppercase FLEX.
+Non-default column/wrap/nonempty-track controls still reject block;positive
+display controls select the owning flex/grid predicate. Thus those four fields
+do not select a flex/grid own-container path for these exact block owners.
+This does not exclude item roles,block content alignment,gaps,other consumers,
+anonymous formatting or native used-layout differences. No blanket property
+equivalence or complete owner/case claim follows. Existing general block-
+alignment findings and authored absolute-flow substitutions stay separate.
+
+Command:node scripts/check-divider-omitted-owner-consumers.mjs,exit0,including
+all prior controls. Log:divider-block-container-routing-20261102.log,SHA256
+3d5d40fe7a4f8f7fbc4dab9d0c6d0c21e8821d19eef5d6c1e431814eedec46ac.
+Captured/current source receipts are included. Canonical5e770758 remains the
+accepted export;standalone increments await a coherent join. All2311 cases stay
+partial/current-unverified. No renderer/fixture change,new defect or full export.
+
+
 November2 percentage-height consumer routing:existing consumer script executes
 the actual captured/current definiteContainingBlockContentHeight and
 parseAutoBlockConstraint methods. Fourteen controls distinguish root-body,

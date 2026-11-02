@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-block-container-routing-20261102.log. It binds120 block owners,
+480 exact container-field inputs and32 captured/current dispatch controls.
+Earlier source revisions/logs remain historical evidence;do not replace them
+or treat own-container dispatch as complete formatting/item-role acceptance.
+
+
 Keep divider-percentage-height-routing-20261102.log. It records14 bounded
 captured/current percentage-reference routing controls,not actual page reflow.
 Retain the existing October24 frame-size capture/verification and earlier source

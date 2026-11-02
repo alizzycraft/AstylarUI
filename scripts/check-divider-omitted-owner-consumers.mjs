@@ -76,6 +76,7 @@ let constraintOwnerPairs = 0, omittedConstraintSlots = 0;
 let objectFitOwnerExclusions = 0, normalContentOwners = 0, svgContextOnlySlots = 0;
 let maskedHeadingOwners = 0;
 let omittedZeroMinHeightOwners = 0, matchingPercentMinHeightOwners = 0;
+let blockContainerOwners = 0, containerOnlyInputSlots = 0;
 for (let i = 0; i < previous.treeReceipts.length; i += 2) {
   const a = JSON.parse(fs.readFileSync(previous.treeReceipts[i].file));
   const b = JSON.parse(fs.readFileSync(previous.treeReceipts[i + 1].file));
@@ -98,6 +99,16 @@ for (let i = 0; i < previous.treeReceipts.length; i += 2) {
       maskedHeadingOwners++;
     }
     const candidates = b.nodes.filter(n => n.authored?.id === id); assert.equal(candidates.length, 1);
+    assert.equal(a.styles[native.style].display, 'block');
+    assert.equal(candidates[0].resolvedStyle.display, 'block');
+    assert.equal(candidates[0].normalResolvedStyle.display, 'block');
+    for (const [field, expected] of [['flexDirection', 'row'], ['flexWrap', 'nowrap'],
+      ['gridTemplateColumns', 'none'], ['gridTemplateRows', 'none']]) {
+      assert.equal(a.styles[native.style][field], expected);
+      assert.equal(candidates[0].resolvedStyle[field], field.startsWith('grid') ? undefined : expected);
+      containerOnlyInputSlots++;
+    }
+    blockContainerOwners++;
     if (id === 'page') {
       assert.equal(a.styles[native.style].minHeight, '100%');
       assert.equal(candidates[0].resolvedStyle.minHeight, '100%');
@@ -134,6 +145,7 @@ for (let i = 0; i < previous.treeReceipts.length; i += 2) {
 assert.equal(constraintOwnerPairs, 120); assert.equal(omittedConstraintSlots, 360);
 assert.equal(maskedHeadingOwners, 48);
 assert.equal(omittedZeroMinHeightOwners, 96); assert.equal(matchingPercentMinHeightOwners, 24);
+assert.equal(blockContainerOwners, 120); assert.equal(containerOnlyInputSlots, 480);
 assert.ok(fs.readFileSync('examples/material-showcase/src/app/reference.component.ts', 'utf8')
   .includes('.benchmark>.eyebrow,.benchmark>h1{opacity:0}'));
 assert.equal(objectFitOwnerExclusions, 120); assert.equal(normalContentOwners, 120); assert.equal(svgContextOnlySlots, 360);
@@ -156,6 +168,19 @@ for (const [version, source] of sources('app/services/dom/elements/element-dimen
   }
 }
 let diagnosticControls = 0;
+let containerDispatchControls = 0;
+for (const [file, name, active] of [
+  ['app/services/dom/elements/flex.service.ts', 'isFlexContainer', ['flex', 'inline-flex']],
+  ['app/services/dom/elements/grid.service.ts', 'isGridContainer', ['grid', 'inline-grid']],
+]) for (const source of sources(file)) {
+  const probe = method(source, name);
+  for (const display of [undefined, 'block', 'inline', 'flex', 'inline-flex', 'grid', 'inline-grid', 'FLEX']) {
+    const style = { display, flexDirection: 'column', flexWrap: 'wrap', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '20px' };
+    const render = { actions: { style: { findStyleForElement: () => style } } };
+    assert.equal(probe[name](render, {}, [], { context: { elementStyles: new Map() } }), active.includes(display?.toLowerCase()));
+    containerDispatchControls++;
+  }
+}
 const percentageHeightRouting = [];
 for (const [version, source] of sources('app/services/dom/elements/element-creation.service.ts').entries()) {
   const probe = method(source, 'definiteContainingBlockContentHeight');
@@ -295,6 +320,9 @@ console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-omitted-ow
   sourceMap: { file: mapFile, sha256: hash(mapBytes) }, sources: receipts,
   positionControls, meshControls, constraintOwnerPairs, omittedConstraintSlots, constraintControls, explicitNoneObservations,
   diagnosticControls, historicalHeightEvidence,
+  containerInputRouting: { blockContainerOwners, containerOnlyInputSlots, containerDispatchControls,
+    conclusion: 'All120 exact owners have block display on both sides. Captured/current flex/grid dispatch predicates reject block even with non-default flex/track requests; positive flex/grid display controls select their own path.',
+    boundary: 'Own-container dispatch and four recorded fields only; not flex/grid item roles,block content alignment,gaps,all downstream consumers,native used formatting,anonymous layout or whole-case equivalence.' },
   percentageHeightRouting,
   minimumHeightInputs: { omittedZeroMinHeightOwners, matchingPercentMinHeightOwners,
     conclusion: '96 non-page owners omit candidate minHeight against native 0px; actual captured/current height-constraint controls preserve a positive height for both omission and explicit zero. All24 pages explicitly retain matching 100% tokens.',
