@@ -1,5 +1,20 @@
 # Audit artifact retention
 
+The divider-consumer-review-exact-dependency-loader-20261102.log is now complete,
+exit0,2/2 tests,18647 authenticated dependencies. Retain it and all failed prior
+loader logs;do not overwrite the completed successful record on resumption.
+Keep the exact versioned producer copy and accepted snapshot used by the reader.
+No new canonical package or physical large proposal was generated.
+
+
+Keep all divider-consumer-review-*-loader-20261102 logs,including failures and
+the currently running exact-dependency attempt. Preserve the immutable producer
+copy divider-consumer-check-divider-owner-coverage-20261102.mjs (raw SHA256
+c3da659604419f1436ae8052059caf4469e11a1915978a79620987c490396ee5).
+It separates a new source generation from accepted historical receipts;do not
+rewrite old logs or remove failed-loader evidence. No canonical snapshot added.
+
+
 Keep divider-consumer-input-join-final-20261102.log and earlier local
 divider-consumer-input-join[-raw-receipts]-20261102 logs. Final integration
 authenticates66 raw receipts and exact parent restoration. No physical large

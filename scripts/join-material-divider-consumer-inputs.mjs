@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { createCaptureAvailabilityReviewReader } from './join-material-capture-availability.mjs';
 
 // A bounded successor over the accepted case ledger, not a new audit collector.
 const hash = b => createHash('sha256').update(b).digest('hex');
@@ -11,6 +14,60 @@ const records = [
   [base + 'divider-outside-owner-transform-routing-20261102.log', 'beae96174a40a72f59e4c219b24bf6a8eb18b0fcd8db5fc021b4dc75ff6fedde'],
   [base + 'divider-line-box-context-reuse-corrected-20261102.log', '449c148b3ea8f5e43b61638fa1d6e822f2709a08f87cce05ac0b5fe9ea3ceabd'],
 ];
+export function createDividerConsumerReviewReader({ root = process.cwd(), read = fs.readFileSync, reviewSha256 } = {}) {
+  const indexFile = path.resolve(root, 'artifacts/material-parity/working-audit/5e770758fa29941badd1003f008c86cca288884c4e62815e3fef9490dc8f3491/index.json');
+  const indexBytes = read(indexFile);
+  assert.equal(hash(indexBytes), '2090dfe307032486226a09d1c6da8c32084e27c40e2ef0e49ae5ded76c4a6ec3');
+  const inspection = JSON.parse(indexBytes).metadata.coverage.inspectionEvidence;
+  const parent = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',
+    ...(inspection.schemaVersion === 2 ? { inspectionSchemaVersion: 2 } : {}),
+    scope: inspection.scope, groups: inspection.cases };
+  assert.equal(hash(JSON.stringify(parent)), '2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1');
+  const joined = joinDividerConsumerInputs(parent.groups, name => read(path.resolve(root, name)));
+  const review = { ...parent, groups: joined.cases }, sha256 = hash(JSON.stringify(review));
+  if (reviewSha256 !== undefined) assert.equal(reviewSha256, sha256, 'Only exact successor digest selects this reader');
+  const file = path.resolve(root, `artifacts/material-parity/working-audit/proposals/${sha256}.json`);
+  const bytes = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256, review }));
+  const ownerSource = path.resolve(root, 'scripts/check-divider-owner-coverage.mjs');
+  const oldOwnerSource = execFileSync('git', ['show', '5ecb14b1:scripts/check-divider-owner-coverage.mjs'], { cwd: root });
+  assert.equal(hash(oldOwnerSource), '0d4ed653d46fe241ef20a0009bcc84b821464284d1cef870da363dc30bcf8f14');
+  const priorRead = (name, options) => {
+    if (path.resolve(root, name) === ownerSource) {
+      assert.equal(hash(read(ownerSource)), 'c3da659604419f1436ae8052059caf4469e11a1915978a79620987c490396ee5');
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? oldOwnerSource.toString(encoding) : Buffer.from(oldOwnerSource);
+    }
+    return read(path.resolve(root, name), options);
+  };
+  const prior = createCaptureAvailabilityReviewReader({ root, read: priorRead });
+  assert.equal(prior.sha256, inspection.reviewSha256);
+  const expected = new Map(inspection.evidenceFingerprints.map(r => [path.resolve(root, r.file), r.sha256]));
+  for (const row of joined.cases.filter(r => r.family === 'divider'))
+    for (const r of row.obligations.inputStyleStructure[child].evidence) {
+      const name = path.resolve(root, r.file);
+      if (expected.has(name)) assert.equal(expected.get(name), r.sha256, 'Conflicting dependency generation');
+      expected.set(name, r.sha256);
+    }
+  return { file, sha256, changed: joined.changed, read(name, options) {
+    const absolute = path.resolve(root, name);
+    if (absolute !== file) {
+      const sha = expected.get(absolute), current = sha ? read(absolute) : undefined;
+      let selected;
+      if (sha && hash(current) === sha) selected = current;
+      else {
+        selected = prior.read(absolute);
+        if (sha) assert.equal(hash(selected), sha, `Unreconciled dependency generation: ${name}`);
+      }
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? selected.toString(encoding) : Buffer.from(selected);
+    }
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  }, sourceApplicability: { mode: 'pending-divider-consumer-case-join',
+    predecessorReview: inspection.reviewSha256, acceptedIndexSha256: hash(indexBytes),
+    predecessorApplicability: prior.sourceApplicability,
+    boundary: 'Exact accepted parent case ledger plus receipt-bound consumer children. Existing historical reader only;not source-registry/export selection,current rendering or case closure.' } };
+}
 export function restoreDividerConsumerInputs(cases) {
   return cases.map(row => {
     if (!row.obligations.inputStyleStructure[child]) return row;
@@ -31,7 +88,9 @@ export function joinDividerConsumerInputs(cases, read = fs.readFileSync) {
     return JSON.parse(text.slice(text.indexOf('{')));
   };
   const [consumer, topology] = records.map(load);
-  for (const r of [consumer.producer, consumer.previous, consumer.sourceMap, topology.producer, topology.report, topology.collector]) bind(r);
+  for (const r of [consumer.producer, consumer.previous, consumer.sourceMap, topology.report, topology.collector]) bind(r);
+  assert.equal(hash(read(topology.producer.file)), topology.producer.sha256);
+  bind({ file: base + 'divider-consumer-check-divider-owner-coverage-20261102.mjs', sha256: topology.producer.sha256 });
   const sourceMap = JSON.parse(read(consumer.sourceMap.file));
   for (const r of consumer.sources) {
     const bytes = read(r.current.file);

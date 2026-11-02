@@ -1,5 +1,58 @@
 # Material comparison/state coverage inventory
 
+November2 consumer review loader VERIFIED;the preceding in-progress entries are
+historical attempts. Same corrected process exited0:both tests pass,0skip,total
+272894.1559ms. Existing complete loader authenticates18647 dependencies across
+all2311 cases. InspectionComplete:false/currentRenderingAccepted:false and every
+partial/unverified status remain. Exact case-array restoration and four rejecting
+controls still pass. No recapture,physical large proposal or acceptance change.
+
+Verified pending review:
+cf6132228dae0db2f2d07acf7fca15ba1d789fce8ea8dfc4f76751d3c2632eea.
+Verified successor case-array digest:
+d3f4e2dffd31fb0288c7c249223f92cc8b07373a7caf7a1191742c20add23185.
+The expected-receipt route resolves historical/current sources exactly;new
+producer copy keeps c3da6596 distinct from accepted0d4ed653. Complete prior reader
+still verifies its exact original review. Unknown generation/receipt mismatches
+reject;current byte selection is permitted only on an exact expected hash match.
+
+Command:node --max-old-space-size=8192 --test
+tests/material-parity/divider-consumer-input-join.spec.mjs.
+Log:divider-consumer-review-exact-dependency-loader-20261102.log,SHA256
+1eb81eb9afcd584bcf57acae3678770fa63aa085b0f0c73e4b24e07b4c6cca5f.
+Reader source16d15761d27551a4f37dc863ea40dbf0dbc07b69ff503b69c59b7635fd4375d0;
+owning test0852d050f20f09cfe1e62a4a94177025aeeb06f7d69625de3e27bbfc9b15862b.
+Next register this coherent source/proof batch and exact reader selection,with
+guarded predecessor restoration,then the existing publication milestone. This
+loader pass is not source-registry/export registration or canonical promotion.
+Accepted5e770758 remains unchanged. Reuse this validation for unchanged inputs;
+do not repeat the failed generation-routing approaches or full loader for prose.
+
+
+November2 consumer reader integration IN PROGRESS,not accepted. Complete loader
+exposed receipt-generation issues beyond the earlier standalone conservation
+test. First:accepted and new evidence name different revisions of
+check-divider-owner-coverage.mjs. New c3da6596 producer bytes are now retained
+as divider-consumer-check-divider-owner-coverage-20261102.mjs;accepted0d4ed653
+bytes recover exactly from Git5ecb14b1 under a guarded historical read. Second:
+using only the latest historical helper misses older configured-activation
+restorations;delegate through the complete existing predecessor reader. Third:
+that reader can restore too far for newly attached current collector receipts.
+The pending reader now selects current bytes ONLY when their hash equals the
+exact expected dependency receipt;otherwise guarded predecessor bytes must
+match that same receipt. No generations are normalized or validators bypassed.
+
+Retain failed divider-consumer-review-loader-20261102,
+divider-consumer-review-versioned-source-loader-20261102 and
+divider-consumer-review-complete-prior-loader-20261102 logs. Last run1/2 passes,
+fails on input-equivalence-audit source generation after1031189.5458ms;it is NOT
+a passing integration. Corrected exact-dependency loader is running in
+divider-consumer-review-exact-dependency-loader-20261102.log. Resume that existing
+process handle rather than restart it;no final verdict yet. Current code edits
+remain uncommitted pending verification. Accepted5e770758 and all partial/current-
+unverified statuses remain unchanged. Registration/export selection still pending.
+
+
 November2 standalone consumer batch now has a bounded reversible case-ledger
 join,not more isolated property capture. New join-material-divider-consumer-
 inputs.mjs consumes the two latest pinned consumer/topology logs and exact

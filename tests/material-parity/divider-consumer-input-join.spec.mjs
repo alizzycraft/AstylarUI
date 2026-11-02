@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
-import { joinDividerConsumerInputs, restoreDividerConsumerInputs, dividerConsumerPredecessor } from '../../scripts/join-material-divider-consumer-inputs.mjs';
+import { joinDividerConsumerInputs, restoreDividerConsumerInputs, dividerConsumerPredecessor, createDividerConsumerReviewReader } from '../../scripts/join-material-divider-consumer-inputs.mjs';
+import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 
 test('Divider consumer batch joins exact accepted parents and preserves every gap and status', () => {
   const hash = b => createHash('sha256').update(b).digest('hex');
@@ -37,4 +38,20 @@ test('Divider consumer batch joins exact accepted parents and preserves every ga
   console.log(JSON.stringify({ predecessor: dividerConsumerPredecessor, successor: joined.sha256,
     cases: parents.length, changed: joined.changed, emittedRawReceipts: emittedReceipts.size, restoredExactly: true, rejectedControls: 4,
     canonicalPublished: false, inspectionPromoted: false, currentRenderingAccepted: false }));
+});
+
+test('Divider consumer review passes the existing complete receipt loader without promoting cases', () => {
+  const reader = createDividerConsumerReviewReader();
+  const envelope = JSON.parse(reader.read(reader.file));
+  assert.equal(envelope.sha256, reader.sha256);
+  console.log(JSON.stringify({ phase: 'consumer-review-constructed', review: reader.sha256, cases: envelope.review.groups.length }));
+  const loaded = loadCaseObligationReview(
+    `artifacts/material-parity/working-audit/proposals/${reader.sha256}.json`, reader.sha256,
+    envelope.review.groups.map(r => r.case), { root: process.cwd(), read: reader.read });
+  assert.equal(loaded.cases.length, 2311); assert.equal(loaded.inspectionComplete, false);
+  assert.equal(loaded.currentRenderingAccepted, false);
+  assert.ok(loaded.cases.every(r => r.inspection === 'partial' && r.currentRendering === 'unverified'));
+  console.log(JSON.stringify({ phase: 'consumer-review-validated', review: reader.sha256,
+    dependencies: loaded.evidenceFingerprints.length, inspectionComplete: loaded.inspectionComplete,
+    currentRenderingAccepted: loaded.currentRenderingAccepted }));
 });
