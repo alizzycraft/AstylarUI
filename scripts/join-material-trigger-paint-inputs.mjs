@@ -1,6 +1,70 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { createDividerConsumerReviewReader } from './join-material-divider-consumer-inputs.mjs';
+
+const sourceTransitions = [
+  ['scripts/check-divider-omitted-owner-consumers.mjs', 'b08c882e548ad27d76e39379ed64a15096352889d1389620a30cd818b6b9a277', 'cf989605fc7c727111431c0b2deb1dc3e733b39c07a4751aaf19c798625c2bcd'],
+  ['tests/material-parity/snackbar-position-observation.spec.mjs', 'a8bf420d925771d21804832fbdee3bd8cf83150fc6981828bb455aa32ffda405', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
+  ['tests/material-parity/input-equivalence-policy.mjs', '43e758150e13d5da4876127b7ca6755c0c66957b092499587498c66bef1a4d52', '8f1acb6af64b5cfdcddba911a4b3ddf61e241edfea74eec241d2276617fe1ea3'],
+  ['tests/material-parity/input-equivalence-audit.mjs', 'e96a5675f424c340b5ce79fbccce3a53caf3b19ac9410cddafbd6a423f5cc64b', '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54'],
+];
+
+export function createTriggerPaintHistoricalRead({ root = process.cwd(), read = fs.readFileSync } = {}) {
+  const transitions = new Map(sourceTransitions.map(row => [path.resolve(root, row[0]), row]));
+  const cache = new Map();
+  return (name, options) => {
+    const absolute = path.resolve(root, name), transition = transitions.get(absolute);
+    if (!transition) return read(absolute, options);
+    const current = read(absolute), normalized = hash(current.toString().replaceAll('\r\n', '\n'));
+    assert.ok([transition[1], transition[2]].includes(normalized), `Unknown trigger-paint source generation: ${transition[0]}`);
+    if (!cache.has(absolute)) {
+      const prior = execFileSync('git', ['show', `c8095ca7:${transition[0]}`], { cwd: root, maxBuffer: 8 * 1024 * 1024 });
+      assert.equal(hash(prior), transition[2], 'Exact accepted Git predecessor required'); cache.set(absolute, prior);
+    }
+    const bytes = cache.get(absolute), encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  };
+}
+
+export function createTriggerPaintReviewReader({ root = process.cwd(), read = fs.readFileSync, reviewSha256 } = {}) {
+  const historicalRead = createTriggerPaintHistoricalRead({ root, read });
+  const indexFile = path.resolve(root, 'artifacts/material-parity/working-audit/695dea7b4cf15915138ac671c75edf2655587db4719c3be9fe7724b402ed6249/index.json');
+  const indexBytes = read(indexFile);
+  assert.equal(hash(indexBytes), '23dc19f652886ea2c02b2a3e8aedb6074beb2046837223fbd222f36cbb3ea045');
+  const inspection = JSON.parse(indexBytes).metadata.coverage.inspectionEvidence;
+  const parent = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',
+    ...(inspection.schemaVersion === 2 ? { inspectionSchemaVersion: 2 } : {}), scope: inspection.scope, groups: inspection.cases };
+  assert.equal(hash(JSON.stringify(parent)), 'b49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21');
+  const joined = joinRetainedTriggerPaintInputs(parent.groups, name => read(path.resolve(root, name)));
+  const prior = createDividerConsumerReviewReader({ root, read: historicalRead, reviewSha256: inspection.reviewSha256 });
+  const review = { ...parent, groups: joined.cases }, sha256 = hash(JSON.stringify(review));
+  if (reviewSha256 !== undefined) assert.equal(reviewSha256, sha256, 'Exact trigger-paint successor required');
+  const file = path.resolve(root, `artifacts/material-parity/working-audit/proposals/${sha256}.json`);
+  const bytes = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256, review }));
+  const expected = new Map(inspection.evidenceFingerprints.map(r => [path.resolve(root, r.file), r.sha256]));
+  for (const row of joined.cases) for (const child of [row.obligations.inputStyleStructure[clipKey], row.obligations.localPaint[paintKey]].filter(Boolean))
+    for (const receipt of child.evidence) {
+      const absolute = path.resolve(root, receipt.file);
+      if (expected.has(absolute)) assert.equal(expected.get(absolute), receipt.sha256, 'Never replace a historical dependency');
+      expected.set(absolute, receipt.sha256);
+    }
+  return { file, sha256, changed: joined.changed, read(name, options) {
+    const absolute = path.resolve(root, name), encoding = typeof options === 'string' ? options : options?.encoding;
+    let selected;
+    if (absolute === file) selected = bytes;
+    else {
+      const sha = expected.get(absolute), current = sha ? read(absolute) : undefined;
+      selected = sha && hash(current) === sha ? current : prior.read(absolute);
+      if (sha) assert.equal(hash(selected), sha, `Unreconciled trigger-paint dependency: ${name}`);
+    }
+    return encoding ? selected.toString(encoding) : Buffer.from(selected);
+  }, sourceApplicability: { mode: 'pending-trigger-paint-case-join', predecessorReview: inspection.reviewSha256,
+    acceptedIndexSha256: hash(indexBytes), predecessorApplicability: prior.sourceApplicability,
+    boundary: 'Exact historical parent plus bounded evidence children;not current source equivalence,canonical publication or inspection closure.' } };
+}
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 export const triggerPaintPredecessor = '38aca39a69052334314e3584d33682195702b9690b024c5150fbd22c338e8ee1';

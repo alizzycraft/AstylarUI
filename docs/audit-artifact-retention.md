@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Keep trigger-paint-historical-reader-20261102 stdout/empty stderr,passing3/3
+including full18669-dependency validation. Retain accepted695dea7b index and
+c8095ca7 Git source predecessors;the virtual successor reader depends on both.
+No physical proposal copy,new browser run or canonical generation was created.
+
 Keep trigger-paint-parent-conservation-20261102 and corrected parent-bound-batch
 stdout/empty stderr;the latter passes6/6 and binds the explicit focus checkpoint.
 Keep trigger-paint-clipping-producer-20261102.mjs byte-for-byte snapshot,b08c882e,

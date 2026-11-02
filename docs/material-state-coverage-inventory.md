@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+November2 trigger-paint HISTORICAL READER integration passes3/3,0skip/failure,
+433030.5091ms. Exact c8095ca7 predecessors for four changed registered paths are
+whole-source hash guarded;four unknown-generation controls reject. The existing
+complete receipt loader validates all18669 dependencies and2311 cases for review
+519ba849ef8e693ca78136df2fcee066be579e1f03d56670c5e6c7bbaa8221e3.
+Accepted parent restoration remains exact. Current successor case-array hash is
+8d9b950e63ce973c9afbfe438cdc88d66f267c0ad31f2510587a67973afa45db;
+the earlier d65d6b25 child hash is historical because its owning module/test
+source receipts preceded this reader implementation. Case scope and conclusions
+did not change. No dependency generations were overwritten or assumed current.
+
+Evidence:trigger-paint-historical-reader-20261102.log,raw SHA256
+3e004e78962c048f8096169865ed4f7cc2f50fd995942ea420e2810fd2bad468.
+All2311 remain partial/current-rendering-unverified. This is not canonical
+registration/publication or final acceptance. Next register the new join source
+and focused proofs and explicit review selection with reversible historical
+compatibility,then run one coherent canonical milestone. Reuse this loader proof
+unless relevant dependencies change;do not rerun it for documentation alone.
+
 November2 bounded trigger-paint CASE JOIN passes the coherent6/6 focused batch,
 0skip/failure,38059.6983ms. New pure join adds clipping caller-routing evidence
 to24 Divider input obligations and original state-paint evidence to four Snackbar

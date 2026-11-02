@@ -12,7 +12,37 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { proveSnackbarPositionRequests, applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
-import { joinRetainedTriggerPaintInputs, restoreRetainedTriggerPaintInputs, triggerPaintPredecessor } from '../../scripts/join-material-trigger-paint-inputs.mjs';
+import { joinRetainedTriggerPaintInputs, restoreRetainedTriggerPaintInputs, triggerPaintPredecessor, createTriggerPaintHistoricalRead, createTriggerPaintReviewReader } from '../../scripts/join-material-trigger-paint-inputs.mjs';
+
+test('trigger paint historical reader restores exact accepted sources and rejects drift', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const read = createTriggerPaintHistoricalRead();
+  const sources = [
+    ['scripts/check-divider-omitted-owner-consumers.mjs', 'cf989605fc7c727111431c0b2deb1dc3e733b39c07a4751aaf19c798625c2bcd'],
+    ['tests/material-parity/snackbar-position-observation.spec.mjs', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
+    ['tests/material-parity/input-equivalence-policy.mjs', '8f1acb6af64b5cfdcddba911a4b3ddf61e241edfea74eec241d2276617fe1ea3'],
+    ['tests/material-parity/input-equivalence-audit.mjs', '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54'],
+  ];
+  for (const [file, sha256] of sources) {
+    assert.equal(hash(read(file)), sha256);
+    assert.equal(hash(read(file, 'utf8')), sha256);
+    const forged = createTriggerPaintHistoricalRead({ read: name => String(name).replaceAll('\\', '/').endsWith(file) ? Buffer.from('unknown generation') : readFileSync(name) });
+    assert.throws(() => forged(file), /Unknown trigger-paint source generation/);
+  }
+});
+
+test('trigger paint successor passes the complete existing receipt loader', async () => {
+  const { loadCaseObligationReview } = await import('../../scripts/audit-findings-store.mjs');
+  const reader = createTriggerPaintReviewReader(), envelope = JSON.parse(reader.read(reader.file));
+  console.log(JSON.stringify({ phase: 'trigger-paint-reader-constructed', review: reader.sha256, cases: envelope.review.groups.length }));
+  const loaded = loadCaseObligationReview(`artifacts/material-parity/working-audit/proposals/${reader.sha256}.json`, reader.sha256,
+    envelope.review.groups.map(row => row.case), { root: process.cwd(), read: reader.read });
+  assert.equal(loaded.cases.length, 2311); assert.equal(loaded.inspectionComplete, false);
+  assert.equal(loaded.currentRenderingAccepted, false);
+  console.log(JSON.stringify({ phase: 'trigger-paint-reader-validated', review: reader.sha256,
+    dependencies: loaded.evidenceFingerprints.length, inspectionComplete: loaded.inspectionComplete,
+    currentRenderingAccepted: loaded.currentRenderingAccepted }));
+});
 
 test('original snackbar auto-dismiss comparator does not witness the timed transition', async () => {
   const { gunzipSync } = await import('node:zlib');
