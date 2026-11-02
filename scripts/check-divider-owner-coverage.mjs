@@ -20,6 +20,36 @@ for (const key of ['gaps', 'resolvedStyleGaps', 'stateStyleGaps', 'errors']) ass
 assert.equal(inventory.cases.length, 48); assert.equal(inventory.envelopes.length, 24);
 const observations = [];
 let recordedTextLeaves = 0, mixedTextElementOwners = 0;
+const lineBoxFile = 'artifacts/material-parity/divider-natural-line-box-contexts-recovered-20261020.log';
+const lineBoxBytes = readFileSync(lineBoxFile);
+assert.equal(hash(lineBoxBytes), 'cc4839ff5ce689aec6bf01689d15abb41cacd4a3e2b675083cd0f37d8b304416');
+const lineBoxes = JSON.parse(lineBoxBytes);
+for (const r of [lineBoxes.producer, lineBoxes.checkpoint, lineBoxes.recipe.source, lineBoxes.originalReport])
+  assert.equal(hash(readFileSync(r.file)), r.sha256);
+assert.equal(lineBoxes.captures.length, 16);
+const lineBoxContextReuse = [];
+for (const entry of cases) {
+  const treeMatches = lineBoxes.captures.filter(c => c.inputTree.sha256 === entry.inputTrees.reference.sha256);
+  const contextMatches = treeMatches.filter(c => ['width', 'height', 'deviceScaleFactor']
+    .every(k => c.viewport[k] === entry.viewport[k]));
+  const interaction = report.interactions.includes(entry);
+  assert.equal(contextMatches.length, interaction && entry.viewport.deviceScaleFactor === 2 ? 0 : 1);
+  for (const c of contextMatches) {
+    assert.equal(hash(readFileSync(c.inputTree.file)), c.inputTree.sha256);
+    assert.deepEqual(c.observations.map(o => o.id), ['divider-above', 'divider-below']);
+    for (const o of c.observations) {
+      assert.equal(o.measured.fontReady, true);
+      assert.equal(o.measured.naturalHeight, o.before.parentBox.height);
+      assert.deepEqual(o.before.parentBox, o.after.parentBox);
+      assert.deepEqual(o.before.labelBox, o.after.labelBox);
+      assert.equal(o.after.observers, 0);
+    }
+  }
+  lineBoxContextReuse.push({ viewport: entry.viewport.id, profile: entry.profile,
+    treeMatches: treeMatches.map(c => c.case), eligibleInputContexts: contextMatches.map(c => c.case),
+    boundary: 'Input-tree and numeric viewport/DPR correspondence only; not interaction execution, glyph fragments, candidate geometry or current rendering.' });
+}
+assert.equal(lineBoxContextReuse.filter(r => r.eligibleInputContexts.length).length, 20);
 const headingFindings = queryFindings('artifacts/material-parity/working-audit', 'divider')
   .filter(row => ['eyebrow', 'title'].includes(row.element));
 assert.equal(headingFindings.length, 96);
@@ -142,6 +172,10 @@ for (let index = 0; index < cases.length; index++) {
   observations.push({ case: mappings[0].case, scalarIds, outsideScalarTargets, frameBoxInputs, headingDomains, evidence: entry.inputTrees });
 }
 console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-owner-coverage.mjs', sha256: hash(readFileSync(import.meta.filename)) },
+  retainedNaturalLineBoxes: { record: { file: lineBoxFile, sha256: hash(lineBoxBytes) },
+    runtime: lineBoxes.runtime, lineBoxContextReuse,
+    conclusion: '16 static contexts and four DPR1 interaction input contexts match the existing native Above/Below supplement. Four DPR2 interaction contexts have matching trees but no same-DPR supplement. Headings and candidate/anonymous glyph geometry remain outside this measurement.',
+    inspectionPromoted: false, currentRenderingAccepted: false },
   textTopology: { recordedTextLeaves, mixedTextElementOwners,
     conclusion: '96 recorded nonempty text owners are mapped leaves with exact authored text; no mixed own-text/element owner occurs in these 24 retained pairs.',
     boundary: 'Element topology only, not raw DOM text-node splitting, anonymous formatting boxes, line wrapping, baseline/glyph geometry or current rendering. Input trees have no lineBoxes/textFragments observations; reuse a receipt-bound dedicated line-box trace before closing that obligation.' },

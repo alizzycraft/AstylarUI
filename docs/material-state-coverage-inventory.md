@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+November2 natural-line-box reuse check narrows the next evidence gap without
+another browser run. Existing cc4839ff supplement is authenticated together with
+its producer,checkpoint,probe source,original report and matched reference trees.
+It measures only Above/Below natural heights,not headings or glyph fragments.
+All16 static contexts match exact tree hashes and numeric width/height/DPR.
+Four desktop-dpr1 interaction records also match their desktop static input
+contexts despite different viewport IDs. Four desktop-dpr2 interaction records
+match tree hashes but NOT the supplement's DPR. A viewport name mismatch is not
+itself an input discrepancy;equal tree bytes alone do not justify DPR reuse.
+
+The existing owner-coverage check now enforces this20/4 applicability partition,
+font readiness,natural-height/paragraph equality,unchanged before/after bounds
+and observer cleanup for matched observations. This reuses prior evidence;it is
+not20 newly completed cases or actual interaction replay. Historical browser
+155.0.8059.80 versus checkpoint155.0.8059.40 remains explicit. Candidate geometry,
+heading line boxes and anonymous/glyph fragments remain unmeasured by this
+supplement. Next inspect the existing baseline/texture traces for those precise
+owners and DPRs;do not repeat natural-height capture or infer baseline from it.
+
+Command:node scripts/check-divider-owner-coverage.mjs,corrected exit0.
+Log:divider-line-box-context-reuse-corrected-20261102.log,SHA256
+449c148b3ea8f5e43b61638fa1d6e822f2709a08f87cce05ac0b5fe9ea3ceabd.
+Initial local assertion incorrectly excluded static DPR2 comparison contexts;
+it failed1!==0 before completion. Corrected discrimination uses actual report
+interaction membership,not DPR alone;no capture/evidence was altered. Preserve
+the first empty stdout log as a failed attempt. All2311 cases remain partial;
+canonical5e770758 and existing acceptance gates are unchanged.
+
+
 November2 coverage-led continuation authenticates accepted index2090dfe3 before
 reading obligations. Priority remains (1) material-property/anonymous-line-box
 correspondence, (2) equal-input paint causality and crop-producer applicability,

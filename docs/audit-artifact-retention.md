@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep divider-line-box-context-reuse-corrected-20261102.log and the first empty
+divider-line-box-context-reuse-20261102.log. The first local check failed an
+overbroad DPR assertion;the corrected record preserves the exact20 matched/four
+DPR-mismatched input-context partition. Preserve original cc4839ff natural-line-
+box supplement,its verification record and earlier failed/truncated captures.
+No new browser artifacts or replacement of historical evidence follows.
+
+
 Keep divider-recorded-text-topology-20261102.log. It authenticates the existing
 24-pair trees and96 mapped leaf-text owners with the extended owner-coverage
 script. It does not replace raw trees or supply anonymous line-box/glyph geometry.
