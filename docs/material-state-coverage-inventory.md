@@ -1,5 +1,58 @@
 # Material comparison/state coverage inventory
 
+November 2 Slider-track evidence package is ACCEPTED LOCALLY after corrected
+export, complete conservation, independent cold equality and verified imports.
+Generation `5e770758fa29941badd1003f008c86cca288884c4e62815e3fef9490dc8f3491`,
+decoded SHA256 `1ed7b5ceae420214276e36b6a1ca45b7cc10580c48f3933366c40bc68439b648`,
+accepted index `2090dfe307032486226a09d1c6da8c32084e27c40e2ef0e49ae5ded76c4a6ec3`.
+This supersedes the pending-publication statements below, not their historical
+failure evidence. No rendering or whole-case inspection acceptance is implied.
+
+Corrected export is terminal0. The complete80-section authentication finds70
+unchanged sections,10 changed,none added/removed. Metadata conservation verifies
+all1143 current raw normalized source fingerprints:one source added,16 existing
+paths changed,none removed. All205 prior findings remain exact;the added finding
+is fixture-slider-track-thickness-substitution. All470 prior proof records remain
+exact except11 line locations;two new proofs give472. The prior72 implementation
+entries are unchanged,with one added entry giving73. The plan is sorted by
+priority:the first ad-hoc prefix assertion was wrong,not a candidate defect.
+Retained authenticated metadata now precedes semantic assertions so no further
+decode is needed to inspect those values. Preserve the empty first metadata log
+and the failure explanation;do not infer success from it.
+
+Five changed derived sections compare14085648 leaf/container entries. Exactly147
+values change:98 direct producer-hash transitions,48 independently recomputed
+control-proof hashes and one independently recomputed owner-motion report hash.
+The complete prior producer is recovered at89e3475e;current producer19dea13e.
+All other selected values,paths and containers remain unchanged. Coverage is an
+unchanged section:436 static+1875 interaction cases are still2311 PARTIAL cases,
+not2311 completed inspections. Current rendering remains unverified;8483 scalar
+differences/389202 occurrences/39904 controls remain,with206 source findings and
+zero unresolved scalar attributions. Root-cause,history,paint,semantics and final
+enforced matrix obligations are not waived by this publication milestone.
+
+Independent --capture-availability --check with ASTYLAR_AUDIT_COLD=1 is terminal0,
+diskHits0,collectors2,20194 reads/3849933375 bytes;elapsed3273258.3386ms through
+canonical comparison. Isolated import and accepted import are terminal0. Accepted
+pointer stayed73c84aef until verification;86 immutable hard links share437055378
+logical bytes with the isolated store. Never mutate their linked contents.
+
+Retained gate receipts (under artifacts/material-parity;raw SHA256):
+- slider-track-candidate-sections-20261102.log:002ee049284e6b27da57b2227e23af491785703157da3b5ad8c8e46848d40f5d
+- slider-track-candidate-metadata-sorted-plan-20261102.log:f2298a4de6b2b458d78c679f5817a0adcf1adf8e4e60eaf2dce07d87e9215fe5
+- slider-track-metadata-conservation-20261102.log:81a48ebd13119ceec7c2e08a314eb1702af2e1f38e04c09c83bbfa77b7ae7c28
+- slider-track-candidate-receipt-leaves-20261102.log:33798caa2cabc9be7f714789dc136b4115581d52959dea2be96c780534e98eb8
+- slider-track-derived-receipt-conservation-20261102.log:a41e4435ad426268ee4fa67ee49b332fa2c779268dc46bcb2cd412fcb4af7b6e
+- slider-track-independent-cold-20261102.log:e81bf9418bd2f59335c2fd6eac31287641e4979871c686f17f7b09c7d36f840a
+- slider-track-independent-cold-20261102.stderr.log:03173f2960e0b7b826e39f25ddbbb64210c2bfb8156dbbe6bd114ffcae481032
+- slider-track-candidate-import-20261102.log:7d74dd32ace118c739ccd5122de832401daf07a238c6b85f06524c4e7b0a6890
+- slider-track-accepted-import-20261102.log:ed52fe88d278214f61d5e38ccb5e0a25e50e7e2481be35123494ba53526ceb5d
+
+No renderer/fixture edits or browser captures were made in this milestone.
+Next publish the verified canonical increment,then resume the existing unresolved
+inspection obligations through compact queries;do not restart the settled Slider
+track investigation or describe this package milestone as audit completion.
+
 November 2 final diagnostic-read boundary correction is focused-tested, NOT yet
 canonical-published. validateMaterialInputAudit now accepts diagnosticRead with
 raw readFileSync as its default. The runner explicitly supplies the existing

@@ -1,5 +1,27 @@
 # Audit artifact retention
 
+November2 Slider-track generation5e770758/index2090dfe3 is accepted locally after
+corrected export,80-section/metadata/derived-receipt conservation,independent cold
+comparison(exit0,diskHits0),isolated import and accepted import. Retain
+slider-track-candidate-store-20261102 and its import log. The86 accepted-store
+files are immutable hard links to that store;do not mutate them. They share
+437055378 logical bytes instead of duplicating the store data.
+
+Keep slider-track-pre-export-73c8-20261101 and original failed November1 export
+stdout/stderr. Keep corrected slider-track-diagnostic-corrected-export-20261102
+stdout/stderr,slider-track-candidate-sections-20261102.log,
+slider-track-candidate-metadata-sorted-plan-20261102.log,
+slider-track-metadata-conservation-20261102.log,
+slider-track-candidate-receipt-leaves-20261102.log,
+slider-track-derived-receipt-conservation-20261102.log,
+slider-track-independent-cold-20261102 stdout/stderr and
+slider-track-accepted-import-20261102.log. Exact hashes and conclusions are in
+the current coverage ledger. Preserve the empty first metadata log as failed
+check evidence:its plan-prefix assertion incorrectly ignored priority sorting;
+it is not a successful receipt. No original evidence or predecessor is deleted
+by accepting this package. Evidence-package acceptance is not rendering parity,
+inspection closure or permission to bypass the original final gates.
+
 Keep `artifacts/material-parity/sidenav-focused-ax-20261030`: the paired AX
 trees, report, producer and provenance document the Chrome 156 focused
 observation. It supplements rather than replaces the 36-case historical capture.
