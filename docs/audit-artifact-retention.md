@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-outside-owner-clipping-entry20261102 stdout/stderr as failed
+instrumentation evidence (missing extracted imported binding),and corrected
+clipping-entry-bound20261102 stdout/empty stderr as the passing18-control proof.
+Do not overwrite either attempt. This standalone successor is not a new accepted
+canonical generation and does not authorize releasing predecessor evidence.
+
 November2 corrected695dea7b/index23dc19f6 is accepted locally after all milestone
 gates,including independent cold exit0/diskHits0 and verified accepted import.
 No milestone process remains live. Keep corrected-accepted-promotion20261102.log

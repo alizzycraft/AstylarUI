@@ -78,6 +78,7 @@ let maskedHeadingOwners = 0;
 let omittedZeroMinHeightOwners = 0, matchingPercentMinHeightOwners = 0;
 let blockContainerOwners = 0, containerOnlyInputSlots = 0;
 const ownTransformInputs = [];
+const ownClipInputs = [];
 for (let i = 0; i < previous.treeReceipts.length; i += 2) {
   const a = JSON.parse(fs.readFileSync(previous.treeReceipts[i].file));
   const b = JSON.parse(fs.readFileSync(previous.treeReceipts[i + 1].file));
@@ -100,6 +101,14 @@ for (let i = 0; i < previous.treeReceipts.length; i += 2) {
       maskedHeadingOwners++;
     }
     const candidates = b.nodes.filter(n => n.authored?.id === id); assert.equal(candidates.length, 1);
+    const referenceClip = Object.fromEntries(['overflowX', 'overflowY', 'clipPath', 'clip']
+      .map(field => [field, a.styles[native.style][field]]));
+    assert.deepEqual(referenceClip, { overflowX: 'visible', overflowY: 'visible', clipPath: 'none', clip: 'auto' });
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle'])
+      for (const field of ['overflow', 'overflowX', 'overflowY', 'clipPath', 'clip'])
+        assert.equal(candidates[0][stage][field], undefined);
+    ownClipInputs.push({ referenceTree: previous.treeReceipts[i], id, referenceClip,
+      candidate: 'overflow/overflowX/overflowY/clipPath/clip omitted in normal and effective declaration snapshots' });
     assert.equal(a.styles[native.style].transform, 'none');
     assert.equal(candidates[0].resolvedStyle.transform, undefined);
     assert.equal(candidates[0].normalResolvedStyle.transform, undefined);
@@ -156,6 +165,7 @@ assert.equal(constraintOwnerPairs, 120); assert.equal(omittedConstraintSlots, 36
 assert.equal(maskedHeadingOwners, 48);
 assert.equal(omittedZeroMinHeightOwners, 96); assert.equal(matchingPercentMinHeightOwners, 24);
 assert.equal(blockContainerOwners, 120); assert.equal(containerOnlyInputSlots, 480);
+assert.equal(ownClipInputs.length, 120);
 assert.ok(fs.readFileSync('examples/material-showcase/src/app/reference.component.ts', 'utf8')
   .includes('.benchmark>.eyebrow,.benchmark>h1{opacity:0}'));
 assert.equal(objectFitOwnerExclusions, 120); assert.equal(normalContentOwners, 120); assert.equal(svgContextOnlySlots, 360);
@@ -325,6 +335,27 @@ for (const source of sources('app/services/dom/positioning/stacking-context.mana
   }
 }
 
+// Execute only the actual clipping entry guard. A rejecting parent traps any
+// geometry/material work; positive controls must reach it. This does not test
+// clipping geometry, ancestors, shader composition or browser pixels.
+let overflowEntryControls = 0;
+for (const source of sources('app/services/dom/elements/overflow-clip.service.ts')) {
+  const reached = new Error('clip geometry reached');
+  const probe = method(source, 'apply', { resolveCssViewportRect() { throw reached; } });
+  const parent = new Proxy({}, { get() { throw reached; } });
+  for (const style of [{}, { overflow: undefined }, { overflow: 'visible' },
+    { overflowX: 'hidden' }, { clipPath: 'inset(0)' }]) {
+    assert.doesNotThrow(() => probe.apply(parent, style, new Map(), () => { throw reached; }));
+    overflowEntryControls++;
+  }
+  for (const overflow of ['hidden', 'clip', 'auto', 'scroll']) {
+    assert.throws(() => probe.apply(parent, { overflow }, new Map(), () => { throw reached; }),
+      error => error === reached);
+    overflowEntryControls++;
+  }
+}
+assert.equal(overflowEntryControls, 18);
+
 // Actual core mesh construction on the installed matching Babylon version.
 // This tests initial visibility flags, not CSS visibility support or raster paint.
 const engine = new NullEngine(), scene = new Scene(engine);
@@ -346,6 +377,9 @@ console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-omitted-ow
   positionControls, meshControls, constraintOwnerPairs, omittedConstraintSlots, constraintControls, explicitNoneObservations,
   diagnosticControls, historicalHeightEvidence,
   ownTransformInputs, transformParserControls,
+  ownClippingInputs: { observations: ownClipInputs, overflowEntryControls,
+    conclusion: 'All120 exact owners retain native visible overflow axes,none clipPath and auto clip against candidate omissions. Captured/current OverflowClipService.apply returns before geometry/material access for omitted or visible overflow;four positive shorthand values enter geometry.',
+    boundary: 'Own-input snapshots and this one core entry guard only. Axis-only and clipPath positive tokens do not activate this guard;their other consumers/support remain unproved. Not ancestor/viewport clipping,call-site style propagation,legacy clip applicability,shader/raster paint,current rendering or whole-case equivalence. Do not normalize absent declarations to native computed values.' },
   ownTransformBoundary: '120 native none versus omitted candidate transform requests route to null in captured/current parser controls. Preserve all raw used-origin pixels and candidate omissions. This is own-parser applicability only,not origin/default equivalence,ancestor transforms,stacking,containing blocks,projection or paint. Zero translation remains a non-null transform;do not normalize it to none.',
   containerInputRouting: { blockContainerOwners, containerOnlyInputSlots, containerDispatchControls,
     conclusion: 'All120 exact owners have block display on both sides. Captured/current flex/grid dispatch predicates reject block even with non-default flex/track requests; positive flex/grid display controls select their own path.',

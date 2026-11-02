@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+November2 next bounded question:do omitted clipping declarations themselves
+activate core clipping for the120 outside-scalar Divider owners? Competing
+explanations were inactive own inputs versus an enabled clipping entry path.
+Extended the existing consumer check,not another capture/collector. All120 exact
+owners retain native overflowX/Y:visible,clipPath:none,clip:auto;candidate
+overflow/axis/clipPath/clip remain omitted in normal/effective snapshots.
+Captured/current OverflowClipService.apply executes18 controls:omission and
+visible return before geometry/material access;hidden/clip/auto/scroll positive
+shorthands reach a rejecting geometry sentinel. Axis-only hidden and clipPath
+tokens do not activate THIS guard;no global support conclusion follows.
+
+First attempt failed because the extracted method lacked its imported
+resolveCssViewportRect binding. Preserve clipping-entry20261102 stdout/stderr;
+this was instrumentation failure,not renderer evidence. Bound retry passes
+exit0,empty stderr:divider-outside-owner-clipping-entry-bound-20261102.log,
+SHA25618d3923061b07a641eea8dc096b913f4376555cadea61b450f8e80e1dedd418c.
+Producer SHA256e55c77c4dcd040d823e5ea97d9fc32ab009ab89d218ad69164fe49dd039ff9a6;
+captured/current module receipts are in the log. All earlier controls pass.
+No renderer/fixture edit,new defect,default normalization or case promotion.
+This standalone proof is not yet joined into canonical695dea7b;its source
+fingerprints remain the published predecessor generation,not current-source
+rendering acceptance. No canonical rebuild is justified for this small note.
+Next trace actual call-site style propagation/ancestor clipping or reuse a
+matching retained paint trace before attributing pixel visibility. Own-entry
+inactivity alone does not close the remaining paint or anonymous-line-box gaps.
+
 November2 Divider consumer milestone is ACCEPTED LOCALLY as695dea7b/index23dc19f6.
 Corrected export,complete conservation,independent cold comparison and verified
 isolated/accepted imports pass. No process remains active for this milestone.
