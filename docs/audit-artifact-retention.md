@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-outside-owner-applicability-20261102.log and empty stderr. It extends
+exact input/applicability accounting to five owners while retaining SVG paint as
+context-only and before/after as the limited pseudo scope. Preserve the original
+divider-paragraph-svg-replaced-inputs and native-property-domain/source-verification
+20261020 records and their PNGs;the new log does not replace or broaden them.
+
 Keep divider-constraint-public-reuse-20261102.log and empty stderr. It binds
 the existing September24 DPR1/2 maximum-none height failure and omission control
 to bundle,focused source and exact fixture receipts. The recorded commit alone

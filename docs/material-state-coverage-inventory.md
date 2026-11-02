@@ -1,5 +1,46 @@
 # Material comparison/state coverage inventory
 
+November2 exact outside-owner applicability accounting extends the existing
+consumer script without another capture/normalizer. All24 original trees pairs
+retain120 non-replaced main/p/h1 owner pairs. Each has objectFit:fill and
+content:normal natively,with both candidate declaration fields omitted. All
+authored own text matches. No recorded before/after generated content exists;
+the collector's pseudo scope is ONLY before/after,not every pseudo-element or
+class. The script rejects unexpected owner/tree types rather than extending
+these conclusions to images,SVG,controls or replacement content automatically.
+
+Object-fit is inactive for these exact non-replaced owners;normal content and
+unchanged authored text do not request image replacement or extra before/after
+content. These240 field slots are bounded applicability/input accounting,not240
+newly completed inspections or a global omitted-to-fill/content normalization.
+The draft's computed spelling contents is NOT substituted for captured normal.
+Primary references checked November2:
+- https://www.w3.org/TR/2023/CRD-css-images-3-20231218/#the-object-fit
+- https://www.w3.org/TR/2025/WD-css-content-3-20251204/#content-property
+- https://www.w3.org/TR/SVG2/painting.html#FillProperty
+
+The360 default-valued fill/stroke/strokeWidth slots retain no recorded SVG
+descendants,but remain CONTEXT-ONLY,not blanket HTML-text paint equivalence.
+The earlier property-domain work already warns that the evolving CSS Fill and
+Stroke draft includes text;tag-only reasoning is insufficient. Reuse the existing
+24-case/48-paragraph-pair domain records and native paragraph interventions,
+not another replay of the same pixels. Native property-domain verified log still
+authenticates at8d53ed0ef75df6746f88c8fde3ea564f7a8379b1d1dbe1d0051c6aac8b544ad6.
+Those two-paragraph/context/browser limits do not automatically cover all five
+owners or establish current rendering. Source-gated object-fit evidence already
+exists in divider-property-domain-source-verification-20261020.log. The new
+five-owner accounting includes72 page/eyebrow/title pairs beyond the48 wrappers;
+do not count the existing wrapper paint work as newly discovered evidence.
+
+`node scripts/check-divider-omitted-owner-consumers.mjs` applicabilityExit0;
+all prior controls/historical public reuse still pass. Script raw SHA256
+d28cac83e38077855de5549121826f990e033f1223924c1be99478026192b81c.
+Keep divider-outside-owner-applicability-20261102.log,raw SHA256
+764de9e6d3c6cdf5141bc2b31a5809b9a73a896a2f0a122bde3af7389d1bb76f,
+and empty stderr. No renderer/fixture edits,new defect,case promotion or canonical
+export. Next reuse the remaining exact-owner paint/default evidence with its
+actual context limits;do not restart the known paragraph property interventions.
+
 November2 public maximum-none reuse resolves the prior pending HISTORICAL height
 question without another browser run. This is NOT a newly discovered defect:
 commit2a6b8d07 already documents the September24 public height failure and both

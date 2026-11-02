@@ -73,9 +73,15 @@ function constraintProbe(source, axis) {
 
 // Check actual omitted input slots, not inferred default values from the triage.
 let constraintOwnerPairs = 0, omittedConstraintSlots = 0;
+let objectFitOwnerExclusions = 0, normalContentOwners = 0, svgContextOnlySlots = 0;
 for (let i = 0; i < previous.treeReceipts.length; i += 2) {
   const a = JSON.parse(fs.readFileSync(previous.treeReceipts[i].file));
   const b = JSON.parse(fs.readFileSync(previous.treeReceipts[i + 1].file));
+  // Reject scope expansion rather than assuming a future SVG/image/control
+  // owner or generated content is covered by this HTML-only applicability proof.
+  assert.ok(a.nodes.every(n => ['main', 'p', 'h1', 'section', 'span', 'mat-divider'].includes(n.type)));
+  assert.ok(a.nodes.every(n => (n.pseudoElements ?? []).every(p => p.generated !== true)));
+  assert.ok(b.nodes.every(n => !n.authored.type || ['main', 'p', 'h1', 'section', 'span', 'div'].includes(n.authored.type)));
   const owners = [['page', a.nodes.find(n => n.key === 'frame')],
     ['eyebrow', a.nodes.find(n => n.attributes?.class === 'eyebrow')],
     ['title', a.nodes.find(n => n.type === 'h1')],
@@ -92,10 +98,24 @@ for (let i = 0; i < previous.treeReceipts.length; i += 2) {
       assert.equal(candidates[0].normalResolvedStyle[property], undefined);
       omittedConstraintSlots++;
     }
+    assert.ok(['main', 'p', 'h1'].includes(native.type));
+    assert.equal(a.styles[native.style].objectFit, 'fill');
+    assert.equal(candidates[0].resolvedStyle.objectFit, undefined);
+    objectFitOwnerExclusions++;
+    assert.equal(a.styles[native.style].content, 'normal');
+    assert.equal(candidates[0].resolvedStyle.content, undefined);
+    assert.equal(native.ownText, candidates[0].authored.textContent ?? candidates[0].authored.value ?? '');
+    normalContentOwners++;
+    for (const [property, value] of [['fill', 'rgb(0, 0, 0)'], ['stroke', 'none'], ['strokeWidth', '1px']]) {
+      assert.equal(a.styles[native.style][property], value);
+      assert.equal(candidates[0].resolvedStyle[property], undefined);
+      svgContextOnlySlots++;
+    }
     constraintOwnerPairs++;
   }
 }
 assert.equal(constraintOwnerPairs, 120); assert.equal(omittedConstraintSlots, 360);
+assert.equal(objectFitOwnerExclusions, 120); assert.equal(normalContentOwners, 120); assert.equal(svgContextOnlySlots, 360);
 let constraintControls = 0;
 const explicitNoneObservations = [];
 for (const [version, source] of sources('app/services/dom/elements/element-dimension.service.ts').entries()) {
@@ -227,6 +247,18 @@ console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-omitted-ow
   sourceMap: { file: mapFile, sha256: hash(mapBytes) }, sources: receipts,
   positionControls, meshControls, constraintOwnerPairs, omittedConstraintSlots, constraintControls, explicitNoneObservations,
   diagnosticControls, historicalHeightEvidence,
+  outsideOwnerApplicability: {
+    objectFitOwnerExclusions, normalContentOwners, svgContextOnlySlots,
+    objectFit: 'Inactive on the 120 exact non-replaced main/p/h1 owners; no image/replacement content is captured. Not an omitted-to-fill normalization for arbitrary elements.',
+    content: '120 exact normal-content owners preserve authored own text, with no generated pseudo-content in their recorded trees. Preserve raw normal instead of substituting a draft computed-value spelling.',
+    svgFields: '360 default-valued slots with no recorded SVG descendants. Context only: not blanket HTML text fill/stroke applicability, inherited-paint support or raster acceptance.',
+    primaryReferences: [
+      'https://www.w3.org/TR/2023/CRD-css-images-3-20231218/#the-object-fit',
+      'https://www.w3.org/TR/2025/WD-css-content-3-20251204/#content-property',
+      'https://www.w3.org/TR/SVG2/painting.html#FillProperty',
+    ],
+    boundary: 'Exact retained trees only. Not complete anonymous-content, glyph/material, inherited SVG paint, current-browser or whole-case closure; drafts are context, not implementation acceptance.',
+  },
   conclusion: 'Omitted and explicit static share the inspected captured/current layout-parent, containing-block, block/flex-flow and stacking branches. Captured/current plane construction starts with visible flags; absence in declaration snapshots is not a hidden flag.',
   constraintConclusion: 'The 360 recorded omitted constraint fields do not invoke a maximum clamp; minWidth:0 does not change the positive control size. Explicit maximum none instead clamps to zero in captured/current source blocks. This separate source divergence must not be hidden by rewriting none to omission; it is not an observed explicit-none input on these 120 owner pairs.',
   boundary: 'Source-executed routing/constraint blocks and NullEngine initial flags only. Not complete used geometry, public-API explicit-none rendering, CSS visibility inheritance/support, every visual owner, compositing/clipping, browser raster, current runtime or whole-case closure.',
