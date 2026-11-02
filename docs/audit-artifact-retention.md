@@ -1,5 +1,16 @@
 # Audit artifact retention
 
+Retain both failed November2 directories divider-native-owner-property-domains-
+20261102 and divider-native-heading-property-domains-20261102, their stdout and
+stderr logs, and all partial PNGs. The latter directory holds failed-driver.mjs,
+moved byte-for-byte from the untracked diagnostic script (SHA256
+d8f998b6ce2569a7292979dff8b491204632441c88e3a931bd56d64c243d3d62).
+Neither run passed its color positive control; neither reached title. Preserve
+divider-heading-mask-boundary-20261102.log as the successful retained-tree/source
+check explaining the heading limitation. Do not treat partial images as passes
+or replace original evidence with these failed diagnostics.
+
+
 Keep divider-outside-owner-applicability-20261102.log and empty stderr. It extends
 exact input/applicability accounting to five owners while retaining SVG paint as
 context-only and before/after as the limited pseudo scope. Preserve the original

@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+November2 failed native owner property-domain trials are inconclusive, not
+passes. The frame trial failed its visible color positive control before reaching
+headings; the narrower retry failed on eyebrow before reaching title. Existing
+benchmark CSS masks eyebrow/title with opacity:0. The retained-tree consumer
+check now independently asserts opacity:0 on all48 heading owners across24
+cases and confirms the current masking rule. Its focused execution passes;
+see divider-heading-mask-boundary-20261102.log. This reuses the existing masking
+finding, not a new renderer defect. No reference unmasking or repeat capture is
+justified. Neither failed trial establishes fill/stroke inactivity, frame paint
+equivalence, title intervention coverage or current rendering acceptance.
+The exact failed retry driver is retained with its captures (SHA256
+d8f998b6ce2569a7292979dff8b491204632441c88e3a931bd56d64c243d3d62).
+Canonical5e770758 and all2311 partial case classifications remain unchanged.
+
+
 November2 exact outside-owner applicability accounting extends the existing
 consumer script without another capture/normalizer. All24 original trees pairs
 retain120 non-replaced main/p/h1 owner pairs. Each has objectFit:fill and
