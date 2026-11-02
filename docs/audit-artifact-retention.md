@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-percentage-height-routing-20261102.log. It records14 bounded
+captured/current percentage-reference routing controls,not actual page reflow.
+Retain the existing October24 frame-size capture/verification and earlier source
+proofs;no repeat capture,new browser artifacts or canonical export is required.
+
+
 Keep divider-min-height-inputs-20261102.log. It extends the existing120-owner
 input accounting to96 omitted zero minima and24 matching explicit percentage
 minima,without claiming complete used sizing. Preserve earlier consumer logs

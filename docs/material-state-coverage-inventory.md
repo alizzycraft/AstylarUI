@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+November2 percentage-height consumer routing:existing consumer script executes
+the actual captured/current definiteContainingBlockContentHeight and
+parseAutoBlockConstraint methods. Fourteen controls distinguish root-body,
+indefinite/auto parent,explicit pixel-height parent and flex-assigned parent;
+root/definite600 minus10/20 padding yields570 CSSpx,while an auto parent yields
+undefined. Parsing100% with570 returns570;without a definite reference it remains
+undefined. No world conversion occurs in these inspected methods. Ancestry and
+registry inputs are controlled stubs,not proof of actual Material page ancestry,
+native CSS definiteness,all height syntaxes or full reflow execution.
+
+Existing element-creation.service.spec.ts already has a definite-root percentage
+min-height control;this source-executed check extends applicability to the captured
+generation and explicit indefinite/flex controls without a new framework. The
+October24 frame supplement ALREADY records zero extent error in20 physical
+contexts/24 configured aliases and authenticates521 served assets. Reuse it;
+do not recapture frame sizes or invent a percentage sizing failure from different
+serialization stages. Native explicit border-box versus candidate omission is
+the already classified first unequal request,not new projection causality.
+Next inspect finite unclassified input domains rather than repeating this
+frame/baseline/heading loop. No general percentage-support or case closure claim.
+
+Command:node scripts/check-divider-omitted-owner-consumers.mjs,exit0;all prior
+bounded controls remain. Log:divider-percentage-height-routing-20261102.log,
+SHA25677ad800f1518d1fc48fcd828c78c4a31ebee5d9473ff97d6078d1bf13d116641.
+Canonical5e770758 and all2311 partial/current-unverified statuses unchanged.
+
+
 November2 min-height accounting closes the deliberately excluded input-slot
 question,not used-height parity. Existing omitted-owner script authenticates96
 non-page owners with native minHeight0px versus omitted candidate normal/effective

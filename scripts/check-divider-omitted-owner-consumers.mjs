@@ -156,6 +156,33 @@ for (const [version, source] of sources('app/services/dom/elements/element-dimen
   }
 }
 let diagnosticControls = 0;
+const percentageHeightRouting = [];
+for (const [version, source] of sources('app/services/dom/elements/element-creation.service.ts').entries()) {
+  const probe = method(source, 'definiteContainingBlockContentHeight');
+  probe.hasFlexAssignedHeight = method(source, 'hasFlexAssignedHeight').hasFlexAssignedHeight;
+  const parent = { id: 'root-body' }, page = { id: 'page' };
+  probe.ancestry = { getParent: () => parent };
+  const dom = { context: { elementDimensions: new Map([['root-body', {
+    height: 600, padding: { top: 10, bottom: 20 },
+  }]]), elementStyles: new Map(), elements: new Map() } };
+  assert.equal(probe.definiteContainingBlockContentHeight(dom, page), 570);
+  const dimensions = dom.context.elementDimensions.get('root-body');
+  parent.id = 'auto-parent'; dom.context.elementDimensions.set(parent.id, dimensions);
+  assert.equal(probe.definiteContainingBlockContentHeight(dom, page), undefined);
+  dom.context.elementStyles.set(parent.id, { normal: { height: 'auto' } });
+  assert.equal(probe.definiteContainingBlockContentHeight(dom, page), undefined);
+  dom.context.elementStyles.set(parent.id, { normal: { height: '600px' } });
+  assert.equal(probe.definiteContainingBlockContentHeight(dom, page), 570);
+  dom.context.elementStyles.set(parent.id, { normal: { height: 'auto' } });
+  dom.context.elements.set(parent.id, { metadata: { astylarFlexAssignedSize: { width: 800, height: 600 } } });
+  assert.equal(probe.definiteContainingBlockContentHeight(dom, page), 570);
+  const parser = method(source, 'parseAutoBlockConstraint');
+  assert.equal(parser.parseAutoBlockConstraint('100%', 16, 570), 570);
+  assert.equal(parser.parseAutoBlockConstraint('100%', 16, undefined), undefined);
+  percentageHeightRouting.push({ version: version ? 'current' : 'captured', controls: 7,
+    rootContentHeight: 570, indefiniteParentReference: 'undefined',
+    boundary: 'Actual source methods with explicit CSS registry inputs and ancestry stub; not native containing-block semantics, actual page ancestor/registry execution or complete percentage-height support.' });
+}
 for (const source of sources('lib/astylar-diagnostics.ts')) {
   const declaration = unique(source, n => ts.isVariableDeclaration(n) && n.name.getText() === 'styleProperties');
   const styleProperties = new Function(`return (${declaration.slice(declaration.indexOf('=') + 1)});`)();
@@ -268,6 +295,7 @@ console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-omitted-ow
   sourceMap: { file: mapFile, sha256: hash(mapBytes) }, sources: receipts,
   positionControls, meshControls, constraintOwnerPairs, omittedConstraintSlots, constraintControls, explicitNoneObservations,
   diagnosticControls, historicalHeightEvidence,
+  percentageHeightRouting,
   minimumHeightInputs: { omittedZeroMinHeightOwners, matchingPercentMinHeightOwners,
     conclusion: '96 non-page owners omit candidate minHeight against native 0px; actual captured/current height-constraint controls preserve a positive height for both omission and explicit zero. All24 pages explicitly retain matching 100% tokens.',
     boundary: 'Constraint block and recorded inputs only. Percentage containing-height definiteness, box sizing, intrinsic sizing and other layout consumers remain separate; equal 100% tokens do not prove used page heights.' },
