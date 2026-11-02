@@ -1,5 +1,9 @@
 # Audit artifact retention
 
+Keep trigger-paint-staged-selection20261102 and staged-selection-integration
+stdout/empty stderr. These prove in-memory routing only;no live exporter change,
+physical proposal,new capture or canonical generation occurred.
+
 Keep trigger-paint-inventory-registration-20261102 stdout/empty stderr,passing
 3/3 source/proof inventory,parent restoration and historical drift checks.
 Its source generation supersedes only the prior staged source receipts,not

@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+November2 trigger-paint STAGED EXPORT SELECTION passes4/4 combined checks,
+0skip/failure,11373.0718ms. Reversible runner/launcher transformations preserve
+all31 older options plus default,route only the requested exact review digest,
+reject mixed/unknown options and unknown source drift,and leave live exporter
+bytes untouched. Test routing uses a synthetic digest;it is not an accepted
+review or an actual export. Inventory is1151 sources/485 proofs/208 findings/
+75 plans with complete prior entries preserved. Evidence:
+trigger-paint-staged-selection-integration-20261102.log,raw SHA256
+b284690eea22d7fc7eb508713743bfe365182aa4bd88197c34c7ae17efed8563.
+Next apply the staged routing only with exact historical restoration of changed
+runner/launcher sources and older-reader compatibility,then validate the real
+successor digest before export. All2311 case statuses and final gates preserve.
+
 November2 trigger-paint SOURCE/PROOF REGISTRATION passes3/3 focused checks,
 0skip/failure,10667.3774ms. Additive inventory now1151 sources/484 proofs/208
 findings/75 plans. Complete accepted1149 source entries/477 proofs/206 definitions/

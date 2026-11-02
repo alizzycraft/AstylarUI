@@ -7,9 +7,9 @@ import { createDividerConsumerReviewReader } from './join-material-divider-consu
 
 const sourceTransitions = [
   ['scripts/check-divider-omitted-owner-consumers.mjs', 'b08c882e548ad27d76e39379ed64a15096352889d1389620a30cd818b6b9a277', 'cf989605fc7c727111431c0b2deb1dc3e733b39c07a4751aaf19c798625c2bcd'],
-  ['tests/material-parity/snackbar-position-observation.spec.mjs', 'eee0a447f4d84f301f52deb6a56d0acdcce745fa601e1b8d20121e6e9b0a3827', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
+  ['tests/material-parity/snackbar-position-observation.spec.mjs', '3e25eec7ed247f9ce15094c6c635c6e57558eecc02c874d4e67953b9dd3b7eb5', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
   ['tests/material-parity/input-equivalence-policy.mjs', '43e758150e13d5da4876127b7ca6755c0c66957b092499587498c66bef1a4d52', '8f1acb6af64b5cfdcddba911a4b3ddf61e241edfea74eec241d2276617fe1ea3'],
-  ['tests/material-parity/input-equivalence-audit.mjs', 'c91ce9d66ddacb947c5907ea9d5981e6f928970a8a347fb7a3e8906eb27691a6', '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54'],
+  ['tests/material-parity/input-equivalence-audit.mjs', 'cfed52bc5d431d49709955afc990b69cfcc04a11e26d0ddc8d3748d9a28a4c51', '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54'],
 ];
 
 export function createTriggerPaintHistoricalRead({ root = process.cwd(), read = fs.readFileSync } = {}) {
@@ -67,6 +67,44 @@ export function createTriggerPaintReviewReader({ root = process.cwd(), read = fs
 }
 
 const hash = value => createHash('sha256').update(value).digest('hex');
+const selectionPredecessors = {
+  runner: '2ad71026b5377e36c479a8d67d0b6fd4bc65377d080d4ce7283e3d06fefb566c',
+  launcher: '9adaeef25a49792ee453d56c7f1c0d2bcf817ba3322e69c097fff18209606a96',
+};
+function selectionEdits(kind, review) {
+  assert.match(review, /^[a-f0-9]{64}$/);
+  if (kind === 'launcher') return [
+    ["const rawRequested = process.argv.slice(2);", `const rawRequested = process.argv.slice(2);\nconst triggerPaint = rawRequested.includes('--trigger-paint');\nassert.ok(!triggerPaint || rawRequested.every(argument => ['--trigger-paint', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');`],
+    ['const requested = rawRequested.filter(', "const requested = rawRequested.filter(argument => argument !== '--trigger-paint').filter("],
+    ['|--divider-consumer-inputs]', '|--divider-consumer-inputs|--trigger-paint]'],
+    ['for (const [name, relative] of Object.entries(inputs)) {', `if (triggerPaint) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${review}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+    ['|| dividerConsumerInputs)', '|| dividerConsumerInputs || triggerPaint)'],
+    ["if (requested.includes('--dry-run'))", `if (triggerPaint) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${review}';\nif (requested.includes('--dry-run'))`],
+  ];
+  assert.equal(kind, 'runner');
+  return [
+    ["import { createDividerConsumerReviewReader } from './join-material-divider-consumer-inputs.mjs';", "import { createDividerConsumerReviewReader } from './join-material-divider-consumer-inputs.mjs';\nimport { createTriggerPaintReviewReader, createTriggerPaintHistoricalRead } from './join-material-trigger-paint-inputs.mjs';"],
+    ['const dividerConsumerEvidenceRead = createDividerConsumerRegistrationHistoricalRead({root,read:auditReadFileSync});', 'const triggerPaintHistoricalRead = createTriggerPaintHistoricalRead({root,read:auditReadFileSync});\n    const dividerConsumerEvidenceRead = createDividerConsumerRegistrationHistoricalRead({root,read:triggerPaintHistoricalRead});'],
+    ['const applicability=dividerConsumerReaderFactory?.({root,read:captureAvailabilityEvidenceRead,reviewSha256:options.caseObligationReviewSha256});', `const applicability=options.caseObligationReviewSha256==='${review}'\n      ? createTriggerPaintReviewReader({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256})\n      : dividerConsumerReaderFactory?.({root,read:captureAvailabilityEvidenceRead,reviewSha256:options.caseObligationReviewSha256});`],
+    ["diagnosticRead: (options.caseObligationReviewSha256===captureAvailabilityReview", `diagnosticRead: options.caseObligationReviewSha256==='${review}'\n      ? createCaptureAvailabilityHistoricalRead({root,read:createTriggerPaintHistoricalRead({root,read:auditReadFileSync})})\n      : (options.caseObligationReviewSha256===captureAvailabilityReview`],
+  ];
+}
+export function prepareTriggerPaintSelection(bytes, kind, review) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(source), selectionPredecessors[kind], 'Exact selection predecessor required');
+  for (const [before, after] of selectionEdits(kind, review)) {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  }
+  return source;
+}
+export function restoreTriggerPaintSelection(bytes, kind, review) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  if (hash(source) === selectionPredecessors[kind]) return source;
+  for (const [before, after] of selectionEdits(kind, review).toReversed()) {
+    assert.equal(source.split(after).length, 2); source = source.replace(after, before);
+  }
+  assert.equal(hash(source), selectionPredecessors[kind], 'Unknown selection changes'); return source;
+}
 export const triggerPaintPredecessor = '38aca39a69052334314e3584d33682195702b9690b024c5150fbd22c338e8ee1';
 const clipKey = 'retainedClippingCallerRouting', paintKey = 'retainedTriggerStatePaint';
 const base = 'artifacts/material-parity/';

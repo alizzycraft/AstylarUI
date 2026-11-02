@@ -10080,6 +10080,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/snackbar-position-observation.spec.mjs', /test\('trigger paint staged selection preserves every older option and rejects mixtures'/,
+      'trigger paint staged selection preserves every older option and rejects mixtures', 'Reversible staged runner/launcher selection and complete prior-option controls;not live export routing or canonical publication.'),
     proof(root, 'tests/material-parity/snackbar-position-observation.spec.mjs', /test\('trigger paint historical reader restores exact accepted sources and rejects drift'/,
       'trigger paint historical reader restores exact accepted sources and rejects drift', 'Four whole-source guarded Git predecessors and rejecting drift controls;not current source equivalence or canonical publication.'),
     proof(root, 'tests/material-parity/snackbar-position-observation.spec.mjs', /test\('trigger paint successor passes the complete existing receipt loader'/,

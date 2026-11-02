@@ -31,6 +31,52 @@ test('trigger paint historical reader restores exact accepted sources and reject
   }
 });
 
+test('trigger paint staged selection preserves every older option and rejects mixtures', async () => {
+  const { prepareTriggerPaintSelection, restoreTriggerPaintSelection } = await import('../../scripts/join-material-trigger-paint-inputs.mjs');
+  const { default: ts } = await import('typescript'), vm = await import('node:vm'), path = await import('node:path');
+  const { fileURLToPath, pathToFileURL } = await import('node:url');
+  const review = '1'.repeat(64);
+  for (const [kind, file] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
+    const original = readFileSync(file), staged = prepareTriggerPaintSelection(original, kind, review);
+    assert.deepEqual(ts.createSourceFile(file, staged, 99, true, ts.ScriptKind.JS).parseDiagnostics, []);
+    assert.equal(restoreTriggerPaintSelection(staged, kind, review), original.toString().replaceAll('\r\n', '\n'));
+    assert.throws(() => restoreTriggerPaintSelection(staged + '\n// drift', kind, review));
+    assert.throws(() => prepareTriggerPaintSelection(original, kind, 'not-a-review'));
+    assert.deepEqual(readFileSync(file), original, 'Staged selection must not mutate live exporter');
+    if (kind === 'runner') {
+      const match = staged.match(/const applicability=([\s\S]*?);\n    assert.ok\(!applicability/); assert.ok(match);
+      const choose = Function('options', 'createTriggerPaintReviewReader', 'auditReadFileSync', 'root', 'dividerConsumerReaderFactory', 'captureAvailabilityEvidenceRead', `return ${match[1]}`);
+      const next = () => 'new', prior = () => 'old';
+      assert.equal(choose({ caseObligationReviewSha256: review }, next, null, '.', prior, null), 'new');
+      assert.equal(choose({ caseObligationReviewSha256: 'old' }, next, null, '.', prior, null), 'old');
+      continue;
+    }
+    const execute = (source, flags) => {
+      const outputs = [];
+      vm.runInNewContext(source.replace(/^import .*;\n/gm, '').replaceAll('import.meta.url', 'moduleUrl'), {
+        assert, path, fileURLToPath, moduleUrl: pathToFileURL(path.resolve(file)).href,
+        statSync: () => ({ isFile: () => true, isDirectory: () => true }),
+        process: { argv: ['node', file, ...flags], execPath: 'node', env: {} },
+        spawnSync: (_exe, args) => { outputs.push({ args }); return { status: 0, signal: null }; },
+        console: { log: value => outputs.push(JSON.parse(value)) },
+      });
+      assert.equal(outputs.length, 1); return JSON.parse(JSON.stringify(outputs[0]));
+    };
+    const before = original.toString().replaceAll('\r\n', '\n');
+    const older = [...before.matchAll(/rawRequested\.includes\('(.*?)'\)/g)].map(row => row[1]);
+    for (const flags of [[], ...older.map(flag => [flag])])
+      assert.deepEqual(execute(staged, [...flags, '--dry-run']), execute(before, [...flags, '--dry-run']));
+    for (const suffix of [[], ['--check'], ['--dry-run']]) {
+      const result = execute(staged, ['--trigger-paint', ...suffix]);
+      assert.ok(result.args.includes(`--case-obligation-review-sha256=${review}`));
+      assert.ok(result.args.includes(`--case-obligation-review=artifacts/material-parity/working-audit/proposals/${review}.json`));
+      assert.equal(result.args.includes('--check'), suffix.includes('--check'));
+    }
+    for (const flag of [...older, '--unknown']) assert.throws(() => execute(staged, ['--trigger-paint', flag, '--dry-run']));
+    console.log(JSON.stringify({ stagedSelection: true, olderOptionsPreserved: older.length, liveExporterChanged: false }));
+  }
+});
+
 test('trigger paint successor passes the complete existing receipt loader', async () => {
   const { loadCaseObligationReview } = await import('../../scripts/audit-findings-store.mjs');
   const reader = createTriggerPaintReviewReader(), envelope = JSON.parse(reader.read(reader.file));
@@ -310,7 +356,7 @@ test('Snackbar paint batch classifications preserve prior definitions proofs and
     visit(extract(source, name)); assert.ok(result);
     return result.elements.map(n => n.getText());
   };
-  for (const [name, additions, oldCount] of [['sourceFingerprints', 2, 1149], ['focusedProofInventory', 7, 477], ['implementationPlan', 2, 73]]) {
+  for (const [name, additions, oldCount] of [['sourceFingerprints', 2, 1149], ['focusedProofInventory', 8, 477], ['implementationPlan', 2, 73]]) {
     const before = entries(oldProducer, name), after = entries(currentProducer, name);
     assert.equal(before.length, oldCount); assert.equal(after.length, oldCount + additions);
     assert.deepEqual(after.slice(additions), before);
@@ -327,7 +373,7 @@ test('Snackbar paint batch classifications preserve prior definitions proofs and
     assert.equal([...source.matchAll(expression)].length, 1);
     assert.equal(new RegExp(row.pattern).test(source.replace(expression, '/* rejected detector control */')), false);
   }
-  console.log(JSON.stringify({ sources: 1151, proofs: 484, findings: 208, plans: 75,
+  console.log(JSON.stringify({ sources: 1151, proofs: 485, findings: 208, plans: 75,
     priorDefinitionsPreserved: 206, priorProofEntriesPreserved: 477, newFindingIds: expected,
     newDetectorControls: 2, canonicalPublished: false, casePromoted: false }));
 });
