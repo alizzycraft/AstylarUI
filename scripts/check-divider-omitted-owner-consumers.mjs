@@ -75,6 +75,7 @@ function constraintProbe(source, axis) {
 let constraintOwnerPairs = 0, omittedConstraintSlots = 0;
 let objectFitOwnerExclusions = 0, normalContentOwners = 0, svgContextOnlySlots = 0;
 let maskedHeadingOwners = 0;
+let omittedZeroMinHeightOwners = 0, matchingPercentMinHeightOwners = 0;
 for (let i = 0; i < previous.treeReceipts.length; i += 2) {
   const a = JSON.parse(fs.readFileSync(previous.treeReceipts[i].file));
   const b = JSON.parse(fs.readFileSync(previous.treeReceipts[i + 1].file));
@@ -97,6 +98,17 @@ for (let i = 0; i < previous.treeReceipts.length; i += 2) {
       maskedHeadingOwners++;
     }
     const candidates = b.nodes.filter(n => n.authored?.id === id); assert.equal(candidates.length, 1);
+    if (id === 'page') {
+      assert.equal(a.styles[native.style].minHeight, '100%');
+      assert.equal(candidates[0].resolvedStyle.minHeight, '100%');
+      assert.equal(candidates[0].normalResolvedStyle.minHeight, '100%');
+      matchingPercentMinHeightOwners++;
+    } else {
+      assert.equal(a.styles[native.style].minHeight, '0px');
+      assert.equal(candidates[0].resolvedStyle.minHeight, undefined);
+      assert.equal(candidates[0].normalResolvedStyle.minHeight, undefined);
+      omittedZeroMinHeightOwners++;
+    }
     for (const [property, reference] of [['minWidth', '0px'], ['maxWidth', 'none'], ['maxHeight', 'none']]) {
       assert.equal(a.styles[native.style][property], reference);
       assert.equal(candidates[0].resolvedStyle[property], undefined);
@@ -121,6 +133,7 @@ for (let i = 0; i < previous.treeReceipts.length; i += 2) {
 }
 assert.equal(constraintOwnerPairs, 120); assert.equal(omittedConstraintSlots, 360);
 assert.equal(maskedHeadingOwners, 48);
+assert.equal(omittedZeroMinHeightOwners, 96); assert.equal(matchingPercentMinHeightOwners, 24);
 assert.ok(fs.readFileSync('examples/material-showcase/src/app/reference.component.ts', 'utf8')
   .includes('.benchmark>.eyebrow,.benchmark>h1{opacity:0}'));
 assert.equal(objectFitOwnerExclusions, 120); assert.equal(normalContentOwners, 120); assert.equal(svgContextOnlySlots, 360);
@@ -255,6 +268,9 @@ console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-omitted-ow
   sourceMap: { file: mapFile, sha256: hash(mapBytes) }, sources: receipts,
   positionControls, meshControls, constraintOwnerPairs, omittedConstraintSlots, constraintControls, explicitNoneObservations,
   diagnosticControls, historicalHeightEvidence,
+  minimumHeightInputs: { omittedZeroMinHeightOwners, matchingPercentMinHeightOwners,
+    conclusion: '96 non-page owners omit candidate minHeight against native 0px; actual captured/current height-constraint controls preserve a positive height for both omission and explicit zero. All24 pages explicitly retain matching 100% tokens.',
+    boundary: 'Constraint block and recorded inputs only. Percentage containing-height definiteness, box sizing, intrinsic sizing and other layout consumers remain separate; equal 100% tokens do not prove used page heights.' },
   failedHeadingControlBoundary: { maskedHeadingOwners,
     conclusion: 'All 48 retained native heading owners have opacity:0. Zero-change heading color controls cannot establish visible fill/stroke applicability. Preserve failed November2 trials; do not promote them to passes or unmask the reference.',
     inspectionPromoted: false },

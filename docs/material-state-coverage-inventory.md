@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+November2 min-height accounting closes the deliberately excluded input-slot
+question,not used-height parity. Existing omitted-owner script authenticates96
+non-page owners with native minHeight0px versus omitted candidate normal/effective
+minHeight. Its existing captured/current actual height-constraint controls already
+distinguish omission,zero,positive and percentage minima;omission and explicit
+zero preserve the positive control height. All24 page owners retain explicit
+matching100% minima in both candidate stages. This is NOT proof of percentage
+containing-height definiteness,box sizing,intrinsic sizing or other consumers.
+Equal100% tokens must not be promoted to equal used page heights.
+
+No need to repeat settled baseline/heading work:October19 copy-aware baseline
+trace already distinguishes local draw coordinates from projection;October25
+heading-box verification already measures38px title height on both sides in
+four supplementary desktop-DPR1 contexts. Their exact bounds remain in the
+original ledger and reports. The immediately preceding next-step suggestion to
+seek those traces is superseded by their discovery,not authorization to rerun
+them. Heading-specific clipping failure remains unestablished and masked native
+paint prevents an equal-input visible heading verdict. Avoid speculative GPU
+capture. Continue finite owner sizing/material-input accounting,especially page
+percentage containing-height and explicit box-sizing requests,using existing
+source/history proofs before considering any new capture.
+
+Command:node scripts/check-divider-omitted-owner-consumers.mjs,exit0;prior
+position/mesh/constraint/public-evidence/applicability controls remain passing.
+Log:divider-min-height-inputs-20261102.log,SHA256
+0f07cca3140158d9a166600b70ed83b53801df032f5542ec91fca47da4b62d38.
+No renderer/fixture change,case promotion,new defect count or canonical export.
+
+
 November2 natural-line-box reuse check narrows the next evidence gap without
 another browser run. Existing cc4839ff supplement is authenticated together with
 its producer,checkpoint,probe source,original report and matched reference trees.

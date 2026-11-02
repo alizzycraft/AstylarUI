@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-min-height-inputs-20261102.log. It extends the existing120-owner
+input accounting to96 omitted zero minima and24 matching explicit percentage
+minima,without claiming complete used sizing. Preserve earlier consumer logs
+and the original baseline/heading observations;no repeat capture or replacement.
+
+
 Keep divider-line-box-context-reuse-corrected-20261102.log and the first empty
 divider-line-box-context-reuse-20261102.log. The first local check failed an
 overbroad DPR assertion;the corrected record preserves the exact20 matched/four
