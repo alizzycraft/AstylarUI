@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+November2 corrected consumer reviewb49ef7e0 passes8/8 and18647 dependencies.
+Immutable predecessor pin removes a promotion-sensitive test baseline;no case
+scope/status/gate changes. Freeze1149/477/206/73 for corrected export. Preserve
+first candidated9ce8aee and accepted5e77 backups. Reuse first-candidate derived
+conservation only after full section-digest identity proves applicability;do
+not rerun settled leaf checks or promote the superseded source generation.
+
+
 November2 consumer batch is live1149 sources/477 proofs/206 findings/73 plans.
 Exact reviewa4a63925 passes8/8 combined old/new registration and complete reader
 tests,including18647 dependencies. Freeze for one export/conservation/independent

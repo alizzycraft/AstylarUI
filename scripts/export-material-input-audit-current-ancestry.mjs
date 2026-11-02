@@ -105,7 +105,7 @@ if (datepickerOpening) inputs['case-obligation-review'] = 'artifacts/material-pa
 if (tooltipOpen) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/3a51fbe3299d2c0f3f7ee70822bb69e0a4f7d9ec77739e6942337d12917cfe9d.json';
 if (badgeLabelPaint) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/3cb9fe23409d103230b7d2f9e842d9f3dfd984fd579e5cf2cfc4c32bcef52b60.json';
 if (captureAvailability) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1.json';
-if (dividerConsumerInputs) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/a4a63925b2b779bb71719935b4a2d9e28d7e8184ad67e78118feae6f82633273.json';
+if (dividerConsumerInputs) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/b49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21.json';
 for (const [name, relative] of Object.entries(inputs)) {
   const retained = (originalRunnerRecovery || dividerComputedPaint || dividerOwnerFrame || menuSelectDisabled || dividerOwnerContext || editingContext || textHeld || treeFocus || sortArrow || focusSelection || chipsAlternate || stepperBatch || snackbarSingleOpen || datepickerOpening || tooltipOpen || badgeLabelPaint || captureAvailability || dividerConsumerInputs) && name === 'case-obligation-review' ? 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json' : relative;
   const stat = statSync(path.join(root, retained));
@@ -139,7 +139,7 @@ if (datepickerOpening) args[args.findIndex(argument => argument.startsWith('--ca
 if (tooltipOpen) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=3a51fbe3299d2c0f3f7ee70822bb69e0a4f7d9ec77739e6942337d12917cfe9d';
 if (badgeLabelPaint) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=3cb9fe23409d103230b7d2f9e842d9f3dfd984fd579e5cf2cfc4c32bcef52b60';
 if (captureAvailability) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=2f609608195c66b94a965508eb7d59e1aa7d94b7bf33ba24e61566b550f737d1';
-if (dividerConsumerInputs) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=a4a63925b2b779bb71719935b4a2d9e28d7e8184ad67e78118feae6f82633273';
+if (dividerConsumerInputs) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=b49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21';
 if (requested.includes('--dry-run')) console.log(JSON.stringify({ cwd: root, executable: process.execPath, args }, null, 2));
 else {
   // Forward the caller's cold/progress settings and preserve validation failure

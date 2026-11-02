@@ -4,7 +4,7 @@ import path from 'node:path';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const prior = '19dea13ed3eaf952b72171e12664ce180185aea863c52e187649c273f6782fc1';
-export const dividerConsumerReview = 'a4a63925b2b779bb71719935b4a2d9e28d7e8184ad67e78118feae6f82633273';
+export const dividerConsumerReview = 'b49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21';
 export const dividerConsumerSources = Object.freeze([
   'scripts/check-divider-omitted-owner-consumers.mjs',
   'scripts/join-material-divider-consumer-inputs.mjs',

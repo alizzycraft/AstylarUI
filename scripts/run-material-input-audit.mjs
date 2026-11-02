@@ -102,7 +102,7 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);
   const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial,
-    diagnosticRead: (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256==='a4a63925b2b779bb71719935b4a2d9e28d7e8184ad67e78118feae6f82633273')
+    diagnosticRead: (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256==='b49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21')
       ? createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync}) : readFileSync });
   progress('verify-evidence-session');
   return { audit, errors };

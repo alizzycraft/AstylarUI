@@ -1,5 +1,129 @@
 # Material comparison/state coverage inventory
 
+November2 pinned-baseline instrumentation correction VERIFIED8/8,0skip,
+263058.7358ms. Existing complete loader authenticates18647 dependencies for
+reviewb49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21.
+Historical predecessor test now names immutable5e770758/index2090dfe3 rather
+than mutable current.json;all prior assertions,parent restoration,rejection
+controls,old route compatibility and partial/current-unverified statuses remain.
+Only test baseline and exact review selectors changed,no renderer/fixture edits.
+
+Command:node --max-old-space-size=8192 --test
+tests/material-parity/divider-consumer-registration.spec.mjs
+tests/material-parity/capture-availability-registration.spec.mjs
+tests/material-parity/divider-consumer-input-join.spec.mjs.
+Log:divider-consumer-fixed-baseline-batch-20261102.log,SHA256
+c8453728aead9db77439b6fead49540a5e9fac3e86ef71dad321e25db327b76a.
+Freeze corrected source generation1149/477/206/73 for one corrected export.
+Do not cold-check/promote the now-superseded first candidated9ce8aee. Its
+conservation results remain reusable only for sections authenticated unchanged
+in the corrected package. First candidate and accepted5e77 backups are retained.
+Accepted pointer remains2090dfe3;original final gates and all2311 partial statuses
+preserve. No full loader repeat is justified for recording this verified result.
+
+
+November2 first-candidate derived conservation completes exit0:all147 changes
+are explained,including98 exact module-hash transitions,48 complete control-row
+old/new hashes and one actual motion-report hash. All other14085648 selected
+entries/containers conserve. Log divider-consumer-derived-receipt-conservation-
+20261102.log SHA2564b29afb19ce3f977aa2c78d55a419ce85f031dbed1d20b20359bfe60b4b8154a.
+
+PRE-IMPORT instrumentation hazard found:consumer predecessor test read mutable
+working-audit/current.json and asserted it remained5e770758. Correct accepted
+promotion would therefore break that historical test. It now pins immutable
+generation5e770758/index2090dfe3 directly;no scope,assertion,case or acceptance
+requirement is removed. Exact reader/test source receipt changes revise review
+to b49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21.
+Registration constant,launcher and diagnostic selector updated coherently.
+
+First candidated9ce8aee manifest/payload/markdown are copied/hash-verified in
+divider-consumer-first-candidate-d9ce-20261102 before further writes. No cold run
+or import/pointer promotion was started against that generation. The fixed-
+baseline combined8-test command is active in divider-consumer-fixed-baseline-
+batch-20261102.log;resume its existing handle. Current edits uncommitted pending
+verification. A corrected frozen export is required afterward. Reuse first-
+candidate derived evidence ONLY if complete section-digest identity proves
+those sections unchanged;do not re-execute leaf comparisons unnecessarily or
+claim their applicability before checking. Accepted5e770758 remains unchanged.
+
+
+November2 candidate section/metadata decode completed exit0. Both encoded and
+decoded candidate hashes/lengths authenticate. Complete80-section inventory has
+72 unchanged,eight changed,no additions/removals. Changed:sourceFingerprints,
+coverage,controlLineBoxes,discrepancies,ownerCaretInputs,reviewedSourceBatchInputs,
+controlTypography,focusedProofs. All206 findings,73 plans and the full summary
+are identical. All472 old proof rows are EXACTLY unchanged;five named consumer
+proof declarations are added. Candidate source fingerprints match the expected
+preflight digest a156eb01 with1149 total paths.
+
+Combined record:divider-consumer-candidate-sections-metadata-20261102.log,SHA256
+3f46e185403b114a24d3565c1538b500c08176b5295e7848d5ad5cc522217fc3.
+Focused metadata conservation also checks complete old/new source membership,
+six additions/five changed existing paths/no removals and every actual current
+source hash;log divider-consumer-metadata-conservation-20261102.log.
+Complete selected leaf/container comparison exits0 on the five changed derived
+sections:14085648 entries,147 changed leaves. Both streams authenticate. Record
+divider-consumer-derived-receipt-leaves-20261102.log SHA256
+8a8afd582d99a63c958aedc681c321492de1e5feb7753be2c2bcf1f46dc6b439.
+Changes group as98 direct module receipts,48 control-proof hashes and one
+motion-report hash. Recomputing the49 derived hashes from complete current
+objects/actual motion collector is running in divider-consumer-derived-receipt-
+conservation-20261102.log. Resume that handle,not the completed leaf comparison.
+Do not interpret a receipt-shaped path as proof of a correct derived value.
+Coverage conservation,cold comparison and verified imports remain outstanding.
+Accepted working-store pointer still2090dfe3/5e770758;no promotion or parity claim.
+
+
+November2 consumer export completed exit0,same original process,no restart.
+Candidate d9ce8aee0df02ebe5ebc45538477f60fa9d7ba3f6097b12743773f3909bbeac8
+is98587211 compressed bytes;decoded2370853238 bytes/SHA256
+7d3e9a4fd729973e9900454714c045b54916172225acc7afb469715e9db294da.
+Progress complete3199743.3341ms;one collector/10 memory hits/one disk hit,
+20204 file reads/4116245376 verification bytes. Summary remains8483 differences,
+389202 occurrences,206 findings,inputEquivalent:false,436/436static+1875/1875
+interaction configured coverage. This is not completed inspection or acceptance.
+
+Export stdout SHA61346a66ea76be020fddb0149c6f99319799be4f01e8adb4bd673e4cb0a011b0;
+stderr SHA f76db0c362217f846c21e92886bf709c7ade4177aacb1473a6d4871845ffd9ab.
+One candidate decode is now running in divider-consumer-candidate-sections-
+metadata-20261102.log,combining existing sectionDigests and five selected metadata
+sections. Authenticated predecessor receipts are reused;no old payload decode.
+No accepted-store promotion,cold result or import is claimed. Preserve pre-export
+5e77 backup and accepted pointer2090dfe3 until all publication gates pass.
+
+
+November2 frozen consumer publication STARTED,not accepted. Disk preflight:
+C5816254464/D1507229696 bytes free before the exact backup. Accepted manifest,
+payload and markdown copied/hash-verified into divider-consumer-pre-export-5e77-
+20261102. Raw hashes respectively916c4e2356d8506009fb25af9599ac435f3e4417d1eab9a4184a568633777b14,
+5e770758fa29941badd1003f008c86cca288884c4e62815e3fef9490dc8f3491,
+d5b061b874ffef3fce29bfef029e1a188996003a5a5ce547c199315960ef6628.
+
+One actual export is running with ASTYLAR_AUDIT_PROGRESS=1,COLD=0:
+node scripts/export-material-input-audit-current-ancestry.mjs --divider-consumer-inputs.
+Logs:divider-consumer-canonical-export-20261102.log/.stderr.log. Existing handle
+is live;resume it,do not restart from elapsed time or missing final output.
+Current progress advanced from build-audit to join-case-obligations at
+1009196.3883ms,then validate-audit at1373315.8832ms. Same process remains live;
+no canonical-write verdict yet.
+Accepted working-store pointer2090dfe3
+still names5e770758 and must not advance before complete conservation,independent
+cold comparison and verified isolated/accepted imports. Reuse authenticated
+predecessor section/metadata receipts from the prior Slider milestone instead
+of decoding the old2.37GB payload again just to recover unchanged baseline data.
+Read-only preflight now reauthenticates both retained log hashes002ee049/f2298a4d
+and confirms each current.manifest names accepted5e770758. They supply all80
+section digests and sourceFingerprints/summary/sourceFindings/focusedProofs/
+implementationPlan baseline metadata. No predecessor payload decode was needed.
+Live actual sourceFingerprints function preflight independently yields1149 paths
+against baseline1143:six additions,no removals,five changed existing paths
+(capture-availability-registration,check-divider-owner-coverage,launcher,producer,
+runner). All are the frozen audit changes,not renderer/fixture edits. Exact
+current fingerprint-array digest a156eb019a58acc38354fbb64d02fadfa8b1a9c7f533ea6bad94303f79586ac2
+is an expected candidate transition,not evidence that the candidate has passed.
+All2311 cases remain partial/current-unverified;original final gates unchanged.
+
+
 November2 LIVE compatible consumer batch VERIFIED8/8,0skip,262042.214ms.
 Same existing process exited0. Complete loader authenticates18647 dependencies
 for exact reviewa4a63925b2b779bb71719935b4a2d9e28d7e8184ad67e78118feae6f82633273.

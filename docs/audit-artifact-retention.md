@@ -1,5 +1,46 @@
 # Audit artifact retention
 
+divider-consumer-fixed-baseline-batch-20261102.log is complete,exit0,8/8 tests,
+18647 authenticated dependencies. Preserve it with first candidate d9ce8aee and
+accepted5e77 backups. No cold run or accepted import was performed on the first
+candidate. Corrected source generation must pass its publication gates separately.
+
+
+Keep complete derived-receipt-conservation-20261102 record and all48 proof rows.
+Keep divider-consumer-first-candidate-d9ce-20261102 (three exact copied files):
+the source-generation candidate is superseded by a necessary pinned-baseline
+instrumentation correction,not accepted or deleted. Keep active divider-consumer-
+fixed-baseline-batch-20261102 log;resume its existing verification handle. Do not
+release the accepted5e77 backup or first-candidate evidence before reconciliation.
+
+
+divider-consumer-derived-receipt-leaves-20261102.log is complete,exit0,14085648
+entries/147 changed leaves. Keep it. Resume active derived-receipt-conservation
+20261102 handle,which retains the complete48 selected proof objects and checks
+their old/new digests plus the actual motion report. No accepted-store promotion.
+
+
+Keep completed divider-consumer-candidate-sections-metadata-20261102.log and
+divider-consumer-metadata-conservation-20261102.log. Keep active
+divider-consumer-derived-receipt-leaves-20261102.log and resume its existing
+comparison handle. Predecessor section/metadata receipts remain required;no
+candidate acceptance or retention release follows from72 unchanged sections.
+
+
+divider-consumer-canonical-export-20261102 stdout/stderr are now complete,exit0.
+Keep both and exact pre-export5e77 backup. Candidate generationd9ce8aee is NOT
+accepted yet. Keep active divider-consumer-candidate-sections-metadata-20261102
+log;resume its existing process instead of another decode. No promotion follows
+from successful export alone;conservation/cold/import gates remain outstanding.
+
+
+Keep divider-consumer-pre-export-5e77-20261102:all three accepted canonical files
+are hash-verified before the one active export. Keep active divider-consumer-
+canonical-export-20261102 stdout/stderr and resume its existing process handle.
+No successful candidate or accepted-store promotion is claimed yet. Do not
+remove the predecessor backup or overwrite these logs on resumption.
+
+
 divider-consumer-live-compatible-batch-20261102.log is complete,exit0,8/8 tests,
 18647 dependencies. Preserve this verified final live-batch record and all earlier
 failed/intermediate logs with their source revisions. No running loader remains.

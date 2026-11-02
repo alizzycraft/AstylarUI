@@ -8,8 +8,10 @@ import { createDividerConsumerRegistrationHistoricalRead } from './divider-consu
 
 test('Divider consumer batch joins exact accepted parents and preserves every gap and status', () => {
   const hash = b => createHash('sha256').update(b).digest('hex');
-  const pointer = JSON.parse(fs.readFileSync('artifacts/material-parity/working-audit/current.json'));
-  assert.equal(pointer.generation, '5e770758fa29941badd1003f008c86cca288884c4e62815e3fef9490dc8f3491');
+  // This is a historical predecessor-conservation proof. Promotion of a later
+  // accepted generation must not silently change its baseline or make it fail.
+  const pointer = { generation: '5e770758fa29941badd1003f008c86cca288884c4e62815e3fef9490dc8f3491',
+    indexSha256: '2090dfe307032486226a09d1c6da8c32084e27c40e2ef0e49ae5ded76c4a6ec3' };
   const bytes = fs.readFileSync(`artifacts/material-parity/working-audit/${pointer.generation}/index.json`);
   assert.equal(hash(bytes), pointer.indexSha256);
   const parents = JSON.parse(bytes).metadata.coverage.inspectionEvidence.cases;
