@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+November2 clipping caller/ancestor-selection question answered at SOURCE-REPLAY
+scope only. Actual captured/current processChildren forwards resolver-returned
+style identity in432 checks;432 missing-style controls suppress apply. Actual
+reconcile selects zero clipping entries across48 version/context replays of24
+retained nine-owner trees. Ninety-six resolver-hidden/inline-clip diagnostic
+controls select page. Reconstructed ancestry rejects missing non-root parents;
+no canonical fixture is changed. All prior consumer assertions still pass.
+This narrows a style-swapping/entry-selection hypothesis,not original runtime
+causality:resolver,cascade,layout,mesh lookup and paint are explicitly stubbed.
+Outside-tree ancestors,stale material clips and viewport/GPU composition remain
+unproved. Do not repeat these methods as if they prove original painted state.
+
+Command:node scripts/check-divider-omitted-owner-consumers.mjs,exit0,empty stderr.
+Keep initial passing caller-routing20261102 log and final stricter
+divider-clipping-caller-routing-ancestry-bound-20261102.log,raw SHA256
+d22da5998550d9f33c89c9139efaa240bcd85900f974b9937515597688861475.
+Producerb08c882e548ad27d76e39379ed64a15096352889d1389620a30cd818b6b9a277;
+captured/current element-creation and scroll-runtime receipts are recorded.
+Standalone successor only;canonical695dea7b and all case statuses preserve.
+Next use an applicable retained crop-producer/paint trace for the actual pixel
+question or explicitly record the missing runtime observation,not more guard
+controls or another full export. No renderer defect/fix or equal-input claim.
+
 November2 next bounded question:do omitted clipping declarations themselves
 activate core clipping for the120 outside-scalar Divider owners? Competing
 explanations were inactive own inputs versus an enabled clipping entry path.

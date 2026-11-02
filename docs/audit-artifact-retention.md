@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Keep divider-clipping-caller-routing20261102 passing log and stricter
+clipping-caller-routing-ancestry-bound20261102 passing stdout/empty stderr.
+Both are bounded source replays,not browser captures or accepted canonical
+generations. Preserve prior clipping-entry failure/corrected records separately.
+
 Keep divider-outside-owner-clipping-entry20261102 stdout/stderr as failed
 instrumentation evidence (missing extracted imported binding),and corrected
 clipping-entry-bound20261102 stdout/empty stderr as the passing18-control proof.

@@ -79,9 +79,18 @@ let omittedZeroMinHeightOwners = 0, matchingPercentMinHeightOwners = 0;
 let blockContainerOwners = 0, containerOnlyInputSlots = 0;
 const ownTransformInputs = [];
 const ownClipInputs = [];
+const clippingContexts = [];
 for (let i = 0; i < previous.treeReceipts.length; i += 2) {
   const a = JSON.parse(fs.readFileSync(previous.treeReceipts[i].file));
   const b = JSON.parse(fs.readFileSync(previous.treeReceipts[i + 1].file));
+  const nodes = b.nodes.filter(n => n.authored?.type);
+  assert.equal(nodes.length, 9);
+  for (const node of nodes) {
+    assert.equal(node.authored.style?.overflow, undefined);
+    assert.equal(node.resolvedStyle.overflow, undefined);
+    assert.equal(node.normalResolvedStyle.overflow, undefined);
+  }
+  clippingContexts.push({ receipt: previous.treeReceipts[i + 1], nodes });
   // Reject scope expansion rather than assuming a future SVG/image/control
   // owner or generated content is covered by this HTML-only applicability proof.
   assert.ok(a.nodes.every(n => ['main', 'p', 'h1', 'section', 'span', 'mat-divider'].includes(n.type)));
@@ -356,6 +365,72 @@ for (const source of sources('app/services/dom/elements/overflow-clip.service.ts
 }
 assert.equal(overflowEntryControls, 18);
 
+// Replay caller selection with retained styles, not a substitute cascade or
+// layout execution. The actual resolver is deliberately outside this proof.
+let clippingCallerStyles = 0, clippingCallerMissingStyle = 0;
+for (const source of sources('app/services/dom/elements/element-creation.service.ts')) {
+  const probe = method(source, 'processChildren');
+  probe.ancestry = { setParent() {} }; probe.grid = { isGridContainer: () => false };
+  probe.shouldUseInlineFlow = () => false; probe.layoutBlockChildren = () => {};
+  for (const context of clippingContexts) for (const node of context.nodes) {
+    const styles = [], elementStyles = new Map(), layoutBoxes = new Map(), parent = {};
+    const project = () => { throw new Error('Unexpected projection'); };
+    let selected = node.resolvedStyle, calls = 0;
+    const render = { actions: { camera: { projectCssViewportPoint: project }, style: {
+      findStyleForElement(element, suppliedStyles, suppliedMap) {
+        assert.equal(element, node.authored); assert.equal(suppliedStyles, styles);
+        assert.equal(suppliedMap, elementStyles); return selected;
+      },
+    } } };
+    probe.overflowClip = { apply(mesh, style) {
+      assert.equal(mesh, parent); assert.equal(style, selected); calls++;
+    } };
+    const dom = { actions: { isFlexContainer: () => false }, context: { elementStyles, layoutBoxes } };
+    probe.processChildren(dom, render, [], parent, styles, node.authored);
+    assert.equal(calls, 1); clippingCallerStyles++;
+    selected = undefined; calls = 0;
+    probe.processChildren(dom, render, [], parent, styles, node.authored);
+    assert.equal(calls, 0); clippingCallerMissingStyle++;
+  }
+}
+assert.equal(clippingCallerStyles, 432); assert.equal(clippingCallerMissingStyle, 432);
+
+let clippingReconcileContexts = 0, clippingReconcilePositiveControls = 0;
+for (const source of sources('lib/astylar-scroll-runtime.ts')) {
+  for (const context of clippingContexts) {
+    const probe = method(source, 'reconcile');
+    const elements = new Map(context.nodes.map(n => [n.key, { ...n.authored, children: [] }]));
+    const root = { children: [] };
+    for (const node of context.nodes) {
+      if (node.parent !== 'root') assert.ok(elements.has(node.parent), 'Unrecorded ancestor');
+      (node.parent === 'root' ? root : elements.get(node.parent)).children.push(elements.get(node.key));
+    }
+    const styles = new Map(context.nodes.map(n => [n.authored.id, n.normalResolvedStyle]));
+    let override = false, observed;
+    probe.containers = new Map(); probe.parentIds = new Map(); probe.clipEntries = [];
+    probe.disposed = false; probe.createContainer = () => undefined;
+    probe.refreshClipping = () => { observed = probe.clipEntries; };
+    probe.options = {
+      resolveStyle(element) { const style = styles.get(element.id); assert.ok(style);
+        return override && element.id === 'page' ? { ...style, overflow: 'hidden' } : style; },
+      getStyle() { throw new Error('Unexpected fallback from retained style'); },
+      getMesh(id) { assert.ok(styles.has(id)); return { name: id }; },
+    };
+    const siteData = { root };
+    probe.reconcile(siteData); assert.deepEqual(observed, []); clippingReconcileContexts++;
+    override = true;
+    probe.reconcile(siteData); assert.equal(observed.length, 1);
+    assert.equal(observed[0].mesh.name, 'page'); assert.equal(observed[0].style.overflow, 'hidden');
+    clippingReconcilePositiveControls++;
+    const page = context.nodes.find(n => n.authored.id === 'page'); assert.ok(page);
+    override = false; elements.get(page.key).style = { overflow: 'clip' };
+    probe.reconcile(siteData); assert.equal(observed.length, 1);
+    assert.equal(observed[0].mesh.name, 'page'); assert.equal(observed[0].style.overflow, 'clip');
+    clippingReconcilePositiveControls++;
+  }
+}
+assert.equal(clippingReconcileContexts, 48); assert.equal(clippingReconcilePositiveControls, 96);
+
 // Actual core mesh construction on the installed matching Babylon version.
 // This tests initial visibility flags, not CSS visibility support or raster paint.
 const engine = new NullEngine(), scene = new Scene(engine);
@@ -380,6 +455,11 @@ console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-omitted-ow
   ownClippingInputs: { observations: ownClipInputs, overflowEntryControls,
     conclusion: 'All120 exact owners retain native visible overflow axes,none clipPath and auto clip against candidate omissions. Captured/current OverflowClipService.apply returns before geometry/material access for omitted or visible overflow;four positive shorthand values enter geometry.',
     boundary: 'Own-input snapshots and this one core entry guard only. Axis-only and clipPath positive tokens do not activate this guard;their other consumers/support remain unproved. Not ancestor/viewport clipping,call-site style propagation,legacy clip applicability,shader/raster paint,current rendering or whole-case equivalence. Do not normalize absent declarations to native computed values.' },
+  clippingCallRouting: { clippingCallerStyles, clippingCallerMissingStyle,
+    clippingReconcileContexts, clippingReconcilePositiveControls,
+    treeReceipts: clippingContexts.map(c => c.receipt),
+    conclusion: 'Captured/current child-processing callers forward the exact resolver-returned style object;missing style suppresses the call. Reconcile selects no clip entry for any of24 retained nine-owner candidate trees in either source version;resolver-hidden and authored-inline-clip positive controls each select the page.',
+    boundary: 'Source-method replay with recorded normal/effective snapshots and explicitly stubbed resolver,layout,mesh lookup and paint. Not actual resolver/cascade execution,original runtime calls,ancestors outside the recorded tree,stale material clip state,viewport/shader composition,anonymous line boxes,current rendering or whole-case acceptance. Positive mutations are diagnostic objects only,not fixture edits.' },
   ownTransformBoundary: '120 native none versus omitted candidate transform requests route to null in captured/current parser controls. Preserve all raw used-origin pixels and candidate omissions. This is own-parser applicability only,not origin/default equivalence,ancestor transforms,stacking,containing blocks,projection or paint. Zero translation remains a non-null transform;do not normalize it to none.',
   containerInputRouting: { blockContainerOwners, containerOnlyInputSlots, containerDispatchControls,
     conclusion: 'All120 exact owners have block display on both sides. Captured/current flex/grid dispatch predicates reject block even with non-default flex/track requests; positive flex/grid display controls select their own path.',
