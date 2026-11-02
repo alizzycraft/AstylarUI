@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep divider-consumer-staged-routing-20261102.log. Its3/3 tests bind exact
+new-review selection,unchanged existing flag routes,rejection controls and
+producer/runner/launcher reversal without editing those live files. Earlier
+registration/reader logs remain required evidence for their source revisions.
+
+
 Keep divider-consumer-staged-registration-20261102.log. Its2/2 focused tests
 prove additive inventory conservation and exact historical reversal without
 changing live producer/export selection. No new canonical package or capture.

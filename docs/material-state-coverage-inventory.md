@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+November2 consumer runner/launcher routing is STAGED,3/3 focused tests pass,
+0skip,971.4979ms. Exact review cf613222 is selected only by the new
+--divider-consumer-inputs route. All existing rawRequested flag routes and default
+dry-run arguments are byte-for-byte equivalent after structured serialization;
+new ordinary/check/dry-run routes carry the exact review path/hash. Mixed older
+supplements and unknown flags reject. Runner selection chooses the new factory
+only for its exact digest;older factories remain fallback. Source collection
+precedes scoped evidence restoration. Final diagnostic receipt routing includes
+the new supplement without changing the earlier capture-availability branch.
+
+Complete staged producer/runner/launcher reversal recovers their pinned current
+sources;unknown drift rejects. No live files in those roles were edited. Source
+inventory remains1149 staged paths;one additional routing test makes477 staged
+proof declarations,with all prior1143/472 entries and73 plans preserved. Pending
+review reader/source/test remain unchanged,so prior18647-dependency validation
+is reused,not rerun for preparation or prose. This is NOT live registration,
+actual runner export or final current-code rendering acceptance.
+
+Command:node --test tests/material-parity/divider-consumer-registration.spec.mjs.
+Keep divider-consumer-staged-routing-20261102.log. Next apply the coherent
+producer/runner/launcher registration using these exact transformations,verify
+the actual live routes and source inventory through guarded historical reads,
+then freeze for the existing publication milestone. Accepted5e770758 unchanged;
+all2311 cases remain partial/current-unverified. No renderer/fixture/policy fix.
+
+
 November2 consumer source/proof registration is STAGED and verified2/2,0skip.
 New divider-consumer-registration.mjs follows the existing additive registration
 pattern against exact producer19dea13e. It adds six distinct sources(including
