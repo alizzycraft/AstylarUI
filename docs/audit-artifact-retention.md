@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep divider-outside-owner-transform-routing-20261102.log. It preserves120 raw
+native used origins/candidate omissions and14 captured/current parser controls.
+Do not replace original trees or reinterpret null parser routing as origin,
+stacking,ancestor-transform or rendering equivalence. Earlier origin findings
+and failure evidence remain required.
+
+
 Keep divider-block-container-routing-20261102.log. It binds120 block owners,
 480 exact container-field inputs and32 captured/current dispatch controls.
 Earlier source revisions/logs remain historical evidence;do not replace them

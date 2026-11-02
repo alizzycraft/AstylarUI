@@ -1,5 +1,29 @@
 # Material comparison/state coverage inventory
 
+November2 own-transform routing extends exact-owner input accounting without
+normalizing origins. All120 outside-scalar owners retain native transform:none
+and omitted candidate normal/effective transform. Candidate transformOrigin is
+omitted;every native used pixel-origin string is retained verbatim in the log.
+Fourteen actual captured/current parseCssTransform controls distinguish null
+results for omitted/empty/none/case-whitespace none from fractional translation,
+scale and explicit zero translation. The latter remains NON-null. Do not extend
+the no-transform route to identity-function stacking/containing-block behavior.
+
+This resolves own-parser routing only. It does not equate used pixel origins
+with candidate declaration omissions,prove CSS initial/reference-box semantics,
+exclude ancestor transforms or establish stacking,projection,glyph/paint parity.
+Reuse the existing origin-stage and inactive-paragraph findings with their own
+scope;the scalar helper requires full scalar/tree correspondence and must not be
+fed invented heading/page IDs or synthesized scalar evidence. No such alias or
+default normalization was introduced. Remaining meaningful differences stay open.
+
+Command:node scripts/check-divider-omitted-owner-consumers.mjs,exit0;all prior
+controls remain. Log:divider-outside-owner-transform-routing-20261102.log,SHA256
+beae96174a40a72f59e4c219b24bf6a8eb18b0fcd8db5fc021b4dc75ff6fedde.
+Captured/current parser source receipts included. No renderer/fixture changes,
+new defect count,case promotion or export. Accepted5e770758 remains unchanged.
+
+
 November2 own-container routing accounts for four further exact input fields
 without another capture. All120 outside-scalar owners retain display:block in
 native and both candidate normal/effective snapshots. Native flexDirection:row

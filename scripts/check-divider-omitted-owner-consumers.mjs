@@ -77,6 +77,7 @@ let objectFitOwnerExclusions = 0, normalContentOwners = 0, svgContextOnlySlots =
 let maskedHeadingOwners = 0;
 let omittedZeroMinHeightOwners = 0, matchingPercentMinHeightOwners = 0;
 let blockContainerOwners = 0, containerOnlyInputSlots = 0;
+const ownTransformInputs = [];
 for (let i = 0; i < previous.treeReceipts.length; i += 2) {
   const a = JSON.parse(fs.readFileSync(previous.treeReceipts[i].file));
   const b = JSON.parse(fs.readFileSync(previous.treeReceipts[i + 1].file));
@@ -99,6 +100,15 @@ for (let i = 0; i < previous.treeReceipts.length; i += 2) {
       maskedHeadingOwners++;
     }
     const candidates = b.nodes.filter(n => n.authored?.id === id); assert.equal(candidates.length, 1);
+    assert.equal(a.styles[native.style].transform, 'none');
+    assert.equal(candidates[0].resolvedStyle.transform, undefined);
+    assert.equal(candidates[0].normalResolvedStyle.transform, undefined);
+    assert.equal(candidates[0].resolvedStyle.transformOrigin, undefined);
+    assert.match(a.styles[native.style].transformOrigin, /^-?[\d.]+px -?[\d.]+px(?: 0px)?$/);
+    ownTransformInputs.push({ referenceTree: previous.treeReceipts[i], id,
+      referenceTransform: a.styles[native.style].transform,
+      referenceUsedOrigin: a.styles[native.style].transformOrigin,
+      candidateTransform: '<omitted>', candidateOrigin: '<omitted>' });
     assert.equal(a.styles[native.style].display, 'block');
     assert.equal(candidates[0].resolvedStyle.display, 'block');
     assert.equal(candidates[0].normalResolvedStyle.display, 'block');
@@ -168,6 +178,21 @@ for (const [version, source] of sources('app/services/dom/elements/element-dimen
   }
 }
 let diagnosticControls = 0;
+let transformParserControls = 0;
+for (const source of sources('app/services/dom/elements/css-transform.ts')) {
+  const declaration = unique(source, n => ts.isFunctionDeclaration(n) && n.name?.text === 'parseCssTransform')
+    .replace(/^export\s+/, '');
+  const compiled = ts.transpileModule(declaration, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const parse = new Function(`${compiled};return parseCssTransform;`)();
+  for (const value of [undefined, '', 'none', ' NONE ']) {
+    assert.equal(parse(value), null); transformParserControls++;
+  }
+  assert.deepEqual(parse('translate(1.25px, -2.5px)').translate, { x: 1.25, y: -2.5, z: 0 });
+  assert.deepEqual(parse('scale(2)').scale, { x: 2, y: 2, z: 1 });
+  assert.notEqual(parse('translate(0px, 0px)'), null);
+  transformParserControls += 3;
+}
+assert.equal(ownTransformInputs.length, 120);
 let containerDispatchControls = 0;
 for (const [file, name, active] of [
   ['app/services/dom/elements/flex.service.ts', 'isFlexContainer', ['flex', 'inline-flex']],
@@ -320,6 +345,8 @@ console.log(JSON.stringify({ producer: { file: 'scripts/check-divider-omitted-ow
   sourceMap: { file: mapFile, sha256: hash(mapBytes) }, sources: receipts,
   positionControls, meshControls, constraintOwnerPairs, omittedConstraintSlots, constraintControls, explicitNoneObservations,
   diagnosticControls, historicalHeightEvidence,
+  ownTransformInputs, transformParserControls,
+  ownTransformBoundary: '120 native none versus omitted candidate transform requests route to null in captured/current parser controls. Preserve all raw used-origin pixels and candidate omissions. This is own-parser applicability only,not origin/default equivalence,ancestor transforms,stacking,containing blocks,projection or paint. Zero translation remains a non-null transform;do not normalize it to none.',
   containerInputRouting: { blockContainerOwners, containerOnlyInputSlots, containerDispatchControls,
     conclusion: 'All120 exact owners have block display on both sides. Captured/current flex/grid dispatch predicates reject block even with non-default flex/track requests; positive flex/grid display controls select their own path.',
     boundary: 'Own-container dispatch and four recorded fields only; not flex/grid item roles,block content alignment,gaps,all downstream consumers,native used formatting,anonymous layout or whole-case equivalence.' },
