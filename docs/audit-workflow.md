@@ -1,5 +1,12 @@
 # Efficient Material input-audit workflow
 
+November2 trigger-paint live review10f4311b passes5/5 and complete18669-dependency
+validation with1151 sources/485 proofs/208 findings/75 plans. Shared/nested
+historical routing is exact and drift rejecting. Freeze for one --trigger-paint
+export/conservation/independent cold/import milestone after preserving695dea7b.
+All2311 remain partial/current-unverified. Do not rerun settled source probes,
+captures or full loader for documentation. Original scope and final gates apply.
+
 November2 consumer milestone695dea7b/index23dc19f6 passes export,complete
 conservation,independent cold equality(diskHits0) and isolated/accepted imports.
 All2311 cases remain partial/current-rendering unverified. Publish then resume

@@ -37,6 +37,9 @@ test('trigger paint historical reader restores exact accepted sources and reject
     ['scripts/run-material-input-audit.mjs', 'cffae75a36eeffe9bda5d799d43565c4833a3bbb751077420ac741528f8dd3a8'],
     ['scripts/export-material-input-audit-current-ancestry.mjs', 'bd12f66374002fd4897769e03c373f26c812744c44d5e18a35d1b39b9e4df05a'],
   ]) assert.equal(hash(shared(file)), expected, 'Shared historical entry must restore the exact older generation');
+  const nested = createCaptureAvailabilityHistoricalRead({ root: process.cwd(), read: shared });
+  assert.deepEqual(nested('tests/material-parity/input-equivalence-policy.mjs'), shared('tests/material-parity/input-equivalence-policy.mjs'),
+    'Already-restored nested policy bytes must remain owned by the older reader');
 });
 
 test('trigger paint staged selection preserves every older option and rejects mixtures', async () => {

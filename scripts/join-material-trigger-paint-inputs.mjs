@@ -6,9 +6,9 @@ import { execFileSync } from 'node:child_process';
 import { createDividerConsumerReviewReader } from './join-material-divider-consumer-inputs.mjs';
 
 const sourceTransitions = [
-  ['tests/material-parity/capture-availability-registration.mjs', 'ab859337f2585e35662ea2ece83228beabe7e4af3a00151d61b0389bd1d00d13', 'c7f8b931ab00939e6c65b4adca555a02e4622d4be9f25dbe2546797ecfdd3254'],
+  ['tests/material-parity/capture-availability-registration.mjs', 'ced32e851b4ef3681a76771d90a882e3c0d547d123e54515a30ed3a54a5037ff', 'c7f8b931ab00939e6c65b4adca555a02e4622d4be9f25dbe2546797ecfdd3254'],
   ['scripts/check-divider-omitted-owner-consumers.mjs', 'b08c882e548ad27d76e39379ed64a15096352889d1389620a30cd818b6b9a277', 'cf989605fc7c727111431c0b2deb1dc3e733b39c07a4751aaf19c798625c2bcd'],
-  ['tests/material-parity/snackbar-position-observation.spec.mjs', '69af83212fc53b07b6326cf388250f8c35263b8ffb67ed456422439b8aa00956', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
+  ['tests/material-parity/snackbar-position-observation.spec.mjs', '90971af86fed22189311bcc96f1ab87b2f26096c95b96357f368b4770cc5bc35', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
   ['tests/material-parity/input-equivalence-policy.mjs', '43e758150e13d5da4876127b7ca6755c0c66957b092499587498c66bef1a4d52', '8f1acb6af64b5cfdcddba911a4b3ddf61e241edfea74eec241d2276617fe1ea3'],
   ['tests/material-parity/input-equivalence-audit.mjs', 'cfed52bc5d431d49709955afc990b69cfcc04a11e26d0ddc8d3748d9a28a4c51', '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54'],
 ];

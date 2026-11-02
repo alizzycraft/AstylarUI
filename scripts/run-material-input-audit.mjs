@@ -95,7 +95,7 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const dividerConsumerEvidenceRead = createDividerConsumerRegistrationHistoricalRead({root,read:triggerPaintHistoricalRead});
     const captureAvailabilityEvidenceRead = (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256===dividerConsumerReview) ? dividerConsumerEvidenceRead : createCaptureAvailabilityHistoricalRead({root,read:dividerConsumerEvidenceRead});
     const dividerConsumerReaderFactory = options.caseObligationReviewSha256===dividerConsumerReview ? createDividerConsumerReviewReader : captureAvailabilityReaderFactory;
-    const applicability=options.caseObligationReviewSha256==='970ceb2ca4663edab7cda584d64150f2da240ca95c69a0d308bbd97563108b9b'
+    const applicability=options.caseObligationReviewSha256==='10f4311b0375deeb413e8917af9f9227456a9eafd1be08771e1c385b1a528f2d'
       ? createTriggerPaintReviewReader({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256})
       : dividerConsumerReaderFactory?.({root,read:captureAvailabilityEvidenceRead,reviewSha256:options.caseObligationReviewSha256});
     assert.ok(!applicability || typeof applicability.then !== 'function', 'Audit evidence readers must be synchronous within evidence session');
@@ -106,7 +106,7 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);
   const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial,
-    diagnosticRead: options.caseObligationReviewSha256==='970ceb2ca4663edab7cda584d64150f2da240ca95c69a0d308bbd97563108b9b'
+    diagnosticRead: options.caseObligationReviewSha256==='10f4311b0375deeb413e8917af9f9227456a9eafd1be08771e1c385b1a528f2d'
       ? createCaptureAvailabilityHistoricalRead({root,read:createTriggerPaintHistoricalRead({root,read:auditReadFileSync})})
       : (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256==='b49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21')
       ? createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync}) : readFileSync });

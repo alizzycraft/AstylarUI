@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+November2 corrected live review10f4311b0375deeb413e8917af9f9227456a9eafd1be08771e1c385b1a528f2d
+passes5/5 integration,0skip/failure,299782.6917ms,including complete18669-
+dependency loading and all2311 partial/current-unverified cases. Inventory stays
+1151 sources/485 proofs/208 findings/75 plans. Case-array hash is
+65d27105da89d670cca5d8c8c2bb45295d8b5828cdf5a5f7ae220e8f204977f9.
+Evidence:trigger-paint-nested-dispatch-integration-20261102.log,SHA256
+7efe5205a28b5e7d929ef36af1d9b1c2762054b007133d902a36da81d439b7f8.
+Earlier corrected-live integration was4/5:unconditional newest adaptation
+rejected already-restored older policy bytes. Dispatch now applies newest
+restoration only to the exact newest producer;older stages retain their own
+guards. Nested policy regression and unknown-generation rejection both pass.
+Keep failure and corrected logs. Freeze this generation for one export,
+conservation,independent cold and import milestone;do not repeat these checks
+for prose. Accepted695dea7b remains authoritative until all milestone gates pass.
+
+Headroom preflight found D:358248448 bytes free. Closed accepted index695dea7b
+was LZX-compressed in place:266365379 logical/49782784 physical bytes,complete
+SHA256 unchanged23dc19f652886ea2c02b2a3e8aedb6074beb2046837223fbd222f36cbb3ea045.
+D:free574832640 afterward. No originals,failures,history or payloads deleted.
+
 November2 trigger-paint LIVE ROUTING now selects970ceb2ca4663edab7cda584d64150f2da240ca95c69a0d308bbd97563108b9b
 with --trigger-paint. Prior live generationd4fbd534 passed5/5 including complete
 18669-dependency validation in419923.1683ms;its log is

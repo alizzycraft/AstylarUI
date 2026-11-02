@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep trigger-paint-corrected-live-integration20261102 failed4/5 logs (nested
+already-restored policy generation),nested-dispatch-focused passing2/2 and
+nested-dispatch-integration passing5/5 stdout/empty stderr. Accepted695dea7b
+index is now transparently LZX-compressed with complete hash equality:
+266365379 logical bytes/49782784 physical bytes,SHA23dc19f6 unchanged. No bytes,
+paths or pointers changed and no evidence was deleted. No worker remained live
+when compression began. Reuse these proofs for this frozen source generation.
+
 Keep trigger-paint-live-routing-integration20261102 passing5/5,shared-entry-
 preflight20261102 failing three older-entry restorations,shared-entry-corrected
 stdout/empty stderr,and shared-entry-focused20261102 passing4/4. First live

@@ -123,7 +123,11 @@ export function restoreCaptureAvailabilityShared(bytes) {
 // For predecessor evidence readers only. Current source collection must retain
 // its raw reader so registration changes remain visible in the new inventory.
 export function createCaptureAvailabilityHistoricalRead({ root, read }) {
-  read = createTriggerPaintHistoricalRead({ root, read });
+  // Only live newest producers enter the newest adapter. Nested readers may
+  // already supply older generations;their existing guards own those bytes.
+  const triggerProducer = read(path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs'));
+  if (hash(triggerProducer.toString().replaceAll('\r\n', '\n')) === 'cfed52bc5d431d49709955afc990b69cfcc04a11e26d0ddc8d3748d9a28a4c51')
+    read = createTriggerPaintHistoricalRead({ root, read });
   read = createDividerConsumerRegistrationHistoricalRead({ root, read });
   read = createSliderTrackHistoricalRead({ root, read });
   const passiveSources = new Map([
