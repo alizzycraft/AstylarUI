@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { stripDividerConsumerRegistrationIfPresent, createDividerConsumerRegistrationHistoricalRead } from './divider-consumer-registration.mjs';
-import { createTriggerPaintHistoricalRead } from '../../scripts/join-material-trigger-paint-inputs.mjs';
+import { createTriggerPaintHistoricalRead, stripTriggerPaintRegistrationIfPresent } from '../../scripts/join-material-trigger-paint-inputs.mjs';
 import { createSliderTrackHistoricalRead, restoreSliderTrackProducer } from './slider-track-paint-findings.mjs';
 
 // Staged source transformation; applying it to live files is a separate gate.
@@ -68,6 +68,7 @@ export function prepareCaptureAvailabilityRegistration(bytes, kind) {
   return source;
 }
 export function restoreCaptureAvailabilityRegistration(bytes, kind) {
+  bytes = stripTriggerPaintRegistrationIfPresent(bytes, kind);
   bytes = stripDividerConsumerRegistrationIfPresent(bytes, kind);
   if (kind === 'producer' && bytes.toString().includes('"tests/material-parity/slider-track-paint-findings.mjs",'))
     bytes = restoreSliderTrackProducer(bytes);

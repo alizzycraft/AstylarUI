@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+November3 trigger-paint first export failed validation before writes because
+direct shared source-plan restoration bypassed the newest adapter. Exact-stage
+stripping is corrected and all four collectors bind259 groups;repinned9105f2b3
+passes4 focused checks. Verify corrected complete reader,then one fresh-log retry
+using the preserved695dea7b backup. Do not repeat original captures or weaken
+source bindings/attribution requirements. Prior10f4311b full-reader evidence is
+historical for its generation,not authority to skip corrected integration.
+
 November2 trigger-paint live review10f4311b passes5/5 and complete18669-dependency
 validation with1151 sources/485 proofs/208 findings/75 plans. Shared/nested
 historical routing is exact and drift rejecting. Freeze for one --trigger-paint

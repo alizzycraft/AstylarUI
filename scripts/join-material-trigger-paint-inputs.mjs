@@ -6,9 +6,9 @@ import { execFileSync } from 'node:child_process';
 import { createDividerConsumerReviewReader } from './join-material-divider-consumer-inputs.mjs';
 
 const sourceTransitions = [
-  ['tests/material-parity/capture-availability-registration.mjs', 'ced32e851b4ef3681a76771d90a882e3c0d547d123e54515a30ed3a54a5037ff', 'c7f8b931ab00939e6c65b4adca555a02e4622d4be9f25dbe2546797ecfdd3254'],
+  ['tests/material-parity/capture-availability-registration.mjs', 'a83da468cfd59b2d88e1713bb2cd6ac5ca12113ca933d4090b9b4d9ecabaeebb', 'c7f8b931ab00939e6c65b4adca555a02e4622d4be9f25dbe2546797ecfdd3254'],
   ['scripts/check-divider-omitted-owner-consumers.mjs', 'b08c882e548ad27d76e39379ed64a15096352889d1389620a30cd818b6b9a277', 'cf989605fc7c727111431c0b2deb1dc3e733b39c07a4751aaf19c798625c2bcd'],
-  ['tests/material-parity/snackbar-position-observation.spec.mjs', '90971af86fed22189311bcc96f1ab87b2f26096c95b96357f368b4770cc5bc35', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
+  ['tests/material-parity/snackbar-position-observation.spec.mjs', '095e727a7771d3cacc40313d0244fec3a34d6a4f42fad7cc6b742e8e9ffe24c6', '0fb3a5d539573fcc0dfc6e2f46069ff04630545109e988b7016ed6376202872b'],
   ['tests/material-parity/input-equivalence-policy.mjs', '43e758150e13d5da4876127b7ca6755c0c66957b092499587498c66bef1a4d52', '8f1acb6af64b5cfdcddba911a4b3ddf61e241edfea74eec241d2276617fe1ea3'],
   ['tests/material-parity/input-equivalence-audit.mjs', 'cfed52bc5d431d49709955afc990b69cfcc04a11e26d0ddc8d3748d9a28a4c51', '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54'],
 ];
@@ -119,6 +119,24 @@ export function restoreTriggerPaintSelection(bytes, kind, review) {
     assert.equal(source.split(after).length, 2); source = source.replace(after, before);
   }
   assert.equal(hash(source), selectionPredecessors[kind], 'Unknown selection changes'); return source;
+}
+// Shared source replays call restoration directly,not only through a read
+// adapter. Remove this exact newest stage before older restoration stages.
+export function stripTriggerPaintRegistrationIfPresent(bytes, kind) {
+  const source = bytes.toString().replaceAll('\r\n', '\n');
+  if (kind === 'producer') {
+    if (!source.includes("'scripts/join-material-trigger-paint-inputs.mjs',")) return bytes;
+    const transition = sourceTransitions.find(row => row[0] === 'tests/material-parity/input-equivalence-audit.mjs');
+    assert.equal(hash(source), transition[1], 'Unknown trigger-paint producer changes');
+    const prior = execFileSync('git', ['show', `c8095ca7:${transition[0]}`], { maxBuffer: 8 * 1024 * 1024 });
+    assert.equal(hash(prior), transition[2]); return prior;
+  }
+  const marker = kind === 'runner' ? 'const triggerPaintHistoricalRead = ' : kind === 'launcher' ? 'const triggerPaint = ' : undefined;
+  if (!marker || !source.includes(marker)) return bytes;
+  const expression = kind === 'runner' ? /const applicability=options.caseObligationReviewSha256==='([a-f0-9]{64})'/
+    : /if \(triggerPaint\) inputs\['case-obligation-review'\] = 'artifacts\/material-parity\/working-audit\/proposals\/([a-f0-9]{64})\.json'/;
+  const match = source.match(expression); assert.ok(match);
+  return Buffer.from(restoreTriggerPaintSelection(source, kind, match[1]));
 }
 export const triggerPaintPredecessor = '38aca39a69052334314e3584d33682195702b9690b024c5150fbd22c338e8ee1';
 const clipKey = 'retainedClippingCallerRouting', paintKey = 'retainedTriggerStatePaint';

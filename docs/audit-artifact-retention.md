@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep failed trigger-paint-canonical-export20261102 stdout/stderr and the exact
+accepted695dea7b three-file backup. Keep binding-failure-focused20261103 and
+binding-stack stdout/stderr,passing direct-restoration-focused,collectors and
+repinned records. Failure occurred before canonical writes;all three originals
+are hash-identical to backup. Corrected binding proof is not a successful export
+or authority to release any original/failure evidence. No new browser captures.
+
 Keep trigger-paint-corrected-live-integration20261102 failed4/5 logs (nested
 already-restored policy generation),nested-dispatch-focused passing2/2 and
 nested-dispatch-integration passing5/5 stdout/empty stderr. Accepted695dea7b

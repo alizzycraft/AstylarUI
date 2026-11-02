@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+November3 first --trigger-paint export is terminal1 BEFORE canonical writes.
+Evidence session authenticated20228 files/4383353899 bytes,then validation
+reported four unbound source-plan sections and259 unresolved style groups.
+All three canonical files still exactly match trigger-paint-pre-export-695d-
+20261102 backup. Do not treat this export as successful or start conservation.
+Failed stdout/stderr:trigger-paint-canonical-export-20261102.*.log.
+
+Focused collector replay/stack traced the shared cause to DIRECT restoration:
+restoreCaptureAvailabilityRegistration called the older Divider producer
+restorer without removing the newest trigger-paint registration. Read-adapter
+and case-loader tests did not cover this direct source-plan path. New exact
+newest-stage stripping now precedes older direct restoration for producer,
+runner and launcher;unknown drift rejects. No validator or binding requirement
+was weakened. Four affected collectors now independently bind all259 groups:
+alignmentFont72/4016 observations,textAlign49/2677,LTR4/178,reviewed134/3325.
+Collector proof:trigger-paint-direct-restoration-collectors-20261103.log,SHA256
+7c50757f03be85468709d98c4c821b4789d99f88f32826693ace2c42dee71ddd.
+
+Repinned live review9105f2b3bd08a5c30c8c04fc422248fd4fbcf34506feb1ca2bef22b7f0d9cc03
+passes4/4 focused source/direct/nested/selector/inventory/parent checks in
+12842.6393ms. Log:trigger-paint-direct-restoration-repinned-20261103.log,SHA256
+b7982a158ea8f2e0c5493af6d63bc864fae6ed31ec790ac75a899498aa156d9d.
+Full corrected live-reader validation remains pending before one fresh-log
+export retry. Reuse verified695dea7b backup;do not overwrite the failed attempt.
+No process from the first export remains live. All2311 case statuses,original
+equal-input contract and final acceptance gates remain unchanged.
+
 November2 corrected live review10f4311b0375deeb413e8917af9f9227456a9eafd1be08771e1c385b1a528f2d
 passes5/5 integration,0skip/failure,299782.6917ms,including complete18669-
 dependency loading and all2311 partial/current-unverified cases. Inventory stays

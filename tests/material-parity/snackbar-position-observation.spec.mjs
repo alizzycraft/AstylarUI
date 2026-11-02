@@ -30,7 +30,12 @@ test('trigger paint historical reader restores exact accepted sources and reject
     const forged = createTriggerPaintHistoricalRead({ read: name => String(name).replaceAll('\\', '/').endsWith(file) ? Buffer.from('unknown generation') : readFileSync(name) });
     assert.throws(() => forged(file), /Unknown trigger-paint source generation/);
   }
-  const { createCaptureAvailabilityHistoricalRead } = await import('./capture-availability-registration.mjs');
+  const { createCaptureAvailabilityHistoricalRead, restoreCaptureAvailabilityRegistration } = await import('./capture-availability-registration.mjs');
+  for (const [kind, file] of Object.entries({ producer: 'tests/material-parity/input-equivalence-audit.mjs', runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
+    assert.equal(restoreCaptureAvailabilityRegistration(readFileSync(file), kind), restoreCaptureAvailabilityRegistration(read(file), kind),
+      'Direct shared restoration must remove the newest stage before older stages');
+    assert.throws(() => restoreCaptureAvailabilityRegistration(Buffer.concat([readFileSync(file), Buffer.from('\n// unknown drift')]), kind));
+  }
   const shared = createCaptureAvailabilityHistoricalRead({ root: process.cwd(), read: readFileSync });
   for (const [file, expected] of [
     ['tests/material-parity/input-equivalence-audit.mjs', '6e8db2faa61eb96a69c7d43eac20f95e377651a5489612d9f311907d206fccd5'],
