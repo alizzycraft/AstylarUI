@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+November3 live direct canonical collector preflight PASSES on exact ancestry
+reportb07ef154:alignment/font72groups4016 observations;text-align49/2677;
+LTR4/178;reviewed-source146/6295. All4 statusbound,session10398 terminal0 in
+button-toolbar-direct-collector-preflight-20261103.log. Current source registration
+does not break the direct shared restoration path. Reuse frozen904af088 evidence.
+Publication remains unavailable:request-local HTTP/1.1 postBuffer150MiB retry55925
+also terminatedHTTP408;strict BatchMode SSH rejected unknown GitHub ED25519 key.
+No trust,credentials or persistent Git configuration changed. User asked for a
+working/existing trusted route through the async question. No push remains live.
+Canonical export has NOT started;accepted8f94a107 and prior/failure evidence stay
+intact. D:about286MB is also tight for a new full isolated index/payload/shard
+generation;do not allocate it blindly or delete evidence to force publication.
+
 November3 live button/toolbar integration now PASSES complete receipt validation:
 904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4,
 2311 cases,19255 dependencies,104 changed paint children. Live reader89059

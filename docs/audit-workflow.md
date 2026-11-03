@@ -1,5 +1,12 @@
 # Efficient Material input-audit workflow
 
+November3 frozen904af088 direct collector preflight passes all4 expected groups
+(72/4016,49/2677,4/178,146/6295);live reader and focused checks already pass.
+Do not repeat them. Buffered HTTPS retry also failed408;strict SSH has no trusted
+GitHub key and made no changes. No publication/export process is live. Await a
+working approved Git route and verify headroom before another canonical package;
+accepted8f94a107 remains unchanged. Keep audit scope and final gates intact.
+
 November3 live button/toolbar904af088 passes complete19255-dependency/2311-case
 loader plus9 focused checks and direct shared-restoration control. Freeze current
 1158/499/210/77 sources and reuse those results. Next safe publication/headroom
