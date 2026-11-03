@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+November3 filled-focus current authored-source applicability is verified:
+astylar.component.ts raw SHA71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd
+still has exactly the two transparent-shadow-only shared focus declarations.
+The staged join binds that source receipt in each of56 children and explicitly
+keeps served-build/runtime applicability separate. Focused join check passes1/1
+in6861.2875ms,including a changed-focus-selector source rejection plus earlier
+parent/tree drift controls and complete parent restoration. No source/fixture
+behavior changed,no new capture/export,and no case-currentness acceptance.
+
 November3 filled-focus exact-case join is staged and verified,not canonical.
 scripts/join-material-filled-focus-inputs.mjs requires accepted parent case hash
 c02a245f,authenticates each selected tree and adds one bounded localPaint child

@@ -19,6 +19,14 @@ export function restoreFilledFocusInputs(cases) {
 
 export function joinFilledFocusInputs(cases, read = fs.readFileSync) {
   assert.equal(hash(JSON.stringify(cases)), filledFocusParent, 'Exact accepted parent required');
+  const currentSource = { file: 'examples/material-showcase/src/app/astylar.component.ts',
+    sha256: '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd' };
+  const currentBytes = read(currentSource.file);
+  assert.equal(hash(currentBytes), currentSource.sha256, 'Current authored focus source changed');
+  const focusDeclarations = [...currentBytes.toString().matchAll(/\{ selector: '\.material-button:focus', ([^\r\n]+) \}/g)]
+    .map(match => match[1]);
+  assert.deepEqual(focusDeclarations, ["boxShadow: '0 0 0 1px rgba(0,0,0,0)'",
+    "borderWidth: '0', boxShadow: '0 0 0 1px rgba(0,0,0,0)'"]);
   const ownEvidence = ['scripts/join-material-filled-focus-inputs.mjs',
     'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs'].map(file => ({ file, sha256: hash(read(file)) }));
   let changed = 0;
@@ -49,7 +57,8 @@ export function joinFilledFocusInputs(cases, read = fs.readFileSync) {
       sourceFindingIds: ['fixture-filled-button-programmatic-focus-layer-omitted'],
       owner: id, referenceLayer: { color: style.backgroundColor, opacity: style.opacity },
       candidateFill: button.interactionResolvedStyle.background,
-      evidence: [...Object.values(pair), ...ownEvidence],
+      evidence: [...Object.values(pair), currentSource, ...ownEvidence],
+      sourceApplicability: 'Current exact authored source retains both transparent-shadow-only focus declarations;not served-build or runtime equivalence.',
       remaining: ['Complete focus glyph/edge/composition paint and current-source/runtime applicability'],
       boundary: 'Exact retained named primary focus input only;not popup paint,all focus origins,current rendering or whole-case closure.',
     } } } };

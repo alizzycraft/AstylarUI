@@ -91,4 +91,7 @@ test('filled focus join preserves every parent case and rejects altered tree rec
   assert.throws(() => joinFilledFocusInputs(cases, file => file === target.evidence.pairedTrees.reference.file
     ? Buffer.from('altered') : fs.readFileSync(file)), /AssertionError/);
   assert.throws(() => joinFilledFocusInputs(cases.slice(1)), /Exact accepted parent/);
+  assert.throws(() => joinFilledFocusInputs(cases, file => file === 'examples/material-showcase/src/app/astylar.component.ts'
+    ? Buffer.from(fs.readFileSync(file).toString().replace("selector: '.material-button:focus'", "selector: '.material-button:hover'"))
+    : fs.readFileSync(file)), /Current authored focus source changed/);
 });
