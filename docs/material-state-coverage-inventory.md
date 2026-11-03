@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+November3 contrast-primary spatial attribution rejects a surrounding-content-only
+or active-layer-only explanation. Pixel-center partition at the recorded CSS box
+(outside,rim3px,interior text window x24..width-24/y4..height-4,other interior)
+attributes58.1-64.4% of RGB error to the text window,18.9-22.5% to rim and
+15.9-18.9% outside across the10 outliers;other interior isbelow0.63%.
+Inactive static/leave cases still differ with matching requested black bases.
+The light desktop control puts94.2% in text window but has much smaller overall
+error. These are spatial regions,not semantic masks or proof of blur/cause.
+Log button-contrast-pixel-partition-20261103.log SHA
+32ac38b9b2c024b42f91a2a6c7279e5c22861c8037e69271e571a524d10b498f.
+Retained contrast inputs are not wholly equal:reference radius9999px versus
+candidate15px at24px height;reference letterSpacing.096px versus candidate omission,
+and distinct text/layout representations. Current createRoundedRectangle clamps
+radius to half smaller extent,so raw radius difference alone is not proof of a
+core clamp defect or captured-method applicability. Existing transparent-text-
+backing/fractional-phase and border-paint findings remain relevant hypotheses,
+not automatically the cause of these unequal-input button pixels. Next inspect
+the actual label/style/paint ownership chain and existing exact scalar findings;
+do not add a duplicate core finding from SSIM or retune the comparison.
+
 November3 button retained-raster gap narrowed without browser capture. All312
 alignment crops for156 owners/52 pending parents reconstruct byte-for-byte in
 decoded RGBA from104 retained full PNGs at recorded reference geometry plus4CSSpx.
