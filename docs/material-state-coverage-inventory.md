@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+November3 export preflight isolates the remaining shared-restoration integration:
+new producer normalizeda8eae029 is correctly rejected by the older trigger-paint
+guard expectingcfed52bc. Applying exact restoreFilledFocusInventory FIRST makes
+the unchanged trigger-paint restorer recover exact accepted1bce9f85 bytes.
+Owning inventory test now covers both rejection and ordered-composition success;
+focused run passes1/1 in851.1058ms. No guard was widened and no export attempted.
+Next wire this newest-stage adapter ahead of shared direct/nested restoration
+and add explicit filled-focus selection while preserving all older selectors.
+The test-byte change makes2f90a7f8 historical for its tested suite;repin once the
+coherent routing batch is ready,not after every intermediate edit.
+
 November3 filled-focus source/proof registration is LIVE1153 sources/489 proofs,
 with208 findings/75 plan tracks unchanged. Combined owning suite passes4/4,
 0skip/failure,272412.0798ms;session4685 terminal0. Log

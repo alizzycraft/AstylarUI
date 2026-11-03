@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import { stripTriggerPaintRegistrationIfPresent } from '../../scripts/join-material-trigger-paint-inputs.mjs';
 import { createFilledFocusReviewReader, joinFilledFocusInputs, restoreFilledFocusInputs,
   prepareFilledFocusInventory, restoreFilledFocusInventory } from '../../scripts/join-material-filled-focus-inputs.mjs';
 
@@ -24,6 +25,12 @@ test('filled focus staged inventory preserves the complete predecessor source', 
   assert.equal(get('focusedProofInventory').body.statements[0].expression.elements.length, 489);
   assert.throws(() => prepareFilledFocusInventory(source + '// drift'), /Exact inventory predecessor/);
   assert.throws(() => restoreFilledFocusInventory(staged + '// drift'), /Inventory restoration drift/);
+  // Direct collectors must peel the newest stage before entering an older
+  // guarded restorer; widening its accepted hash would hide source drift.
+  assert.throws(() => stripTriggerPaintRegistrationIfPresent(Buffer.from(current), 'producer'),
+    /Unknown trigger-paint producer changes/);
+  const prior = stripTriggerPaintRegistrationIfPresent(Buffer.from(restoreFilledFocusInventory(current)), 'producer');
+  assert.equal(hash(prior), '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54');
 });
 
 test('56 retained filled-button focus owners omit the native programmatic focus layer', t => {
