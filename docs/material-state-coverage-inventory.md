@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+November3 filled-focus exact-case join is staged and verified,not canonical.
+scripts/join-material-filled-focus-inputs.mjs requires accepted parent case hash
+c02a245f,authenticates each selected tree and adds one bounded localPaint child
+to exactly56 named-primary focus cases. It preserves prior evidence,remaining
+work,inspection/current-rendering statuses and all2255 unaffected object identities.
+Removing only those children restores the complete accepted parent hash exactly.
+The owning focused join test passes1/1 in5536.8779ms,including altered-tree and
+wrong-parent rejection. No physical proposal,canonical export or closure occurs.
+Next integrate this staged join with a coherent source/proof batch using the
+existing receipt loader;do not rerun settled focus captures or milestone export
+solely to publish this bounded join. Original scope/final gates remain unchanged.
+
 November3 shared focus-layer scope is now56 exact focus cases across core,
 button,menu,bottom-sheet,dialog,snack-bar,tooltip (four profiles,DPR1/2).
 The existing tooltip-focus-layer-inputs proof now selects each named primary

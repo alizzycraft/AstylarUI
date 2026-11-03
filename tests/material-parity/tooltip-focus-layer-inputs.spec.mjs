@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import { joinFilledFocusInputs, restoreFilledFocusInputs } from '../../scripts/join-material-filled-focus-inputs.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const generation = '0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445';
@@ -70,4 +71,24 @@ test('56 retained filled-button focus owners omit the native programmatic focus 
   }
   t.diagnostic(JSON.stringify({ generation, indexSha256, observations,
     boundary: 'Exact retained opener focus inputs only; shared application-authoring omission, not equal-input core failure, popup paint/sharpness, current rendering or whole-case closure.' }));
+});
+
+test('filled focus join preserves every parent case and rejects altered tree receipts', () => {
+  const bytes = fs.readFileSync(`artifacts/material-parity/working-audit/${generation}/index.json`);
+  assert.equal(hash(bytes), indexSha256);
+  const cases = JSON.parse(bytes).metadata.coverage.inspectionEvidence.cases;
+  const joined = joinFilledFocusInputs(cases);
+  assert.equal(joined.changed, 56);
+  assert.equal(joined.canonicalPublished, false);
+  assert.deepEqual(restoreFilledFocusInputs(joined.cases), cases);
+  for (let i = 0; i < cases.length; i++) {
+    assert.equal(joined.cases[i].inspection, cases[i].inspection);
+    assert.equal(joined.cases[i].currentRendering, cases[i].currentRendering);
+    if (!joined.cases[i].obligations.localPaint.retainedFilledPrimaryFocusLayer)
+      assert.equal(joined.cases[i], cases[i]);
+  }
+  const target = cases.find(row => row.family === 'tooltip' && row.case.endsWith('/focus'));
+  assert.throws(() => joinFilledFocusInputs(cases, file => file === target.evidence.pairedTrees.reference.file
+    ? Buffer.from('altered') : fs.readFileSync(file)), /AssertionError/);
+  assert.throws(() => joinFilledFocusInputs(cases.slice(1)), /Exact accepted parent/);
 });
