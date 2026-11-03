@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+November3 bounded core transparent-hover reset defect demonstrated publicly.
+scripts/audit-public-transparent-hover.mjs reuses package-root mount/native CSS
+translation with identical SiteData and only separate diagnostic input variants.
+AtDPR1/2,pointer-only hover/leave(no click/focus/Material) leaves candidate blank
+interior RGB235 after300ms versus native parentRGB238 for keyword transparent.
+Explicit rgba(0,0,0,0) and opaque-white controls reset correctly in all4 pairs.
+Report public-transparent-hover-20261103/latest-report.json SHA
+3a7b5c323aec32eecc31f36bc6a2a8304c32d935de60b3485742547b4ff3b587
+pins6 pairs/48 screenshots,served assets,bundle inputs,input-only transform and
+no page errors. Regression checks every physical pixel in an8x8CSSpx blank patch,
+all screenshot receipts and same SiteData. Complete parseBackgroundColor,
+setupMouseEvents,interaction applyElementMaterial and normal applyElementMaterial
+match current emit/installed/served source after shared whitespace formatting;
+changed keyword control rejects. Parser returnsnull for transparent;interaction
+material helper has no null/transparent reset branch,unlike normal material owner.
+This is the bounded core transition owner,not a fixture workaround. Initial whole-
+module equality and method formatting failures are retained in transparent-
+material-source-binding-20261103.FAILURE.md;whole-module identity is not claimed.
+Focused suite6/6,0skip,7033.2783ms after correction. Original October5 session
+causality,other reset variants/lifecycle and full-case/current-output acceptance
+remain separate. New proof/source/finding/coverage registration is pending a
+coherent batch;accepted1153/489/208/75 unchanged. No renderer fix authorized.
+
 November3 matched live material evidence resolves the next-frame-only hypothesis
 for the authenticated retained served build. Diagnostic
 scripts/audit-material-toolbar-leave-material.mjs reuses the established build/

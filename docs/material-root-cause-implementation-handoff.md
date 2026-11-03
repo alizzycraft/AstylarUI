@@ -1,5 +1,18 @@
 # Material audit: evidence-led implementation priorities
 
+November3 pending core transparent-hover reset finding:public package-root
+equal-input pointer-only proof fails for transparent atDPR1/2;alpha-zero rgba
+and opaque controls reset correctly. Matched served toolbar material remains
+opaque hover fill after settled frames despite transparent resolved input.
+Complete selected current/installed/served methods bind the parser/null branch,
+interaction caller and material helpers;see current coverage ledger and
+toolbar-focus-layer-inputs.spec.mjs(6 passing tests). Fix the general interaction
+material reset owner so transparent clears prior fill;do not translate fixtures
+to rgba(0,0,0,0),retune colors or add Material-specific branches. Keep missing
+application focus-layer input and separate allocation/adoption issues distinct.
+This is evidence/implementation guidance,not authorization to fix in this audit.
+Original-session attribution and final acceptance gates remain open.
+
 October26 margin/visibility evidence is now canonicald6f07066/indexfa4603e4:
 1085 source paths/412 proof declarations/203 findings/70 implementation tracks.
 Corrected export,complete conservation,independent cold comparison(diskHits0)

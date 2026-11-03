@@ -177,3 +177,73 @@ test('authenticated served toolbar retains opaque hover material after settled t
   for (const x of report.observations.filter(x => x.side === 'reference' && x.state.startsWith('leave')))
     assert.equal(x.data.layer.opacity, '0');
 });
+
+test('public equal-input hover leave fails only for transparent keyword at DPR1 and DPR2', () => {
+  const root = 'artifacts/material-parity/public-transparent-hover-20261103';
+  const bytes = fs.readFileSync(`${root}/latest-report.json`);
+  assert.equal(hash(bytes), '3a7b5c323aec32eecc31f36bc6a2a8304c32d935de60b3485742547b4ff3b587');
+  const report = JSON.parse(bytes);
+  assert.deepEqual(report.errors, []); assert.equal(report.results.length, 6);
+  for (const pair of report.results) {
+    assert.equal(pair.stages.length, 8);
+    for (const stage of pair.stages) {
+      assert.deepEqual(stage.snapshot.site, pair.stages[0].snapshot.site);
+      const pngBytes = fs.readFileSync(`${root}/${stage.screenshot.file}`);
+      assert.equal(hash(pngBytes), stage.screenshot.sha256);
+      const png = PNG.sync.read(pngBytes);
+      const base = pair.name === 'opaque' ? 255 : 238;
+      const expected = stage.state === 'hover' ||
+        stage.mode === 'astylar' && pair.name === 'transparent' && stage.state.startsWith('leave') ? 235 : base;
+      // Blank interior patch, away from text/borders; every physical pixel.
+      for (let y = 56 * pair.dpr; y < 64 * pair.dpr; y++)
+        for (let x = 50 * pair.dpr; x < 58 * pair.dpr; x++)
+          assert.deepEqual([...png.data.subarray((y * png.width + x) * 4, (y * png.width + x) * 4 + 4)],
+            [expected, expected, expected, 255]);
+    }
+    for (const side of ['reference', 'astylar'])
+      assert.ok(pair[side + 'Assets'].some(x => x.type === 'script' && x.sha256 === report.bundleSha256));
+  }
+});
+
+test('complete transparent-material methods bind current emit, installed code and served capture', async () => {
+  const { default: ts } = await import('typescript');
+  const { createRequire } = await import('node:module');
+  const esbuild = createRequire(process.cwd() + '/examples/material-showcase/package.json')('esbuild');
+  const reportBytes = fs.readFileSync('artifacts/material-parity/toolbar-leave-material-accessor-corrected-20261103/latest-report.json');
+  assert.equal(hash(reportBytes), '70b1975262dcef39545e3e2df22eedf2574eb5ebde84565162db4d1b0d161600');
+  const report = JSON.parse(reportBytes), mapFile = 'chunk-XOU37TRR.js.map';
+  const mapBytes = fs.readFileSync(`examples/material-showcase/dist/material-showcase/browser/${mapFile}`);
+  assert.equal(hash(mapBytes), report.browserFiles.find(x => x.file === mapFile).sha256);
+  const map = JSON.parse(mapBytes);
+  const method = (source, name, member) => {
+    const ast = ts.createSourceFile('source.ts', source, 99, true);
+    let owner;
+    const visit = n => { if (ts.isClassDeclaration(n) && n.name?.text === name) owner = n; ts.forEachChild(n, visit); };
+    visit(ast); assert.ok(owner);
+    const members = owner.members.filter(n => ts.isMethodDeclaration(n) && n.name.getText(ast) === member);
+    assert.equal(members.length, 1);
+    const emitted = ts.transpileModule(`class Owner {${members[0].getText(ast)}}`,
+      { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
+    // Angular's served source wraps object literals across lines. Remove only
+    // formatting through the same parser/printer; retain the complete method.
+    return esbuild.transformSync(emitted, { loader: 'js', target: 'es2022', legalComments: 'none',
+      minifyWhitespace: true }).code;
+  };
+  for (const [relative, name, members] of [
+    ['app/services/dom/style.service', 'StyleService', ['parseBackgroundColor']],
+    ['app/services/dom/elements/element-interaction.service', 'ElementInteractionService', ['setupMouseEvents', 'applyElementMaterial']],
+    ['app/services/dom/elements/element-material.service', 'ElementMaterialService', ['applyElementMaterial']],
+  ]) {
+    const current = fs.readFileSync(`src/${relative}.ts`, 'utf8');
+    const installed = fs.readFileSync(`examples/material-showcase/node_modules/astylarui/dist/lib/${relative}.js`, 'utf8');
+    const ix = map.sources.indexOf(`node_modules/astylarui/dist/lib/${relative}.js`); assert.ok(ix >= 0);
+    const captured = map.sourcesContent[ix];
+    for (const member of members) {
+      const body = method(current, name, member);
+      assert.equal(body, method(installed, name, member), `current/installed ${name}.${member}`);
+      assert.equal(body, method(captured, name, member), `installed/captured ${name}.${member}`);
+      if (member === 'parseBackgroundColor')
+        assert.notEqual(body, method(current.replace("colorLower === 'transparent'", "colorLower === 'opaque'"), name, member));
+    }
+  }
+});
