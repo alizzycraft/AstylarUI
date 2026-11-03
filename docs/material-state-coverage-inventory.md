@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+November3 button/toolbar registry is LIVE1158 sources/499 proofs/210 findings/77
+plans. Explicit --button-toolbar-paint selects review
+904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4.
+Reversible five-file producer/policy/shared/runner/launcher transformations and
+default/all older selectors pass guarded source/VM tests;mixtures/unknown reject.
+Actual named launcher dry-run selects that exact path/hash;runner Node syntax
+passes. Explicit live focused selection9/9,0skip,20613.6687ms in
+button-toolbar-live-focused-20261103.log. Source hashes/review repinned after tests
+were updated to strip the exact newest stage before checking the old baseline;
+no old guard was broadened. One live complete-loader run89059 is pending in
+button-toolbar-live-reader-20261103.log;stagedeaa7 validation is historical for
+its source generation,not authority to skip live dependency validation. Freeze
+these sources. Accepted8f94a107 and all2311 partial/current-unverified dispositions
+remain;no canonical export/promotion,current rendering acceptance or renderer fix.
+
 November3 staged reader/inventory integration PASSES. Revieweaa7b9d0f782751d5543daab79190b5877fe192c0c6a8ed8ef374983d6518eb7
 joins104 cases and preserves2311 partial/current-unverified records. Existing
 complete loader authenticates19255 dependencies;focused loader1/1 passes in

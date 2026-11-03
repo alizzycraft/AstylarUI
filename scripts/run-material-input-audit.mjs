@@ -43,6 +43,7 @@ import { captureAvailabilityReview, createCaptureAvailabilityReviewReader } from
 import { createDividerConsumerReviewReader } from './join-material-divider-consumer-inputs.mjs';
 import { createTriggerPaintReviewReader, createTriggerPaintHistoricalRead } from './join-material-trigger-paint-inputs.mjs';
 import { createFilledFocusReviewReader, createFilledFocusHistoricalRead } from './join-material-filled-focus-inputs.mjs';
+import { createButtonToolbarReviewReader, createButtonToolbarHistoricalRead } from './join-material-button-toolbar-paint.mjs';
 import { dividerConsumerReview, createDividerConsumerRegistrationHistoricalRead } from '../tests/material-parity/divider-consumer-registration.mjs';
 import { createCaptureAvailabilityHistoricalRead } from '../tests/material-parity/capture-availability-registration.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
@@ -92,12 +93,15 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const tooltipOpenReaderFactory = options.caseObligationReviewSha256===tooltipOpenReview ? createTooltipOpenReviewReader : datepickerOpeningReaderFactory;
     const badgeLabelPaintReaderFactory = options.caseObligationReviewSha256===badgeLabelPaintReview ? createBadgeLabelPaintReviewReader : tooltipOpenReaderFactory;
     const captureAvailabilityReaderFactory = options.caseObligationReviewSha256===captureAvailabilityReview ? createCaptureAvailabilityReviewReader : badgeLabelPaintReaderFactory;
-    const filledFocusHistoricalRead = createFilledFocusHistoricalRead({root,read:auditReadFileSync});
+    const buttonToolbarHistoricalRead = createButtonToolbarHistoricalRead({root,read:auditReadFileSync});
+    const filledFocusHistoricalRead = createFilledFocusHistoricalRead({root,read:buttonToolbarHistoricalRead});
     const triggerPaintHistoricalRead = createTriggerPaintHistoricalRead({root,read:filledFocusHistoricalRead});
     const dividerConsumerEvidenceRead = createDividerConsumerRegistrationHistoricalRead({root,read:triggerPaintHistoricalRead});
     const captureAvailabilityEvidenceRead = (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256===dividerConsumerReview) ? dividerConsumerEvidenceRead : createCaptureAvailabilityHistoricalRead({root,read:dividerConsumerEvidenceRead});
     const dividerConsumerReaderFactory = options.caseObligationReviewSha256===dividerConsumerReview ? createDividerConsumerReviewReader : captureAvailabilityReaderFactory;
-    const applicability=options.caseObligationReviewSha256==='9eb4cb42066d5e50347b6ae269354a8702ddeae694f971a9ba5f26ccb421409f'
+    const applicability=options.caseObligationReviewSha256==='904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4'
+      ? createButtonToolbarReviewReader({root,read:auditReadFileSync})
+      : options.caseObligationReviewSha256==='9eb4cb42066d5e50347b6ae269354a8702ddeae694f971a9ba5f26ccb421409f'
       ? createFilledFocusReviewReader({root,read:auditReadFileSync})
       : options.caseObligationReviewSha256==='9105f2b3bd08a5c30c8c04fc422248fd4fbcf34506feb1ca2bef22b7f0d9cc03'
       ? createTriggerPaintReviewReader({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256})
@@ -110,7 +114,9 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);
   const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial,
-    diagnosticRead: options.caseObligationReviewSha256==='9eb4cb42066d5e50347b6ae269354a8702ddeae694f971a9ba5f26ccb421409f'
+    diagnosticRead: options.caseObligationReviewSha256==='904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4'
+      ? createCaptureAvailabilityHistoricalRead({root,read:createButtonToolbarHistoricalRead({root,read:auditReadFileSync})})
+      : options.caseObligationReviewSha256==='9eb4cb42066d5e50347b6ae269354a8702ddeae694f971a9ba5f26ccb421409f'
       ? createCaptureAvailabilityHistoricalRead({root,read:createFilledFocusHistoricalRead({root,read:auditReadFileSync})})
       : options.caseObligationReviewSha256==='9105f2b3bd08a5c30c8c04fc422248fd4fbcf34506feb1ca2bef22b7f0d9cc03'
       ? createCaptureAvailabilityHistoricalRead({root,read:createTriggerPaintHistoricalRead({root,read:auditReadFileSync})})

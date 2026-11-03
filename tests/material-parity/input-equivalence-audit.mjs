@@ -8922,6 +8922,11 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/join-material-button-toolbar-paint.mjs',
+    'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs',
+    'scripts/audit-material-toolbar-leave-material.mjs',
+    'scripts/audit-public-transparent-hover.mjs',
+    'examples/material-showcase/audit/transparent-hover-input.mjs',
     'scripts/join-material-filled-focus-inputs.mjs',
     'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs',
     'scripts/join-material-trigger-paint-inputs.mjs',
@@ -10082,6 +10087,26 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('toolbar text\-button focus omits the native layer independently of filled\-button scope'/,
+      'toolbar text-button focus omits the native layer independently of filled-button scope', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('retained toolbar leave pixels change despite identical recorded candidate action nodes'/,
+      'retained toolbar leave pixels change despite identical recorded candidate action nodes', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('all retained toolbar leave crops preserve hover pixels after reported hover clears'/,
+      'all retained toolbar leave crops preserve hover pixels after reported hover clears', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('authenticated served toolbar retains opaque hover material after settled transparent leave'/,
+      'authenticated served toolbar retains opaque hover material after settled transparent leave', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('public equal\-input hover leave fails only for transparent keyword at DPR1 and DPR2'/,
+      'public equal-input hover leave fails only for transparent keyword at DPR1 and DPR2', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('complete transparent\-material methods bind current emit, installed code and served capture'/,
+      'complete transparent-material methods bind current emit, installed code and served capture', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('button toolbar paint join preserves complete accepted coverage and rejects corrupt evidence'/,
+      'button toolbar paint join preserves complete accepted coverage and rejects corrupt evidence', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('button toolbar staged finding registration preserves complete policy and rejects drift'/,
+      'button toolbar staged finding registration preserves complete policy and rejects drift', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('button toolbar staged inventory preserves complete producer and plans'/,
+      'button toolbar staged inventory preserves complete producer and plans', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('button toolbar successor passes the existing complete receipt loader'/,
+      'button toolbar successor passes the existing complete receipt loader', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
     proof(root, 'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs', /test\('56 retained filled\-button focus owners omit the native programmatic focus layer'/,
       '56 retained filled-button focus owners omit the native programmatic focus layer', 'Bounded retained focus inputs and conservative receipt/inventory integration;not current rendering,canonical publication or whole-case closure.'),
     proof(root, 'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs', /test\('filled focus join preserves every parent case and rejects altered tree receipts'/,
@@ -11012,6 +11037,8 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
+    {"priority":2.07,"rootCause":"Core interaction material does not clear transparent background after hover","action":"Fix the shared interaction material reset so transparent clears prior fill. Preserve the public DPR1/2 failure and passing explicit alpha-zero/opaque controls. Do not convert fixture transparent to rgba,add Material-specific paint branches,or conflate this reset with allocation/adoption and focus-layer authoring defects. Extend updates,gradients,focus/pressed transitions and disposal before general acceptance."},
+    {"priority":5.87,"rootCause":"Toolbar action omits native focus layer input","action":"Preserve equivalent toolbar focus composition through supported public owners. Keep this unfilled action distinct from the prior filled-button scope;reduce unsupported general state-layer capability at core rather than authoring sampled colors. Verify actual focus paint,semantics and current rendering after equivalent inputs."},
     { priority: 1.15, rootCause: 'Applicable state paint is reported successful without measurement', action: 'At the existing parity harness boundary,make missing applicable state-paint evidence explicit instead of matches:true. Preserve every family,state,threshold and honest failure;add local assertions with equivalent inputs rather than accepting calibrated fixture colors or whole-page SSIM. This audit only records the gap;no gate change is authorized here.' },
     { priority: 5.86, rootCause: 'Filled-button focus state omits reference layer inputs', action: 'Preserve reference-equivalent focus composition and resolved declarations through supported public rendering owners. If pseudo/state-layer behavior cannot be expressed,reduce the missing general core/public-API capability instead of inserting sampled background colors or plugin-specific paint workarounds. Keep the one-case focus witness separate from hover/held opaque-fill arithmetic and remaining full-paint/current-runtime evidence.' },
     {"priority":2.05,"rootCause":"Range plugin substitutes host-relative track thickness for native track geometry","action":"In later implementation, express the reference-equivalent resolved track geometry through the supported public CSS-space paint contract and remove the host-height-derived substitute. First check that the required CSS input reaches the plugin unchanged; reduce any missing general style/paint capability separately at its core/public-API owner. Do not tune the visual-host height, offsets, camera scale or reference styling to reproduce the screenshot. Preserve the existing 78-case membership and native track/fill evidence. After equivalent track input is supplied, verify its pre-projection value, active/inactive geometry, DPR edges, disabled/theme states and hover/held paint independently of SSIM-only acceptance. Keep hit-domain, motion, state-layer alpha and black-fallback findings separate."},

@@ -269,10 +269,11 @@ test('button toolbar paint join preserves complete accepted coverage and rejects
 });
 
 test('button toolbar staged finding registration preserves complete policy and rejects drift', async () => {
-  const { prepareButtonToolbarPolicy, restoreButtonToolbarPolicy, buttonToolbarSourceDefinitions } =
+  const { prepareButtonToolbarPolicy, restoreButtonToolbarPolicy, buttonToolbarSourceDefinitions,
+    stripButtonToolbarRegistrationIfPresent } =
     await import('../../scripts/join-material-button-toolbar-paint.mjs');
   const { default: ts } = await import('typescript');
-  const prior = fs.readFileSync('tests/material-parity/input-equivalence-policy.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const prior = stripButtonToolbarRegistrationIfPresent(fs.readFileSync('tests/material-parity/input-equivalence-policy.mjs'), 'policy').toString().replaceAll('\r\n', '\n');
   const next = prepareButtonToolbarPolicy(prior);
   assert.equal(restoreButtonToolbarPolicy(next), prior);
   const ast = ts.createSourceFile('policy.mjs', next, 99, true, ts.ScriptKind.JS);
@@ -291,10 +292,10 @@ test('button toolbar staged finding registration preserves complete policy and r
 });
 
 test('button toolbar staged inventory preserves complete producer and plans', async () => {
-  const { prepareButtonToolbarInventory, restoreButtonToolbarInventory } =
+  const { prepareButtonToolbarInventory, restoreButtonToolbarInventory, stripButtonToolbarRegistrationIfPresent } =
     await import('../../scripts/join-material-button-toolbar-paint.mjs');
   const { default: ts } = await import('typescript');
-  const source = fs.readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const source = stripButtonToolbarRegistrationIfPresent(fs.readFileSync('tests/material-parity/input-equivalence-audit.mjs'), 'producer').toString().replaceAll('\r\n', '\n');
   const staged = prepareButtonToolbarInventory(source);
   assert.equal(restoreButtonToolbarInventory(staged), source);
   const ast = ts.createSourceFile('producer.mjs', staged, 99, true, ts.ScriptKind.JS);
@@ -313,6 +314,51 @@ test('button toolbar staged inventory preserves complete producer and plans', as
   }
   assert.throws(() => prepareButtonToolbarInventory(source + ' '));
   assert.throws(() => restoreButtonToolbarInventory(staged + ' '));
+  const registration = await import('../../scripts/join-material-button-toolbar-paint.mjs');
+  const vm = await import('node:vm');
+  const { fileURLToPath, pathToFileURL } = await import('node:url');
+  const review = '1'.repeat(64), stagedFiles = new Map();
+  stagedFiles.set(path.resolve('tests/material-parity/input-equivalence-audit.mjs'), Buffer.from(staged));
+  const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+  stagedFiles.set(path.resolve(policyFile), Buffer.from(registration.prepareButtonToolbarPolicy(
+    stripButtonToolbarRegistrationIfPresent(fs.readFileSync(policyFile), 'policy'))));
+  const shared = 'tests/material-parity/capture-availability-registration.mjs';
+  const sharedBytes = registration.createButtonToolbarHistoricalRead()(shared);
+  const stagedShared = registration.prepareButtonToolbarShared(sharedBytes);
+  assert.equal(registration.restoreButtonToolbarShared(stagedShared), sharedBytes.toString());
+  stagedFiles.set(path.resolve(shared), Buffer.from(stagedShared));
+  for (const [kind, file] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs',
+    launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
+    const original = stripButtonToolbarRegistrationIfPresent(fs.readFileSync(file), kind).toString().replaceAll('\r\n', '\n');
+    const selected = registration.prepareButtonToolbarSelection(original, kind, review);
+    assert.equal(ts.createSourceFile(file, selected, 99, true, ts.ScriptKind.JS).parseDiagnostics.length, 0);
+    assert.equal(registration.restoreButtonToolbarSelection(selected, kind, review), original);
+    assert.throws(() => registration.restoreButtonToolbarSelection(selected + '// drift', kind, review));
+    stagedFiles.set(path.resolve(file), Buffer.from(selected));
+    if (kind !== 'launcher') continue;
+    const execute = (code, flags) => {
+      const output = [];
+      vm.runInNewContext(code.replace(/^import .*;\n/gm, '').replaceAll('import.meta.url', 'moduleUrl'), {
+        assert, path, fileURLToPath, moduleUrl: pathToFileURL(path.resolve(file)).href,
+        statSync: () => ({ isFile: () => true, isDirectory: () => true }),
+        process: { argv: ['node', file, ...flags], execPath: 'node', env: {} },
+        spawnSync: (_exe, args) => { output.push({ args }); return { status: 0, signal: null }; },
+        console: { log: text => output.push(JSON.parse(text)) },
+      });
+      assert.equal(output.length, 1); return JSON.parse(JSON.stringify(output[0]));
+    };
+    const older = [...original.matchAll(/rawRequested\.includes\('(.*?)'\)/g)].map(m => m[1]);
+    for (const flags of [[], ...older.map(flag => [flag])])
+      assert.deepEqual(execute(selected, [...flags, '--dry-run']), execute(original, [...flags, '--dry-run']));
+    for (const suffix of [[], ['--check'], ['--dry-run']])
+      assert.ok(execute(selected, ['--button-toolbar-paint', ...suffix]).args.includes(`--case-obligation-review-sha256=${review}`));
+    for (const flag of [...older, '--unknown'])
+      assert.throws(() => execute(selected, ['--button-toolbar-paint', flag, '--dry-run']));
+  }
+  const historical = registration.createButtonToolbarHistoricalRead({ read: (name, ...args) =>
+    stagedFiles.get(path.resolve(name)) ?? fs.readFileSync(name, ...args) });
+  const priorRead = registration.createButtonToolbarHistoricalRead();
+  for (const [file] of stagedFiles) assert.deepEqual(historical(file), priorRead(file));
 });
 
 test('button toolbar successor passes the existing complete receipt loader', async t => {

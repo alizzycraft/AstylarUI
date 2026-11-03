@@ -5,6 +5,91 @@ import path from 'node:path';
 import { createFilledFocusReviewReader } from './join-material-filled-focus-inputs.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
+const sharedFile = 'tests/material-parity/capture-availability-registration.mjs';
+const sharedParent = '390070de05bd064607354eb1768d92164d8f8e8b264b1e8035353e05b1e1b62d';
+const sharedImport = "import { stripButtonToolbarRegistrationIfPresent, createButtonToolbarHistoricalRead } from '../../scripts/join-material-button-toolbar-paint.mjs';\n";
+const sharedStrip = '  bytes = stripButtonToolbarRegistrationIfPresent(bytes, kind);\n';
+const sharedRead = '  read = createButtonToolbarHistoricalRead({ root, read });\n';
+const selectionParents = { runner: 'd5c899bfa5ca2f4a001fc3ac4484f39ea4169ea4a7811925c89c8159776c2383',
+  launcher: '74cdfa4036a3dae979a40b9f980fafbdf7030429aaeee78f0aa4368754050b2e' };
+function selectionEdits(kind, review) {
+  assert.match(review, /^[a-f0-9]{64}$/);
+  if (kind === 'launcher') return [
+    ['const rawRequested = process.argv.slice(2);', "const rawRequested = process.argv.slice(2);\nconst buttonToolbarPaint = rawRequested.includes('--button-toolbar-paint');\nassert.ok(!buttonToolbarPaint || rawRequested.every(argument => ['--button-toolbar-paint', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');"],
+    ['const requested = rawRequested.filter(', "const requested = rawRequested.filter(argument => argument !== '--button-toolbar-paint').filter("],
+    ['|--filled-focus]', '|--filled-focus|--button-toolbar-paint]'],
+    ['for (const [name, relative] of Object.entries(inputs)) {', `if (buttonToolbarPaint) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${review}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+    ['|| filledFocus)', '|| filledFocus || buttonToolbarPaint)'],
+    ["if (requested.includes('--dry-run'))", `if (buttonToolbarPaint) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${review}';\nif (requested.includes('--dry-run'))`],
+  ];
+  assert.equal(kind, 'runner');
+  return [
+    ["import { createFilledFocusReviewReader, createFilledFocusHistoricalRead } from './join-material-filled-focus-inputs.mjs';", "import { createFilledFocusReviewReader, createFilledFocusHistoricalRead } from './join-material-filled-focus-inputs.mjs';\nimport { createButtonToolbarReviewReader, createButtonToolbarHistoricalRead } from './join-material-button-toolbar-paint.mjs';"],
+    ['const filledFocusHistoricalRead = createFilledFocusHistoricalRead({root,read:auditReadFileSync});', 'const buttonToolbarHistoricalRead = createButtonToolbarHistoricalRead({root,read:auditReadFileSync});\n    const filledFocusHistoricalRead = createFilledFocusHistoricalRead({root,read:buttonToolbarHistoricalRead});'],
+    ['const applicability=options.caseObligationReviewSha256===', `const applicability=options.caseObligationReviewSha256==='${review}'\n      ? createButtonToolbarReviewReader({root,read:auditReadFileSync})\n      : options.caseObligationReviewSha256===`],
+    ['diagnosticRead: options.caseObligationReviewSha256===', `diagnosticRead: options.caseObligationReviewSha256==='${review}'\n      ? createCaptureAvailabilityHistoricalRead({root,read:createButtonToolbarHistoricalRead({root,read:auditReadFileSync})})\n      : options.caseObligationReviewSha256===`],
+  ];
+}
+export function prepareButtonToolbarSelection(bytes, kind, review) {
+  let source = bytes.toString().replaceAll('\r\n', '\n'); assert.equal(hash(source), selectionParents[kind]);
+  for (const [before, after] of selectionEdits(kind, review)) {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  }
+  return source;
+}
+export function restoreButtonToolbarSelection(bytes, kind, review) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  for (const [before, after] of selectionEdits(kind, review).toReversed()) {
+    assert.equal(source.split(after).length, 2); source = source.replace(after, before);
+  }
+  assert.equal(hash(source), selectionParents[kind], 'Button-toolbar selection drift'); return source;
+}
+export function prepareButtonToolbarShared(bytes) {
+  const source = bytes.toString().replaceAll('\r\n', '\n'); assert.equal(hash(source), sharedParent);
+  return sharedImport + source.replace('export function restoreCaptureAvailabilityRegistration(bytes, kind) {\n',
+    'export function restoreCaptureAvailabilityRegistration(bytes, kind) {\n' + sharedStrip)
+    .replace('export function createCaptureAvailabilityHistoricalRead({ root, read }) {\n',
+      'export function createCaptureAvailabilityHistoricalRead({ root, read }) {\n' + sharedRead);
+}
+export function restoreButtonToolbarShared(bytes) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  for (const addition of [sharedImport, sharedStrip, sharedRead]) {
+    assert.equal(source.split(addition).length, 2); source = source.replace(addition, '');
+  }
+  assert.equal(hash(source), sharedParent, 'Shared button-toolbar drift'); return source;
+}
+export function stripButtonToolbarRegistrationIfPresent(bytes, kind) {
+  const source = bytes.toString().replaceAll('\r\n', '\n');
+  if (kind === 'producer') return source.includes("'scripts/join-material-button-toolbar-paint.mjs',")
+    ? Buffer.from(restoreButtonToolbarInventory(source)) : bytes;
+  if (kind === 'policy') return source.includes("\"id\": \"core-transparent-background-hover-reset-omitted\"")
+    ? Buffer.from(restoreButtonToolbarPolicy(source)) : bytes;
+  const marker = kind === 'runner' ? 'const buttonToolbarHistoricalRead = ' : kind === 'launcher' ? 'const buttonToolbarPaint = ' : undefined;
+  if (!marker || !source.includes(marker)) return bytes;
+  const expression = kind === 'runner' ? /const applicability=options.caseObligationReviewSha256==='([a-f0-9]{64})'/
+    : /if \(buttonToolbarPaint\) inputs\['case-obligation-review'\] = 'artifacts\/material-parity\/working-audit\/proposals\/([a-f0-9]{64})\.json'/;
+  const match = source.match(expression); assert.ok(match);
+  return Buffer.from(restoreButtonToolbarSelection(source, kind, match[1]));
+}
+export function createButtonToolbarHistoricalRead({ root = process.cwd(), read = fs.readFileSync } = {}) {
+  const kinds = new Map([
+    ['tests/material-parity/input-equivalence-audit.mjs', 'producer'],
+    ['tests/material-parity/input-equivalence-policy.mjs', 'policy'],
+    ['scripts/run-material-input-audit.mjs', 'runner'],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', 'launcher'],
+  ].map(([file, kind]) => [path.resolve(root, file), kind]));
+  return (name, options) => {
+    const absolute = path.resolve(root, name), kind = kinds.get(absolute);
+    let bytes;
+    if (kind) bytes = stripButtonToolbarRegistrationIfPresent(read(absolute), kind);
+    else if (absolute === path.resolve(root, sharedFile)) {
+      const current = read(absolute);
+      bytes = current.toString().includes(sharedImport.trim()) ? Buffer.from(restoreButtonToolbarShared(current)) : current;
+    } else return read(name, options);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  };
+}
 export const buttonToolbarParent = '24e522ce9dce5ffe2b6f38514a588d6bc621d6d8a9076d51433b9cc140ea5515';
 const key = 'retainedButtonToolbarPaint';
 const directory = 'artifacts/material-parity/';
@@ -100,7 +185,7 @@ export function createButtonToolbarReviewReader({ root = process.cwd(), read = f
     '8f94a1075751d28052fab3f5b4e3f3e9da3b45057d0bdb9875362fdfb32ed727/index.json'));
   assert.equal(hash(indexBytes), 'e043b3feaa8d780828df6c5486c83914e773598643e6eb798b91f60e67323878');
   const inspection = JSON.parse(indexBytes).metadata.coverage.inspectionEvidence;
-  const prior = createFilledFocusReviewReader({ root, read });
+  const prior = createFilledFocusReviewReader({ root, read: createButtonToolbarHistoricalRead({ root, read }) });
   assert.equal(prior.sha256, inspection.reviewSha256);
   const joined = joinButtonToolbarPaint(inspection.cases, file => read(path.resolve(root, file)));
   const review = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',

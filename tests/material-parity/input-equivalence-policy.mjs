@@ -110,6 +110,48 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+  "id": "core-transparent-background-hover-reset-omitted",
+  "file": "src/app/services/dom/elements/element-interaction.service.ts",
+  "pattern": "private applyElementMaterial\\(",
+  "classification": "confirmed-core-renderer-defect",
+  "introducedBy": "Current/installed/served selected methods agree;first introduction not established",
+  "owner": "core interaction material transition/reset",
+  "focusedProof": "tests/material-parity/toolbar-focus-layer-inputs.spec.mjs: public equal-input hover leave fails only for transparent keyword at DPR1 and DPR2",
+  "evidence": [
+    {
+      "file": "artifacts/material-parity/public-transparent-hover-20261103/latest-report.json",
+      "sha256": "3a7b5c323aec32eecc31f36bc6a2a8304c32d935de60b3485742547b4ff3b587"
+    },
+    {
+      "file": "artifacts/material-parity/toolbar-leave-material-accessor-corrected-20261103/latest-report.json",
+      "sha256": "70b1975262dcef39545e3e2df22eedf2574eb5ebde84565162db4d1b0d161600"
+    }
+  ],
+  "justification": "Public package-root identical CSS/SiteData hover/leave leaves opaque hover fill for transparent at DPR1/2;explicit alpha-zero rgba and opaque controls reset. Matched served toolbar material remains alpha1 after settled frames despite transparent resolved background. Complete parser,interaction caller/material and normal material methods agree under shared emit/formatting. Transparent parses to null;interaction material application lacks a null/transparent reset unlike normal application. Not original October5 causal attribution or full rendering acceptance.",
+  "recommendation": "Fix general interaction material reset semantics;never replace fixture transparent with rgba or add Material-specific paint branches.",
+  "inputEquivalent": false,
+  "currentRenderingAccepted": false
+}),
+  Object.freeze({
+  "id": "fixture-toolbar-action-focus-layer-omitted",
+  "file": "examples/material-showcase/src/app/astylar.component.ts",
+  "pattern": "selector: '\\.toolbar-action:hover'",
+  "classification": "application-plugin-authoring-defect",
+  "introducedBy": "Retained focus trees and current source agree;first introduction not established",
+  "owner": "showcase toolbar action focus-state authoring",
+  "focusedProof": "tests/material-parity/toolbar-focus-layer-inputs.spec.mjs: toolbar text-button focus omits the native layer independently of filled-button scope",
+  "evidence": [
+    {
+      "file": "artifacts/material-parity/toolbar-retained-raster-coverage-20261103.log",
+      "sha256": "66f6e9df4bf476dc9ded3be4642e9b62478c26c005c8c4a2065840d82ea38660"
+    }
+  ],
+  "justification": "Eight exact toolbar focus trees retain active native programmatic-focus primary-color layer at .12 opacity while candidate is a transparent childless action with no focus selector. Eight leave controls have native layer0. This unfilled action is outside the prior56 filled-primary scope. First divergence is omitted supplied focus composition,not lost equivalent core paint.",
+  "recommendation": "Restore equivalent focus composition through supported public owners;reduce any missing general capability rather than authoring sampled colors.",
+  "inputEquivalent": false,
+  "currentRenderingAccepted": false
+}),
+  Object.freeze({
   "id": "fixture-stepper-label-clipping-wrappers-omitted",
   "classification": "application-plugin-authoring-defect",
   "file": "examples/material-showcase/src/app/astylar.component.ts",

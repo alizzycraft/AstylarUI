@@ -1,5 +1,14 @@
 # Efficient Material input-audit workflow
 
+November3 button/toolbar evidence is registered LIVE1158/499/210/77 with exact
+--button-toolbar-paint review904af088. Nine focused routing/source/receipt checks
+pass;one live complete loader89059 is pending. Keep sources frozen until its
+terminal result. Accepted8f94a107 remains canonical;stagedeaa7 reader proof is
+historical. Do not recapture browser evidence or repeat staged inventories for
+metadata. Next direct collector/source reconciliation and one justified coherent
+canonical milestone only after validation,safe headroom and publication route.
+Original equal-input scope,partial cases and final acceptance gates unchanged.
+
 November3 filled-focus milestone8f94a107/indexe043b3fe passes independent cold
 canonical comparison (exit0,diskHits0;20231 files/4649955265 verified bytes).
 Accepted promotion reused86 individually hash-verified immutable hard links;
