@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+November3 button retained-raster gap narrowed without browser capture. All312
+alignment crops for156 owners/52 pending parents reconstruct byte-for-byte in
+decoded RGBA from104 retained full PNGs at recorded reference geometry plus4CSSpx.
+Original reportab42dbec authenticates geometry/text-center results;current PNG
+hashes are newly recorded retained-byte receipts,not invented capture-time hashes.
+Provenance log button-pending-raster-provenance-20261103.log SHA
+51b909e51efa5163f627ac814e36b8a268b0c2aaca45d52c0cdb039008ec8275.
+All stored center checks pass(max0.5371668238411758px);focusedRasters is empty
+for all52. Existing evaluateFocusedRaster diagnostics on all156 pairs give
+minimum SSIM0.7317579175085198,max color error0.07627691575579455;146 satisfy
+its default .8 SSIM diagnostic and119 meet its generic sharpness diagnostic.
+Neither generic default is promoted to a button acceptance gate. All10 low-SSIM
+pairs are contrast/button-primary;the static desktop pair has center erroronly
+0.030284370456541865px. Log button-pending-local-raster-20261103.log SHA
+bff55fd5b4ef56788fbcd2c1c89dcbf48f11ff2d28ce8f1efc674564d510e6fd.
+This demonstrates why center agreement cannot close paint. Next separate text,
+background/edge and neighboring-content contributions in the existing contrast
+primary crop,including inactive cases with matching black base requests,versus
+unequal active state-layer authoring. No core attribution,case closure,current
+rendering acceptance or canonical/source-registry change is claimed.
+
 November3 pending-button paint question answered without capture:accepted index
 e043b3fe and existing all-state census57504b29 authenticate exact membership of
 all52 pending button paint parents. Existing observeButtonStatePaint reproduces
