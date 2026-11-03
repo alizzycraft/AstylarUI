@@ -1,5 +1,23 @@
 # Material comparison/state coverage inventory
 
+November3 candidate8f94a107 derived conservation PASSES. Streamed comparison
+40796 terminal0 authenticates both complete packages and14085648 entries across
+five sections;exactly147 leaves differ. Leaf log filled-focus-derived-leaves-
+20261103.log SHAf1423ed9c56e14b7e1dcba33f4451df34abc6e71561e93c419bf09b1f8514009.
+Exactly98 producer receipts changecfed52bc->a8eae029;48 complete retained control
+rows independently reproduce each accepted and candidate proof hash after only
+that module fingerprint substitution. Their before hashes match authenticated
+prior complete-proof receipts,not an assumed applicability claim. Fresh complete
+motion report reproduces the candidate receipt and reverting its sole producer
+fingerprint recovers exact accepted report hash. All other selected values and
+container shapes/order remain conserved. Successful exact-encoding log SHA
+fc307ab8c5f3983e7bf6f8e5ec198135a9fb09f7e854b889e0e5c2c5ae4f5e7d;
+session93644 terminal0. Initial verifier71719 failed because it hashed compact
+JSON instead of producer JSON.stringify(report,null,2)+newline;preserve failed
+log SHA9e715e3f8b972f6598fc1515213d88f40684ba341a87cf01428fa4e89b85a4e9.
+No candidate/source change was needed. Independent cold36977 remains pending;
+isolated/accepted import and publication remain open. No case acceptance follows.
+
 November3 filled-focus export8371 terminal0 produces candidate
 8f94a1075751d28052fab3f5b4e3f3e9da3b45057d0bdb9875362fdfb32ed727,
 98636369 compressed/2371074893 decoded bytes,decoded SHA

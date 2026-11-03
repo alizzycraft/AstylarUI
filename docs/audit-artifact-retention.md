@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep filled-focus-derived-leaves-20261103.log,failed derived-receipt-conservation
+and passing derived-receipt-exact-encoding logs. Keep prior complete control rows
+and their trigger-paint conservation receipt:their exact before hashes establish
+reuse applicability. Corrected verifier uses the producer's pretty JSON+newline
+encoding;no evidence was rewritten. Cold/import/promotion remain pending,so the
+accepted baseline backup and predecessor stores are not released.
+
 Keep filled-focus-canonical-export-20261103 stdout/stderr,the accepted0d7ff3c4
 three-file backup,and candidate-sections-metadata/metadata-conservation logs.
 Their complete hashes are in the ledger. Candidate8f94a107 is not accepted yet;
