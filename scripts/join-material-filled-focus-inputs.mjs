@@ -12,6 +12,42 @@ const sharedFile = 'tests/material-parity/capture-availability-registration.mjs'
 const sharedImport = "import { stripFilledFocusRegistrationIfPresent, createFilledFocusHistoricalRead } from '../../scripts/join-material-filled-focus-inputs.mjs';\n";
 const sharedStrip = '  bytes = stripFilledFocusRegistrationIfPresent(bytes, kind);\n';
 const sharedRead = '  read = createFilledFocusHistoricalRead({ root, read });\n';
+const selectionParents = { runner: 'a533b9181aa7fe385401c9abb5be796ec1adb5dd6e7d829dcab964917c2b0af0',
+  launcher: '3e8bb5e2fda65bf4af2304860e10887e423af9f279bce86d0e72b98a8ea8a9a7' };
+function selectionEdits(kind, review) {
+  assert.match(review, /^[a-f0-9]{64}$/);
+  if (kind === 'launcher') return [
+    ['const rawRequested = process.argv.slice(2);', "const rawRequested = process.argv.slice(2);\nconst filledFocus = rawRequested.includes('--filled-focus');\nassert.ok(!filledFocus || rawRequested.every(argument => ['--filled-focus', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');"],
+    ['const requested = rawRequested.filter(', "const requested = rawRequested.filter(argument => argument !== '--filled-focus').filter("],
+    ['|--trigger-paint]', '|--trigger-paint|--filled-focus]'],
+    ['for (const [name, relative] of Object.entries(inputs)) {', `if (filledFocus) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${review}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+    ['|| triggerPaint)', '|| triggerPaint || filledFocus)'],
+    ["if (requested.includes('--dry-run'))", `if (filledFocus) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${review}';\nif (requested.includes('--dry-run'))`],
+  ];
+  assert.equal(kind, 'runner');
+  return [
+    ["import { createTriggerPaintReviewReader, createTriggerPaintHistoricalRead } from './join-material-trigger-paint-inputs.mjs';", "import { createTriggerPaintReviewReader, createTriggerPaintHistoricalRead } from './join-material-trigger-paint-inputs.mjs';\nimport { createFilledFocusReviewReader, createFilledFocusHistoricalRead } from './join-material-filled-focus-inputs.mjs';"],
+    ['const triggerPaintHistoricalRead = createTriggerPaintHistoricalRead({root,read:auditReadFileSync});', 'const filledFocusHistoricalRead = createFilledFocusHistoricalRead({root,read:auditReadFileSync});\n    const triggerPaintHistoricalRead = createTriggerPaintHistoricalRead({root,read:filledFocusHistoricalRead});'],
+    ['const applicability=options.caseObligationReviewSha256===', `const applicability=options.caseObligationReviewSha256==='${review}'\n      ? createFilledFocusReviewReader({root,read:auditReadFileSync})\n      : options.caseObligationReviewSha256===`],
+    ['diagnosticRead: options.caseObligationReviewSha256===', `diagnosticRead: options.caseObligationReviewSha256==='${review}'\n      ? createCaptureAvailabilityHistoricalRead({root,read:createFilledFocusHistoricalRead({root,read:auditReadFileSync})})\n      : options.caseObligationReviewSha256===`],
+  ];
+}
+export function prepareFilledFocusSelection(bytes, kind, review) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(source), selectionParents[kind], 'Exact focus selection predecessor required');
+  for (const [before, after] of selectionEdits(kind, review)) {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  }
+  return source;
+}
+export function restoreFilledFocusSelection(bytes, kind, review) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  for (const [before, after] of selectionEdits(kind, review).toReversed()) {
+    assert.equal(source.split(after).length, 2); source = source.replace(after, before);
+  }
+  assert.equal(hash(source), selectionParents[kind], 'Focus selection drift');
+  return source;
+}
 
 export function stripFilledFocusRegistrationIfPresent(bytes, kind) {
   if (kind !== 'producer' || !bytes.toString().includes("'scripts/join-material-filled-focus-inputs.mjs',")) return bytes;

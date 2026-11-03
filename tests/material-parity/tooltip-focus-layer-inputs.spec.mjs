@@ -39,6 +39,35 @@ test('filled focus staged inventory preserves the complete predecessor source', 
     restoreCaptureAvailabilityRegistration(Buffer.from(source), 'producer'));
   assert.throws(() => createFilledFocusHistoricalRead({ read: file => Buffer.from(fs.readFileSync(file).toString() + '// drift') })(shared),
     /Shared focus adapter drift/);
+  const { prepareFilledFocusSelection, restoreFilledFocusSelection } = await import('../../scripts/join-material-filled-focus-inputs.mjs');
+  const vm = await import('node:vm'), path = await import('node:path');
+  const { fileURLToPath, pathToFileURL } = await import('node:url');
+  const review = '1'.repeat(64);
+  for (const [kind, file] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
+    const original = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const staged = prepareFilledFocusSelection(original, kind, review);
+    assert.equal(ts.createSourceFile(file, staged, 99, true, ts.ScriptKind.JS).parseDiagnostics.length, 0);
+    assert.equal(restoreFilledFocusSelection(staged, kind, review), original);
+    assert.throws(() => restoreFilledFocusSelection(staged + '// drift', kind, review), /Focus selection drift/);
+    if (kind === 'runner') continue;
+    const execute = (source, flags) => {
+      const output = [];
+      vm.runInNewContext(source.replace(/^import .*;\n/gm, '').replaceAll('import.meta.url', 'moduleUrl'), {
+        assert, path, fileURLToPath, moduleUrl: pathToFileURL(path.resolve(file)).href,
+        statSync: () => ({ isFile: () => true, isDirectory: () => true }),
+        process: { argv: ['node', file, ...flags], execPath: 'node', env: {} },
+        spawnSync: (_exe, args) => { output.push({ args }); return { status: 0, signal: null }; },
+        console: { log: value => output.push(JSON.parse(value)) },
+      });
+      assert.equal(output.length, 1); return JSON.parse(JSON.stringify(output[0]));
+    };
+    const older = [...original.matchAll(/rawRequested\.includes\('(.*?)'\)/g)].map(m => m[1]);
+    for (const flags of [[], ...older.map(flag => [flag])])
+      assert.deepEqual(execute(staged, [...flags, '--dry-run']), execute(original, [...flags, '--dry-run']));
+    for (const suffix of [[], ['--check'], ['--dry-run']])
+      assert.ok(execute(staged, ['--filled-focus', ...suffix]).args.includes(`--case-obligation-review-sha256=${review}`));
+    for (const flag of [...older, '--unknown']) assert.throws(() => execute(staged, ['--filled-focus', flag, '--dry-run']));
+  }
 });
 
 test('56 retained filled-button focus owners omit the native programmatic focus layer', t => {

@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+November3 explicit --filled-focus selection is STAGED,not applied live.
+prepare/restore helpers guard exact runnera533b918/launcher3e8bb5e2 predecessors.
+Owning focused test passes1/1 in1072.4247ms:both staged sources parse,complete
+source restoration matches,all existing/default launcher dry-run outputs remain
+identical,and new normal/check/dry-run routes select the supplied digest.
+Every mixed older/new option and unknown option rejects. No live exporter or
+canonical payload changed. Next compose staged selection restoration in the
+newest adapter,repin review after the complete routing batch,then apply and run
+one coherent integration check. Earlier full-loader digests remain historical.
+
 November3 newest filled-focus adapter now composes at shared direct and nested
 restoration entry points. Focused test passes1/1 in951.7113ms:direct shared
 producer restoration equals the predecessor result;shared adapter source removes
