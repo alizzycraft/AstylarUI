@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+November3 next exact-case question resolved:all eight configured Tooltip focus
+owners (four profiles,desktop DPR1/2) share the retained filled-button focus-layer
+omission already classified for Snackbar. New focused test
+tests/material-parity/tooltip-focus-layer-inputs.spec.mjs pins accepted0d7ff3c4
+indexe5aac04c and authenticates all16 tree receipts. Native generated persistent
+ripple ::before has opacity0.12 with active cdk-program-focused rule;ink is black
+for dark,white otherwise. Candidate childless opener keeps normal fill under
+interaction resolution;both material-button:focus rules supply only transparent
+shadow,no layer/background. `node --test` for that file passes1/1 (~1.5s).
+This is bounded historical application-authoring input evidence,not equal-input
+core failure,popup displacement/sharpness,current rendering or case closure.
+No captures or canonical regeneration. Exact obligation join/source inventory
+registration remain pending for a coherent batch;do not treat this test as an
+already-integrated canonical finding or rerun the accepted export for this note.
+
 November3 trigger-paint milestone0d7ff3c4 is accepted locally after complete
 conservation,independent cold canonical equality and verified accepted import.
 Cold session39500 is terminal0;complete3489229.7554ms,20228 files and4383355919
