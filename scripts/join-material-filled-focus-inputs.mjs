@@ -45,7 +45,16 @@ export function createFilledFocusReviewReader({ root = process.cwd(), read = fs.
     '0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445/index.json'));
   assert.equal(hash(indexBytes), 'e5aac04c4db56ba0d365f9a5ccb107bcba6d02455033c18515a6cf1dafd8ab0d');
   const inspection = JSON.parse(indexBytes).metadata.coverage.inspectionEvidence;
-  const prior = createTriggerPaintReviewReader({ root, read, reviewSha256: inspection.reviewSha256 });
+  const producerFile = path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs');
+  const historicalRead = (name, options) => {
+    if (path.resolve(root, name) !== producerFile) return read(name, options);
+    const source = read(name).toString().replaceAll('\r\n', '\n');
+    const restored = hash(source) === 'cfed52bc5d431d49709955afc990b69cfcc04a11e26d0ddc8d3748d9a28a4c51'
+      ? source : restoreFilledFocusInventory(source);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? restored : Buffer.from(restored);
+  };
+  const prior = createTriggerPaintReviewReader({ root, read: historicalRead, reviewSha256: inspection.reviewSha256 });
   const joined = joinFilledFocusInputs(inspection.cases, file => read(path.resolve(root, file)));
   const review = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',
     ...(inspection.schemaVersion === 2 ? { inspectionSchemaVersion: 2 } : {}),

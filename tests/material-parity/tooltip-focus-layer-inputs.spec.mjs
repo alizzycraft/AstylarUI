@@ -11,8 +11,10 @@ const indexSha256 = 'e5aac04c4db56ba0d365f9a5ccb107bcba6d02455033c18515a6cf1dafd
 
 test('filled focus staged inventory preserves the complete predecessor source', async () => {
   const { default: ts } = await import('typescript');
-  const source = fs.readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const current = fs.readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const source = restoreFilledFocusInventory(current);
   const staged = prepareFilledFocusInventory(source);
+  assert.equal(staged, current);
   assert.equal(restoreFilledFocusInventory(staged), source);
   const ast = ts.createSourceFile('staged.mjs', staged, 99, true, ts.ScriptKind.JS);
   assert.equal(ast.parseDiagnostics.length, 0);

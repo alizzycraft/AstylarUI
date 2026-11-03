@@ -8922,6 +8922,8 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/join-material-filled-focus-inputs.mjs',
+    'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs',
     'scripts/join-material-trigger-paint-inputs.mjs',
     'artifacts/material-parity/trigger-paint-clipping-producer-20261102.mjs',
     "scripts/check-divider-omitted-owner-consumers.mjs",
@@ -10080,6 +10082,14 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs', /test\('56 retained filled\-button focus owners omit the native programmatic focus layer'/,
+      '56 retained filled-button focus owners omit the native programmatic focus layer', 'Bounded retained focus inputs and conservative receipt/inventory integration;not current rendering,canonical publication or whole-case closure.'),
+    proof(root, 'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs', /test\('filled focus join preserves every parent case and rejects altered tree receipts'/,
+      'filled focus join preserves every parent case and rejects altered tree receipts', 'Bounded retained focus inputs and conservative receipt/inventory integration;not current rendering,canonical publication or whole-case closure.'),
+    proof(root, 'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs', /test\('filled focus successor passes the existing complete receipt loader'/,
+      'filled focus successor passes the existing complete receipt loader', 'Bounded retained focus inputs and conservative receipt/inventory integration;not current rendering,canonical publication or whole-case closure.'),
+    proof(root, 'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs', /test\('filled focus staged inventory preserves the complete predecessor source'/,
+      'filled focus staged inventory preserves the complete predecessor source', 'Bounded retained focus inputs and conservative receipt/inventory integration;not current rendering,canonical publication or whole-case closure.'),
     proof(root, 'tests/material-parity/snackbar-position-observation.spec.mjs', /test\('trigger paint staged selection preserves every older option and rejects mixtures'/,
       'trigger paint staged selection preserves every older option and rejects mixtures', 'Reversible staged runner/launcher selection and complete prior-option controls;not live export routing or canonical publication.'),
     proof(root, 'tests/material-parity/snackbar-position-observation.spec.mjs', /test\('trigger paint historical reader restores exact accepted sources and rejects drift'/,

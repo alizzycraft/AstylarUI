@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+November3 filled-focus source/proof registration is LIVE1153 sources/489 proofs,
+with208 findings/75 plan tracks unchanged. Combined owning suite passes4/4,
+0skip/failure,272412.0798ms;session4685 terminal0. Log
+artifacts/material-parity/filled-focus-live-registration-20261103.log has raw
+SHA256d15421cc170e59a72c6fe015b262a8263bdc5702fc160c9d43b6fee4aff5546e.
+Tested review2f90a7f86173f115a4687b563632ec1efd110115a81928317d2f28eafbfeb836
+validates18671 dependencies/2311 partial,current-unverified cases and56 changes.
+Current source inventory restores exactly to cfed52bc before predecessor reader
+construction;the full old inventory/source and prior dependencies remain intact.
+Canonical0d7ff3c4 is historical relative to the newly registered producer,not
+current-source equality. Next exact export selection/shared restoration must be
+reconciled before the next justified canonical milestone;do not start an export
+with the older selector or silently relabel historical receipt generations.
+No renderer/fixture changes or acceptance-gate changes occurred.
+
 November3 filled-focus inventory registration is staged,not live. Guarded
 prepare/restore helpers require exact cfed52bc predecessor and recover its
 entire normalized source byte-for-byte. AST syntax/count proof passes1/1 in
