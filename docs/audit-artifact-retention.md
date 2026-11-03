@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep trigger-paint-candidate-import20261103 stdout/empty stderr and isolated
+0d7ff3c4 store/indexe5aac04c. Closed predecessor index5e770758 now occupies
+49639424 physical bytes for265748201 logical bytes,hash2090dfe3 unchanged.
+Closed isolated index occupies49815552 physical for266569843 logical bytes,
+hashe5aac04c unchanged. Transparent LZX compression deletes no evidence and
+changes no paths/pointers. Cold is pending;do not remove or promote these stores
+solely because isolated import passed. Accepted695dea7b backup remains required.
+
 Keep trigger-paint-candidate-derived-leaves20261103 and derived-receipt-
 conservation stdout/empty stderr. The latter authenticates/reuses complete48
 control rows from divider-consumer-derived-receipt-conservation20261102 only

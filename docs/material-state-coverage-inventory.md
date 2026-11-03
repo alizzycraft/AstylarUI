@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+November3 isolated candidate import PASSES for0d7ff3c4,index
+e5aac04c4db56ba0d365f9a5ccb107bcba6d02455033c18515a6cf1dafd8ab0d.
+Store:artifacts/material-parity/trigger-paint-candidate-store-20261103.
+Existing importer and full store verification authenticate8483 discrepancies,
+208 source findings,39904 controls,389202 occurrences,zero unresolved groups,
+72800867 compact shard bytes and expected2311-case review9105f2b3. Import log
+SHA2567569419c2a052da32c245b82e52c3a0da95f7f00bcdb813a5af17002369b7535.
+Accepted pointer remains695dea7b/index23dc19f6. Independent cold is still live;
+accepted promotion/publication and final acceptance remain pending.
+
+Safe headroom:closed predecessor5e770758 index was LZX-compressed with full
+hash2090dfe3 unchanged,265748201 logical/49639424 physical bytes. D:free rose
+334786560 to547487744 before import. Isolated import then left94818304 bytes;
+its closed index was LZX-compressed with full e5aac04c hash equality,
+266569843 logical/49815552 physical bytes. D:free308940800 afterward. No original,
+failure,payload or history was deleted;neither compression changes evidence
+bytes/paths or the cold worker's frozen sources. Reuse isolated generation
+after cold passes rather than regenerating another candidate store.
+
 November3 candidate0d7ff3c4 DERIVED CONSERVATION passes. Existing streamed
 comparator authenticates both complete packages and compares14085648 entries
 across the five changed derived sections;only147 values differ. Leaf record:
