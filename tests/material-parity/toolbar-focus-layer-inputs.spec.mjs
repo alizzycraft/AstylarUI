@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
 
@@ -287,4 +288,44 @@ test('button toolbar staged finding registration preserves complete policy and r
   }
   assert.throws(() => prepareButtonToolbarPolicy(prior + ' '));
   assert.throws(() => restoreButtonToolbarPolicy(next + ' '));
+});
+
+test('button toolbar staged inventory preserves complete producer and plans', async () => {
+  const { prepareButtonToolbarInventory, restoreButtonToolbarInventory } =
+    await import('../../scripts/join-material-button-toolbar-paint.mjs');
+  const { default: ts } = await import('typescript');
+  const source = fs.readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const staged = prepareButtonToolbarInventory(source);
+  assert.equal(restoreButtonToolbarInventory(staged), source);
+  const ast = ts.createSourceFile('producer.mjs', staged, 99, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const fn = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const files = fn('sourceFingerprints').body.statements.find(n => ts.isVariableStatement(n) &&
+    n.declarationList.declarations.some(d => d.name.getText(ast) === 'files'))
+    .declarationList.declarations.find(d => d.name.getText(ast) === 'files').initializer;
+  assert.equal(files.elements.length, 1158);
+  assert.equal(new Set(files.elements.map(n => n.text)).size, 1158);
+  for (const [name, count] of [['focusedProofInventory', 499], ['implementationPlan', 77]]) {
+    let expression = fn(name).body.statements.find(ts.isReturnStatement).expression;
+    while (ts.isCallExpression(expression) || ts.isPropertyAccessExpression(expression)) expression = expression.expression;
+    assert.ok(ts.isArrayLiteralExpression(expression));
+    assert.equal(expression.elements.length, count);
+  }
+  assert.throws(() => prepareButtonToolbarInventory(source + ' '));
+  assert.throws(() => restoreButtonToolbarInventory(staged + ' '));
+});
+
+test('button toolbar successor passes the existing complete receipt loader', async t => {
+  const { createButtonToolbarReviewReader } = await import('../../scripts/join-material-button-toolbar-paint.mjs');
+  const { loadCaseObligationReview } = await import('../../scripts/audit-findings-store.mjs');
+  const reader = createButtonToolbarReviewReader();
+  const envelope = JSON.parse(reader.read(reader.file));
+  const configured = envelope.review.groups.map(r => r.case);
+  const evidence = loadCaseObligationReview(path.relative(process.cwd(), reader.file), reader.sha256,
+    configured, { root: process.cwd(), read: reader.read });
+  assert.equal(evidence.cases.length, 2311);
+  assert.equal(evidence.inspectionComplete, false);
+  assert.equal(evidence.currentRenderingAccepted, false);
+  t.diagnostic(JSON.stringify({ review: reader.sha256, cases: evidence.cases.length,
+    dependencies: evidence.evidenceFingerprints.length, changed: reader.changed }));
 });

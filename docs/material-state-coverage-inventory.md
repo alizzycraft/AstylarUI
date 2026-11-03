@@ -1,5 +1,22 @@
 # Material comparison/state coverage inventory
 
+November3 staged reader/inventory integration PASSES. Revieweaa7b9d0f782751d5543daab79190b5877fe192c0c6a8ed8ef374983d6518eb7
+joins104 cases and preserves2311 partial/current-unverified records. Existing
+complete loader authenticates19255 dependencies;focused loader1/1 passes in
+540507.1076ms,log button-toolbar-staged-reader-20261103.log SHA
+6d00686b7984b476fac7f8e056c683a3ccc341358c894a67bc728b20d4204e7e.
+Explicit nine-test focused selection passes9/9,0skip,19771.2362ms,log
+button-toolbar-staged-focused-20261103.log. The earlier negative-lookahead run
+was interrupted for memory pressure(parent26292/child19436);it is NOT a pass.
+Original complete loader continued and finished;no replacement was launched.
+Reversible staged producer has1158 unique sources/499 proofs/77 plans;policy210
+findings restores exact208 predecessor. Shared immutable public bundle,HTML,
+48 control/failure PNGs and8 live-material PNGs bind once;new receipts never
+replace predecessor evidence. Live policy/producer/canonical remain unchanged.
+Next exact reversible live selection/historical routing before registration;
+reuse this frozen staged validation rather than repeating it for documentation.
+No case closure,new acceptance gate,renderer fix or original-runtime claim.
+
 November3 coherent button/toolbar integration is STAGED,not live/canonical.
 scripts/join-material-button-toolbar-paint.mjs joins exact accepted parent
 24e522ce into104 local-paint parents(52 button/52 toolbar),with per-owner PNG
