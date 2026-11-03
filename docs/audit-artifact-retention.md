@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep filled-focus-candidate-import-20261103.log and isolated8f94a107/indexe043b3fe
+store. Closed7a22e84a and isolated candidate indexes were LZX-compressed with
+complete hash equality and full store verification before/after. No evidence
+deleted or pointer advanced. Cold remains pending;do not promote or release the
+accepted0d7ff3c4 backup solely because isolated import passed.
+
 Keep filled-focus-derived-leaves-20261103.log,failed derived-receipt-conservation
 and passing derived-receipt-exact-encoding logs. Keep prior complete control rows
 and their trigger-paint conservation receipt:their exact before hashes establish

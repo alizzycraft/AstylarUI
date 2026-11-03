@@ -1,5 +1,22 @@
 # Material comparison/state coverage inventory
 
+November3 isolated filled-focus candidate import49123 terminal0 passes complete
+store verification for8f94a107,indexe043b3feaa8d780828df6c5486c83914e773598643e6eb798b91f60e67323878.
+Destination:artifacts/material-parity/filled-focus-candidate-store-20261103.
+Counts8483 discrepancies,208 findings,39904 controls,389202 occurrences,
+0unresolved;72800867 compact shard bytes,expected2311-case review9eb4cb42.
+Import log SHA39756f1235f86a28e520b9933a1d281fb527a79feb5713ea8e894c1f0cb7b8f9.
+Accepted pointer remains0d7ff3c4. Cold36977 is still pending;no promotion yet.
+
+Safe headroom:closed7a22e84a index262517627 logical bytes was LZX-compressed
+with hash0d9f52fae32e7783dc7dbb6bc08587fe6a0b01b1e3bf0ff94b9c4b6b08837850
+unchanged and complete store checks before/after;historical202 findings/8483
+groups/39904 controls/389202 occurrences/0unresolved. D:free413802496->626917376.
+After isolated import188551168 remained. Closed candidate index266705158 bytes
+was similarly compressed,hashe043b3fe unchanged,whole store checks pass before/
+after;free405446656. No evidence deleted or paths/pointers changed. Reuse this
+isolated generation after cold passes rather than generating a duplicate store.
+
 November3 candidate8f94a107 derived conservation PASSES. Streamed comparison
 40796 terminal0 authenticates both complete packages and14085648 entries across
 five sections;exactly147 leaves differ. Leaf log filled-focus-derived-leaves-
