@@ -1,5 +1,23 @@
 # Material comparison/state coverage inventory
 
+November3 pending-button paint question answered without capture:accepted index
+e043b3fe and existing all-state census57504b29 authenticate exact membership of
+all52 pending button paint parents. Existing observeButtonStatePaint reproduces
+all156 primary/secondary/disabled owner proofs from their104 distinct paired
+trees and exact original scalar receipts. Parent states:12 static plus8 each
+hover,held,activate,activate-leave,disabled. Primary layer opacity counts28 zero,
+16 .08,8 .12. Primary-only log button-pending-paint-membership-20261103.log SHA
+b567513c2486b464cf3edbe49221c42231e805de2db516125e98f2a49639ec45;
+sibling replay log button-pending-paint-siblings-20261103.log SHA
+af920f3d616e24fb6f480800c8164034a494f1b3984ed973369da4dd8bad85c5.
+The first log's disabled=false diagnostic concerns only button-primary,not
+the case's disabled control. Sibling replay verifies actual disabled authoring
+on button-disabled and native disabled attribute in all52 cases. Never infer
+owner state from the case label. No missing host/state-layer input capture here;
+remaining complete paint/raster attribution,lifecycle and currentness are not
+proved by this census. Next map existing local raster receipts to all three
+owners before proposing any capture. No parent disposition or canonical change.
+
 November3 post-promotion triage authenticates complete accepted indexe043b3fe.
 All2311 remain partial:inputStyleStructure/semantics/historyOwnership/
 sourceCurrentness each2311 partial;localPaint898 pending joins and1413 partial;
