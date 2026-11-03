@@ -8,6 +8,36 @@ const hash = value => createHash('sha256').update(value).digest('hex');
 export const filledFocusParent = 'c02a245f4c2c17eaa73be940d736ae09f2d20f06e9f20809ae6e9fd2bcd330b1';
 const key = 'retainedFilledPrimaryFocusLayer';
 const families = ['core', 'button', 'menu', 'bottom-sheet', 'dialog', 'snack-bar', 'tooltip'];
+const sharedFile = 'tests/material-parity/capture-availability-registration.mjs';
+const sharedImport = "import { stripFilledFocusRegistrationIfPresent, createFilledFocusHistoricalRead } from '../../scripts/join-material-filled-focus-inputs.mjs';\n";
+const sharedStrip = '  bytes = stripFilledFocusRegistrationIfPresent(bytes, kind);\n';
+const sharedRead = '  read = createFilledFocusHistoricalRead({ root, read });\n';
+
+export function stripFilledFocusRegistrationIfPresent(bytes, kind) {
+  if (kind !== 'producer' || !bytes.toString().includes("'scripts/join-material-filled-focus-inputs.mjs',")) return bytes;
+  return Buffer.from(restoreFilledFocusInventory(bytes));
+}
+
+export function createFilledFocusHistoricalRead({ root = process.cwd(), read = fs.readFileSync } = {}) {
+  return (name, options) => {
+    const absolute = path.resolve(root, name);
+    let bytes;
+    if (absolute === path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs'))
+      bytes = stripFilledFocusRegistrationIfPresent(read(absolute), 'producer');
+    else if (absolute === path.resolve(root, sharedFile)) {
+      let source = read(absolute).toString().replaceAll('\r\n', '\n');
+      if (source.includes(sharedImport.trim())) {
+        for (const addition of [sharedImport, sharedStrip, sharedRead]) {
+          assert.equal(source.split(addition).length, 2); source = source.replace(addition, '');
+        }
+        assert.equal(hash(source), 'a83da468cfd59b2d88e1713bb2cd6ac5ca12113ca933d4090b9b4d9ecabaeebb', 'Shared focus adapter drift');
+      } else return read(name, options);
+      bytes = Buffer.from(source);
+    } else return read(name, options);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  };
+}
 
 const inventoryPaths = "    'scripts/join-material-filled-focus-inputs.mjs',\n    'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs',\n";
 const proofNames = [
@@ -45,15 +75,7 @@ export function createFilledFocusReviewReader({ root = process.cwd(), read = fs.
     '0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445/index.json'));
   assert.equal(hash(indexBytes), 'e5aac04c4db56ba0d365f9a5ccb107bcba6d02455033c18515a6cf1dafd8ab0d');
   const inspection = JSON.parse(indexBytes).metadata.coverage.inspectionEvidence;
-  const producerFile = path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs');
-  const historicalRead = (name, options) => {
-    if (path.resolve(root, name) !== producerFile) return read(name, options);
-    const source = read(name).toString().replaceAll('\r\n', '\n');
-    const restored = hash(source) === 'cfed52bc5d431d49709955afc990b69cfcc04a11e26d0ddc8d3748d9a28a4c51'
-      ? source : restoreFilledFocusInventory(source);
-    const encoding = typeof options === 'string' ? options : options?.encoding;
-    return encoding ? restored : Buffer.from(restored);
-  };
+  const historicalRead = createFilledFocusHistoricalRead({ root, read });
   const prior = createTriggerPaintReviewReader({ root, read: historicalRead, reviewSha256: inspection.reviewSha256 });
   const joined = joinFilledFocusInputs(inspection.cases, file => read(path.resolve(root, file)));
   const review = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',

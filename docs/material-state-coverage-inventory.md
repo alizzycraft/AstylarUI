@@ -1,5 +1,14 @@
 # Material comparison/state coverage inventory
 
+November3 newest filled-focus adapter now composes at shared direct and nested
+restoration entry points. Focused test passes1/1 in951.7113ms:direct shared
+producer restoration equals the predecessor result;shared adapter source removes
+only three exact additions and recoversa83da468 bytes;unrelated drift rejects.
+Older unmarked shared sources pass through byte-for-byte without normalization.
+No older hash guard is widened. Explicit export selector and full coherent
+routing integration remain pending;do not start a canonical export yet or reuse
+the earlier full-loader digest as current for these changed adapter bytes.
+
 November3 export preflight isolates the remaining shared-restoration integration:
 new producer normalizeda8eae029 is correctly rejected by the older trigger-paint
 guard expectingcfed52bc. Applying exact restoreFilledFocusInventory FIRST makes

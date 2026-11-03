@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { createHash } from 'node:crypto';
 import { stripTriggerPaintRegistrationIfPresent } from '../../scripts/join-material-trigger-paint-inputs.mjs';
 import { createFilledFocusReviewReader, joinFilledFocusInputs, restoreFilledFocusInputs,
-  prepareFilledFocusInventory, restoreFilledFocusInventory } from '../../scripts/join-material-filled-focus-inputs.mjs';
+  prepareFilledFocusInventory, restoreFilledFocusInventory, createFilledFocusHistoricalRead } from '../../scripts/join-material-filled-focus-inputs.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const generation = '0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445';
@@ -31,6 +31,14 @@ test('filled focus staged inventory preserves the complete predecessor source', 
     /Unknown trigger-paint producer changes/);
   const prior = stripTriggerPaintRegistrationIfPresent(Buffer.from(restoreFilledFocusInventory(current)), 'producer');
   assert.equal(hash(prior), '1bce9f85f8ea18be40dab632667a84f3ca1ed324a45a1606ff738f4a0e8dfd54');
+  const { restoreCaptureAvailabilityRegistration } = await import('./capture-availability-registration.mjs');
+  const historical = createFilledFocusHistoricalRead();
+  const shared = 'tests/material-parity/capture-availability-registration.mjs';
+  assert.equal(hash(historical(shared)), 'a83da468cfd59b2d88e1713bb2cd6ac5ca12113ca933d4090b9b4d9ecabaeebb');
+  assert.equal(restoreCaptureAvailabilityRegistration(Buffer.from(current), 'producer'),
+    restoreCaptureAvailabilityRegistration(Buffer.from(source), 'producer'));
+  assert.throws(() => createFilledFocusHistoricalRead({ read: file => Buffer.from(fs.readFileSync(file).toString() + '// drift') })(shared),
+    /Shared focus adapter drift/);
 });
 
 test('56 retained filled-button focus owners omit the native programmatic focus layer', t => {

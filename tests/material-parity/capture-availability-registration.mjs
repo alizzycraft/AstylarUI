@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { stripDividerConsumerRegistrationIfPresent, createDividerConsumerRegistrationHistoricalRead } from './divider-consumer-registration.mjs';
 import { createTriggerPaintHistoricalRead, stripTriggerPaintRegistrationIfPresent } from '../../scripts/join-material-trigger-paint-inputs.mjs';
+import { stripFilledFocusRegistrationIfPresent, createFilledFocusHistoricalRead } from '../../scripts/join-material-filled-focus-inputs.mjs';
 import { createSliderTrackHistoricalRead, restoreSliderTrackProducer } from './slider-track-paint-findings.mjs';
 
 // Staged source transformation; applying it to live files is a separate gate.
@@ -68,6 +69,7 @@ export function prepareCaptureAvailabilityRegistration(bytes, kind) {
   return source;
 }
 export function restoreCaptureAvailabilityRegistration(bytes, kind) {
+  bytes = stripFilledFocusRegistrationIfPresent(bytes, kind);
   bytes = stripTriggerPaintRegistrationIfPresent(bytes, kind);
   bytes = stripDividerConsumerRegistrationIfPresent(bytes, kind);
   if (kind === 'producer' && bytes.toString().includes('"tests/material-parity/slider-track-paint-findings.mjs",'))
@@ -124,6 +126,7 @@ export function restoreCaptureAvailabilityShared(bytes) {
 // For predecessor evidence readers only. Current source collection must retain
 // its raw reader so registration changes remain visible in the new inventory.
 export function createCaptureAvailabilityHistoricalRead({ root, read }) {
+  read = createFilledFocusHistoricalRead({ root, read });
   // Only live newest producers enter the newest adapter. Nested readers may
   // already supply older generations;their existing guards own those bytes.
   const triggerProducer = read(path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs'));
