@@ -39,15 +39,18 @@ test('filled focus staged inventory preserves the complete predecessor source', 
     restoreCaptureAvailabilityRegistration(Buffer.from(source), 'producer'));
   assert.throws(() => createFilledFocusHistoricalRead({ read: file => Buffer.from(fs.readFileSync(file).toString() + '// drift') })(shared),
     /Shared focus adapter drift/);
-  const { prepareFilledFocusSelection, restoreFilledFocusSelection } = await import('../../scripts/join-material-filled-focus-inputs.mjs');
+  const { prepareFilledFocusSelection, restoreFilledFocusSelection, stripFilledFocusRegistrationIfPresent } = await import('../../scripts/join-material-filled-focus-inputs.mjs');
   const vm = await import('node:vm'), path = await import('node:path');
   const { fileURLToPath, pathToFileURL } = await import('node:url');
   const review = '1'.repeat(64);
   for (const [kind, file] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
-    const original = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const original = stripFilledFocusRegistrationIfPresent(fs.readFileSync(file), kind).toString().replaceAll('\r\n', '\n');
     const staged = prepareFilledFocusSelection(original, kind, review);
     assert.equal(ts.createSourceFile(file, staged, 99, true, ts.ScriptKind.JS).parseDiagnostics.length, 0);
     assert.equal(restoreFilledFocusSelection(staged, kind, review), original);
+    const stagedRead = createFilledFocusHistoricalRead({ read: name => String(name).replaceAll('\\', '/').endsWith(file)
+      ? Buffer.from(staged) : fs.readFileSync(name) });
+    assert.equal(stagedRead(file).toString(), original);
     assert.throws(() => restoreFilledFocusSelection(staged + '// drift', kind, review), /Focus selection drift/);
     if (kind === 'runner') continue;
     const execute = (source, flags) => {

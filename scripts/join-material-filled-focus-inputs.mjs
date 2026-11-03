@@ -50,8 +50,15 @@ export function restoreFilledFocusSelection(bytes, kind, review) {
 }
 
 export function stripFilledFocusRegistrationIfPresent(bytes, kind) {
-  if (kind !== 'producer' || !bytes.toString().includes("'scripts/join-material-filled-focus-inputs.mjs',")) return bytes;
-  return Buffer.from(restoreFilledFocusInventory(bytes));
+  const source = bytes.toString().replaceAll('\r\n', '\n');
+  if (kind === 'producer') return source.includes("'scripts/join-material-filled-focus-inputs.mjs',")
+    ? Buffer.from(restoreFilledFocusInventory(source)) : bytes;
+  const marker = kind === 'runner' ? 'const filledFocusHistoricalRead = ' : kind === 'launcher' ? 'const filledFocus = ' : undefined;
+  if (!marker || !source.includes(marker)) return bytes;
+  const expression = kind === 'runner' ? /const applicability=options.caseObligationReviewSha256==='([a-f0-9]{64})'/
+    : /if \(filledFocus\) inputs\['case-obligation-review'\] = 'artifacts\/material-parity\/working-audit\/proposals\/([a-f0-9]{64})\.json'/;
+  const match = source.match(expression); assert.ok(match, 'Exact filled-focus selector required');
+  return Buffer.from(restoreFilledFocusSelection(source, kind, match[1]));
 }
 
 export function createFilledFocusHistoricalRead({ root = process.cwd(), read = fs.readFileSync } = {}) {
@@ -60,6 +67,10 @@ export function createFilledFocusHistoricalRead({ root = process.cwd(), read = f
     let bytes;
     if (absolute === path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs'))
       bytes = stripFilledFocusRegistrationIfPresent(read(absolute), 'producer');
+    else if (absolute === path.resolve(root, 'scripts/run-material-input-audit.mjs'))
+      bytes = stripFilledFocusRegistrationIfPresent(read(absolute), 'runner');
+    else if (absolute === path.resolve(root, 'scripts/export-material-input-audit-current-ancestry.mjs'))
+      bytes = stripFilledFocusRegistrationIfPresent(read(absolute), 'launcher');
     else if (absolute === path.resolve(root, sharedFile)) {
       let source = read(absolute).toString().replaceAll('\r\n', '\n');
       if (source.includes(sharedImport.trim())) {

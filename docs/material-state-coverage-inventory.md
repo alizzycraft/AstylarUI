@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+November3 filled-focus live routing selects exact review
+9eb4cb42066d5e50347b6ae269354a8702ddeae694f971a9ba5f26ccb421409f
+with --filled-focus. Combined suite passes4/4,0skip/failure,269119.5088ms;
+session7923 terminal0. Complete loader authenticates18671 dependencies,2311
+partial/current-unverified cases,56 children. Log filled-focus-live-routing-
+20261103.log raw SHAe2d8e50371c0d548e95cf8e5745c47dc6fd00ffd4186d5156e075765d00e79fd.
+Actual launcher --filled-focus --dry-run selects the exact review/path;runner
+Node syntax and scoped diff checks pass. New adapter restores staged/live runner
+and launcher exactly before older historical readers;default/older selection
+outputs and mixed-option rejection remain verified. No canonical export yet.
+Freeze1153 sources/489 proofs/208 findings/75 tracks for the next justified
+export/conservation/independent-cold/import milestone after storage preflight.
+Accepted0d7ff3c4 remains historical until reconciliation;no whole-case acceptance.
+
 November3 explicit --filled-focus selection is STAGED,not applied live.
 prepare/restore helpers guard exact runnera533b918/launcher3e8bb5e2 predecessors.
 Owning focused test passes1/1 in1072.4247ms:both staged sources parse,complete

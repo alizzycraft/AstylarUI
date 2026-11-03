@@ -1,5 +1,12 @@
 # Efficient Material input-audit workflow
 
+November3 filled-focus batch is live1153/489/208/75 with exact --filled-focus
+review9eb4cb42. Combined4/4 routing/receipt integration validates18671 dependencies;
+reuse that evidence for frozen inputs. Next storage preflight and one canonical
+milestone,not another capture/registration loop. Accepted0d7ff3c4 is historical
+relative to current producer. All2311 remain partial/current-unverified;original
+equal-input scope and final gates stay unchanged. See current ledger for receipts.
+
 November3 trigger-paint milestone0d7ff3c4/indexe5aac04c passes independent cold
 canonical equality(exit0,diskHits0),complete conservation and isolated/accepted
 store verification. Accepted import reuses86 hash-verified immutable hard links,
