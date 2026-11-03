@@ -247,3 +247,44 @@ test('complete transparent-material methods bind current emit, installed code an
     }
   }
 });
+
+test('button toolbar paint join preserves complete accepted coverage and rejects corrupt evidence', async () => {
+  const { joinButtonToolbarPaint, restoreButtonToolbarPaint } =
+    await import('../../scripts/join-material-button-toolbar-paint.mjs');
+  const bytes = fs.readFileSync(`artifacts/material-parity/working-audit/${generation}/index.json`);
+  assert.equal(hash(bytes), indexSha256);
+  const parent = JSON.parse(bytes).metadata.coverage.inspectionEvidence.cases;
+  const joined = joinButtonToolbarPaint(parent);
+  assert.equal(joined.changed, 104);
+  assert.deepEqual(joined.counts, { button: 52, toolbar: 52 });
+  assert.deepEqual(restoreButtonToolbarPaint(joined.cases), parent);
+  assert.equal(joined.cases.filter((r, i) => r === parent[i]).length, 2207);
+  assert.deepEqual(joined.cases.map(r => [r.case, r.inspection, r.currentRendering]),
+    parent.map(r => [r.case, r.inspection, r.currentRendering]));
+  assert.throws(() => joinButtonToolbarPaint(parent.slice(1)));
+  for (const suffix of ['toolbar-retained-raster-coverage-20261103.log', 'toolbar-action-alignment-astylar.png'])
+    assert.throws(() => joinButtonToolbarPaint(parent, (file, ...args) =>
+      file.endsWith(suffix) ? Buffer.from('corrupt') : fs.readFileSync(file, ...args)));
+});
+
+test('button toolbar staged finding registration preserves complete policy and rejects drift', async () => {
+  const { prepareButtonToolbarPolicy, restoreButtonToolbarPolicy, buttonToolbarSourceDefinitions } =
+    await import('../../scripts/join-material-button-toolbar-paint.mjs');
+  const { default: ts } = await import('typescript');
+  const prior = fs.readFileSync('tests/material-parity/input-equivalence-policy.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const next = prepareButtonToolbarPolicy(prior);
+  assert.equal(restoreButtonToolbarPolicy(next), prior);
+  const ast = ts.createSourceFile('policy.mjs', next, 99, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const statement = ast.statements.find(s => ts.isVariableStatement(s) &&
+    s.declarationList.declarations.some(d => d.name.getText(ast) === 'sourceAuditDefinitions'));
+  const definitions = statement.declarationList.declarations[0].initializer.arguments[0];
+  assert.equal(definitions.elements.length, 210);
+  assert.equal(buttonToolbarSourceDefinitions.length, 2);
+  for (const definition of buttonToolbarSourceDefinitions) {
+    assert.ok(new RegExp(definition.pattern).test(fs.readFileSync(definition.file, 'utf8')));
+    for (const receipt of definition.evidence) assert.equal(hash(fs.readFileSync(receipt.file)), receipt.sha256);
+  }
+  assert.throws(() => prepareButtonToolbarPolicy(prior + ' '));
+  assert.throws(() => restoreButtonToolbarPolicy(next + ' '));
+});

@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+November3 coherent button/toolbar integration is STAGED,not live/canonical.
+scripts/join-material-button-toolbar-paint.mjs joins exact accepted parent
+24e522ce into104 local-paint parents(52 button/52 toolbar),with per-owner PNG
+receipt checks and diagnostic-only metrics. All2311 case IDs/inspection/current
+statuses preserve;2207 unaffected objects retain identity;removing only the new
+child restores the complete accepted parent. Corrupt report/toolbarPNG/wrong
+parent controls reject. Two staged source definitions classify toolbar focus
+authoring omission and public transparent-reset core defect;complete208-entry
+policy restores exactly after210-entry staging,and changed source guards reject.
+Combined focused suite8/8,0skip,13880.1414ms. Neither live policy/producer nor
+canonical8f94a107 was changed. Next reversible inventory/plan/reader registration
+and dependency integration,then one justified canonical milestone once safe
+publication/headroom is available. Do not repeat settled browser probes for this
+metadata. Original remaining work and final acceptance gates stay unchanged.
+
 November3 bounded core transparent-hover reset defect demonstrated publicly.
 scripts/audit-public-transparent-hover.mjs reuses package-root mount/native CSS
 translation with identical SiteData and only separate diagnostic input variants.

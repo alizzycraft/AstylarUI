@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Retain November3 button/toolbar owner/raster logs and the public-transparent-hover-
+20261103 bundle,HTML,report and48 PNGs:they are required failure/control evidence,
+not successful scratch. Retain toolbar-leave-material-accessor-corrected-20261103
+report/8 PNGs and the initial failed toolbar-leave-material-20261103 directory,
+plus transparent-material-source-binding-20261103.FAILURE.md. Staged coverage/
+policy joins reference these exact receipts;no canonical promotion or reference
+closure yet authorizes removal. Do not rerun captures merely to update prose.
+
 November3 filled-focus cold comparison completed exit0,diskHits0. Preserve its
 stdout/stderr logs, isolated8f94a107 store, accepted8f94a107/indexe043b3fe and
 previous0d7 backup. Accepted promotion used86 individually hash-verified immutable
