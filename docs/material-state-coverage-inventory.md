@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+November3 matched live material evidence resolves the next-frame-only hypothesis
+for the authenticated retained served build. Diagnostic
+scripts/audit-material-toolbar-leave-material.mjs reuses the established build/
+browser-launch/asset authentication and real pointer actions,without CSS/material
+or render scheduling patches. Contrast desktop DPR1 reference layer returns0;
+candidate resolved background returns transparent and hoverpage,but live nontext
+toolbar-action material remains alpha1,diffuse235/255 in all channels,at frame45
+and frame96(after300ms and further settlement). Static material was alpha0;
+hover was opaque235/255. Report toolbar-leave-material-accessor-corrected-20261103/
+latest-report.json SHA70b1975262dcef39545e3e2df22eedf2574eb5ebde84565162db4d1b0d161600
+contains8 observations,authenticated served responses,8 screenshots and no page
+errors. Initial directory toolbar-leave-material-20261103 retains4 reference
+PNGs and FAILURE.md:instrumentation called nonexistent diagnostics.snapshot;
+corrected accessor reads diagnostics property. Neither failed evidence nor
+reference truth was overwritten. Regression suite passes4/4,0skip,5783.2409ms.
+Current source suggests an owning mismatch:parseBackgroundColor(transparent)
+returnsnull;interaction applyElementMaterial handles onlygradient/color,whereas
+normal ElementMaterialService has an explicit transparent branch. This is still
+a mechanism hypothesis until complete served/current method/caller bindings and
+public equal-input proof establish it. Not original-session causal attribution,
+allcontexts,current-source parity or whole-case closure. Next bind that specific
+branch and its caller;do not recapture the same frame-delay question.
+
 November3 toolbar leave anomaly extends to all8 profile/DPR contexts,not only2
 SSIM outliers. Every retained candidate activate-leave crop is decoded-pixel-
 identical to its own hover crop;hover resolved fill is nontransparent,leave fill

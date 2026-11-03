@@ -142,3 +142,38 @@ test('all retained toolbar leave crops preserve hover pixels after reported hove
   t.diagnostic(JSON.stringify({ observations,
     boundary: 'All8 retained leave crops equal their hover peers despite scalar/hover-state reset. This extends the observation beyond2 threshold outliers;not proof of capture timing,material caching,focus ownership,current reproduction or a core cause.' }));
 });
+
+test('authenticated served toolbar retains opaque hover material after settled transparent leave', () => {
+  const file = 'artifacts/material-parity/toolbar-leave-material-accessor-corrected-20261103/latest-report.json';
+  const bytes = fs.readFileSync(file);
+  assert.equal(hash(bytes), '70b1975262dcef39545e3e2df22eedf2574eb5ebde84565162db4d1b0d161600');
+  const report = JSON.parse(bytes);
+  assert.deepEqual(report.errors, []);
+  assert.equal(report.observations.length, 8);
+  const expectedAssets = new Map(report.browserFiles.map(x => [x.file, x.sha256]));
+  assert.ok(report.assets.some(x => x.file.endsWith('.js')));
+  for (const asset of report.assets) assert.equal(asset.sha256, expectedAssets.get(asset.file));
+  for (const observation of report.observations)
+    assert.equal(hash(fs.readFileSync(observation.screenshot.file)), observation.screenshot.sha256);
+  const candidate = report.observations.filter(x => x.side === 'astylar');
+  const material = x => {
+    assert.equal(x.data.meshes.length, 1);
+    assert.equal(x.data.meshes[0].text, false);
+    return x.data.meshes[0].material;
+  };
+  assert.equal(material(candidate[0]).alpha, 0);
+  const hover = material(candidate[1]);
+  assert.equal(hover.alpha, 1);
+  assert.deepEqual(hover.diffuse, [235 / 255, 235 / 255, 235 / 255]);
+  for (const x of candidate.slice(2)) {
+    assert.equal(x.data.nodes[0].resolvedStyle.background, 'transparent');
+    assert.equal(x.data.diagnostics.interaction.hoveredElementId, 'page');
+    assert.equal(x.data.diagnostics.interaction.focusVisible, false);
+    assert.equal(material(x).alpha, 1);
+    assert.deepEqual(material(x).diffuse, hover.diffuse);
+  }
+  assert.ok(candidate[3].data.frameId > candidate[2].data.frameId);
+  assert.equal(material(candidate[3]).id, material(candidate[2]).id);
+  for (const x of report.observations.filter(x => x.side === 'reference' && x.state.startsWith('leave')))
+    assert.equal(x.data.layer.opacity, '0');
+});
