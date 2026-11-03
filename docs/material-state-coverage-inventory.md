@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+November3 filled-focus export preflight passes all four direct collectors:
+72/4016 alignment-font,49/2677 text-align,4/178 LTR,146/6295 reviewed-source
+groups/observations. Log filled-focus-direct-collector-preflight-20261103.log
+SHAbc999e906bde69f6bff25d374a77c673a8a20f4d4551086b63228417ecb9d602;
+session96418 terminal0. The older134/3325 preflight count is not full canonical
+population:authenticated accepted0d7ff3c4 discrepancy shards independently contain
+146 reviewed groups/6295 occurrences,matching the actual ancestry export inputs.
+No source plan or classification was changed to reconcile the counts.
+
+Storage preflight:closed3252368b index263053033 bytes/hashff2b1a1d and93324520
+index262867207 bytes/hash9f6ca83f were transparently LZX-compressed with complete
+hash equality and existing whole-store verification before/after. Both historical
+stores retain203 findings,8483 groups,39904 controls,389202 occurrences,0unresolved.
+D:free92057600->519135232;no evidence deleted. Exact three-file backup now at
+artifacts/material-parity/filled-focus-pre-export-0d7f-20261103;manifest hash
+3988257cc8dd20ca4d536f65bbafa8b53d2332631100c20b48a3839d8cf98184,
+payload0d7ff3c4,markdown9a128e9695afc0059eccdb8402a85ac6d62cf49b04b77ae9b2654b027023d488.
+Free420143104 afterward. Next one --filled-focus export with fresh logs,then
+conservation/independent cold/import;none is claimed complete by this preflight.
+
 November3 filled-focus live routing selects exact review
 9eb4cb42066d5e50347b6ae269354a8702ddeae694f971a9ba5f26ccb421409f
 with --filled-focus. Combined suite passes4/4,0skip/failure,269119.5088ms;

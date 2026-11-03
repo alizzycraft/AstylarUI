@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep filled-focus-pre-export-0d7f-20261103 three-file hash-verified backup and
+filled-focus-direct-collector-preflight-20261103.log. Closed3252368b/93324520
+indexes were LZX-compressed without byte/hash changes;complete stores verify
+before/after. No original/failure evidence deleted or pointer advanced. Exact
+backup/index hashes and free-space measurements are in the current ledger.
+
 Keep filled-focus-live-registration-20261103.log (4/4 complete suite,raw hash
 d15421cc170e59a72c6fe015b262a8263bdc5702fc160c9d43b6fee4aff5546e) and
 immutable0d7ff3c4 predecessor. New live review2f90a7f8 supersedes only staged
