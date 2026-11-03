@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+November3 shared focus-layer scope is now56 exact focus cases across core,
+button,menu,bottom-sheet,dialog,snack-bar,tooltip (four profiles,DPR1/2).
+The existing tooltip-focus-layer-inputs proof now selects each named primary
+and its own ripple child,authenticates112 tree receipts against immutable
+accepted0d7ff3c4/indexe5aac04c,and checks the active programmatic-focus rule.
+All56 native layers have opacity0.12;candidate childless primary retains its
+normal fill with only transparent focus shadows. Sixteen actual retained
+negative controls(button-disabled and button-secondary in eight contexts) have
+no programmatic-focus class and opacity0. Test passes1/1 in1789.1048ms.
+This extends the same authoring finding,not56 whole-case closures or a new core
+diagnosis. Canonical obligation joins and inventory registration remain pending
+for a coherent batch. No capture,export,fixture or renderer change was made.
+
 November3 next exact-case question resolved:all eight configured Tooltip focus
 owners (four profiles,desktop DPR1/2) share the retained filled-button focus-layer
 omission already classified for Snackbar. New focused test
