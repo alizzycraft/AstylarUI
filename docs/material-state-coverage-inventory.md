@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+November3 toolbar focus input gap now has a focused regression,independent of
+the filled-primary56 scope. tests/material-parity/toolbar-focus-layer-inputs.spec.mjs
+pins accepted8f94a107/indexe043b3fe and authenticates32 exact focus/control trees.
+All8 focus cases retain an active native cdk-program-focused ::before rule with
+opacity.12 and theme primary color;candidate toolbar-action is a transparent
+leaf with no focus rule. Eight activate-leave controls retain native opacity0;
+changed candidate fill rejects. Complete current application sourceb493a355 pins
+hover authoring and absent toolbar focus selector. First divergence is omitted
+application focus-layer intent,not a core inability to paint supplied inputs.
+Command node --test tests/material-parity/toolbar-focus-layer-inputs.spec.mjs
+passes1/1,0 skipped,1945.9646ms. New standalone proof is pending coherent source/
+finding/coverage registration;no canonical source replaced or case closed.
+Toolbar title/action crop coverage and full paint/currentness remain open.
+
 November3 contrast label attribution closes this bounded triage question:all10
 local-raster outliers have exact accepted reviewedCases membership in both
 fontFamily and letterSpacing reviewed-button-typography-host-input findings.
