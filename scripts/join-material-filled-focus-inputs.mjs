@@ -9,6 +9,37 @@ export const filledFocusParent = 'c02a245f4c2c17eaa73be940d736ae09f2d20f06e9f208
 const key = 'retainedFilledPrimaryFocusLayer';
 const families = ['core', 'button', 'menu', 'bottom-sheet', 'dialog', 'snack-bar', 'tooltip'];
 
+const inventoryPaths = "    'scripts/join-material-filled-focus-inputs.mjs',\n    'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs',\n";
+const proofNames = [
+  '56 retained filled-button focus owners omit the native programmatic focus layer',
+  'filled focus join preserves every parent case and rejects altered tree receipts',
+  'filled focus successor passes the existing complete receipt loader',
+  'filled focus staged inventory preserves the complete predecessor source',
+];
+const inventoryProofs = proofNames.map(name =>
+  `    proof(root, 'tests/material-parity/tooltip-focus-layer-inputs.spec.mjs', /test\\('${name.replaceAll('-', '\\-')}'/,\n` +
+  `      '${name}', 'Bounded retained focus inputs and conservative receipt/inventory integration;not current rendering,canonical publication or whole-case closure.'),\n`).join('');
+
+export function prepareFilledFocusInventory(source) {
+  const original = source.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(original), 'cfed52bc5d431d49709955afc990b69cfcc04a11e26d0ddc8d3748d9a28a4c51', 'Exact inventory predecessor required');
+  const next = original.replace('function sourceFingerprints(root) {\n  const files = [\n',
+    'function sourceFingerprints(root) {\n  const files = [\n' + inventoryPaths)
+    .replace('function focusedProofInventory(root) {\n  return [\n',
+      'function focusedProofInventory(root) {\n  return [\n' + inventoryProofs);
+  assert.equal(restoreFilledFocusInventory(next), original);
+  return next;
+}
+
+export function restoreFilledFocusInventory(source) {
+  const original = source.toString().replaceAll('\r\n', '\n');
+  assert.equal(original.split(inventoryPaths).length, 2);
+  assert.equal(original.split(inventoryProofs).length, 2);
+  const restored = original.replace(inventoryPaths, '').replace(inventoryProofs, '');
+  assert.equal(hash(restored), 'cfed52bc5d431d49709955afc990b69cfcc04a11e26d0ddc8d3748d9a28a4c51', 'Inventory restoration drift');
+  return restored;
+}
+
 export function createFilledFocusReviewReader({ root = process.cwd(), read = fs.readFileSync } = {}) {
   const indexBytes = read(path.resolve(root, 'artifacts/material-parity/working-audit/' +
     '0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445/index.json'));

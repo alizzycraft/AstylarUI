@@ -2,11 +2,27 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
-import { createFilledFocusReviewReader, joinFilledFocusInputs, restoreFilledFocusInputs } from '../../scripts/join-material-filled-focus-inputs.mjs';
+import { createFilledFocusReviewReader, joinFilledFocusInputs, restoreFilledFocusInputs,
+  prepareFilledFocusInventory, restoreFilledFocusInventory } from '../../scripts/join-material-filled-focus-inputs.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const generation = '0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445';
 const indexSha256 = 'e5aac04c4db56ba0d365f9a5ccb107bcba6d02455033c18515a6cf1dafd8ab0d';
+
+test('filled focus staged inventory preserves the complete predecessor source', async () => {
+  const { default: ts } = await import('typescript');
+  const source = fs.readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const staged = prepareFilledFocusInventory(source);
+  assert.equal(restoreFilledFocusInventory(staged), source);
+  const ast = ts.createSourceFile('staged.mjs', staged, 99, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const get = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const paths = get('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(paths.length, 1153);
+  assert.equal(get('focusedProofInventory').body.statements[0].expression.elements.length, 489);
+  assert.throws(() => prepareFilledFocusInventory(source + '// drift'), /Exact inventory predecessor/);
+  assert.throws(() => restoreFilledFocusInventory(staged + '// drift'), /Inventory restoration drift/);
+});
 
 test('56 retained filled-button focus owners omit the native programmatic focus layer', t => {
   // Pin an immutable accepted generation, never the moving current pointer.

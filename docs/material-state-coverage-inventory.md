@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+November3 filled-focus inventory registration is staged,not live. Guarded
+prepare/restore helpers require exact cfed52bc predecessor and recover its
+entire normalized source byte-for-byte. AST syntax/count proof passes1/1 in
+803.4269ms:1151->1153 source paths,485->489 proof declarations;no finding or
+implementation-plan changes. Wrong parent and unrelated restoration drift reject.
+No exporter/source inventory file was changed or canonical rerun started.
+The prior33088b28 full-loader result remains historical for its tested module/
+suite hashes;new helper/test bytes require a freshly bound review when the
+coherent live-registration batch is ready. Do not silently reuse the old digest.
+
 November3 staged filled-focus review passes the existing COMPLETE receipt loader.
 Session2522 terminal0;owning test passes1/1,263993.4644ms. Review
 33088b286a3cda930f63fcccaf48b66595bb1650b840bce8e1cbfcca9f32c01e
