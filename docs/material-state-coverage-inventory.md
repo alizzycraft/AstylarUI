@@ -1,5 +1,22 @@
 # Material comparison/state coverage inventory
 
+November3 toolbar leave anomaly extends to all8 profile/DPR contexts,not only2
+SSIM outliers. Every retained candidate activate-leave crop is decoded-pixel-
+identical to its own hover crop;hover resolved fill is nontransparent,leave fill
+transparent,and reported hoveredElementId is page. Stored statePaint.matches is
+true with transparent scalar. Visible contrast/custom fill exactly matches the
+authored hover colors(235,235,235 /224,239,238),not merely changed text position.
+Third focused regression pins reportab42dbec,tree receipts and all8 crop pairs;
+suite passes3/3,0 skipped,5982.6496ms. Focus remains toolbar-action with
+focusVisible=false in inspected leave snapshots;this alone cannot rule out all
+authored/default focus decoration. Maintained compareStatePaint checks resolved
+interactionBackground,not rendered pixels;do not reuse its success as paint proof.
+Precise missing evidence:matched post-leave live mesh/material state and rendered
+frame/capture timing,with original producer applicability. Need that decisive
+observation to distinguish material caching,focus paint or capture settlement.
+Do not repeat existing crop/style comparisons or assign an original core cause
+from them. No renderer/fixture change or case acceptance;registration pending.
+
 November3 toolbar raster coverage now inspected without recapture:208 title/action
 crops reconstruct exactly from104 retained full PNGs for all52 cases. All104
 stored centering checks pass. Existing raster diagnostics:52/52 title crops

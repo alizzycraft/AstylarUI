@@ -110,3 +110,35 @@ test('retained toolbar leave pixels change despite identical recorded candidate 
   t.diagnostic(JSON.stringify({ observations,
     boundary: 'Recorded node identity does not prove complete equal runtime inputs. Core cause, original timing/material/focus ownership, current rendering and whole-case acceptance remain unproved.' }));
 });
+
+test('all retained toolbar leave crops preserve hover pixels after reported hover clears', t => {
+  const reportBytes = fs.readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(reportBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes);
+  const observations = [];
+  for (const profile of ['light', 'dark', 'contrast', 'custom']) for (const dpr of [1, 2]) {
+    const entries = ['hover', 'activate-leave'].map(state => report.interactions.find(e =>
+      e.family === 'toolbar' && e.profile === profile && e.viewport.id === `desktop-dpr${dpr}` && e.state === state));
+    assert.ok(entries.every(Boolean));
+    const nodes = entries.map(e => {
+      const receipt = e.inputTrees.astylar, bytes = fs.readFileSync(receipt.file);
+      assert.equal(hash(bytes), receipt.sha256);
+      return JSON.parse(bytes).nodes.find(n => n.authored?.id === 'toolbar-action');
+    });
+    assert.notEqual(nodes[0].resolvedStyle.background, 'transparent');
+    assert.equal(nodes[1].resolvedStyle.background, 'transparent');
+    assert.equal(entries[1].statePaint.matches, true);
+    assert.equal(entries[1].statePaint.astylar, 'transparent');
+    assert.ok(entries[1].resourceSnapshots.every(s => s.surface.interaction.hoveredElementId === 'page'));
+    const pixels = entries.map(e => {
+      const file = e.inputTrees.astylar.file.replace('astylar-input-tree.json', 'toolbar-action-alignment-astylar.png');
+      const png = PNG.sync.read(fs.readFileSync(file));
+      return { width: png.width, height: png.height, rgbaSha256: hash(png.data) };
+    });
+    assert.deepEqual(pixels[0], pixels[1]);
+    observations.push({ profile, dpr, hoverBackground: nodes[0].resolvedStyle.background,
+      leaveBackground: nodes[1].resolvedStyle.background, pixels: pixels[0] });
+  }
+  t.diagnostic(JSON.stringify({ observations,
+    boundary: 'All8 retained leave crops equal their hover peers despite scalar/hover-state reset. This extends the observation beyond2 threshold outliers;not proof of capture timing,material caching,focus ownership,current reproduction or a core cause.' }));
+});
