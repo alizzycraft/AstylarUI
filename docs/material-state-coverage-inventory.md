@@ -1,5 +1,22 @@
 # Material comparison/state coverage inventory
 
+November3 contrast label attribution closes this bounded triage question:all10
+local-raster outliers have exact accepted reviewedCases membership in both
+fontFamily and letterSpacing reviewed-button-typography-host-input findings.
+Original tree/scalar receipts reproduce one direct mdc-button__label per host,
+matching label/value text and host/label computed font inputs versus candidate
+leaf:Roboto versus fallback stack,and .096px tracking versus omission. Existing
+classification is application-plugin-authoring-defect at font-token translation,
+before layout/projection,not a newly discovered core cause. Log
+button-contrast-label-attribution-20261103.log SHA
+7a5105fb7ade3c926fdc4bd793742ee8238e9d2a6891c7ec6db7b12f59bbc200.
+No exact pixel contribution,physical font choice,core exclusion or whole-case
+closure follows. Stop repeating this attribution;retain the156-owner input and
+raster records for the next coherent coverage integration. Remaining button
+paint work is complete glyph/edge/composition and source/runtime applicability,
+not absent crop evidence. Continue other genuinely unjoined owner/state evidence
+before another canonical milestone. All original final gates remain open.
+
 November3 contrast-primary spatial attribution rejects a surrounding-content-only
 or active-layer-only explanation. Pixel-center partition at the recorded CSS box
 (outside,rim3px,interior text window x24..width-24/y4..height-4,other interior)
