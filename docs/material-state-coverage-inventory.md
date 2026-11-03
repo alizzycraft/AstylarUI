@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+November3 toolbar raster coverage now inspected without recapture:208 title/action
+crops reconstruct exactly from104 retained full PNGs for all52 cases. All104
+stored centering checks pass. Existing raster diagnostics:52/52 title crops
+exceed generic .8 SSIM (minimum.8696226543663952);42/52 action crops do,minimum
+.46664319592517767. Generic thresholds remain diagnostic,not new toolbar gates.
+Log toolbar-retained-raster-coverage-20261103.log SHA
+66f6e9df4bf476dc9ded3be4642e9b62478c26c005c8c4a2065840d82ea38660.
+Ten action outliers split into8 known focus-layer input omissions plus contrast/
+custom DPR1 activate-leave. For those2 leave cases,reference crops are decoded-
+pixel-identical to static peers;candidate pixels differ despite identical complete
+recorded toolbar-action nodes(including all resolved and retained text-paint data).
+Both native persistent layers are0,candidate fill transparent,and reported hover
+is page. This narrows an unrecorded state/paint/timeline question,not a core cause.
+Focused regression now has2 tests passing,0 skipped,3841.572ms;exact retained
+decoded hashes and tree receipts are pinned in toolbar-focus-layer-inputs.spec.mjs.
+Next inspect the candidate static-versus-leave changed-pixel footprint and focus/
+material/capture ownership;do not diagnose solely from equal recorded nodes.
+Standalone proof and raster coverage still await coherent inventory/case joining.
+
 November3 toolbar focus input gap now has a focused regression,independent of
 the filled-primary56 scope. tests/material-parity/toolbar-focus-layer-inputs.spec.mjs
 pins accepted8f94a107/indexe043b3fe and authenticates32 exact focus/control trees.

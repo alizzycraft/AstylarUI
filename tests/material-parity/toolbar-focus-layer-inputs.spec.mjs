@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import { PNG } from 'pngjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const generation = '8f94a1075751d28052fab3f5b4e3f3e9da3b45057d0bdb9875362fdfb32ed727';
@@ -64,4 +65,48 @@ test('toolbar text-button focus omits the native layer independently of filled-b
   assert.ok(!/(?:\.toolbar-action|#toolbar-action):focus/.test(source));
   t.diagnostic(JSON.stringify({ generation, indexSha256, observations, inactiveControls: 8,
     boundary: 'Retained unfilled toolbar action focus input omission, not physical paint, equal-input core failure, current runtime or whole-case acceptance. Pending coherent inventory/coverage integration.' }));
+});
+
+test('retained toolbar leave pixels change despite identical recorded candidate action nodes', t => {
+  const bytes = fs.readFileSync(`artifacts/material-parity/working-audit/${generation}/index.json`);
+  assert.equal(hash(bytes), indexSha256);
+  const cases = JSON.parse(bytes).metadata.coverage.inspectionEvidence.cases;
+  const observations = [];
+  // Decoded hashes bind the retained pixels now; they are not asserted to be
+  // original capture-time PNG receipts or evidence of current runtime behavior.
+  const expected = {
+    contrast: ['d92d051a206d13c6c271aa7687794e28b72b9f7125b8a3660c986921b2bbc674',
+      'f9896fcf571545583cdde2b6fbf1e5f4eb4c884007fea64196793e5cfa05568f',
+      '3fa01f0a4ded2cc404ab43b90abf17fe782b58834b5e250f2209f2ca6cb499a3'],
+    custom: ['e8fe0c41ac81b7f28ecc7c0d8410a82feebe3336096a529d38c59f51c5989a06',
+      'd96c98f74c3bc79056561c711c5b97b8d70eac2a8d12f3d1781c35bab1d5cad5',
+      'eb940f0404f89c1399608b06133ce9b7ed75b975e3f1fbdd9750e5a5f43eb6df'],
+  };
+  for (const profile of ['contrast', 'custom']) {
+    const ids = [`static:toolbar@${profile}/desktop`,
+      `interaction:toolbar@${profile}/desktop-dpr1/activate-leave`];
+    const nodes = [], pixels = [];
+    for (const id of ids) {
+      const row = cases.find(r => r.case === id); assert.ok(row);
+      const receipt = row.evidence.pairedTrees.astylar, treeBytes = fs.readFileSync(receipt.file);
+      assert.equal(hash(treeBytes), receipt.sha256);
+      const nodesForId = JSON.parse(treeBytes).nodes.filter(n => n.authored?.id === 'toolbar-action');
+      assert.equal(nodesForId.length, 1); nodes.push(nodesForId[0]);
+      pixels.push(Object.fromEntries(['reference', 'astylar'].map(side => {
+        const file = row.evidence.pairedTrees[side].file.replace(`${side}-input-tree.json`,
+          `toolbar-action-alignment-${side}.png`);
+        const image = PNG.sync.read(fs.readFileSync(file));
+        return [side, { width: image.width, height: image.height, rgbaSha256: hash(image.data) }];
+      })));
+    }
+    assert.deepEqual(nodes[0], nodes[1]);
+    assert.deepEqual(pixels[0].reference, pixels[1].reference);
+    assert.equal(pixels[0].reference.rgbaSha256, expected[profile][0]);
+    assert.equal(pixels[0].astylar.rgbaSha256, expected[profile][1]);
+    assert.equal(pixels[1].astylar.rgbaSha256, expected[profile][2]);
+    assert.notEqual(pixels[0].astylar.rgbaSha256, pixels[1].astylar.rgbaSha256);
+    observations.push({ profile, cases: ids, pixels });
+  }
+  t.diagnostic(JSON.stringify({ observations,
+    boundary: 'Recorded node identity does not prove complete equal runtime inputs. Core cause, original timing/material/focus ownership, current rendering and whole-case acceptance remain unproved.' }));
 });
