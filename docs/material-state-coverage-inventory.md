@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+November3 filled-focus milestone is accepted locally as8f94a1075751d28052fab3f5b4e3f3e9da3b45057d0bdb9875362fdfb32ed727,
+indexe043b3feaa8d780828df6c5486c83914e773598643e6eb798b91f60e67323878.
+Independent cold36977 completed exit0;collectors2,memoryHits10,diskHits0,
+invalidated0,20231 files/4649955265 verified bytes. Existing canonical comparison
+passed. Logs:filled-focus-independent-cold-20261103.log SHA
+49d48ca9248fa30ca8faf7b886d1e45d752b5f3335917194733ee7ee671d7e5d;
+stderr SHA365acadb0a737ff1a1bdf0e9dffbe521b8ba74d8ba948d7a5f39588fa1939ca4.
+Accepted promotion57889 completed exit0:86 immutable isolated files individually
+hash-checked and hard-linked;whole-store verification before/after existing atomic
+import reuse passed. Previous0d7 retained. Counts1153/489/208/75;all2311 remain
+partial/current-rendering-unverified. Earlier pending process/pointer statements
+below are historical. Next publish,then inspect remaining exact-case obligations;
+no renderer fix,case closure or acceptance-criteria change follows.
+
 November3 isolated filled-focus candidate import49123 terminal0 passes complete
 store verification for8f94a107,indexe043b3feaa8d780828df6c5486c83914e773598643e6eb798b91f60e67323878.
 Destination:artifacts/material-parity/filled-focus-candidate-store-20261103.

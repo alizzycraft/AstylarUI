@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+November3 filled-focus cold comparison completed exit0,diskHits0. Preserve its
+stdout/stderr logs, isolated8f94a107 store, accepted8f94a107/indexe043b3fe and
+previous0d7 backup. Accepted promotion used86 individually hash-verified immutable
+hard links, with complete store verification before/after atomic import reuse.
+No evidence deleted; no current-rendering or whole-case acceptance implied.
+The pending-cold/pointer-not-advanced paragraph below is historical.
+
 Keep filled-focus-candidate-import-20261103.log and isolated8f94a107/indexe043b3fe
 store. Closed7a22e84a and isolated candidate indexes were LZX-compressed with
 complete hash equality and full store verification before/after. No evidence

@@ -1,5 +1,16 @@
 # Efficient Material input-audit workflow
 
+November3 filled-focus milestone8f94a107/indexe043b3fe passes independent cold
+canonical comparison (exit0,diskHits0;20231 files/4649955265 verified bytes).
+Accepted promotion reused86 individually hash-verified immutable hard links;
+complete store verification passed before and after atomic import reuse. Previous
+0d7ff3c4 remains retained. All2311 cases remain partial/current-rendering-unverified.
+Publish this verified increment before continuing remaining exact-case obligations;
+do not repeat completed export/conservation/cold checks for documentation edits.
+Cold stdout SHA49d48ca9248fa30ca8faf7b886d1e45d752b5f3335917194733ee7ee671d7e5d;
+stderr SHA365acadb0a737ff1a1bdf0e9dffbe521b8ba74d8ba948d7a5f39588fa1939ca4.
+Original scope, equal-input contract and final acceptance gates remain unchanged.
+
 November3 filled-focus batch is live1153/489/208/75 with exact --filled-focus
 review9eb4cb42. Combined4/4 routing/receipt integration validates18671 dependencies;
 reuse that evidence for frozen inputs. Next storage preflight and one canonical
