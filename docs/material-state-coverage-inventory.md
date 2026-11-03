@@ -1,5 +1,22 @@
 # Material comparison/state coverage inventory
 
+November3 post-promotion triage authenticates complete accepted indexe043b3fe.
+All2311 remain partial:inputStyleStructure/semantics/historyOwnership/
+sourceCurrentness each2311 partial;localPaint898 pending joins and1413 partial;
+activation1408 pending/549 partial/354 authored exclusions;programmaticFocus1571
+pending/386 partial/40 inspected failures/314 exclusions;editing577 partial/1734
+exclusions. These are obligation counts,not new cases or missing captures.
+Prioritize shared button/overlay paint mapping,then editable placement/sharpness,
+then uncovered state/ownership boundaries. Button has52 pending paint parents
+(12 static plus40 non-focus interaction cases),while its eight focus parents
+are partial. Next decisive question:does existing retained shared-button paint
+evidence cover those exact owners/states,or only sampled scalar inputs? Compare
+its actual case membership and raster/source receipts before collecting anything.
+Do not repeat the settled56-owner focus omission or tooltip focus-popup absence.
+Publication:369bdbd1 is committed locally;two HTTPS pushes returned408 and an
+independent remote lookup still showspreviousc36f7df8. No credential/trust change
+or successful publication claimed. Local audit inspection can continue.
+
 November3 filled-focus milestone is accepted locally as8f94a1075751d28052fab3f5b4e3f3e9da3b45057d0bdb9875362fdfb32ed727,
 indexe043b3feaa8d780828df6c5486c83914e773598643e6eb798b91f60e67323878.
 Independent cold36977 completed exit0;collectors2,memoryHits10,diskHits0,
