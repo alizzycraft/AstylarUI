@@ -1,11 +1,47 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { createTriggerPaintReviewReader } from './join-material-trigger-paint-inputs.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 export const filledFocusParent = 'c02a245f4c2c17eaa73be940d736ae09f2d20f06e9f20809ae6e9fd2bcd330b1';
 const key = 'retainedFilledPrimaryFocusLayer';
 const families = ['core', 'button', 'menu', 'bottom-sheet', 'dialog', 'snack-bar', 'tooltip'];
+
+export function createFilledFocusReviewReader({ root = process.cwd(), read = fs.readFileSync } = {}) {
+  const indexBytes = read(path.resolve(root, 'artifacts/material-parity/working-audit/' +
+    '0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445/index.json'));
+  assert.equal(hash(indexBytes), 'e5aac04c4db56ba0d365f9a5ccb107bcba6d02455033c18515a6cf1dafd8ab0d');
+  const inspection = JSON.parse(indexBytes).metadata.coverage.inspectionEvidence;
+  const prior = createTriggerPaintReviewReader({ root, read, reviewSha256: inspection.reviewSha256 });
+  const joined = joinFilledFocusInputs(inspection.cases, file => read(path.resolve(root, file)));
+  const review = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',
+    ...(inspection.schemaVersion === 2 ? { inspectionSchemaVersion: 2 } : {}),
+    scope: inspection.scope, groups: joined.cases };
+  const sha256 = hash(JSON.stringify(review));
+  const file = path.resolve(root, `artifacts/material-parity/working-audit/proposals/${sha256}.json`);
+  const bytes = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256, review }));
+  const expected = new Map(inspection.evidenceFingerprints.map(r => [path.resolve(root, r.file), r.sha256]));
+  for (const row of joined.cases) for (const receipt of row.obligations.localPaint[key]?.evidence ?? []) {
+    const absolute = path.resolve(root, receipt.file);
+    if (expected.has(absolute)) assert.equal(expected.get(absolute), receipt.sha256, 'Never replace predecessor evidence');
+    expected.set(absolute, receipt.sha256);
+  }
+  return { file, sha256, changed: joined.changed, read(name, options) {
+    const absolute = path.resolve(root, name), encoding = typeof options === 'string' ? options : options?.encoding;
+    let selected;
+    if (absolute === file) selected = bytes;
+    else {
+      const sha = expected.get(absolute), current = sha ? read(absolute) : undefined;
+      selected = sha && hash(current) === sha ? current : prior.read(absolute);
+      if (sha) assert.equal(hash(selected), sha, `Unreconciled filled-focus dependency: ${name}`);
+    }
+    return encoding ? selected.toString(encoding) : Buffer.from(selected);
+  }, sourceApplicability: { mode: 'staged-filled-focus-input-join', predecessorReview: inspection.reviewSha256,
+    predecessorApplicability: prior.sourceApplicability,
+    boundary: 'Bounded focus inputs with exact historical dependencies;not current rendering,canonical publication or case closure.' } };
+}
 
 export function restoreFilledFocusInputs(cases) {
   return cases.map(row => {

@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Filled-focus staged review33088b28 depends on immutable accepted0d7ff3c4 index
+and its complete predecessor reader chain. Preserve that generation and all112
+selected tree receipts;new proof/reader sources are required provenance. The
+complete loader session2522 passed before publication with18671 dependencies.
+No physical proposal,new capture or duplicated canonical payload was generated.
+This does not authorize releasing original/failure evidence or predecessor stores.
+
 Keep terminal0 trigger-paint-independent-cold-20261103 stdout/stderr and accepted
 0d7ff3c4/indexe5aac04c generation. Promotion reuses86 immutable isolated files
 through hash-verified same-volume hard links;all source/destination hashes and

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
-import { joinFilledFocusInputs, restoreFilledFocusInputs } from '../../scripts/join-material-filled-focus-inputs.mjs';
+import { createFilledFocusReviewReader, joinFilledFocusInputs, restoreFilledFocusInputs } from '../../scripts/join-material-filled-focus-inputs.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const generation = '0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445';
@@ -71,6 +71,19 @@ test('56 retained filled-button focus owners omit the native programmatic focus 
   }
   t.diagnostic(JSON.stringify({ generation, indexSha256, observations,
     boundary: 'Exact retained opener focus inputs only; shared application-authoring omission, not equal-input core failure, popup paint/sharpness, current rendering or whole-case closure.' }));
+});
+
+test('filled focus successor passes the existing complete receipt loader', async t => {
+  const { loadCaseObligationReview } = await import('../../scripts/audit-findings-store.mjs');
+  const reader = createFilledFocusReviewReader(), envelope = JSON.parse(reader.read(reader.file));
+  const loaded = loadCaseObligationReview(`artifacts/material-parity/working-audit/proposals/${reader.sha256}.json`,
+    reader.sha256, envelope.review.groups.map(row => row.case), { read: reader.read });
+  assert.equal(loaded.cases.length, 2311);
+  assert.equal(loaded.inspectionComplete, false);
+  assert.equal(loaded.currentRenderingAccepted, false);
+  assert.equal(reader.changed, 56);
+  t.diagnostic(JSON.stringify({ review: reader.sha256, dependencies: loaded.evidenceFingerprints.length,
+    cases: loaded.cases.length, changed: reader.changed, inspectionComplete: false, currentRenderingAccepted: false }));
 });
 
 test('filled focus join preserves every parent case and rejects altered tree receipts', () => {
