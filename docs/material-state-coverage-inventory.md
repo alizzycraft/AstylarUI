@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+November3 live button/toolbar integration now PASSES complete receipt validation:
+904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4,
+2311 cases,19255 dependencies,104 changed paint children. Live reader89059
+terminal0,1/1,0skip,483028.892ms in button-toolbar-live-reader-20261103.log.
+The separate9 live focused checks passed;combined10 proofs are verified for
+these frozen sources. Direct actual shared collector restoration also recovers
+the same predecessor with/without newest stage,and policy43e75815 recovers.
+No new browser capture or repeat staged loader was needed. Counts1158/499/210/77;
+all2311 remain partial/current-rendering-unverified. Next publication/headroom
+preflight and direct canonical collector reconciliation before one export batch.
+Accepted8f94a107 is unchanged until full export/conservation/cold/import gates.
+Do not repeat these source/receipt checks merely for documentation edits.
+
 November3 button/toolbar registry is LIVE1158 sources/499 proofs/210 findings/77
 plans. Explicit --button-toolbar-paint selects review
 904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4.

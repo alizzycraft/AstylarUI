@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+November3 live button/toolbar904af088 passes complete19255-dependency/2311-case
+loader plus9 focused checks and direct shared-restoration control. Freeze current
+1158/499/210/77 sources and reuse those results. Next safe publication/headroom
+and direct collector reconciliation,then one canonical milestone;not another
+capture,inventory or loader loop. Accepted8f94a107 remains historical relative
+to this live producer;all cases stay partial/current-unverified. Original gates
+and equal-input scope remain unchanged. Earlier pending89059 text is historical.
+
 November3 button/toolbar evidence is registered LIVE1158/499/210/77 with exact
 --button-toolbar-paint review904af088. Nine focused routing/source/receipt checks
 pass;one live complete loader89059 is pending. Keep sources frozen until its
