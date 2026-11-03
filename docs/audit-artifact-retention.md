@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep terminal0 trigger-paint-independent-cold-20261103 stdout/stderr and accepted
+0d7ff3c4/indexe5aac04c generation. Promotion reuses86 immutable isolated files
+through hash-verified same-volume hard links;all source/destination hashes and
+complete store checks pass before/after existing atomic import reuse. Mutable
+docs files are not linked. Accepted695dea7b backup,isolated store and original/
+failure evidence remain retained;no deletion or whole-case acceptance follows.
+Earlier cold/import pending entries below are historical for this milestone.
+
 Keep trigger-paint-candidate-import20261103 stdout/empty stderr and isolated
 0d7ff3c4 store/indexe5aac04c. Closed predecessor index5e770758 now occupies
 49639424 physical bytes for265748201 logical bytes,hash2090dfe3 unchanged.

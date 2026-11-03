@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+November3 trigger-paint milestone0d7ff3c4/indexe5aac04c passes independent cold
+canonical equality(exit0,diskHits0),complete conservation and isolated/accepted
+store verification. Accepted import reuses86 hash-verified immutable hard links,
+not a regenerated store or duplicate payload. See current ledger for receipts.
+Publish this increment,then resume remaining exact-case obligations. All2311
+cases remain partial/current-rendering-unverified;no original scope or final
+acceptance gate changes. Earlier pending checkpoints below are historical.
+
 November3 trigger-paint first export failed validation before writes because
 direct shared source-plan restoration bypassed the newest adapter. Exact-stage
 stripping is corrected and all four collectors bind259 groups;repinned9105f2b3

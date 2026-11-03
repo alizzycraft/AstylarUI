@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+November3 trigger-paint milestone0d7ff3c4 is accepted locally after complete
+conservation,independent cold canonical equality and verified accepted import.
+Cold session39500 is terminal0;complete3489229.7554ms,20228 files and4383355919
+verification bytes,collectors2,memoryHits10,diskHits0,invalidated0. Cold stdout
+SHA2569be7de976980e808628db5bae37a5bbbbb89fde02f702f7b233c02e515904879;
+stderr SHA256fc5676a6350d09392e633b6999ac2d99d5fe70d10d3684a9baa6cce64b7dc57e.
+Both are trigger-paint-independent-cold-20261103 logs. No restart occurred.
+
+Promotion session67069 terminal0 authenticates all86 immutable isolated files,
+hard-links them into the new working-audit/0d7ff3c4 generation,checks every full
+source/destination hash and complete store before pointer advancement. Existing
+importFindings reuse atomically publishes generation
+0d7ff3c47321cb30b8188724f53b12f7341799aab55cd1703137732e301d4445,
+indexe5aac04c4db56ba0d365f9a5ccb107bcba6d02455033c18515a6cf1dafd8ab0d;
+complete verification passes again afterward. Counts8483 discrepancies,208
+findings,39904 controls,389202 occurrences,zero unresolved scalar groups.
+No mutable docs payload is hard-linked;old accepted stores/backups remain intact.
+This accepts the evidence increment only:all2311 cases remain partial/current-
+rendering-unverified,inputEquivalent=false and original final gates remain open.
+Next publish this coherent increment,then resume exact-case obligations;do not
+repeat settled milestone checks for prose. Earlier pending entries are historical.
+
 November3 isolated candidate import PASSES for0d7ff3c4,index
 e5aac04c4db56ba0d365f9a5ccb107bcba6d02455033c18515a6cf1dafd8ab0d.
 Store:artifacts/material-parity/trigger-paint-candidate-store-20261103.
