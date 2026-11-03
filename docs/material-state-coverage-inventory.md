@@ -1,5 +1,29 @@
 # Material comparison/state coverage inventory
 
+November3 filled-focus export8371 terminal0 produces candidate
+8f94a1075751d28052fab3f5b4e3f3e9da3b45057d0bdb9875362fdfb32ed727,
+98636369 compressed/2371074893 decoded bytes,decoded SHA
+e1c7078a25bc9800bd634f72e081830cfc8f0a84204a62b9b656ca5e7f075add.
+Complete20814005.5212ms includes the long observation/suspension interval;
+evidence session20231 files/4649955265 verification bytes,diskHits1. Export
+stdout SHA662b6a44a81ff79513a4c8e7eba2f12ccef3c07701c9c5fd40327c5a8ed32173
+is recorded in filled-focus-canonical-export-20261103.log.
+
+Candidate section/metadata pass18278 terminal0 authenticates the complete stream:
+72/80 sections unchanged;changed sourceFingerprints,coverage,controlLineBoxes,
+discrepancies,ownerCaretInputs,reviewedSourceBatchInputs,controlTypography,
+focusedProofs. Removing56 children restores exact parentc02a245f. Cases2311,
+allpartial/current-unverified,review9eb4cb42,casesSHA24e522ce9dce5ffe2b6f38514a588d6bc621d6d8a9076d51433b9cc140ea5515;
+18671 dependencies SHAecb34267c96beccdbd82ef59013a874ce9c5d8685d3b0a40bc19f01c651859e7.
+Combined record filled-focus-candidate-sections-metadata-20261103.log SHA
+8288f6753605fe15f36d4aac5cdb8339c8be4c3c236a4050ff19eb9dd42e0289.
+Separate metadata-conservation log SHAd2513812949bf64207ab50eb7d847b8d772a9059cd55705480952c66648e67f7
+proves summary/208 findings/75 plans unchanged,all485 prior non-line proof fields
+conserved,four additive proofs,two additive source paths,no old source removed,
+exactly four changed old fingerprints,and all1153 current normalized hashes.
+Five-section leaf comparison40796 and independent cold36977 remain running;
+accepted0d7ff3c4 pointer is unchanged. No candidate promotion or audit completion.
+
 November3 filled-focus export preflight passes all four direct collectors:
 72/4016 alignment-font,49/2677 text-align,4/178 LTR,146/6295 reviewed-source
 groups/observations. Log filled-focus-direct-collector-preflight-20261103.log

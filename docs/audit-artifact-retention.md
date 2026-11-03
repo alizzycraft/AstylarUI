@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep filled-focus-canonical-export-20261103 stdout/stderr,the accepted0d7ff3c4
+three-file backup,and candidate-sections-metadata/metadata-conservation logs.
+Their complete hashes are in the ledger. Candidate8f94a107 is not accepted yet;
+pending leaf-comparison and independent-cold logs must not be overwritten or
+treated as completed evidence. No old package decode or new capture was needed
+for the section/metadata comparison;authenticated prior section receipts reused.
+
 Keep filled-focus-pre-export-0d7f-20261103 three-file hash-verified backup and
 filled-focus-direct-collector-preflight-20261103.log. Closed3252368b/93324520
 indexes were LZX-compressed without byte/hash changes;complete stores verify
