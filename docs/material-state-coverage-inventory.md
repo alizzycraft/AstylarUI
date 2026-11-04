@@ -1,5 +1,21 @@
 # Material comparison/state coverage inventory
 
+November4 publication prerequisite resolved:plain CLI git push succeeded and
+independent ls-remote matches e82752539ac4ff70c2b570e88b323824b644a57b.
+No credential,SSH trust or persistent Git setting changed;earlier408 blocker is
+historical. Three closed indexes73c84aef/e1072ead/080b1dd5 were LZX-compressed
+with complete index hashes and full store checks before/after,pointer unchanged.
+Headroom log button-toolbar-headroom-20261104.log SHA
+a05373bb3b3faf26ebb63c39899bc1e1f7b97ef9945af0433756581b47a6f1ba.
+D:free930914304 after verified backup;no evidence deleted. Backup
+button-toolbar-pre-export-8f94-20261104/manifest.json SHA
+f6ba74927816786f533ccf298a6b9b9744ef86521db934e1fb0d155400dd1b3e
+pins all3 original files. Backup payload links only immutable accepted8f94 store;
+mutable canonical payload has a different inode and is not aliased. One canonical
+export42579 now runs --button-toolbar-paint for frozen904af088;logs
+button-toolbar-canonical-export-20261104.log/.stderr.log. Accepted8f94 pointer
+remains unchanged. No independent cold/promotion or audit acceptance yet.
+
 November3 live direct canonical collector preflight PASSES on exact ancestry
 reportb07ef154:alignment/font72groups4016 observations;text-align49/2677;
 LTR4/178;reviewed-source146/6295. All4 statusbound,session10398 terminal0 in

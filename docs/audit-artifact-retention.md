@@ -1,5 +1,16 @@
 # Audit artifact retention
 
+November4 headroom recovery changes storage only. Closed indexes73c84aef,
+e1072ead and080b1dd5 were LZX-compressed with complete file SHA equality and
+verifyFindings before/after each;all retain205 historical findings and unchanged
+8483/39904/389202/0 counts. Full receipts in button-toolbar-headroom-20261104.log.
+Keep verified button-toolbar-pre-export-8f94-20261104:manifest/markdown copies
+and payload hard link from immutable accepted generation,not from mutable docs.
+Canonical and immutable payload inode inequality was checked before linking.
+No original/failure evidence was deleted;this backup will support the pending
+export/conservation milestone. D:free930914304 after backup. Preserve live42579
+export logs and accepted8f94 until all promotion gates pass.
+
 Retain November3 button/toolbar owner/raster logs and the public-transparent-hover-
 20261103 bundle,HTML,report and48 PNGs:they are required failure/control evidence,
 not successful scratch. Retain toolbar-leave-material-accessor-corrected-20261103

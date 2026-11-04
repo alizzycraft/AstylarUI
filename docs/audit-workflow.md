@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+November4 plain CLI Git publication works(remote verifiede8275253);use normal
+Git defaults,not repeated HTTP/SSH overrides. Byte-preserving compression of3
+closed indexes recovers canonical headroom;exact8f94 backup is verified without
+aliasing mutable canonical bytes. One frozen904af088 --button-toolbar-paint
+export42579 is active. Poll that handle/logs;do not launch a replacement merely
+because it is slow. Accepted8f94 remains until conservation,cold and verified
+store-promotion gates pass. Earlier publication-blocked paragraphs are historical.
+
 November3 frozen904af088 direct collector preflight passes all4 expected groups
 (72/4016,49/2677,4/178,146/6295);live reader and focused checks already pass.
 Do not repeat them. Buffered HTTPS retry also failed408;strict SSH has no trusted
