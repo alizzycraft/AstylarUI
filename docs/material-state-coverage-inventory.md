@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+November5 button/toolbar canonical export42579 completed exit0, candidate
+ab2c875a63283401c78dad6c467437888a9a086f15e9afef23d0aa35fc1aa60d
+(98938320 compressed /2371643904 decoded bytes). Candidate section receipt
+button-toolbar-candidate-section-digests-20261105.log SHA
+01665577ca35ea4327cf859869a6a34d5d749664ce714e94728d7505177e9c0f
+authenticates all80 sections:69 unchanged,11 reconciled separately. Metadata
+conservation preserves208 findings/489 proofs/75 plans exactly,adding2/10/2;
+1153 source paths become1158,with only5 exact reversible prior-source changes.
+Candidate coverage has104 paint children;removing them restores exact24e522ce
+parent cases. All2311 remain partial/current-rendering-unverified.
+
+Derived leaf comparison preserves14085648 entries' containers/order/membership.
+All147 changed values reconcile:98 direct producer receipts,48 independently
+recomputed complete control-proof hashes,one complete motion-report hash.
+button-toolbar-derived-receipt-conservation-20261105.log SHA
+c64740ec9040fb2bef98b967e44adba5d865eb9e40629cd9a3bf0e7a09a0cacb.
+Independent cold --button-toolbar-paint --check session66903 is now live;retain
+button-toolbar-independent-cold-20261105.log/.stderr.log and poll that handle.
+Accepted8f94 remains unchanged pending cold equality and verified store promotion.
+No renderer/fixture changes,current-rendering acceptance or final-gate waiver.
+
 November4 publication prerequisite resolved:plain CLI git push succeeded and
 independent ls-remote matches e82752539ac4ff70c2b570e88b323824b644a57b.
 No credential,SSH trust or persistent Git setting changed;earlier408 blocker is
