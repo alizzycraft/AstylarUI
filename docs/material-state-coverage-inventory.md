@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+November5 virtual --slider-span-opener selector passes owning route tests:
+every older launcher dry-run remains byte-equivalent in emitted command data;
+new normal/check/dry-run routes select only the supplied review;all older/unknown
+mixed supplements reject. Runner/launcher parse,recover exact prior sources and
+reject drift;historical reader strips their exact marked addition. Focused suite
+passes5/5. No live selector or source registration applied. Adding selector
+helpers/test changes fingerprints bound by51131444,so its complete-loader result
+is historical for that frozen generation,not current-byte validation. Defer the
+next complete loader until live wiring is coherent;do not repeat per metadata edit.
+
 November5 linked span/opener staged review5113144432d561494c552b1288f171295c770bbe93de6323f300eda8904da704
 passes the existing complete dependency loader:2311 cases,19366 dependencies,
 26 closed-opener children,inspectionComplete=false,currentRenderingAccepted=false.

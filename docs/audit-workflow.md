@@ -1,5 +1,11 @@
 # Efficient Material input-audit workflow
 
+November5 span/opener selector preparation passes5 focused tests and preserves
+all older routes. It changes bound helper/test source bytes:51131444 complete
+loader evidence is historical for its frozen source generation. Finish coherent
+live wiring before one next full dependency check;do not repeat it per helper or
+documentation edit. Acceptedab2c and original acceptance gates remain unchanged.
+
 November5 linked span/opener virtual review51131444 passes the existing complete
 loader(2311 cases,19366 dependencies,exit0) and six combined focused checks.
 Reuse its frozen source generation;do not rerun it for documentation. Accepted

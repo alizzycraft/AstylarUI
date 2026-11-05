@@ -103,6 +103,8 @@ export function createSliderOpenerHistoricalRead({ root = process.cwd(), read = 
     ['tests/material-parity/input-equivalence-policy.mjs', 'policy'],
     ['tests/material-parity/input-equivalence-audit.mjs', 'producer'],
     ['tests/material-parity/capture-availability-registration.mjs', 'shared'],
+    ['scripts/run-material-input-audit.mjs', 'runner'],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', 'launcher'],
   ].map(([file, kind]) => [path.resolve(root, file), kind]));
   return (name, options) => {
     const kind = files.get(path.resolve(root, name));
@@ -120,8 +122,57 @@ export function createSliderOpenerHistoricalRead({ root = process.cwd(), read = 
 }
 
 export function stripSliderOpenerRegistrationIfPresent(bytes, kind) {
+  if (kind === 'runner' || kind === 'launcher') {
+    const marker = kind === 'runner' ? 'const sliderOpenerHistoricalRead = ' : 'const sliderOpener = ';
+    if (!bytes.toString().includes(marker)) return bytes;
+    const pattern = kind === 'runner' ? /const applicability=options.caseObligationReviewSha256==='([a-f0-9]{64})'/
+      : /if \(sliderOpener\) inputs\['case-obligation-review'\] = 'artifacts\/material-parity\/working-audit\/proposals\/([a-f0-9]{64})\.json'/;
+    const match = bytes.toString().match(pattern); assert.ok(match);
+    return Buffer.from(restoreSliderOpenerSelection(bytes, kind, match[1]));
+  }
   const marker = kind === 'producer' ? '"tests/material-parity/slider-thumb-span-findings.mjs",'
     : kind === 'policy' ? '"id":"fixture-slider-thumb-span-substitution"' : undefined;
   return marker && bytes.toString().includes(marker)
     ? Buffer.from(restoreSliderOpenerRegistration(bytes, kind)) : bytes;
+}
+
+const selectionParents = {
+  runner: '73061b037bd275333590c0b58a3ab841b5f51cd36862302a05c59363ba816dce',
+  launcher: 'd2bc0df2a30b893480744cd3ce05638dcda0dad4f0737964c74802b43ebc6ac3',
+};
+function selectionEdits(kind, review) {
+  assert.match(review, /^[a-f0-9]{64}$/);
+  if (kind === 'launcher') return [
+    ['const rawRequested = process.argv.slice(2);', "const rawRequested = process.argv.slice(2);\nconst sliderOpener = rawRequested.includes('--slider-span-opener');\nassert.ok(!sliderOpener || rawRequested.every(argument => ['--slider-span-opener', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');"],
+    ['const requested = rawRequested.filter(', "const requested = rawRequested.filter(argument => argument !== '--slider-span-opener').filter("],
+    ['|--button-toolbar-paint]', '|--button-toolbar-paint|--slider-span-opener]'],
+    ['for (const [name, relative] of Object.entries(inputs)) {', `if (sliderOpener) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${review}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+    ['|| buttonToolbarPaint)', '|| buttonToolbarPaint || sliderOpener)'],
+    ["if (requested.includes('--dry-run'))", `if (sliderOpener) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${review}';\nif (requested.includes('--dry-run'))`],
+  ];
+  assert.equal(kind, 'runner');
+  return [
+    ["import { createButtonToolbarReviewReader, createButtonToolbarHistoricalRead } from './join-material-button-toolbar-paint.mjs';",
+      "import { createButtonToolbarReviewReader, createButtonToolbarHistoricalRead } from './join-material-button-toolbar-paint.mjs';\nimport { createSnackbarOpenerReviewReader } from './join-material-snackbar-opener-paint.mjs';\nimport { createSliderOpenerHistoricalRead } from '../tests/material-parity/slider-thumb-span-findings.mjs';"],
+    ['const buttonToolbarHistoricalRead = createButtonToolbarHistoricalRead({root,read:auditReadFileSync});',
+      'const sliderOpenerHistoricalRead = createSliderOpenerHistoricalRead({root,read:auditReadFileSync});\n    const buttonToolbarHistoricalRead = createButtonToolbarHistoricalRead({root,read:sliderOpenerHistoricalRead});'],
+    ['const applicability=options.caseObligationReviewSha256===', `const applicability=options.caseObligationReviewSha256==='${review}'\n      ? createSnackbarOpenerReviewReader({root,read:auditReadFileSync})\n      : options.caseObligationReviewSha256===`],
+    ['diagnosticRead: options.caseObligationReviewSha256===', `diagnosticRead: options.caseObligationReviewSha256==='${review}'\n      ? createCaptureAvailabilityHistoricalRead({root,read:createSliderOpenerHistoricalRead({root,read:auditReadFileSync})})\n      : options.caseObligationReviewSha256===`],
+  ];
+}
+export function prepareSliderOpenerSelection(bytes, kind, review) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(source), selectionParents[kind]);
+  for (const [before, after] of selectionEdits(kind, review)) {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  }
+  return source;
+}
+export function restoreSliderOpenerSelection(bytes, kind, review) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  for (const [before, after] of selectionEdits(kind, review).toReversed()) {
+    assert.equal(source.split(after).length, 2); source = source.replace(after, before);
+  }
+  assert.equal(hash(source), selectionParents[kind], 'Span/opener selection drift');
+  return source;
 }

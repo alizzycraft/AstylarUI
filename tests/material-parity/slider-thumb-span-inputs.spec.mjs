@@ -4,11 +4,13 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+import vm from 'node:vm';
 import * as sharedRegistration from './capture-availability-registration.mjs';
 import { createButtonToolbarHistoricalRead } from '../../scripts/join-material-button-toolbar-paint.mjs';
 import { sliderThumbSpanFinding as finding, prepareSliderOpenerRegistration,
-  restoreSliderOpenerRegistration, createSliderOpenerHistoricalRead } from './slider-thumb-span-findings.mjs';
+  restoreSliderOpenerRegistration, createSliderOpenerHistoricalRead,
+  prepareSliderOpenerSelection, restoreSliderOpenerSelection } from './slider-thumb-span-findings.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const authenticated = (file, sha256) => {
@@ -150,6 +152,44 @@ test('span/opener shared entry points restore exact older generations without li
   assert.throws(() => module.restoreCaptureAvailabilityRegistration(read(producerFile), 'producer'));
   assert.throws(() => module.createCaptureAvailabilityHistoricalRead({ root: process.cwd(), read }));
   assert.deepEqual(readFileSync(sharedFile), parent);
+});
+
+test('span/opener selector preserves every older route and rejects mixed supplements', () => {
+  const review = '1'.repeat(64), files = new Map();
+  for (const [kind, file] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs',
+    launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
+    const bytes = readFileSync(file), original = bytes.toString().replaceAll('\r\n', '\n');
+    const selected = prepareSliderOpenerSelection(bytes, kind, review);
+    assert.deepEqual(ts.createSourceFile(file, selected, 99, true).parseDiagnostics, []);
+    assert.equal(restoreSliderOpenerSelection(selected, kind, review), original);
+    assert.throws(() => prepareSliderOpenerSelection(original + '\n// drift', kind, review));
+    assert.throws(() => restoreSliderOpenerSelection(selected + '\n// drift', kind, review));
+    files.set(path.resolve(file), Buffer.from(selected));
+    if (kind !== 'launcher') continue;
+    const execute = (code, flags) => {
+      const output = [];
+      vm.runInNewContext(code.replace(/^import .*;\n/gm, '').replaceAll('import.meta.url', 'moduleUrl'), {
+        assert, path, fileURLToPath, moduleUrl: pathToFileURL(path.resolve(file)).href,
+        statSync: () => ({ isFile: () => true, isDirectory: () => true }),
+        process: { argv: ['node', file, ...flags], execPath: 'node', env: {} },
+        spawnSync: (_exe, args) => { output.push({ args }); return { status: 0, signal: null }; },
+        console: { log: text => output.push(JSON.parse(text)) },
+      });
+      assert.equal(output.length, 1); return JSON.parse(JSON.stringify(output[0]));
+    };
+    const older = [...original.matchAll(/rawRequested\.includes\('(.*?)'\)/g)].map(match => match[1]);
+    for (const flags of [[], ...older.map(flag => [flag])])
+      assert.deepEqual(execute(selected, [...flags, '--dry-run']), execute(original, [...flags, '--dry-run']));
+    for (const suffix of [[], ['--check'], ['--dry-run']])
+      assert.ok(execute(selected, ['--slider-span-opener', ...suffix]).args.includes(`--case-obligation-review-sha256=${review}`));
+    for (const flag of [...older, '--unknown'])
+      assert.throws(() => execute(selected, ['--slider-span-opener', flag, '--dry-run']));
+    assert.deepEqual(readFileSync(file), bytes);
+  }
+  const historical = createSliderOpenerHistoricalRead({ read: (file, options) =>
+    files.get(path.resolve(file)) ?? readFileSync(file, options) });
+  for (const [file] of files)
+    assert.equal(historical(file, 'utf8'), readFileSync(file, 'utf8').replaceAll('\r\n', '\n'));
 });
 
 test('retained Slider native inset span differs from captured plugin request before projection', () => {
