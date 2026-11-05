@@ -1,6 +1,8 @@
 // Staged finding: not registered in the accepted canonical audit yet.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
 export const sliderThumbSpanFinding = Object.freeze({
   id: 'fixture-slider-thumb-span-substitution',
   classification: 'application-plugin-authoring-defect',
@@ -85,4 +87,19 @@ export function restoreSliderOpenerRegistration(bytes, kind) {
   }
   assert.equal(hash(source), parents[kind], 'Span/opener registration drift');
   return source;
+}
+
+export function createSliderOpenerHistoricalRead({ root = process.cwd(), read = fs.readFileSync } = {}) {
+  const files = new Map([
+    ['tests/material-parity/input-equivalence-policy.mjs', 'policy'],
+    ['tests/material-parity/input-equivalence-audit.mjs', 'producer'],
+  ].map(([file, kind]) => [path.resolve(root, file), kind]));
+  return (name, options) => {
+    const kind = files.get(path.resolve(root, name));
+    if (!kind) return read(name, options);
+    const bytes = read(name), source = bytes.toString().replaceAll('\r\n', '\n');
+    const restored = hash(source) === parents[kind] ? source : restoreSliderOpenerRegistration(bytes, kind);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? Buffer.from(restored).toString(encoding) : Buffer.from(restored);
+  };
 }

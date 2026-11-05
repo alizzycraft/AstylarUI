@@ -3,8 +3,10 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import path from 'node:path';
+import { createButtonToolbarHistoricalRead } from '../../scripts/join-material-button-toolbar-paint.mjs';
 import { sliderThumbSpanFinding as finding, prepareSliderOpenerRegistration,
-  restoreSliderOpenerRegistration } from './slider-thumb-span-findings.mjs';
+  restoreSliderOpenerRegistration, createSliderOpenerHistoricalRead } from './slider-thumb-span-findings.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const authenticated = (file, sha256) => {
@@ -53,6 +55,67 @@ test('span and opener staged registration preserves complete prior inventories a
     }
     assert.deepEqual(readFileSync(file), bytes);
   }
+});
+
+test('span/opener actual scanner and explicit historical reads preserve prior source results', () => {
+  const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const policy = readFileSync(policyFile), producer = readFileSync(producerFile);
+  const stagedPolicy = prepareSliderOpenerRegistration(policy, 'policy');
+  const stagedProducer = prepareSliderOpenerRegistration(producer, 'producer');
+  const declarations = source => {
+    const ast = ts.createSourceFile(policyFile, source, 99, true);
+    let declaration;
+    const visit = node => {
+      if (ts.isVariableDeclaration(node) && node.name.getText(ast) === 'sourceAuditDefinitions') declaration = node;
+      ts.forEachChild(node, visit);
+    };
+    visit(ast);
+    return new Function(`return ${declaration.initializer.getText(ast)};`)();
+  };
+  const ast = ts.createSourceFile(producerFile, stagedProducer, 99, true);
+  const scan = ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'scanMaterialSources');
+  assert.ok(scan);
+  const execute = definitions => new Function('sourceAuditDefinitions', 'path', 'readFileSync',
+    scan.getText(ast) + ';return scanMaterialSources(process.cwd());')(definitions, path, readFileSync);
+  const before = execute(declarations(policy.toString()));
+  const after = execute(declarations(stagedPolicy));
+  assert.equal(before.length, 210);
+  assert.deepEqual(after.slice(0, -1), before);
+  assert.equal(after.at(-1).id, finding.id);
+  assert.equal(after.at(-1).detected, true);
+  assert.equal(after.at(-1).locations.length, 1);
+  assert.equal(after.at(-1).canonicalStatus, undefined);
+  const virtual = new Map([[path.resolve(policyFile), Buffer.from(stagedPolicy)],
+    [path.resolve(producerFile), Buffer.from(stagedProducer)]]);
+  const raw = (file, options) => {
+    if (!virtual.has(path.resolve(file))) return readFileSync(file, options);
+    const bytes = virtual.get(path.resolve(file));
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  };
+  const historical = createSliderOpenerHistoricalRead({ read: raw });
+  const nested = createButtonToolbarHistoricalRead({ root: process.cwd(), read: historical });
+  const priorNested = createButtonToolbarHistoricalRead({ root: process.cwd(), read: readFileSync });
+  for (const [file, bytes] of [[policyFile, policy], [producerFile, producer]]) {
+    const expected = bytes.toString().replaceAll('\r\n', '\n');
+    assert.equal(historical(file, 'utf8'), expected);
+    assert.equal(historical(path.resolve(file), { encoding: 'utf8' }), expected);
+    assert.equal(nested(file, 'utf8'), priorNested(file, 'utf8'));
+    const copy = historical(file); copy.fill(0);
+    assert.equal(historical(file, 'utf8'), expected);
+    const staged = virtual.get(path.resolve(file));
+    virtual.set(path.resolve(file), Buffer.concat([staged, Buffer.from('\n// drift')]));
+    assert.throws(() => historical(file));
+    assert.throws(() => nested(file));
+    virtual.set(path.resolve(file), staged);
+    assert.deepEqual(readFileSync(file), bytes);
+  }
+  const options = { encoding: 'utf8' }, sentinel = {};
+  const delegate = createSliderOpenerHistoricalRead({ read: (file, received) => {
+    assert.equal(file, 'unrelated'); assert.equal(received, options); return sentinel;
+  } });
+  assert.equal(delegate('unrelated', options), sentinel);
 });
 
 test('retained Slider native inset span differs from captured plugin request before projection', () => {

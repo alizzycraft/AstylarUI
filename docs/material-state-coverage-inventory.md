@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+November5 staged scanner/historical-chain check passes3/3 focused tests.
+Actual scanMaterialSources with virtual staged definitions detects exactly one
+new span finding at one current source location;all210 prior scanner results
+remain deeply equal. Explicit createSliderOpenerHistoricalRead restores exact
+parent policy/producer,then the existing ButtonToolbar adapter reproduces its
+unchanged older outputs. Both direct/nested reads reject unrelated drift;
+relative/absolute paths,encodings,copy isolation and unrelated-read delegation
+are checked. No live source collection is wrapped or fingerprint waived.
+Remaining live-selection/shared-reader plumbing and complete loader verification
+must precede registration/export. Accepted canonical evidence remains unchanged.
+
 November5 staged span/opener registration is reversible and conservation-tested.
 prepare/restoreSliderOpenerRegistration in slider-thumb-span-findings.mjs reuse
 the existing exact-parent convention for virtual policy/producer sources only.
