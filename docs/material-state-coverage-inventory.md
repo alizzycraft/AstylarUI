@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+November5 snackbar opener boundary verified:all26 pending cases have one opener
+and no native/candidate popup nodes in their exact receipt-authenticated trees.
+snackbar-closed-opener-visibility-20261105.log SHA
+4c78ec9f2806d657aef4f8325d7aadca78ddcd8d1b35bd612429b87e4652377c.
+This is endpoint tree presence,not timed behavior or raster invisibility. Keep
+open-popup failures separate. Four outlier style chains are receipt-authenticated
+in snackbar-opener-outlier-style-chain-20261105.log SHA
+f71f48913dd3e0a04ce1d74f2f9540d06411d1110d8ae111549fd235c0732040:
+native label tracking0.096px versus candidate painted text0;hover/held background
+substitutions reach resolved inputs. No pixel-causal quantification inferred.
+Existing shared-button census and exact current-source transition checks pass2/2
+in snackbar-opener-shared-source-proof-20261105.log SHA
+a8020cd31329de17cccdef406618b1b6319de9b468e72c22e5762442d55c4a03.
+No duplicate test layer,full export,source-receipt waiver or case promotion.
+
 November5 next retained question:26 snackbar localPaint evidence-join-pending
 cases concern the CLOSED opener (12 static plus14 hover/held),not the open popup.
 snackbar-pending-opener-raster-20261105.log SHA
