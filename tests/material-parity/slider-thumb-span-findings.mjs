@@ -1,4 +1,4 @@
-// Staged finding: not registered in the accepted canonical audit yet.
+// Source-registered finding: not published in the accepted canonical audit yet.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
@@ -33,7 +33,7 @@ export const sliderThumbSpanFinding = Object.freeze({
   boundary: 'Confirmed retained geometry-input mismatch, not an equal-input renderer defect, exact pixel causality, in-flight drag correctness, current rendering or whole-case acceptance. Source-map identity is not independent proof of original runtime execution.',
   inputEquivalent: false,
   currentRenderingAccepted: false,
-  canonicalStatus: 'staged-not-source-registered',
+  canonicalStatus: 'source-registered-not-canonical-published',
 });
 
 // Reuse the audit's exact, reversible registration convention. These helpers

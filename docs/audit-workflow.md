@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+November5 span/opener LIVE1162/501/211/78 selects1d3da334 with explicit
+--slider-span-opener. Complete live loader passes2311 cases/19366 dependencies
+(exit0),with owning/selection checks green. Freeze sources and reuse that exact
+proof;no per-prose loader repetition. Next direct collector/source reconciliation,
+safe headroom and one justified canonical milestone. Acceptedab2c remains until
+all original conservation/cold/import gates pass. All cases remain partial and
+current rendering unverified;scope and acceptance are unchanged.
+
 November5 span/opener selector preparation passes5 focused tests and preserves
 all older routes. It changes bound helper/test source bytes:51131444 complete
 loader evidence is historical for its frozen source generation. Finish coherent

@@ -44,6 +44,8 @@ import { createDividerConsumerReviewReader } from './join-material-divider-consu
 import { createTriggerPaintReviewReader, createTriggerPaintHistoricalRead } from './join-material-trigger-paint-inputs.mjs';
 import { createFilledFocusReviewReader, createFilledFocusHistoricalRead } from './join-material-filled-focus-inputs.mjs';
 import { createButtonToolbarReviewReader, createButtonToolbarHistoricalRead } from './join-material-button-toolbar-paint.mjs';
+import { createSnackbarOpenerReviewReader } from './join-material-snackbar-opener-paint.mjs';
+import { createSliderOpenerHistoricalRead } from '../tests/material-parity/slider-thumb-span-findings.mjs';
 import { dividerConsumerReview, createDividerConsumerRegistrationHistoricalRead } from '../tests/material-parity/divider-consumer-registration.mjs';
 import { createCaptureAvailabilityHistoricalRead } from '../tests/material-parity/capture-availability-registration.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
@@ -93,13 +95,16 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const tooltipOpenReaderFactory = options.caseObligationReviewSha256===tooltipOpenReview ? createTooltipOpenReviewReader : datepickerOpeningReaderFactory;
     const badgeLabelPaintReaderFactory = options.caseObligationReviewSha256===badgeLabelPaintReview ? createBadgeLabelPaintReviewReader : tooltipOpenReaderFactory;
     const captureAvailabilityReaderFactory = options.caseObligationReviewSha256===captureAvailabilityReview ? createCaptureAvailabilityReviewReader : badgeLabelPaintReaderFactory;
-    const buttonToolbarHistoricalRead = createButtonToolbarHistoricalRead({root,read:auditReadFileSync});
+    const sliderOpenerHistoricalRead = createSliderOpenerHistoricalRead({root,read:auditReadFileSync});
+    const buttonToolbarHistoricalRead = createButtonToolbarHistoricalRead({root,read:sliderOpenerHistoricalRead});
     const filledFocusHistoricalRead = createFilledFocusHistoricalRead({root,read:buttonToolbarHistoricalRead});
     const triggerPaintHistoricalRead = createTriggerPaintHistoricalRead({root,read:filledFocusHistoricalRead});
     const dividerConsumerEvidenceRead = createDividerConsumerRegistrationHistoricalRead({root,read:triggerPaintHistoricalRead});
     const captureAvailabilityEvidenceRead = (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256===dividerConsumerReview) ? dividerConsumerEvidenceRead : createCaptureAvailabilityHistoricalRead({root,read:dividerConsumerEvidenceRead});
     const dividerConsumerReaderFactory = options.caseObligationReviewSha256===dividerConsumerReview ? createDividerConsumerReviewReader : captureAvailabilityReaderFactory;
-    const applicability=options.caseObligationReviewSha256==='904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4'
+    const applicability=options.caseObligationReviewSha256==='1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5'
+      ? createSnackbarOpenerReviewReader({root,read:auditReadFileSync})
+      : options.caseObligationReviewSha256==='904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4'
       ? createButtonToolbarReviewReader({root,read:auditReadFileSync})
       : options.caseObligationReviewSha256==='9eb4cb42066d5e50347b6ae269354a8702ddeae694f971a9ba5f26ccb421409f'
       ? createFilledFocusReviewReader({root,read:auditReadFileSync})
@@ -114,7 +119,9 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);
   const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial,
-    diagnosticRead: options.caseObligationReviewSha256==='904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4'
+    diagnosticRead: options.caseObligationReviewSha256==='1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5'
+      ? createCaptureAvailabilityHistoricalRead({root,read:createSliderOpenerHistoricalRead({root,read:auditReadFileSync})})
+      : options.caseObligationReviewSha256==='904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4'
       ? createCaptureAvailabilityHistoricalRead({root,read:createButtonToolbarHistoricalRead({root,read:auditReadFileSync})})
       : options.caseObligationReviewSha256==='9eb4cb42066d5e50347b6ae269354a8702ddeae694f971a9ba5f26ccb421409f'
       ? createCaptureAvailabilityHistoricalRead({root,read:createFilledFocusHistoricalRead({root,read:auditReadFileSync})})

@@ -8922,6 +8922,10 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "tests/material-parity/slider-thumb-span-findings.mjs",
+    "tests/material-parity/slider-thumb-span-inputs.spec.mjs",
+    "scripts/join-material-snackbar-opener-paint.mjs",
+    "tests/material-parity/snackbar-opener-paint.spec.mjs",
     'scripts/join-material-button-toolbar-paint.mjs',
     'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs',
     'scripts/audit-material-toolbar-leave-material.mjs',
@@ -10087,6 +10091,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/slider-thumb-span-inputs.spec.mjs", new RegExp("test\\('retained Slider native inset span differs from captured plugin request before projection'"), "retained Slider native inset span differs from captured plugin request before projection", "Confirmed retained geometry-input mismatch, not an equal-input renderer defect, exact pixel causality, in-flight drag correctness, current rendering or whole-case acceptance. Source-map identity is not independent proof of original runtime execution."),
+    proof(root, "tests/material-parity/snackbar-opener-paint.spec.mjs", new RegExp("test\\('closed snackbar opener join preserves exact parents, statuses and unaffected objects'"), "closed snackbar opener join preserves exact parents, statuses and unaffected objects", "Retained closed-opener diagnostics and conservative case join;not open popup,current rendering or whole-case acceptance."),
     proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('toolbar text\-button focus omits the native layer independently of filled\-button scope'/,
       'toolbar text-button focus omits the native layer independently of filled-button scope', 'Bounded retained owner paint,public transparent-reset failure and conservative integration;not original-session causality,current rendering or case closure.'),
     proof(root, 'tests/material-parity/toolbar-focus-layer-inputs.spec.mjs', /test\('retained toolbar leave pixels change despite identical recorded candidate action nodes'/,
@@ -11037,6 +11043,7 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
+    {"priority":2.08,"rootCause":"Range plugin substitutes full-width thumb positioning for native inset span","action":"During later implementation, supply reference-equivalent thumb geometry through the supported CSS-space layout/paint contract. First establish ownership of native slider track/inset semantics and any missing general control capability. Do not add fixture-only pixel nudges, change host width or tune projection scale to conceal unequal inputs. Preserve all 78 retained cases. After equivalent inputs are supplied, verify endpoint geometry, RTL, min/max, full-domain drag identity, keyboard steps, transitions, DPR edges and current browser rendering separately. Endpoint transforms alone do not prove pointer-path or smoothness behavior."},
     {"priority":2.07,"rootCause":"Core interaction material does not clear transparent background after hover","action":"Fix the shared interaction material reset so transparent clears prior fill. Preserve the public DPR1/2 failure and passing explicit alpha-zero/opaque controls. Do not convert fixture transparent to rgba,add Material-specific paint branches,or conflate this reset with allocation/adoption and focus-layer authoring defects. Extend updates,gradients,focus/pressed transitions and disposal before general acceptance."},
     {"priority":5.87,"rootCause":"Toolbar action omits native focus layer input","action":"Preserve equivalent toolbar focus composition through supported public owners. Keep this unfilled action distinct from the prior filled-button scope;reduce unsupported general state-layer capability at core rather than authoring sampled colors. Verify actual focus paint,semantics and current rendering after equivalent inputs."},
     { priority: 1.15, rootCause: 'Applicable state paint is reported successful without measurement', action: 'At the existing parity harness boundary,make missing applicable state-paint evidence explicit instead of matches:true. Preserve every family,state,threshold and honest failure;add local assertions with equivalent inputs rather than accepting calibrated fixture colors or whole-page SSIM. This audit only records the gap;no gate change is authorized here.' },

@@ -10,7 +10,8 @@ import * as sharedRegistration from './capture-availability-registration.mjs';
 import { createButtonToolbarHistoricalRead } from '../../scripts/join-material-button-toolbar-paint.mjs';
 import { sliderThumbSpanFinding as finding, prepareSliderOpenerRegistration,
   restoreSliderOpenerRegistration, createSliderOpenerHistoricalRead,
-  prepareSliderOpenerSelection, restoreSliderOpenerSelection } from './slider-thumb-span-findings.mjs';
+  prepareSliderOpenerSelection, restoreSliderOpenerSelection,
+  stripSliderOpenerRegistrationIfPresent } from './slider-thumb-span-findings.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const authenticated = (file, sha256) => {
@@ -18,6 +19,9 @@ const authenticated = (file, sha256) => {
   assert.equal(hash(bytes), sha256, file);
   return bytes;
 };
+const parentSource = (file, kind) => kind === 'shared'
+  ? createSliderOpenerHistoricalRead()(file)
+  : stripSliderOpenerRegistrationIfPresent(readFileSync(file), kind);
 
 test('span and opener staged registration preserves complete prior inventories and rejects drift', () => {
   const inventory = (source, kind) => {
@@ -42,8 +46,8 @@ test('span and opener staged registration preserves complete prior inventories a
   };
   for (const [kind, file] of Object.entries({ policy: 'tests/material-parity/input-equivalence-policy.mjs',
     producer: 'tests/material-parity/input-equivalence-audit.mjs' })) {
-    const bytes = readFileSync(file), parent = bytes.toString().replaceAll('\r\n', '\n');
-    const staged = prepareSliderOpenerRegistration(bytes, kind);
+    const bytes = readFileSync(file), parent = parentSource(file, kind).toString().replaceAll('\r\n', '\n');
+    const staged = prepareSliderOpenerRegistration(parent, kind);
     assert.equal(restoreSliderOpenerRegistration(staged, kind), parent);
     assert.throws(() => prepareSliderOpenerRegistration(parent + '\n// drift', kind));
     assert.throws(() => restoreSliderOpenerRegistration(staged + '\n// drift', kind));
@@ -64,7 +68,8 @@ test('span and opener staged registration preserves complete prior inventories a
 test('span/opener actual scanner and explicit historical reads preserve prior source results', () => {
   const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
   const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
-  const policy = readFileSync(policyFile), producer = readFileSync(producerFile);
+  const snapshots = new Map([policyFile, producerFile].map(file => [file, readFileSync(file)]));
+  const policy = parentSource(policyFile, 'policy'), producer = parentSource(producerFile, 'producer');
   const stagedPolicy = prepareSliderOpenerRegistration(policy, 'policy');
   const stagedProducer = prepareSliderOpenerRegistration(producer, 'producer');
   const declarations = source => {
@@ -100,7 +105,7 @@ test('span/opener actual scanner and explicit historical reads preserve prior so
   };
   const historical = createSliderOpenerHistoricalRead({ read: raw });
   const nested = createButtonToolbarHistoricalRead({ root: process.cwd(), read: historical });
-  const priorNested = createButtonToolbarHistoricalRead({ root: process.cwd(), read: readFileSync });
+  const priorNested = createButtonToolbarHistoricalRead({ root: process.cwd(), read: createSliderOpenerHistoricalRead() });
   for (const [file, bytes] of [[policyFile, policy], [producerFile, producer]]) {
     const expected = bytes.toString().replaceAll('\r\n', '\n');
     assert.equal(historical(file, 'utf8'), expected);
@@ -113,7 +118,7 @@ test('span/opener actual scanner and explicit historical reads preserve prior so
     assert.throws(() => historical(file));
     assert.throws(() => nested(file));
     virtual.set(path.resolve(file), staged);
-    assert.deepEqual(readFileSync(file), bytes);
+    assert.deepEqual(readFileSync(file), snapshots.get(file));
   }
   const options = { encoding: 'utf8' }, sentinel = {};
   const delegate = createSliderOpenerHistoricalRead({ read: (file, received) => {
@@ -124,7 +129,8 @@ test('span/opener actual scanner and explicit historical reads preserve prior so
 
 test('span/opener shared entry points restore exact older generations without live writes', async () => {
   const sharedFile = 'tests/material-parity/capture-availability-registration.mjs';
-  const parent = readFileSync(sharedFile), staged = prepareSliderOpenerRegistration(parent, 'shared');
+  const snapshot = readFileSync(sharedFile), parent = parentSource(sharedFile, 'shared');
+  const staged = prepareSliderOpenerRegistration(parent, 'shared');
   assert.equal(restoreSliderOpenerRegistration(staged, 'shared'), parent.toString().replaceAll('\r\n', '\n'));
   assert.throws(() => restoreSliderOpenerRegistration(staged + '\n// drift', 'shared'));
   const portable = staged.replace(/from '([^']+)'/g, (_match, relative) =>
@@ -133,7 +139,7 @@ test('span/opener shared entry points restore exact older generations without li
   const files = new Map([[path.resolve(sharedFile), Buffer.from(staged)]]);
   for (const [kind, file] of [['producer', 'tests/material-parity/input-equivalence-audit.mjs'],
     ['policy', 'tests/material-parity/input-equivalence-policy.mjs']]) {
-    files.set(path.resolve(file), Buffer.from(prepareSliderOpenerRegistration(readFileSync(file), kind)));
+    files.set(path.resolve(file), Buffer.from(prepareSliderOpenerRegistration(parentSource(file, kind), kind)));
   }
   const read = (file, options) => {
     const bytes = files.get(path.resolve(file)) ?? readFileSync(file);
@@ -151,15 +157,15 @@ test('span/opener shared entry points restore exact older generations without li
   files.set(path.resolve(producerFile), Buffer.concat([producerBytes, Buffer.from('\n// unrelated drift')]));
   assert.throws(() => module.restoreCaptureAvailabilityRegistration(read(producerFile), 'producer'));
   assert.throws(() => module.createCaptureAvailabilityHistoricalRead({ root: process.cwd(), read }));
-  assert.deepEqual(readFileSync(sharedFile), parent);
+  assert.deepEqual(readFileSync(sharedFile), snapshot);
 });
 
 test('span/opener selector preserves every older route and rejects mixed supplements', () => {
   const review = '1'.repeat(64), files = new Map();
   for (const [kind, file] of Object.entries({ runner: 'scripts/run-material-input-audit.mjs',
     launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' })) {
-    const bytes = readFileSync(file), original = bytes.toString().replaceAll('\r\n', '\n');
-    const selected = prepareSliderOpenerSelection(bytes, kind, review);
+    const bytes = readFileSync(file), original = parentSource(file, kind).toString().replaceAll('\r\n', '\n');
+    const selected = prepareSliderOpenerSelection(original, kind, review);
     assert.deepEqual(ts.createSourceFile(file, selected, 99, true).parseDiagnostics, []);
     assert.equal(restoreSliderOpenerSelection(selected, kind, review), original);
     assert.throws(() => prepareSliderOpenerSelection(original + '\n// drift', kind, review));
@@ -189,14 +195,14 @@ test('span/opener selector preserves every older route and rejects mixed supplem
   const historical = createSliderOpenerHistoricalRead({ read: (file, options) =>
     files.get(path.resolve(file)) ?? readFileSync(file, options) });
   for (const [file] of files)
-    assert.equal(historical(file, 'utf8'), readFileSync(file, 'utf8').replaceAll('\r\n', '\n'));
+    assert.equal(historical(file, 'utf8'), parentSource(file, file.endsWith('run-material-input-audit.mjs') ? 'runner' : 'launcher').toString().replaceAll('\r\n', '\n'));
 });
 
 test('retained Slider native inset span differs from captured plugin request before projection', () => {
   assert.equal(finding.classification, 'application-plugin-authoring-defect');
   assert.equal(finding.inputEquivalent, false);
   assert.equal(finding.currentRenderingAccepted, false);
-  assert.equal(finding.canonicalStatus, 'staged-not-source-registered');
+  assert.equal(finding.canonicalStatus, 'source-registered-not-canonical-published');
   for (const receipt of finding.evidence) authenticated(receipt.file, receipt.sha256);
   const directory = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/';
   const map = JSON.parse(authenticated(directory + 'chunk-7SL66K3U.js.map',

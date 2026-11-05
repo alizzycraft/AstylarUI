@@ -1,4 +1,5 @@
 import { stripButtonToolbarRegistrationIfPresent, createButtonToolbarHistoricalRead } from '../../scripts/join-material-button-toolbar-paint.mjs';
+import { stripSliderOpenerRegistrationIfPresent, createSliderOpenerHistoricalRead } from './slider-thumb-span-findings.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -70,6 +71,7 @@ export function prepareCaptureAvailabilityRegistration(bytes, kind) {
   return source;
 }
 export function restoreCaptureAvailabilityRegistration(bytes, kind) {
+  bytes = stripSliderOpenerRegistrationIfPresent(bytes, kind);
   bytes = stripButtonToolbarRegistrationIfPresent(bytes, kind);
   bytes = stripFilledFocusRegistrationIfPresent(bytes, kind);
   bytes = stripTriggerPaintRegistrationIfPresent(bytes, kind);
@@ -128,6 +130,7 @@ export function restoreCaptureAvailabilityShared(bytes) {
 // For predecessor evidence readers only. Current source collection must retain
 // its raw reader so registration changes remain visible in the new inventory.
 export function createCaptureAvailabilityHistoricalRead({ root, read }) {
+  read = createSliderOpenerHistoricalRead({ root, read });
   read = createButtonToolbarHistoricalRead({ root, read });
   read = createFilledFocusHistoricalRead({ root, read });
   // Only live newest producers enter the newest adapter. Nested readers may

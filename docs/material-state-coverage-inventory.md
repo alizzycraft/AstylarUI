@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+November5 span/opener registration is LIVE1162 sources/501 proofs/211 findings/
+78 plans. Actual --slider-span-opener dry-run selects
+1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5.
+Seven owning tests pass after policy/producer/shared installation;five selector/
+source tests pass after runner/launcher installation. Complete live-reader
+session30835 completed exit0:2311 cases,19366 dependencies,24948 reads,
+6571158937 bytes;inspectionComplete=false,currentRenderingAccepted=false.
+span-opener-live-complete-reader-20261105.log SHA
+872e9d53f0c1de65fe4ecda10c256d12688e9d0308a070b78a39c7ede010fe3e.
+Sources are frozen for this review;reuse the verified loader evidence. Accepted
+ab2c remains unchanged pending direct collector/source reconciliation and original
+canonical conservation/cold/import gates. C92704768/D376688640 bytes free after
+validation:recheck/recover safe headroom before export;no browser capture needed.
+No renderer/fixture edits,case completion or current rendering acceptance.
+
 November5 virtual --slider-span-opener selector passes owning route tests:
 every older launcher dry-run remains byte-equivalent in emitted command data;
 new normal/check/dry-run routes select only the supplied review;all older/unknown
