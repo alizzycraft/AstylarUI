@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { createButtonToolbarReviewReader } from './join-material-button-toolbar-paint.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 export const snackbarOpenerParent = '9e3330c7b56a2001d89728726033f518da598ee8cbdfb7443b02c9b2d10fafad';
@@ -11,6 +13,40 @@ const receipts = [
   ['snackbar-opener-crop-provenance-20261105.log', '8dd321c85481421e5fbd2a4f6335c42144ddccf72634cb947883bfe0839a5286'],
   ['snackbar-closed-opener-visibility-20261105.log', '4c78ec9f2806d657aef4f8325d7aadca78ddcd8d1b35bd612429b87e4652377c'],
 ].map(([name, sha256]) => ({ file: base + name, sha256 }));
+
+export function createSnackbarOpenerReviewReader({ root = process.cwd(), read = fs.readFileSync } = {}) {
+  const indexBytes = read(path.resolve(root, base + 'working-audit/ab2c875a63283401c78dad6c467437888a9a086f15e9afef23d0aa35fc1aa60d/index.json'));
+  assert.equal(hash(indexBytes), 'b26b0abd0d071f566ba6fa5190ded39925f55682145fef5b4e6fcc66b776df4b');
+  const inspection = JSON.parse(indexBytes).metadata.coverage.inspectionEvidence;
+  const prior = createButtonToolbarReviewReader({ root, read });
+  assert.equal(prior.sha256, inspection.reviewSha256);
+  const joined = joinSnackbarOpenerPaint(inspection.cases, file => read(path.resolve(root, file)));
+  const producer = 'scripts/join-material-snackbar-opener-paint.mjs';
+  const producerReceipt = { file: producer, sha256: hash(read(path.resolve(root, producer))) };
+  joined.cases.find(row => row.obligations.localPaint[key]).obligations.localPaint[key].evidence.push(producerReceipt);
+  const review = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',
+    ...(inspection.schemaVersion === 2 ? { inspectionSchemaVersion: 2 } : {}), scope: inspection.scope, groups: joined.cases };
+  const sha256 = hash(JSON.stringify(review));
+  const file = path.resolve(root, `${base}working-audit/proposals/${sha256}.json`);
+  const bytes = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256, review }));
+  const expected = new Map(inspection.evidenceFingerprints.map(r => [path.resolve(root, r.file), r.sha256]));
+  for (const row of joined.cases) for (const receipt of row.obligations.localPaint[key]?.evidence ?? []) {
+    const absolute = path.resolve(root, receipt.file);
+    if (expected.has(absolute)) assert.equal(expected.get(absolute), receipt.sha256, 'Never replace parent receipts');
+    expected.set(absolute, receipt.sha256);
+  }
+  return { file, sha256, changed: joined.changed, read(name, options) {
+    const absolute = path.resolve(root, name), encoding = typeof options === 'string' ? options : options?.encoding;
+    let selected;
+    if (absolute === file) selected = bytes;
+    else {
+      const sha = expected.get(absolute), current = sha ? read(absolute) : undefined;
+      selected = sha && hash(current) === sha ? current : prior.read(absolute);
+      if (sha) assert.equal(hash(selected), sha, `Unreconciled snackbar opener dependency: ${name}`);
+    }
+    return encoding ? selected.toString(encoding) : Buffer.from(selected);
+  } };
+}
 
 export function restoreSnackbarOpenerPaint(cases) {
   return cases.map(row => {

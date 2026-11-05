@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+November5 staged snackbar opener review7c09c71e0d7cc285189061ca41c15b98b8c25f1b4e4a58bc45a69b93b506941d
+passes the existing complete loader:2311 cases,19363 dependencies,26 additions,
+inspectionComplete=false,currentRenderingAccepted=false. Evidence log
+snackbar-opener-complete-reader-20261105.log SHA
+bcc9f73a79fa1575d06a7eb93f1cccf2cef9ee1f69089edf492ca92a0c7e4283.
+Virtual proposal avoids another large saved review. Acceptedab2c and all parent
+receipts remain unchanged;historical reads delegate through the existing reader.
+Freeze this proof;next batch registration/publication is separate,not another
+capture or full export for this ledger edit. HTTPS publication remains unresolved.
+
 November5 staged snackbar opener join adds26 bounded localPaint children and
 preserves2285 untouched objects,all case statuses and every prior obligation.
 Exact9e3330c7 parent cases recover after reversal. No production registration,
