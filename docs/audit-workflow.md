@@ -1,5 +1,12 @@
 # Efficient Material input-audit workflow
 
+November5 button/toolbar milestoneab2c875a/indexb26b0abd passes conservation,
+independent cold equality(exit0,diskHits0),isolated import and full accepted-store
+verification before/after pointer advancement. Reuse this frozen evidence;do not
+repeat export/cold/receipt work for documentation. All2311 cases remain partial
+and current rendering unverified;remaining exact-case obligations and original
+final gates still apply. See current coverage ledger for complete receipts.
+
 November4 plain CLI Git publication works(remote verifiede8275253);use normal
 Git defaults,not repeated HTTP/SSH overrides. Byte-preserving compression of3
 closed indexes recovers canonical headroom;exact8f94 backup is verified without

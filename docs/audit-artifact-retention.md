@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+November5 accepted button/toolbar milestoneab2c875a/indexb26b0abd reuses86
+hash-verified immutable hard links from its verified isolated store;complete
+verification passes before/after accepted pointer advancement. Keep cold,
+conservation,import/promotion logs,isolated store and previous8f94 backup until
+reference closure. No original/failure evidence deleted or rendering accepted.
+
 November4 headroom recovery changes storage only. Closed indexes73c84aef,
 e1072ead and080b1dd5 were LZX-compressed with complete file SHA equality and
 verifyFindings before/after each;all retain205 historical findings and unchanged

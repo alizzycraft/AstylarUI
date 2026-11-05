@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+November5 button/toolbar milestone is accepted as ab2c875a/indexb26b0abd after
+independent cold equality(exit0,diskHits0;20816 files/4937760875 verified bytes),
+isolated import and complete accepted-store verification before/after pointer
+advance. Promotion reused86 individually hash-verified immutable hard links;
+previous8f94 and original/failure evidence remain retained. Promotion receipt
+button-toolbar-accepted-promotion-20261105.log SHA
+605556e82e785a60fc5a1cfff9f457de33fcd9b668f187533c646b75059c9893.
+Cold stdout/stderr SHA9b1f68649057cc7d9528c763bbbca375063d62cae6c6bdb6e41ebabf75612a09 /
+c13992a6546322519d52d33e9bfcb0ff7e92d64ad5a8ad246056276a041ff26f.
+All2311 cases remain partial/current-rendering-unverified. Continue remaining
+exact-case obligations and original final gates;do not repeat this milestone for
+prose changes. Pending-cold paragraphs below are historical.
+
 November5 button/toolbar canonical export42579 completed exit0, candidate
 ab2c875a63283401c78dad6c467437888a9a086f15e9afef23d0aa35fc1aa60d
 (98938320 compressed /2371643904 decoded bytes). Candidate section receipt
