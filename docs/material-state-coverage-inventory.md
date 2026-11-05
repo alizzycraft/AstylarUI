@@ -1,5 +1,13 @@
 # Material comparison/state coverage inventory
 
+November5 span proof strengthened without new captures:the same focused test
+now authenticates original report membership/widths and extracts all24 native
+transforms plus authored ratios directly from paired trees,not diagnostic values
+alone. It executes the captured plugin toRenderPoint call expressions and
+intercepts incoming CSS points at scales0.1,1,10;unequal span requests persist
+before conversion. Focused command passes1/1,no skips. This closes a proof
+indirection gap,not dynamic paint/current acceptance or canonical integration.
+
 November5 Slider native-source gap narrowed:existing recovered chunk-7SL66K3U
 map SHA67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4
 (matching original checkpoint manifest browserFiles receipt) contains native
