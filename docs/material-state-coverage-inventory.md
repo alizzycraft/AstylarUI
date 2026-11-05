@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+November5 static Slider spatial followup answers bounded input/pixel questions.
+slider-static-track-multicolumn-20261105.log SHA
+5afb407458a6ccb87fba633c655942b4c6bdb35bf19bc911dd4dce05c4933ba4
+confirms prior track solid-primary extents across5 interior columns/side/case:
+120 columns agree,120 outside-track controls reject primary color. Thumb-cap
+regions in slider-static-thumb-solid-regions-20261105.log SHA
+2a226bf9491657caf1814d1895a3340788e3223a9ca8c43faf637266ee8df4b4
+locate two regions per side in12 static pairs;candidate cap centers are1..1.5
+CSSpx left for start and0.5..1px right for end. These exclude the center track
+band and are NOT full knob bounds,hit targets or antialiased edge measurements.
+slider-static-thumb-position-inputs-20261105.log SHA
+8a916745d95c79153dd4b0683879933f744a52fc91d30e9ca681c11bbcf4f39d
+authenticates24 retained native transforms:all agree within0.001px with
+3+ratio*(width-6),not ratio*width. Current Material source uses3px tickMarkOffset;
+current plugin uses full visual width before projection. Unequal position
+requests are consistent with observed cap offsets,but captured native-module
+identity and plugin-execution-to-pixel causality remain unproved. No new confirmed
+core claim,fixture offsets,canonical classification or current acceptance.
+
 November5 Slider retained-paint gap:62 pending cases(12 static;8 each focus,
 activate,activate-leave,disabled;9 each drag-start/end) lack configured focused
 rasters;the other16 hover/held cases have existing evidence. Diagnostic
