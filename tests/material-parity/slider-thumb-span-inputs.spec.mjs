@@ -3,7 +3,8 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { sliderThumbSpanFinding as finding } from './slider-thumb-span-findings.mjs';
+import { sliderThumbSpanFinding as finding, prepareSliderOpenerRegistration,
+  restoreSliderOpenerRegistration } from './slider-thumb-span-findings.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const authenticated = (file, sha256) => {
@@ -11,6 +12,48 @@ const authenticated = (file, sha256) => {
   assert.equal(hash(bytes), sha256, file);
   return bytes;
 };
+
+test('span and opener staged registration preserves complete prior inventories and rejects drift', () => {
+  const inventory = (source, kind) => {
+    const ast = ts.createSourceFile(kind + '.mjs', source, 99, true);
+    assert.deepEqual(ast.parseDiagnostics, []);
+    const result = {};
+    const visit = node => {
+      if (kind === 'policy' && ts.isVariableDeclaration(node) && node.name.getText(ast) === 'sourceAuditDefinitions') {
+        result.findings = node.initializer.arguments[0].elements.map(item => item.getText(ast));
+      }
+      if (kind === 'producer' && ts.isFunctionDeclaration(node) &&
+        ['sourceFingerprints', 'focusedProofInventory', 'implementationPlan'].includes(node.name?.text)) {
+        let array;
+        const locate = child => { if (!array && ts.isArrayLiteralExpression(child)) array = child; ts.forEachChild(child, locate); };
+        locate(node);
+        result[node.name.text] = array.elements.map(item => item.getText(ast));
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(ast);
+    return result;
+  };
+  for (const [kind, file] of Object.entries({ policy: 'tests/material-parity/input-equivalence-policy.mjs',
+    producer: 'tests/material-parity/input-equivalence-audit.mjs' })) {
+    const bytes = readFileSync(file), parent = bytes.toString().replaceAll('\r\n', '\n');
+    const staged = prepareSliderOpenerRegistration(bytes, kind);
+    assert.equal(restoreSliderOpenerRegistration(staged, kind), parent);
+    assert.throws(() => prepareSliderOpenerRegistration(parent + '\n// drift', kind));
+    assert.throws(() => restoreSliderOpenerRegistration(staged + '\n// drift', kind));
+    const before = inventory(parent, kind), after = inventory(staged, kind);
+    if (kind === 'policy') {
+      assert.equal(before.findings.length, 210);
+      assert.deepEqual(after.findings.slice(0, -1), before.findings);
+      assert.ok(after.findings.at(-1).includes(finding.id));
+    } else {
+      assert.deepEqual(Object.values(before).map(rows => rows.length), [1158, 499, 77]);
+      for (const [name, count] of [['sourceFingerprints', 4], ['focusedProofInventory', 2], ['implementationPlan', 1]])
+        assert.deepEqual(after[name].slice(count), before[name]);
+    }
+    assert.deepEqual(readFileSync(file), bytes);
+  }
+});
 
 test('retained Slider native inset span differs from captured plugin request before projection', () => {
   assert.equal(finding.classification, 'application-plugin-authoring-defect');

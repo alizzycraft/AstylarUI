@@ -1,4 +1,6 @@
 // Staged finding: not registered in the accepted canonical audit yet.
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 export const sliderThumbSpanFinding = Object.freeze({
   id: 'fixture-slider-thumb-span-substitution',
   classification: 'application-plugin-authoring-defect',
@@ -31,3 +33,56 @@ export const sliderThumbSpanFinding = Object.freeze({
   currentRenderingAccepted: false,
   canonicalStatus: 'staged-not-source-registered',
 });
+
+// Reuse the audit's exact, reversible registration convention. These helpers
+// return virtual source only; they never modify production inventory or policy.
+const hash = source => createHash('sha256').update(source).digest('hex');
+const parents = {
+  policy: 'b784354addf0b7ae9fe8e6e21f2fd0fb8147c834f0d879fd8a54f26de4a5f543',
+  producer: 'de8b876c21c23ef791d1b10a290ee80d64ecc964efc2a9a3da3225e6ac7da2a8',
+};
+const { canonicalStatus: _status, ...definition } = sliderThumbSpanFinding;
+const proof = (file, title, boundary) =>
+  `    proof(root, ${JSON.stringify(file)}, new RegExp(${JSON.stringify("test\\('" + title + "'")}), ${JSON.stringify(title)}, ${JSON.stringify(boundary)}),\n`;
+const additions = {
+  policy: [['\n]);\n\nexport const pluginBoundaryVerdict',
+    `\n  Object.freeze(${JSON.stringify(definition)}),`]],
+  producer: [
+    ['function sourceFingerprints(root) {\n  const files = [\n', [
+      'tests/material-parity/slider-thumb-span-findings.mjs',
+      'tests/material-parity/slider-thumb-span-inputs.spec.mjs',
+      'scripts/join-material-snackbar-opener-paint.mjs',
+      'tests/material-parity/snackbar-opener-paint.spec.mjs',
+    ].map(file => `    ${JSON.stringify(file)},\n`).join('')],
+    ['function focusedProofInventory(root) {\n  return [\n',
+      proof('tests/material-parity/slider-thumb-span-inputs.spec.mjs',
+        'retained Slider native inset span differs from captured plugin request before projection', sliderThumbSpanFinding.boundary) +
+      proof('tests/material-parity/snackbar-opener-paint.spec.mjs',
+        'closed snackbar opener join preserves exact parents, statuses and unaffected objects',
+        'Retained closed-opener diagnostics and conservative case join;not open popup,current rendering or whole-case acceptance.')],
+    ['function implementationPlan() {\n  return [\n', `    ${JSON.stringify({ priority: 2.08,
+      rootCause: 'Range plugin substitutes full-width thumb positioning for native inset span',
+      action: sliderThumbSpanFinding.recommendation + ' ' + sliderThumbSpanFinding.verificationPlan })},\n`],
+  ],
+};
+export function prepareSliderOpenerRegistration(bytes, kind) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.ok(Object.hasOwn(parents, kind));
+  assert.equal(hash(source), parents[kind], 'Unrecognized span/opener parent');
+  for (const [anchor, addition] of additions[kind]) {
+    assert.equal(source.split(anchor).length, 2);
+    source = kind === 'policy' ? source.replace(anchor, addition + anchor) : source.replace(anchor, anchor + addition);
+  }
+  return source;
+}
+export function restoreSliderOpenerRegistration(bytes, kind) {
+  let source = bytes.toString().replaceAll('\r\n', '\n');
+  assert.ok(Object.hasOwn(parents, kind));
+  for (const [anchor, addition] of additions[kind].toReversed()) {
+    const staged = kind === 'policy' ? addition + anchor : anchor + addition;
+    assert.equal(source.split(staged).length, 2);
+    source = source.replace(staged, anchor);
+  }
+  assert.equal(hash(source), parents[kind], 'Span/opener registration drift');
+  return source;
+}

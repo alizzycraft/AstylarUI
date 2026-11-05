@@ -1,5 +1,15 @@
 # Material comparison/state coverage inventory
 
+November5 staged span/opener registration is reversible and conservation-tested.
+prepare/restoreSliderOpenerRegistration in slider-thumb-span-findings.mjs reuse
+the existing exact-parent convention for virtual policy/producer sources only.
+Focused test preserves all1158 source paths/499 proofs/210 findings/77 plans;
+adds4/2/1/1 respectively and recovers complete prior source bytes after reversal.
+Unrelated parent/staged drift rejects. Existing span proof plus registration
+conservation pass2/2. No live policy/producer,runner selection,accepted review or
+canonical pointer changes. Historical-read chain and actual scanner integration
+remain prerequisites to live registration;do not export the staged batch yet.
+
 November5 source-finding reconciliation:the accepted policy's four Slider
 findings cover half-domains,harness drag reach,state layers and track thickness;
 none classifies thumb-span geometry. New staged machine-readable finding
