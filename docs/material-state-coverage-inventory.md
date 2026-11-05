@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+November5 Slider span history:git object2f440115 (August23 original showcase)
+already sets thumb.position.x=-width/2+width*ratio with width=host width times
+pixelToWorldScale. September3 object2cb8b198 wraps that same expression in
+toLocalPoint;September8 objecte4ca3db4 converts it to the CSS-space expression
+and final toRenderPoint boundary. Thus the full-width span predates both
+coordinate fixes;the September8 refactor is not its introduction. This is
+original plugin geometry authoring,not demonstrated later compensation. Evidence:
+git show each object for examples/material-showcase/src/app/material-plugin/
+material-showcase.plugin.ts and git log --follow for that file. Author intent,
+native captured implementation identity and complete drag causality remain open;
+do not infer them from commit titles or blame the final projection boundary.
+
 November5 publication verified:normal CLI HTTPS push completed successfully;
 independent ls-remote reports858c6320575511f05471b6c19a9a5c512ef927df on
 codex/material-audit-alignment-integration. The seven previously outstanding
