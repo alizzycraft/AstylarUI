@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+November5 Slider native-source gap narrowed:existing recovered chunk-7SL66K3U
+map SHA67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4
+(matching original checkpoint manifest browserFiles receipt) contains native
+slider.mjs with tickMarkOffset=3 and the inset-span calculation. Focused test
+tests/material-parity/slider-thumb-span-inputs.spec.mjs authenticates that map,
+captured plugin map/source and24 paired tree receipts;executes captured native
+calculation against all24 static thumb positions and an RTL symmetry control.
+node --test tests/material-parity/slider-thumb-span-inputs.spec.mjs passes1/1,
+no skips. This is staged focused proof,not registered canonical inventory or
+original runtime execution identity. Current rendering,complete drag behavior,
+pixel causality and whole-case acceptance remain unproved. Existing historical
+reader suite stays unchanged;no pinned source receipt was silently repointed.
+
 November5 Slider span history:git object2f440115 (August23 original showcase)
 already sets thumb.position.x=-width/2+width*ratio with width=host width times
 pixelToWorldScale. September3 object2cb8b198 wraps that same expression in
