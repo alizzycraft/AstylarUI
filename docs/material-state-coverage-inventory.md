@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+November5 Slider retained-paint gap:62 pending cases(12 static;8 each focus,
+activate,activate-leave,disabled;9 each drag-start/end) lack configured focused
+rasters;the other16 hover/held cases have existing evidence. Diagnostic
+slider-pending-track-thumb-raster-20261105.log SHA
+44894305babf83ca2b8cf601dd070ec4d47ca954d207e930e847b689616962b4
+authenticates original report/tree receipts and124 full PNGs;in-memory regions
+use reference slider-visual bounds+4CSSpx with existing helper defaults.53/62
+meet default SSIM diagnostic,9 do not(8 dark,1 contrast activate);not new gates.
+Static interior cross-check slider-static-track-interior-corrected-20261105.log
+SHA0a9405a548f2913f91f8c93bbb6c9dcd0b5a80bd4b8758dfa26d7d3db234a893
+uses each recorded viewport/DPR:all12 native solid-primary columns occupy4
+device rows atDPR1/8 atDPR2,candidate7/14,with no unmatched samples. This
+corroborates retained track-thickness mismatch independently of existing unequal
+plugin-input proof;not full antialiased thickness,SSIM causal partition,current
+rendering or case closure. Initial zero-byte slider-static-track-interior-pixels-
+20261105.log retained as failed attempt:hardcoded tablet1280 instead of recorded
+768 caused wrong scale;corrected code derives scale from report and asserts PNG
+dimensions. No fixture/renderer changes,new PNGs or canonical integration.
+
 November5 staged snackbar opener review7c09c71e0d7cc285189061ca41c15b98b8c25f1b4e4a58bc45a69b93b506941d
 passes the existing complete loader:2311 cases,19363 dependencies,26 additions,
 inspectionComplete=false,currentRenderingAccepted=false. Evidence log
