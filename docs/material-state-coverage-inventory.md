@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+November5 publication verified:normal CLI HTTPS push completed successfully;
+independent ls-remote reports858c6320575511f05471b6c19a9a5c512ef927df on
+codex/material-audit-alignment-integration. The seven previously outstanding
+commits are published. Earlier publication-blocked entries below are historical;
+no credentials,SSH trust or persistent Git settings changed.
+
+Slider captured-source linkage is now verified in
+slider-thumb-captured-source-binding-20261105.log SHA
+6afa30b7010c88e8191758cd500b9bf797cc3c77d176bc9bb38c6fe455fbb6ad.
+Authenticated recovered map c0764b03 contains plugin source dee2c10a,exactly
+equal to current complete plugin after line-ending normalization. Initial and
+both update expressions request full-width interpolation before projection;
+24 retained position requests differ from native inset transforms. This closes
+the captured-plugin linkage gap and establishes unequal application geometry
+inputs,not an equal-input renderer defect. Captured native implementation
+identity,first introduction/intent,complete dynamic paint,pixel-causal partition
+and current rendering remain unproved. No fixture adjustment,renderer change,
+canonical integration or case acceptance follows from this bounded result.
+
 November5 static Slider spatial followup answers bounded input/pixel questions.
 slider-static-track-multicolumn-20261105.log SHA
 5afb407458a6ccb87fba633c655942b4c6bdb35bf19bc911dd4dce05c4933ba4
