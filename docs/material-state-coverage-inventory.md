@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+November5 frozen1d3da334 direct collector preflight passes all four expected
+groups/observations:72/4016,49/2677,4/178,146/6295. Log
+span-opener-direct-collector-preflight-20261105.log SHA
+2f11cb938d6d6b6c9f758b6f64f2234f2b9c3e5abcf8e6ecdd66f2610f704bc8.
+No source changes needed. Exact acceptedab2c files copied(not linked to mutable
+canonical paths) into span-opener-pre-export-ab2c-20261105;source/copy hashes
+agree:manifestf6d7445ebf152842be2720fe4099ee143f41cf157550171f41c6d21a4b1b5993,
+payloadab2c875a63283401c78dad6c467437888a9a086f15e9afef23d0aa35fc1aa60d,
+markdown19af3bad1452fa6f9c97999688b828ecb1c8b3328a804d74f9e3a45e7ee7f15a.
+No writer was active;D275542016 bytes remain after backup. One canonical export
+may now run for this frozen batch. Preserve backup/accepted pointer until full
+conservation,independent cold and verified import gates pass;no case acceptance.
+
 November5 span/opener registration is LIVE1162 sources/501 proofs/211 findings/
 78 plans. Actual --slider-span-opener dry-run selects
 1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5.

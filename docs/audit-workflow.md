@@ -1,5 +1,11 @@
 # Efficient Material input-audit workflow
 
+November5 frozen1d3da334 direct collectors pass all four expected groups;exact
+acceptedab2c backup is independently copied/hash-verified with275542016 D:bytes
+free afterward. Run one --slider-span-opener canonical export with fresh logs;
+reuse completed live-loader and collector proofs. Accepted pointer staysab2c
+until conservation,cold and import gates pass. No new browser capture needed.
+
 November5 span/opener LIVE1162/501/211/78 selects1d3da334 with explicit
 --slider-span-opener. Complete live loader passes2311 cases/19366 dependencies
 (exit0),with owning/selection checks green. Freeze sources and reuse that exact
