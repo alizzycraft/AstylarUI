@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+November5 linked span/opener staged review5113144432d561494c552b1288f171295c770bbe93de6323f300eda8904da704
+passes the existing complete dependency loader:2311 cases,19366 dependencies,
+26 closed-opener children,inspectionComplete=false,currentRenderingAccepted=false.
+Session29813 completed exit0. Log span-opener-staged-complete-reader-20261105.log
+SHA634e2b0f6080ffecbd50560c7b5af1aaa4968607aea5950ed3d82b8063c25825
+records24948 reads/6571143687 bytes with virtual policy/producer/shared registration;
+live source files and accepted pointer were not modified. Six combined focused
+span/opener checks also pass. Reader binds all four new source files and delegates
+parent receipt recovery explicitly. Freeze/reuse this exact generation's loader
+result;old7c09 reader result is historical. Runner selection/live registration
+and canonical milestone gates remain separate. Low headroom(C91713536,D379322368
+bytes when checked) excludes new captures/full export without fresh preflight.
+
 November5 shared historical entry points are virtually reconciled. Exact-parent
 shared-source transformation adds newest stripping before older restoration and
 newest read adaptation before the existing chain. Dynamic import of the staged

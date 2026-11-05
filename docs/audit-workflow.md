@@ -1,5 +1,12 @@
 # Efficient Material input-audit workflow
 
+November5 linked span/opener virtual review51131444 passes the existing complete
+loader(2311 cases,19366 dependencies,exit0) and six combined focused checks.
+Reuse its frozen source generation;do not rerun it for documentation. Accepted
+ab2c remains unchanged. Runner selection/live registration remain prerequisites
+to a canonical milestone;recheck low C:/D: headroom before captures/exports.
+All cases remain partial/current-rendering unverified;original gates apply.
+
 November5 button/toolbar milestoneab2c875a/indexb26b0abd passes conservation,
 independent cold equality(exit0,diskHits0),isolated import and full accepted-store
 verification before/after pointer advancement. Reuse this frozen evidence;do not

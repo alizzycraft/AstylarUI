@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { createButtonToolbarReviewReader } from './join-material-button-toolbar-paint.mjs';
+import { createSliderOpenerHistoricalRead } from '../tests/material-parity/slider-thumb-span-findings.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 export const snackbarOpenerParent = '9e3330c7b56a2001d89728726033f518da598ee8cbdfb7443b02c9b2d10fafad';
@@ -18,12 +19,15 @@ export function createSnackbarOpenerReviewReader({ root = process.cwd(), read = 
   const indexBytes = read(path.resolve(root, base + 'working-audit/ab2c875a63283401c78dad6c467437888a9a086f15e9afef23d0aa35fc1aa60d/index.json'));
   assert.equal(hash(indexBytes), 'b26b0abd0d071f566ba6fa5190ded39925f55682145fef5b4e6fcc66b776df4b');
   const inspection = JSON.parse(indexBytes).metadata.coverage.inspectionEvidence;
-  const prior = createButtonToolbarReviewReader({ root, read });
+  const prior = createButtonToolbarReviewReader({ root, read: createSliderOpenerHistoricalRead({ root, read }) });
   assert.equal(prior.sha256, inspection.reviewSha256);
   const joined = joinSnackbarOpenerPaint(inspection.cases, file => read(path.resolve(root, file)));
-  const producer = 'scripts/join-material-snackbar-opener-paint.mjs';
-  const producerReceipt = { file: producer, sha256: hash(read(path.resolve(root, producer))) };
-  joined.cases.find(row => row.obligations.localPaint[key]).obligations.localPaint[key].evidence.push(producerReceipt);
+  const sources = ['scripts/join-material-snackbar-opener-paint.mjs',
+    'tests/material-parity/snackbar-opener-paint.spec.mjs',
+    'tests/material-parity/slider-thumb-span-findings.mjs',
+    'tests/material-parity/slider-thumb-span-inputs.spec.mjs'];
+  const producerReceipts = sources.map(file => ({ file, sha256: hash(read(path.resolve(root, file))) }));
+  joined.cases.find(row => row.obligations.localPaint[key]).obligations.localPaint[key].evidence.push(...producerReceipts);
   const review = { kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',
     ...(inspection.schemaVersion === 2 ? { inspectionSchemaVersion: 2 } : {}), scope: inspection.scope, groups: joined.cases };
   const sha256 = hash(JSON.stringify(review));
@@ -45,7 +49,9 @@ export function createSnackbarOpenerReviewReader({ root = process.cwd(), read = 
       if (sha) assert.equal(hash(selected), sha, `Unreconciled snackbar opener dependency: ${name}`);
     }
     return encoding ? selected.toString(encoding) : Buffer.from(selected);
-  } };
+  }, sourceApplicability: { mode: 'staged-slider-span-snackbar-opener',
+    predecessorReview: inspection.reviewSha256, predecessorApplicability: prior.sourceApplicability,
+    boundary: 'Exact retained input/closed-opener evidence;not live registration,current rendering or whole-case acceptance.' } };
 }
 
 export function restoreSnackbarOpenerPaint(cases) {
