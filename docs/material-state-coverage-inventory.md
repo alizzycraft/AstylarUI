@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+November5 interaction-span question answered from retained trees:all132 thumb
+positions in66 interaction cases match the captured native inset formula within
+0.001CSSpx;none match the plugin full-width request. Coverage is8 each focus,
+hover,held,activate,activate-leave,disabled and9 each drag-start/drag-end.
+The focused span test now authenticates156 paired tree files across78 cases,
+checks156 thumb positions(total includes24 static),and executes captured plugin
+update calls for interaction endpoints. Command passes1/1,no skips. No alternate
+endpoint full-width rule observed. This is not pointer-path/handle-identity,
+in-flight motion,smoothness,pixel causality,current rendering or whole-case proof;
+existing motion/hit-domain findings stay separate. Canonical integration pending.
+
 November5 span proof strengthened without new captures:the same focused test
 now authenticates original report membership/widths and extracts all24 native
 transforms plus authored ratios directly from paired trees,not diagnostic values

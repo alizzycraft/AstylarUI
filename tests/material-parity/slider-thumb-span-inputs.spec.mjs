@@ -87,5 +87,36 @@ test('retained Slider native inset span differs from captured plugin request bef
     }
   }
   assert.equal(positions, 24);
+  const interactions = report.interactions.filter(row => row.family === 'slider');
+  assert.equal(interactions.length, 66);
+  const states = {};
+  let interactionPositions = 0;
+  for (const row of interactions) {
+    states[row.state] = (states[row.state] ?? 0) + 1;
+    const trees = Object.fromEntries(Object.entries(row.inputTrees).map(([side, tree]) =>
+      [side, JSON.parse(authenticated(tree.file, tree.sha256))]));
+    const thumbs = trees.reference.nodes.filter(node => node.attributes?.class?.split(/\s+/).includes('mdc-slider__thumb'));
+    assert.equal(thumbs.length, 2);
+    const visuals = trees.astylar.nodes.filter(node => node.authored?.id === 'slider-visual');
+    assert.equal(visuals.length, 1);
+    const width = row.geometry.elements.find(item => item.id === 'slider-visual').expected.width;
+    for (const [i, handle] of ['start', 'end'].entries()) {
+      const transform = trees.reference.styles[thumbs[i].style].transform;
+      const matrix = transform.match(/^matrix\(1, 0, 0, 1, ([-\d.]+), 0\)$/);
+      assert.ok(matrix);
+      const tx = Number(matrix[1]), ratio = visuals[0].authored.data[handle];
+      assert.ok(Number.isFinite(ratio));
+      assert.ok(Math.abs(calculate.call({ percentage: ratio, _tickMarkOffset: 3,
+        _slider: { _isRtl: false, _cachedWidth: width } }) - tx) < .001,
+      `${row.profile}/${row.viewport.id}/${row.state}/${handle}`);
+      const variable = handle === 'start' ? 'boundedStart' : 'boundedEnd';
+      const point = requests[variable]({ coordinates: { toRenderPoint: value => value } }, width, ratio);
+      assert.ok(Math.abs(point.x + width / 2 - tx) > .5);
+      interactionPositions++;
+    }
+  }
+  assert.deepEqual(states, { focus: 8, hover: 8, held: 8, activate: 8,
+    'activate-leave': 8, 'drag-start': 9, 'drag-end': 9, disabled: 8 });
+  assert.equal(interactionPositions, 132);
   // Captured input mismatch only: not current rendering, drag correctness or pixel causality.
 });
