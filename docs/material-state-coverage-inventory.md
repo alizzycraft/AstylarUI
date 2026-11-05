@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+November5 next retained question:26 snackbar localPaint evidence-join-pending
+cases concern the CLOSED opener (12 static plus14 hover/held),not the open popup.
+snackbar-pending-opener-raster-20261105.log SHA
+f32469ebb79ecfd6f354cff680edf59990e5fea763af618401372f8b3f687e2b
+authenticates parent index/report/tree receipts and52 retained opener crops.
+Existing centering matches26/26(max error0.5031127971px);existing default SSIM
+diagnostic matches22/26,min0.7249395926. Four outliers are contrast desktop/tablet
+static and contrast DPR1 hover/held. No threshold changed or acceptance inferred.
+snackbar-opener-crop-provenance-20261105.log SHA
+8dd321c85481421e5fbd2a4f6335c42144ddccf72634cb947883bfe0839a5286
+reconstructs all52 decoded crops exactly from full screenshots at the reference
+border box plus4 CSSpx. New image hashes are not original capture-time receipts.
+snackbar-opener-outlier-input-links-20261105.log SHA
+985b20d0133ac3acfc3861944749b18a6fcd8ade71ccefefed1699f91c061869
+links each outlier to existing exact-case opener font-family/tracking findings;
+hover/held also link to existing state-layer paint substitutions. This does NOT
+prove pixel-causal attribution or a new equal-input core defect. Remaining:
+review residual paint/structure and source applicability before conservative
+coverage integration;open-popup evidence stays separate. No new browser capture,
+canonical regeneration,case promotion or renderer/fixture change. Publication of
+295d351a remains unconfirmed after two terminal HTTP408 pushes;last observed
+remote4cb809b4. Do not blindly repeat publication or completed milestone checks.
+
 November5 button/toolbar milestone is accepted as ab2c875a/indexb26b0abd after
 independent cold equality(exit0,diskHits0;20816 files/4937760875 verified bytes),
 isolated import and complete accepted-store verification before/after pointer
