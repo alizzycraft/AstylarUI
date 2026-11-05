@@ -1,5 +1,18 @@
 # Material comparison/state coverage inventory
 
+November5 staged snackbar opener join adds26 bounded localPaint children and
+preserves2285 untouched objects,all case statuses and every prior obligation.
+Exact9e3330c7 parent cases recover after reversal. No production registration,
+source inventory/export or accepted-pointer change. Focused owning regression
+passes2/2 in snackbar-opener-staged-regression-corrected-20261105.log SHA
+af57ba6eda6711026ddcbc6f63005ea16fb847f4e17c5a985c9c9bee6d4a05b6.
+Wrong-parent and report/tree/crop/full-image corruption controls reject and
+assert their altered read was reached. Initial failed regression is retained:
+Windows/slash path mismatch meant one control did not inject corruption;test
+matching now normalizes separators only,never evidence bytes or hashes.
+Next coherent integration must authenticate complete review dependencies and
+preserve all parent source receipts;do not equate this pure join with publication.
+
 November5 snackbar opener boundary verified:all26 pending cases have one opener
 and no native/candidate popup nodes in their exact receipt-authenticated trees.
 snackbar-closed-opener-visibility-20261105.log SHA
