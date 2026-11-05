@@ -1,5 +1,17 @@
 # Material comparison/state coverage inventory
 
+November5 source-finding reconciliation:the accepted policy's four Slider
+findings cover half-domains,harness drag reach,state layers and track thickness;
+none classifies thumb-span geometry. New staged machine-readable finding
+fixture-slider-thumb-span-substitution lives in
+tests/material-parity/slider-thumb-span-findings.mjs with exact source pattern,
+three authenticated original evidence receipts,history,owning boundary and
+later implementation/verification plan. Focused span test imports the finding,
+authenticates its receipts and checks unique captured source detection;passes1/1.
+Staged-not-source-registered is explicit:accepted210 findings/499 proofs and
+2311 partial,current-unverified cases are unchanged. Next reconcile staged
+span/opener sources as a coherent integration batch,not a per-edit full export.
+
 November5 interaction-span question answered from retained trees:all132 thumb
 positions in66 interaction cases match the captured native inset formula within
 0.001CSSpx;none match the plugin full-width request. Coverage is8 each focus,

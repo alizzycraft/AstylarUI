@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { sliderThumbSpanFinding as finding } from './slider-thumb-span-findings.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const authenticated = (file, sha256) => {
@@ -12,6 +13,11 @@ const authenticated = (file, sha256) => {
 };
 
 test('retained Slider native inset span differs from captured plugin request before projection', () => {
+  assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  assert.equal(finding.inputEquivalent, false);
+  assert.equal(finding.currentRenderingAccepted, false);
+  assert.equal(finding.canonicalStatus, 'staged-not-source-registered');
+  for (const receipt of finding.evidence) authenticated(receipt.file, receipt.sha256);
   const directory = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/';
   const map = JSON.parse(authenticated(directory + 'chunk-7SL66K3U.js.map',
     '67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4'));
@@ -26,6 +32,7 @@ test('retained Slider native inset span differs from captured plugin request bef
     'c0764b03e6a2e5332dc927a63b2f45396678ceb45abe23378377f343ab622473'));
   const plugin = pluginMap.sourcesContent[pluginMap.sources.indexOf('src/app/material-plugin/material-showcase.plugin.ts')];
   assert.equal(hash(plugin), 'dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e');
+  assert.equal([...plugin.matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
   const ast = ts.createSourceFile('captured-plugin.ts', plugin, 99, true);
   const requests = {};
   for (const variable of ['ratio', 'boundedStart', 'boundedEnd']) {
