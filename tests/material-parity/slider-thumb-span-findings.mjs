@@ -42,11 +42,20 @@ const hash = source => createHash('sha256').update(source).digest('hex');
 const parents = {
   policy: 'b784354addf0b7ae9fe8e6e21f2fd0fb8147c834f0d879fd8a54f26de4a5f543',
   producer: 'de8b876c21c23ef791d1b10a290ee80d64ecc964efc2a9a3da3225e6ac7da2a8',
+  shared: 'a4a2f9b8e736f9183e5584aa94680eb34770b3538713e1512e3268886ab408cd',
 };
 const { canonicalStatus: _status, ...definition } = sliderThumbSpanFinding;
 const proof = (file, title, boundary) =>
   `    proof(root, ${JSON.stringify(file)}, new RegExp(${JSON.stringify("test\\('" + title + "'")}), ${JSON.stringify(title)}, ${JSON.stringify(boundary)}),\n`;
 const additions = {
+  shared: [
+    ["import { stripButtonToolbarRegistrationIfPresent, createButtonToolbarHistoricalRead } from '../../scripts/join-material-button-toolbar-paint.mjs';\n",
+      "import { stripSliderOpenerRegistrationIfPresent, createSliderOpenerHistoricalRead } from './slider-thumb-span-findings.mjs';\n"],
+    ['export function restoreCaptureAvailabilityRegistration(bytes, kind) {\n',
+      '  bytes = stripSliderOpenerRegistrationIfPresent(bytes, kind);\n'],
+    ['export function createCaptureAvailabilityHistoricalRead({ root, read }) {\n',
+      '  read = createSliderOpenerHistoricalRead({ root, read });\n'],
+  ],
   policy: [['\n]);\n\nexport const pluginBoundaryVerdict',
     `\n  Object.freeze(${JSON.stringify(definition)}),`]],
   producer: [
@@ -93,13 +102,26 @@ export function createSliderOpenerHistoricalRead({ root = process.cwd(), read = 
   const files = new Map([
     ['tests/material-parity/input-equivalence-policy.mjs', 'policy'],
     ['tests/material-parity/input-equivalence-audit.mjs', 'producer'],
+    ['tests/material-parity/capture-availability-registration.mjs', 'shared'],
   ].map(([file, kind]) => [path.resolve(root, file), kind]));
   return (name, options) => {
     const kind = files.get(path.resolve(root, name));
     if (!kind) return read(name, options);
     const bytes = read(name), source = bytes.toString().replaceAll('\r\n', '\n');
-    const restored = hash(source) === parents[kind] ? source : restoreSliderOpenerRegistration(bytes, kind);
+    // Older generations may already have been supplied by a nested reader.
+    // Strip only our marked addition; the existing reader owns older receipts.
+    const restored = hash(source) === parents[kind] ? source
+      : kind === 'shared' && source.includes("from './slider-thumb-span-findings.mjs';")
+        ? restoreSliderOpenerRegistration(bytes, kind)
+        : stripSliderOpenerRegistrationIfPresent(bytes, kind).toString();
     const encoding = typeof options === 'string' ? options : options?.encoding;
     return encoding ? Buffer.from(restored).toString(encoding) : Buffer.from(restored);
   };
+}
+
+export function stripSliderOpenerRegistrationIfPresent(bytes, kind) {
+  const marker = kind === 'producer' ? '"tests/material-parity/slider-thumb-span-findings.mjs",'
+    : kind === 'policy' ? '"id":"fixture-slider-thumb-span-substitution"' : undefined;
+  return marker && bytes.toString().includes(marker)
+    ? Buffer.from(restoreSliderOpenerRegistration(bytes, kind)) : bytes;
 }

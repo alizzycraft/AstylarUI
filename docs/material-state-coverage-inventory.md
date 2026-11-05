@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+November5 shared historical entry points are virtually reconciled. Exact-parent
+shared-source transformation adds newest stripping before older restoration and
+newest read adaptation before the existing chain. Dynamic import of the staged
+shared module verifies both actual exported entry points reproduce prior outputs
+for policy/producer;direct restoration and reader construction reject marked
+registration plus unrelated drift. Older nested generations are delegated to
+existing receipt-owning readers,not assumed to be the latest parent. Complete
+shared parent bytes recover;live shared file remains unchanged. Focused suite
+passes4/4,no skips. Runner selection/review linkage and complete loader remain
+pending before live registration;no canonical/current rendering acceptance.
+
 November5 staged scanner/historical-chain check passes3/3 focused tests.
 Actual scanMaterialSources with virtual staged definitions detects exactly one
 new span finding at one current source location;all210 prior scanner results

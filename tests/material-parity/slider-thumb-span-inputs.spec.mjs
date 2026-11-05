@@ -4,6 +4,8 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import * as sharedRegistration from './capture-availability-registration.mjs';
 import { createButtonToolbarHistoricalRead } from '../../scripts/join-material-button-toolbar-paint.mjs';
 import { sliderThumbSpanFinding as finding, prepareSliderOpenerRegistration,
   restoreSliderOpenerRegistration, createSliderOpenerHistoricalRead } from './slider-thumb-span-findings.mjs';
@@ -116,6 +118,38 @@ test('span/opener actual scanner and explicit historical reads preserve prior so
     assert.equal(file, 'unrelated'); assert.equal(received, options); return sentinel;
   } });
   assert.equal(delegate('unrelated', options), sentinel);
+});
+
+test('span/opener shared entry points restore exact older generations without live writes', async () => {
+  const sharedFile = 'tests/material-parity/capture-availability-registration.mjs';
+  const parent = readFileSync(sharedFile), staged = prepareSliderOpenerRegistration(parent, 'shared');
+  assert.equal(restoreSliderOpenerRegistration(staged, 'shared'), parent.toString().replaceAll('\r\n', '\n'));
+  assert.throws(() => restoreSliderOpenerRegistration(staged + '\n// drift', 'shared'));
+  const portable = staged.replace(/from '([^']+)'/g, (_match, relative) =>
+    `from '${relative.startsWith('.') ? pathToFileURL(path.resolve(path.dirname(sharedFile), relative)).href : relative}'`);
+  const module = await import('data:text/javascript;base64,' + Buffer.from(portable).toString('base64'));
+  const files = new Map([[path.resolve(sharedFile), Buffer.from(staged)]]);
+  for (const [kind, file] of [['producer', 'tests/material-parity/input-equivalence-audit.mjs'],
+    ['policy', 'tests/material-parity/input-equivalence-policy.mjs']]) {
+    files.set(path.resolve(file), Buffer.from(prepareSliderOpenerRegistration(readFileSync(file), kind)));
+  }
+  const read = (file, options) => {
+    const bytes = files.get(path.resolve(file)) ?? readFileSync(file);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  };
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  assert.equal(module.restoreCaptureAvailabilityRegistration(read(producerFile), 'producer'),
+    sharedRegistration.restoreCaptureAvailabilityRegistration(readFileSync(producerFile), 'producer'));
+  const current = module.createCaptureAvailabilityHistoricalRead({ root: process.cwd(), read });
+  const prior = sharedRegistration.createCaptureAvailabilityHistoricalRead({ root: process.cwd(), read: readFileSync });
+  for (const file of [producerFile, 'tests/material-parity/input-equivalence-policy.mjs'])
+    assert.equal(current(file, 'utf8'), prior(file, 'utf8'));
+  const producerBytes = files.get(path.resolve(producerFile));
+  files.set(path.resolve(producerFile), Buffer.concat([producerBytes, Buffer.from('\n// unrelated drift')]));
+  assert.throws(() => module.restoreCaptureAvailabilityRegistration(read(producerFile), 'producer'));
+  assert.throws(() => module.createCaptureAvailabilityHistoricalRead({ root: process.cwd(), read }));
+  assert.deepEqual(readFileSync(sharedFile), parent);
 });
 
 test('retained Slider native inset span differs from captured plugin request before projection', () => {
