@@ -208,6 +208,18 @@ These authenticated inputs identify the missing routes, not passing results
 for the unfiltered gate. Reuse these scoped historical views once the export
 releases its source freeze.
 
+Resource applicability check for the two mobile Timepicker groups: the
+authenticated October 5 matrix records closed material counts 25/25/25 and
+resourcesStable=true in both themes. The supplemental lifecycle probe records
+26/27/28 in both themes. Its checkpoint 2aac425d binds Chromium 154.0.8037.99
+versus the original 154.0.8037.58. The served vectors each have 1,887 files,
+but only 1,880 exact path/hash pairs match. Three shared files differ, including
+main.js, and four JavaScript/map paths per capture have distinct names. The
+supplement also uses explicit popup visibility/detachment waits and AX sampling.
+Retain both measurements. The supplemental plateau failure does not revise the
+original gate or prove which changed capture condition explains the difference.
+Carry this boundary into the Timepicker extension's applicability record.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
