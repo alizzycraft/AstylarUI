@@ -97,6 +97,21 @@ reconciliation, the old semantic reader receipt does not match the Git blob
 or its uniform CRLF conversion. Recover and validate the exact captured bytes
 or an explicitly reviewed transformation before reusing that receipt.
 
+The semantic helper receipt is a Text Backing predecessor, not the Git blob
+immediately before the preflight edit. The existing Text Backing restoration
+reproduces the exact accepted 60056387 receipt from authenticated Git blob
+56922108. The reader now recognizes the exact preflight edit, reads that blob,
+and runs the existing restoration. It also binds the 211-row live policy
+through the authenticated 205-row predecessor. The focused helper check
+reproduced the accepted bytes and rejected unrelated drift.
+
+The complete older Text Backing replay now constructs its reader, then its
+base-adapter negative check encounters a changed configured activation driver
+before the expected alignment receipt failure. The driver's observed f97c4459
+and expected 26d7a294 hashes are the next dependency boundary to reconcile.
+The broader replay remains failing. The updated Text Backing reader itself is
+a pending source-fingerprint change for the next coherent export.
+
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
 case groups after removing exactly 26 Snackbar opener paint additions. It

@@ -39,7 +39,13 @@ export function restoreInputBoundaryReadonlyAppend(source){
   assert.equal(hash(text.slice(0,start)),previous);return text.slice(0,start);
 }
 export function restoreQueuedControlHelperSource(source){
-  let text=restoreSharedButtonSemanticHelper(source);
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (hash(text) === '91f806eb4d7f87a9ed77e762c1f88f1f7bfe4bcadf01159643b326274f8b751b') {
+    const file = 'tests/material-parity/semantic-text-transform-registration.mjs';
+    text = execFileSync('git', ['show', '717c5245:' + file], { encoding: 'utf8' });
+    assert.equal(hash(text), '56922108ba561304f35058a32b8f5f9d7119d03ffa9307d521711f31bb425fd5');
+  }
+  text = restoreSharedButtonSemanticHelper(text);
   if(!text.includes('const controlIds =')){
     assert.ok(!text.includes('restoreQueuedControlPolicy'),'Unrecognized queued helper registration');return text;
   }
@@ -148,7 +154,13 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
     transitions.push({logicalFile:file,currentSha256:hash(current),historicalSha256:expected});
   };
   const policy='tests/material-parity/input-equivalence-policy.mjs',policyText=read(path.resolve(root,policy),'utf8');
-  bind(policy,policyText,restoreTextBackingPolicy(policyText),'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512');
+  const normalizedPolicy = policyText.replaceAll('\r\n', '\n');
+  let predecessorPolicy = normalizedPolicy;
+  if (hash(normalizedPolicy) === 'abeb73cafe696f0c6e104908cefde3c6e97d1637db695c2bad031a5c5f86e39d') {
+    predecessorPolicy = execFileSync('git', ['show', '49e1adc5:' + policy], { cwd: root, encoding: 'utf8' });
+    assert.equal(hash(predecessorPolicy), '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f');
+  }
+  bind(policy,policyText,restoreTextBackingPolicy(predecessorPolicy),'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512');
   const suite='tests/material-parity/input-boundary-evidence.spec.mjs',suiteCurrentText=read(path.resolve(root,suite),'utf8');
   const suiteText=restoreInputBoundaryReadonlyAppend(suiteCurrentText);
   assert.equal(hash(suiteText),'171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5');
