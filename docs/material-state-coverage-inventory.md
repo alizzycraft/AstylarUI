@@ -196,6 +196,18 @@ caret and root no-op guards. This is a verified reuse path for the benchmark
 reader. The three unfiltered failures still need that route applied and tested
 after the active export releases the source freeze.
 
+Additional read-only benchmark receipt triage while export inputs are frozen:
+the two selection checks require Sorter 4a386f10 from 2bb82ee6^, not the
+live 1e07ad43. The existing guarded Sorter restoration returns identical
+65d7256f bytes from both inputs and rejects live drift. The antialias check's
+historical core blob e72cfb8e is available at 39b3e0fd^ and the live blob
+matches the paired 5742ba6c guard. The two layout transition failures require
+ada4ad0c; the existing restoration yields that exact source from f4899d85
+input 6bd3537e. Current input 5132fefc is the later paint reader revision.
+These authenticated inputs identify the missing routes, not passing results
+for the unfiltered gate. Reuse these scoped historical views once the export
+releases its source freeze.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
