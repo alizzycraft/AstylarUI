@@ -1,5 +1,16 @@
 # Audit artifact retention
 
+November 22 Datepicker export predecessor is preserved at
+datepicker-mobile-pre-export-0c2c-20261122. Its manifest and Markdown come
+from publication commit a295a240. Its payload is a verified hard link to the
+immutable accepted store, with a distinct file ID from the exporter destination.
+The manifest matches index 31fb68e7 and the authenticated 80-section receipt
+for 0c2cc1b9. Manifest SHA-256
+bf4670d6e8f7fcaa1dbd322cc14cd4be75b0ce00bf5d4b31a33fc43c46c72e81 and
+Markdown SHA-256 3807d88beddb27cabb92e2c2fe4ef11d92fa782c8ffc09b8ef76dd495fba137c.
+Retain this bundle and both export logs through independent cold verification,
+section conservation and accepted import. No original evidence was removed.
+
 November5 accepted button/toolbar milestoneab2c875a/indexb26b0abd reuses86
 hash-verified immutable hard links from its verified isolated store;complete
 verification passes before/after accepted pointer advancement. Keep cold,
