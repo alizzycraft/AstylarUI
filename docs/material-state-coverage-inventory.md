@@ -358,15 +358,17 @@ and rejects unrelated drift in either direction. Staged policy SHA-256
 6cbd3db0fcf4cea5edb9f87d4ff0e446224ce55eaac219f329c2475981e5e8c4.
 Live policy bytes remain frozen pending the active Datepicker export.
 
-Export fingerprint reconciliation identifies three tracked source changes
-since publication commit a295a240: audit-findings-store.spec.mjs
-(6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
-(56922108 to 91f806eb), and text-backing-case-review-source.mjs
-(ec9f0201 to 0c9f1e4d), all under tests/material-parity. The authenticated
-span/opener metadata extract binds the full predecessor hashes, and the exact
-Git blobs at publication reproduce all three. This inventory is distinct
-from the Text Backing historical case dependency 60056387, which is restored
-through the existing reader. Preserve both boundaries for the next export.
+The production source fingerprint collector matches the accepted metadata's
+1,162 ordered paths. Exactly five hashes differ, with 1,157 conserved:
+audit-findings-store.spec.mjs (6c7fcfee to 9295e972),
+semantic-text-transform-registration.mjs (56922108 to 91f806eb),
+text-backing-case-review-source.mjs (ec9f0201 to 0c9f1e4d),
+export-material-input-audit-current-ancestry.mjs (b02cfae8 to e2c3ecf4)
+and run-material-input-audit.mjs (04c24ab7 to 1a25dc26).
+Exact predecessor Git blobs authenticate. The separate Text Backing case
+receipt 60056387 is restored through its existing historical reader. Compare
+the eventual Datepicker candidate against this frozen source census, the
+verified case delta and the full predecessor section receipts.
 
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
