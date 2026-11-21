@@ -152,6 +152,26 @@ in the new applicability record. One candidate export is running with
 datepicker-mobile-open-dismiss-export-20261122 stdout and stderr. Keep the
 accepted pointer at 0c2cc1b9 through conservation, cold equality and import.
 
+While the Datepicker export runs, the accepted mobile open-dismiss census has
+18 groups. Sixteen still have pending activation and focus joins, and the two
+Sidenav groups record authored exclusions. All 18 have partial semantic and
+resource history entries. Menu and Tabs already have additional semantic
+children. Prioritize the two Timepicker rows next because their missing
+case joins can reuse existing exact mobile AX and resource observations.
+
+Revalidated the light and dark Timepicker lifecycle logs (7319fc16/e71f3356)
+and all four declared checkpoints. In all six open samples, both sides resolve
+AX controls to the listbox and active descendant to an option, with 48 options
+open and zero options/listboxes after Escape. Reference hasPopup is listbox
+and Astylar hasPopup is dialog in both themes. Preserve the positive
+relationships and the unequal popup kind separately. These are retained
+390 x 844 DPR2 observations, with current applicability and broader
+event/ownership requirements still open. Reuse them for the pending case join.
+
+The Datepicker focused proposal reader interface check passed exact envelope
+equality, path/encoding behavior, buffer isolation and predecessor delegation.
+Do not repeat it for ledger edits.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
