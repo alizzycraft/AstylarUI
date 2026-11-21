@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { createSnackbarOpenerReviewReader } from './join-material-snackbar-opener-paint.mjs';
 
 const digest = value => createHash('sha256').update(value).digest('hex');
 const base = 'artifacts/material-parity/';
@@ -96,4 +97,27 @@ export function buildDatepickerMobileOpenDismissReview({ root = process.cwd(), r
   };
   assert.equal(digest(JSON.stringify(review)), datepickerMobileOpenDismissReview);
   return review;
+}
+
+export function createDatepickerMobileOpenDismissReviewReader({ root = process.cwd(), read = readFileSync } = {}) {
+  const review = buildDatepickerMobileOpenDismissReview({ root, read });
+  const sha256 = datepickerMobileOpenDismissReview;
+  const file = path.resolve(root, base + 'working-audit/proposals/' + sha256 + '.json');
+  const envelope = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256, review }));
+  const predecessor = createSnackbarOpenerReviewReader({ root, read });
+  assert.equal(predecessor.sha256, '1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5');
+  return {
+    file, sha256,
+    read(name, options) {
+      if (path.resolve(root, name) !== file) return predecessor.read(name, options);
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? envelope.toString(encoding) : Buffer.from(envelope);
+    },
+    sourceApplicability: {
+      mode: 'retained-datepicker-mobile-open-dismiss',
+      predecessorReview: predecessor.sha256,
+      predecessorApplicability: predecessor.sourceApplicability,
+      boundary: 'Exact historical case and settled focus and DOM association observations. Current rendering and whole-case acceptance remain open.',
+    },
+  };
 }

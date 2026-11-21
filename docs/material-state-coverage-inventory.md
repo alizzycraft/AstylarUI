@@ -133,6 +133,16 @@ groups and matched the already staged proposal byte digest. A changed
 diagnostic runner was rejected. The full dependency replay remains a separate
 gate before export wiring and promotion.
 
+Strict Datepicker mobile replay completed with all 2,311 cases and 19,368
+dependencies. The 19,366 inherited receipts were unchanged; the only additions
+were the diagnostic report and runner. Loader log
+datepicker-mobile-open-dismiss-loader-20261122.log SHA-256
+f76a356509cb326a312f7cca6f8f2fcf2fdc25198324f900fb738d7abe17a8ea.
+The Datepicker proposal reader reconstructs the exact staged envelope and
+delegates inherited evidence to the verified Snackbar opener reader. The
+accepted pointer remains 0c2cc1b9 pending reversible export wiring, conservation,
+cold equality and verified import.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
