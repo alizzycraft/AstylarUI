@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+November 21 continuation. The accepted index for generation ab2c875a was
+authenticated against current.json before counting all 2,311 case groups.
+Input/style/structure, semantics, history/ownership and source currentness are
+each partial in all groups. Pending evidence joins are 1,571 programmatic focus,
+1,408 authored activation and 794 local paint. Editing has 577 partial groups
+and keyboard interaction has 128. These obligations overlap. Prioritize shared
+descendant/owner mapping and semantic target association, then interaction
+history and resource ownership. For the next shared owner cohort, join exact
+case, mapped target and source receipts first to distinguish available retained
+observations from missing owner or action evidence before requesting captures.
+
+The existing span/opener export payload hashes to 0c2cc1b9. Its complete section
+receipt (span-opener-candidate-section-digests-20261105.log, SHA-256
+68910b55cadd5a04b52e1d8a5c90f2f6a6e1f1905c3e1212b6edf927ffa4c243)
+records 69 conserved and 11 changed sections. The smallest check for the five
+derived sections compares their complete leaf paths, types and values to test
+whether the changes are restricted to regenerated receipts. The November 21
+derived-leaf comparison and independent cold --slider-span-opener --check
+are in progress. Explain all changed sections and verify the compact import
+before promotion. The accepted pointer is ab2c875a. All final gates remain open.
+
 November5 frozen1d3da334 direct collector preflight passes all four expected
 groups/observations:72/4016,49/2677,4/178,146/6295. Log
 span-opener-direct-collector-preflight-20261105.log SHA
