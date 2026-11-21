@@ -74,6 +74,29 @@ The current benchmark reader hashes to 91f806eb4d7f87a9ed77e762c1f88f1f7bfe4bcad
 Reconcile that receipt explicitly with the next coherent export. Preserve the
 old receipt and complete final gates before claiming current acceptance.
 
+November 22 follow-up. The unfiltered benchmark configuration suite completed
+22/33 with 11 receipt failures. First failing checks group into five boundaries:
+caret applicability block (3), predecessor transition source (2), antialias
+receipt (1), selection runner receipt (2), and original endpoint runner (3).
+The three original endpoint tests pass under the existing read-only
+check-recovered-original-endpoint-proofs.mjs adapter using the authenticated
+e01 runner and retained maps. The unfiltered gate remains failing and still
+needs receipt routing. Failure and passing replay logs are
+benchmark-config-preflight-reconciliation-20261122.log and
+recovered-endpoint-preflight-reconciliation-20261122.log.
+
+The Datepicker mobile diagnostic runner's complete performInteraction,
+interactionTargetBox, settleInteraction and setBenchmarkPhase methods match
+both the maintained runner and recovered e01 source after line-ending
+normalization. This binds the observed action and settlement implementation,
+while the instrumented capture, browser and live date remain distinct.
+The accepted case row still has pending activation and focus joins and partial
+semantics. Bind the witnessed opening focus and DOM association to those
+exact obligations without closing the broader entries. For export receipt
+reconciliation, the old semantic reader receipt does not match the Git blob
+or its uniform CRLF conversion. Recover and validate the exact captured bytes
+or an explicitly reviewed transformation before reusing that receipt.
+
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
 case groups after removing exactly 26 Snackbar opener paint additions. It
