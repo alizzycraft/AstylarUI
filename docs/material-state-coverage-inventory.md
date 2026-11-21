@@ -262,6 +262,27 @@ two retained builds, while browser, launcher, timing and diagnostic sampling
 still differ. Preserve both plateau observations and the established caret
 ownership finding. Current runtime causality remains open.
 
+The light and dark Autocomplete mobile open-dismiss cases now have six paired
+settled observations per theme. Both sides keep focus on autocomplete-control.
+Both controls resolve aria-controls to a listbox while open. After Escape the
+listboxes detach and only Astylar retains aria-controls with an unresolved ID.
+Authenticated app and semantic bridge maps show the first difference in
+authored inputs: the Astylar fixture always requests field-options through
+ariaControls and creates that target only while open. The semantic bridge
+copies the authored reference. This is a retained DOM input/association
+difference, with current applicability and AX behavior unverified.
+
+The maintained catalog preflight passed, all 1,887 assets match the original
+capture, and Chromium 157 is a newer replay environment. In both themes
+the three final Astylar material samples are 18/18/18, matching the original
+matrix. The separate darker lifecycle probe's 19/20/21 discrepancy remains
+open under its different or unavailable runtime receipts. Keep both results.
+Report autocomplete-mobile-open-dismiss-20261122/latest-report.json SHA-256
+a3b46749cf8106e39839fa1134f7cc9a7d09586990401e55e6ce273cd4f18739 and
+diagnostic-runner.mjs df6c6e575a71a52ff427e5dbe52d4d3f793cdaf909899172a5e51069bf28f803.
+Join these exact cases and classify the authored association after the active
+export's input freeze. Preserve the instrumented capture and its source.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
