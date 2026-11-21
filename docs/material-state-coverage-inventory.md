@@ -115,6 +115,16 @@ bytes. Log text-backing-dependency-replay-20261122.log SHA-256 36d25d2ce0066f365
 New reader and test fingerprints await the next coherent export. The
 retained review remains partial with current rendering unverified.
 
+Datepicker mobile open-dismiss review extension a095cf9b57430eb73acc3a3d33f4092644cfef4ac21a1a494ec71acde09c719f
+is staged against accepted generation 0c2cc1b9. It adds retained observations
+under authored activation, programmatic focus and semantics for one exact case.
+It conserves every inherited obligation disposition, all 2,311 case identities
+and the case acceptance flags. Removing those three children restores the
+complete predecessor case list. Two new receipt paths bind the report and
+diagnostic runner. The strict loader and canonical export are separate gates.
+Do not advance the accepted pointer without complete dependency verification,
+conservation, independent cold equality and verified import.
+
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
 case groups after removing exactly 26 Snackbar opener paint additions. It
