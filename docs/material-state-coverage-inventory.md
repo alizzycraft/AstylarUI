@@ -406,6 +406,15 @@ After the source freeze lifts, register the three findings and join the
 two Timepicker matrix observations alongside the supplemental lifecycle
 evidence, preserving each action and its resource result.
 
+Proposal 0ff6f39f4a81513595f7025a8004d2f6e3d478d6c85fd202d0772320caab157f
+stages the matrix-action evidence for both Timepicker mobile cases across
+activation, focus, semantics and sampled ownership. The report and runner
+hashes and all 1,887 retained served asset hashes match. Removing those
+eight children restores proposal 689530e0 by exact digest, including the
+supplemental input-click evidence and all 2,311 case dispositions. The
+complete inherited-dependency replay is pending. Run it after the active
+Datepicker cold check releases memory.
+
 The production source fingerprint collector matches the accepted metadata's
 1,162 ordered paths. Exactly five hashes differ, with 1,157 conserved:
 audit-findings-store.spec.mjs (6c7fcfee to 9295e972),
@@ -417,6 +426,15 @@ Exact predecessor Git blobs authenticate. The separate Text Backing case
 receipt 60056387 is restored through its existing historical reader. Compare
 the eventual Datepicker candidate against this frozen source census, the
 verified case delta and the full predecessor section receipts.
+
+The dark Datepicker export completed at candidate generation 844c896c.
+The compressed payload SHA-256 matches the manifest and the exporter
+verified 5,479,215,110 evidence bytes. The accepted pointer remains
+0c2cc1b9. The first section comparison stopped on the predecessor receipt
+encoding. Its retry authenticates the UTF-16LE receipt and compares all
+80 sections. That check and the independent cold canonical run are active.
+Compare changed sections against the five fingerprint changes and three
+case-obligation additions before isolated import or promotion.
 
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
