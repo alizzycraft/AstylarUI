@@ -305,6 +305,27 @@ two retained mobile cases. AX impact, intermediate focus and other configured
 states remain unverified. Register the finding with the next batch after
 the active export releases its source freeze.
 
+The combined picker proposal 8937ebd6 passed strict replay across all 2,311
+groups and 19,372 dependencies. It preserves the accepted receipt population
+and adds only the two Datepicker report/runner pairs and two Timepicker logs.
+Replay log mobile-picker-combined-dependency-replay-20261122.log SHA-256
+d7fc3e159e56b030959a71b0e37b9662b56fedd0d3d46072da57fdec324e1f86.
+The next proof batch extends this result with Autocomplete and Select.
+
+The exact light and dark mobile Select open-dismiss replay records six paired
+settled boundaries in each theme. Both focus select-control throughout,
+using MAT-SELECT on the reference and readonly INPUT on Astylar. While open,
+both sides resolve aria-controls to a listbox and aria-activedescendant to an
+option. After Escape both popups detach, but only Astylar retains an unresolved
+aria-controls reference. This is consistent with the same authored
+relationship-lifetime pattern as Autocomplete: ariaControls is unconditional
+while select-options exists only when open. Astylar's closed resource samples
+hold at 23/23/23 in each theme. All 1,887 served assets match the original
+capture. Chromium 157, intermediate focus and current applicability remain
+separate. Retain select-mobile-open-dismiss-20261122/latest-report.json
+SHA-256 fafd1f92ae76f807b63ac285ea334295532979440a1bf793da644dbf80fd292a and
+diagnostic-runner.mjs afcb9ff1ea1b44c236ce1d9563bc6ca19213a5ff8630849744f80bc7ed6c01c8.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
