@@ -326,6 +326,16 @@ separate. Retain select-mobile-open-dismiss-20261122/latest-report.json
 SHA-256 fafd1f92ae76f807b63ac285ea334295532979440a1bf793da644dbf80fd292a and
 diagnostic-runner.mjs afcb9ff1ea1b44c236ce1d9563bc6ca19213a5ff8630849744f80bc7ed6c01c8.
 
+Mobile picker proposal 689530e096179a2be7c26a95067d2e91e1601e6f2181ef8a3b9cc5cd13608b24
+adds the two Select rows to the staged Autocomplete extension d47c1f8d.
+It binds the verified report and runner for the exact theme/action cohort
+under activation, focus, semantics and sampled resource history. Removing
+the eight Select children restores the complete predecessor case list.
+All case flags and inherited dispositions are conserved. A single strict
+replay for the four Autocomplete/Select additions is running in
+mobile-picker-select-dependency-replay-20261122.log. The active dark Datepicker
+export has reached case-obligation joining. Keep its inputs frozen.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
