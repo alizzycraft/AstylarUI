@@ -249,6 +249,19 @@ The light report and runner are the only new receipt paths. No inherited
 disposition or case acceptance flag changed. Run strict replay for this batch
 before selecting it. The in-flight dark Datepicker export remains separate.
 
+The combined mobile picker proposal is undergoing strict dependency replay.
+For the Timepicker resource discrepancy, authenticated source maps narrow the
+build difference: both chunk-map pairs contain the same 1,072 source paths,
+and only material-input-evidence.ts and installed astylar.js differ. The
+renderer AST isolates the latter to inspectCurrentDocumentStyles. The former
+changes CoreNodeStyles, collectMaterialCoreResolvedStyles and
+collectAuthoredInputTree. The mapped showcase component, semantic bridge,
+text-input manager, element interaction and element creation sources match
+byte for byte. This rules out a source change in those mapped owners for the
+two retained builds, while browser, launcher, timing and diagnostic sampling
+still differ. Preserve both plateau observations and the established caret
+ownership finding. Current runtime causality remains open.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
