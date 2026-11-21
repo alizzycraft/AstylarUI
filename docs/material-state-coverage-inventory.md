@@ -105,12 +105,15 @@ and runs the existing restoration. It also binds the 211-row live policy
 through the authenticated 205-row predecessor. The focused helper check
 reproduced the accepted bytes and rejected unrelated drift.
 
-The complete older Text Backing replay now constructs its reader, then its
-base-adapter negative check encounters a changed configured activation driver
-before the expected alignment receipt failure. The driver's observed f97c4459
-and expected 26d7a294 hashes are the next dependency boundary to reconcile.
-The broader replay remains failing. The updated Text Backing reader itself is
-a pending source-fingerprint change for the next coherent export.
+The full retained Text Backing review now replays all 2,311 cases through
+the strict loader. It declares the same historical activation, tooltip and
+sort receipts as the later Tabs/Menu/Sheet review, so its full reader now
+uses those three existing hash-guarded restorations. The two passive AX
+restorations remain scoped to Tabs/Menu/Sheet. The focused test also proves
+the base reader rejects the activation drift and refuses changed source
+bytes. Log text-backing-dependency-replay-20261122.log SHA-256 36d25d2ce0066f365c2f3e74565aa83552567796b42df7f00af8654ac4402b70.
+New reader and test fingerprints await the next coherent export. The
+retained review remains partial with current rendering unverified.
 
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
