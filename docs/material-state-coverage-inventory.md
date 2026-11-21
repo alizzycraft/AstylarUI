@@ -59,6 +59,21 @@ that preflight. Reconcile the maintained preflight's historical registry
 selection before final gates. Join this observation with the existing opening
 finding in a coherent audit increment. No canonical case status was advanced.
 
+November 22 benchmark preflight reconciliation. Historical benchmark replay
+now verifies the live 211-row registry and policy hash, then binds the exact
+205-row policy at 49e1adc5 before using the existing restoration chain. The
+six later entries are additive and the 205 predecessor entries match in full
+and in order. The historical replay still produces 159 rows. The two maintained
+catalog and enforced-matrix preflight tests pass, and an altered live registry
+is rejected. The full benchmark-config suite is a separate check. Its log is
+benchmark-config-preflight-reconciliation-20261122.log.
+
+Generation 0c2cc1b9 remains the last accepted export. Its case evidence receipt
+for semantic-text-transform-registration.mjs is 6005638773f461cc73ed5f8ee41971127181186000cf4e464ca04dd42cca9ff7.
+The current benchmark reader hashes to 91f806eb4d7f87a9ed77e762c1f88f1f7bfe4bcadf01159643b326274f8b751b.
+Reconcile that receipt explicitly with the next coherent export. Preserve the
+old receipt and complete final gates before claiming current acceptance.
+
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
 case groups after removing exactly 26 Snackbar opener paint additions. It

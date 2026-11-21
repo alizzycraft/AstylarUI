@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { readFileSync as readActual } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
@@ -339,31 +340,48 @@ export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntr
   assert.equal(graph.filter(row => row.file === runnerFile).length, expectedRunnerEntries);
   return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
 }
+const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+const historicalPolicyHash = '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f';
+
+function benchmarkPolicySource(raw) {
+  const source = normalized(raw);
+  if (!source.includes('fixture-slider-thumb-span-substitution')) return source;
+  assert.equal(digest(source), 'abeb73cafe696f0c6e104908cefde3c6e97d1637db695c2bad031a5c5f86e39d',
+    'Unrecognized live policy for historical benchmark replay');
+  const predecessor = execFileSync('git', ['show', '49e1adc5:' + policyFile], { encoding: 'utf8' });
+  assert.equal(digest(predecessor), historicalPolicyHash);
+  return predecessor;
+}
+
 export function historicalSemanticDefinitions(current) {
+  const source = benchmarkPolicySource(readActual(policyFile));
+  if (digest(source) === historicalPolicyHash && current.length > 205) {
+    assert.equal(digest(JSON.stringify(current)), '7473bad68688ffed9e215f4ecf711aa6e1849e4def0b28db5a07347e00d4ae2d');
+    const predecessor = new Function(source.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+    const ids = new Set(predecessor.map(row => row.id));
+    assert.deepEqual(current.filter(row => ids.has(row.id)), predecessor);
+    current = predecessor;
+  }
   current=sharedButtonTouchDefinitions(current);
   if(current.length===170){
-    const source=readActual('tests/material-parity/input-equivalence-policy.mjs','utf8');
     restoreQueuedControlPolicy(source);
     const actual=new Function(restoreSharedButtonTouchPolicy(source).replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
     assert.deepEqual(current,actual,'unreviewed queued control definition population');
     assert.deepEqual(current.slice(166).map(row=>row.id),controlIds);current=current.slice(0,166);
   }
   if (current.length === 166) {
-    const source=readActual('tests/material-parity/input-equivalence-policy.mjs','utf8');
     restoreReadonlyPolicy(source);
     const actual=new Function(restoreQueuedControlPolicy(source).replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
     assert.deepEqual(current,actual,'unreviewed readonly definition population');
     current=current.filter(row=>row.id!==readonlyId);
   }
   if (current.length === 165) {
-    const source=readActual('tests/material-parity/input-equivalence-policy.mjs','utf8');
     restoreTextBackingPolicy(source);
     const actual=new Function(restoreReadonlyPolicy(source).replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
     assert.deepEqual(current,actual,'unreviewed text backing definition population');
     current=current.filter(row=>row.id!==backingId);
   }
   if (current.length === 164) {
-    const source = readActual('tests/material-parity/input-equivalence-policy.mjs', 'utf8');
     restoreLegacyClipPolicy(source); // Authenticate the complete additive source.
     const actual = new Function(restoreTextBackingPolicy(source).replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
     assert.deepEqual(current, actual, 'unreviewed current definition population');
@@ -392,7 +410,7 @@ export function readHistoricalBenchmarkSource(file, options) {
   if (!['input-equivalence-policy.mjs', 'input-equivalence-audit.mjs', 'benchmark-config.spec.mjs', 'position-composition-producer-transition.mjs'].includes(name)) return raw;
   if (path.resolve(String(file)) !== path.resolve('tests/material-parity', name)) return raw;
   let restored;
-  if (name === 'input-equivalence-policy.mjs') restored = restoreSemanticTextTransformPolicy(raw);
+  if (name === 'input-equivalence-policy.mjs') restored = restoreSemanticTextTransformPolicy(benchmarkPolicySource(raw));
   else if (name === 'input-equivalence-audit.mjs') restored = restoreSemanticTextTransformProducer(raw);
   else if (name === 'position-composition-producer-transition.mjs') restored = restoreSemanticRegistrationTransitionSource(raw);
   else {
