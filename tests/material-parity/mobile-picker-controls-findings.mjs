@@ -78,3 +78,36 @@ export function restoreMobilePickerControlsPolicy(bytes) {
   assert.equal(hash(previous), policyParentSha256, 'Unexpected mobile picker policy drift');
   return previous;
 }
+
+const producerParentSha256 = 'd0c5c4d72e1050569e4d6d8cdbe7152d61425629cbf89eab08272826f1b604dd';
+const sharedPlan = Object.freeze({
+  priority: 4.32,
+  rootCause: 'Autocomplete and Select author controls references beyond popup lifetime',
+  action: 'Align the authored controls relationship with the conditional listbox in both showcase families. Preserve resolved open controls and active-option links. Verify closed reference removal, re-open resolution, focus, and accessibility-tree exposure across the maintained actions and viewports. Keep this separate from the Menu focusability finding and from sampled resource ownership.',
+});
+const producerEdits = [
+  ['function sourceFingerprints(root) {\n  const files = [\n',
+    "function sourceFingerprints(root) {\n  const files = [\n    'tests/material-parity/mobile-picker-controls-findings.mjs',\n"],
+  ['function implementationPlan() {\n  return [\n',
+    'function implementationPlan() {\n  return [\n    ' + JSON.stringify(sharedPlan) + ',\n'],
+];
+
+function changeProducer(source, edits) {
+  for (const [before, after] of edits) {
+    assert.equal(source.split(before).length, 2, 'Expected one mobile picker producer boundary');
+    source = source.replace(before, () => after);
+  }
+  return source;
+}
+
+export function prepareMobilePickerControlsProducer(bytes) {
+  const source = normalized(bytes);
+  assert.equal(hash(source), producerParentSha256, 'Unknown mobile picker producer parent');
+  return changeProducer(source, producerEdits);
+}
+
+export function restoreMobilePickerControlsProducer(bytes) {
+  const previous = changeProducer(normalized(bytes), producerEdits.map(([before, after]) => [after, before]));
+  assert.equal(hash(previous), producerParentSha256, 'Unexpected mobile picker producer drift');
+  return previous;
+}

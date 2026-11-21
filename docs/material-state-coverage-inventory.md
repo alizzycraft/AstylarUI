@@ -358,6 +358,14 @@ and rejects unrelated drift in either direction. Staged policy SHA-256
 6cbd3db0fcf4cea5edb9f87d4ff0e446224ce55eaac219f329c2475981e5e8c4.
 Live policy bytes remain frozen pending the active Datepicker export.
 
+A reversible producer stage now reserves one tracked source path and one
+shared implementation plan for the Autocomplete and Select relationship
+findings. All 78 existing plan rows remain, with one new action for aligning
+the authored ID reference with listbox lifetime. The staged producer hashes
+to 8fe97bd4, restores exact d0c5c4d7 predecessor bytes and rejects unrelated
+changes in either direction. No live producer change was made during the
+Datepicker export.
+
 The production source fingerprint collector matches the accepted metadata's
 1,162 ordered paths. Exactly five hashes differ, with 1,157 conserved:
 audit-findings-store.spec.mjs (6c7fcfee to 9295e972),
