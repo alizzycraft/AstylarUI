@@ -9,7 +9,13 @@ for 0c2cc1b9. Manifest SHA-256
 bf4670d6e8f7fcaa1dbd322cc14cd4be75b0ce00bf5d4b31a33fc43c46c72e81 and
 Markdown SHA-256 3807d88beddb27cabb92e2c2fe4ef11d92fa782c8ffc09b8ef76dd495fba137c.
 Retain this bundle and both export logs through independent cold verification,
-section conservation and accepted import. No original evidence was removed.
+section conservation and accepted import. Retain the first failed section
+comparison logs and the corrected section receipt
+datepicker-mobile-open-dismiss-section-digests-v2-20261122.log (SHA-256
+d861d7d03a6e397a61667d51b8eacb6bd1258091dd2c32e6441d83e28dfc25d8). Keep
+datepicker-mobile-open-dismiss-coverage-conservation-20261122.log (SHA-256
+786db9c73055b11980f84e7a422cd525666d58b133b5d9bd5d2895ed856ace77),
+the two exact case dependencies and both independent cold run logs.
 
 November5 accepted button/toolbar milestoneab2c875a/indexb26b0abd reuses86
 hash-verified immutable hard links from its verified isolated store;complete

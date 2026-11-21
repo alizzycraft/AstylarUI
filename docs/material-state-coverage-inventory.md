@@ -430,11 +430,20 @@ verified case delta and the full predecessor section receipts.
 The dark Datepicker export completed at candidate generation 844c896c.
 The compressed payload SHA-256 matches the manifest and the exporter
 verified 5,479,215,110 evidence bytes. The accepted pointer remains
-0c2cc1b9. The first section comparison stopped on the predecessor receipt
-encoding. Its retry authenticates the UTF-16LE receipt and compares all
-80 sections. That check and the independent cold canonical run are active.
-Compare changed sections against the five fingerprint changes and three
-case-obligation additions before isolated import or promotion.
+0c2cc1b9. The corrected comparison authenticated the UTF-16LE predecessor
+receipt and conserved 77 of 80 sections. The other three reconcile exactly.
+The 1,162 source paths keep their order with the five expected hash changes.
+All 501 focused proof records are conserved after two line shifts in
+audit-findings-store.spec.mjs, 535 to 534 and 575 to 574.
+
+The coverage comparison authenticated both review digests. Removing the
+three Datepicker observations restores all 2,311 case rows. The runner and
+report are the only new case dependencies, and all 19,366 predecessor
+receipts are conserved. The Datepicker applicability record wraps the
+prior chain. Within that chain only the Text Backing reader current hash
+changes, from 56922108 to 91f806eb, with retained receipt 60056387 intact.
+The independent cold canonical run is active. Isolated import and promotion
+remain pending, and all current rendering gates remain open.
 
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
