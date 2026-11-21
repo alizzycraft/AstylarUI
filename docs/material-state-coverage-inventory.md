@@ -11,6 +11,18 @@ history and resource ownership. For the next shared owner cohort, join exact
 case, mapped target and source receipts first to distinguish available retained
 observations from missing owner or action evidence before requesting captures.
 
+Datepicker, Autocomplete, Timepicker and Select account for 393 pending
+programmatic-focus joins. All 393 have recorded structure and DOM target
+comparisons, and 345 also have retained serialized focus identity. In the
+Datepicker dark mobile DPR2 open-dismiss case, the recorded identity collapses
+descendants to the primary host. Both exact paired tree receipts, the report and
+the runner match their retained hashes. The trees lack a dedicated active-owner
+or AX association record, and the DOM comparison tracks active-descendant
+presence only. The existing picker focus-event runs exercise configured desktop
+focus actions. Check other retained reports for the exact mobile open-dismiss
+action boundary before requesting a bounded capture. The missing observation
+is the actual focused descendant and its target association at that boundary.
+
 The existing span/opener export payload hashes to 0c2cc1b9. Its complete section
 receipt (span-opener-candidate-section-digests-20261105.log, SHA-256
 68910b55cadd5a04b52e1d8a5c90f2f6a6e1f1905c3e1212b6edf927ffa4c243)
