@@ -18,10 +18,20 @@ Datepicker dark mobile DPR2 open-dismiss case, the recorded identity collapses
 descendants to the primary host. Both exact paired tree receipts, the report and
 the runner match their retained hashes. The trees lack a dedicated active-owner
 or AX association record, and the DOM comparison tracks active-descendant
-presence only. The existing picker focus-event runs exercise configured desktop
-focus actions. Check other retained reports for the exact mobile open-dismiss
-action boundary before requesting a bounded capture. The missing observation
-is the actual focused descendant and its target association at that boundary.
+presence only. The exact mobile open-dismiss row is present in the accepted dependencies
+current-full-20261005 and current-ancestry-audit. Both report nine pointer
+event names per side across three cycles and primary-host focus after Escape.
+The runner settles each open, presses Escape, then collects the final focus and
+semantic targets after the loop. Neither exact row has a settlement trace.
+The picker focus-mutation and shortcut receipts cover desktop DPR1/2, the
+toggle-activation receipt covers desktop actions, and the calendar-close and
+picker-commit probes use light 1440 x 900 with different actions. These scopes
+cannot supply the mobile opening boundary. Preserve the three recorded resource
+samples and final host identity as historical evidence. The next bounded
+observation is the actual active node and ancestry, plus any resolved semantic
+target association, after open settlement and before Escape in the exact paired
+case. Record post-Escape focus separately to distinguish opening focus transfer
+from dismissal restoration.
 
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
