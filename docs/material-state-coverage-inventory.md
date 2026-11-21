@@ -183,6 +183,19 @@ Removing the eight new children restores the complete Datepicker predecessor
 case list. No inherited dispositions, case acceptance or canonical pointer
 changed. Run the strict dependency replay before selecting this extension.
 
+The strict Timepicker replay is running against proposal 40f45d05, with
+timepicker-mobile-dependency-replay-20261122.log reserved for its result.
+The Datepicker export inputs remain frozen.
+
+Read-only triage of the three shared benchmark caret-block failures reproduced
+the exact historical support bytes e74ef1d5. The live benchmark source
+f383821e contains caret block dd8c3f3d after the queued owner receipt update.
+The existing Text Backing path authenticates Git source 96fd6260 as a270e3d3
+and restores the benchmark support block with the already reviewed older
+caret and root no-op guards. This is a verified reuse path for the benchmark
+reader. The three unfiltered failures still need that route applied and tested
+after the active export releases the source freeze.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
