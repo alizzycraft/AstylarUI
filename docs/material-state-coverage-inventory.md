@@ -172,6 +172,17 @@ The Datepicker focused proposal reader interface check passed exact envelope
 equality, path/encoding behavior, buffer isolation and predecessor delegation.
 Do not repeat it for ledger edits.
 
+Timepicker mobile review 40f45d05de17bba191068e84f8627018132123cd16a9dc69e40df29d3ec47027
+is staged on the exact Datepicker proposal. It joins activation, focus,
+semantics and sampled resource history for the light and dark open-dismiss
+cases. The input is focused at every sampled settled boundary. Astylar's
+closed-endpoint live material counts are 26, 27 and 28 in both themes, a sampled
+plateau failure. The two lifecycle logs are new evidence paths; all four
+checkpoint declarations authenticate and match existing accepted receipts.
+Removing the eight new children restores the complete Datepicker predecessor
+case list. No inherited dispositions, case acceptance or canonical pointer
+changed. Run the strict dependency replay before selecting this extension.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
