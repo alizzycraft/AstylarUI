@@ -33,6 +33,32 @@ target association, after open settlement and before Escape in the exact paired
 case. Record post-Escape focus separately to distinguish opening focus transfer
 from dismissal restoration.
 
+November 22 Datepicker dark mobile DPR2 open-dismiss diagnostic resolves the
+opening versus dismissal focus question. In all three settled open cycles,
+Material focused a calendar gridcell button and its input's aria-owns resolved
+to MAT-CALENDAR. Astylar reported open=true and exposed a popup dialog, while
+focus stayed on datepicker-icon. The inspected Astylar Datepicker DOM scope
+exposed no aria-owns, aria-controls or aria-activedescendant link. After each
+Escape both popups were absent and both openers held focus. This is a settled
+opening focus-transfer difference consistent with the existing omitted focus
+request finding. The DOM association difference is recorded separately. The
+capture does not establish AX behavior, every intermediate frame, or whether
+the association itself changes focus.
+
+Evidence: datepicker-mobile-open-dismiss-focus-state-20261122/latest-report.json
+SHA-256 da27a5d4f6910ca0d5298ea3a4e1128da1768e807ee02d6a60280252b8e78402.
+Preserved diagnostic runner SHA-256
+a8c2177ec93f6b816585acb29e3a0b1b76207b27f3b2097a6efed663e59a23d7.
+All 1,887 served-file hashes match current-full-20261005. Chromium
+157.0.8103.51 and capture date differ, so evidence is bounded to this replay.
+Verified six paired boundaries and no runtime errors. The first attempt failed
+before browser launch when historical catalog module initialization read 211
+live findings where it expected 192. Preserve the first attempt logs. The
+isolated diagnostic enforced exact selection and served hashes in place of
+that preflight. Reconcile the maintained preflight's historical registry
+selection before final gates. Join this observation with the existing opening
+finding in a coherent audit increment. No canonical case status was advanced.
+
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
 case groups after removing exactly 26 Snackbar opener paint additions. It
