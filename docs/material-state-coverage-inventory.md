@@ -283,6 +283,15 @@ diagnostic-runner.mjs df6c6e575a71a52ff427e5dbe52d4d3f793cdaf909899172a5e51069bf
 Join these exact cases and classify the authored association after the active
 export's input freeze. Preserve the instrumented capture and its source.
 
+Autocomplete mobile proposal d47c1f8db6e15290f048dddc1791fe174d87115fbdb9229437772a6fa16d226a
+extends 8937ebd6 with exact light and dark evidence under activation, focus,
+semantics and sampled resource history. Only those two rows changed. Removing
+the eight children restores all 2,311 predecessor groups. The new report
+and runner receipts are the only added paths. Keep the original 18/18/18
+samples and the distinct supplemental 19/20/21 failure. The staged join
+retains every case disposition and acceptance flag. Reuse the ongoing
+combined picker replay before running the next coherent dependency gate.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
