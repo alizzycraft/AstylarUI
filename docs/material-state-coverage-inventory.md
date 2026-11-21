@@ -239,6 +239,16 @@ Retain both measurements. The supplemental plateau failure does not revise the
 original gate or prove which changed capture condition explains the difference.
 Carry this boundary into the Timepicker extension's applicability record.
 
+The next mobile picker proposal is
+8937ebd6cc5e69d95b47c51dd4236abf090a6274030f21f63182aa3c70c85128.
+It extends the strict-replayed 40f45d05 review with the verified light Datepicker
+case and clarifies the resource applicability text for both Timepicker cases.
+Only those three rows changed. Removing the light evidence children and
+restoring the two prior boundary texts reproduces every predecessor row.
+The light report and runner are the only new receipt paths. No inherited
+disposition or case acceptance flag changed. Run strict replay for this batch
+before selecting it. The in-flight dark Datepicker export remains separate.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
