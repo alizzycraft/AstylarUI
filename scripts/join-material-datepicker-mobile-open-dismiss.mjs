@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -104,7 +105,7 @@ export function createDatepickerMobileOpenDismissReviewReader({ root = process.c
   const sha256 = datepickerMobileOpenDismissReview;
   const file = path.resolve(root, base + 'working-audit/proposals/' + sha256 + '.json');
   const envelope = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256, review }));
-  const predecessor = createSnackbarOpenerReviewReader({ root, read });
+  const predecessor = createSnackbarOpenerReviewReader({ root, read: createDatepickerMobileOpenDismissHistoricalRead({ root, read }) });
   assert.equal(predecessor.sha256, '1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5');
   return {
     file, sha256,
@@ -115,9 +116,44 @@ export function createDatepickerMobileOpenDismissReviewReader({ root = process.c
     },
     sourceApplicability: {
       mode: 'retained-datepicker-mobile-open-dismiss',
+      joinSource: {
+        file: 'scripts/join-material-datepicker-mobile-open-dismiss.mjs',
+        sha256: digest(read(path.resolve(root, 'scripts/join-material-datepicker-mobile-open-dismiss.mjs'))),
+      },
       predecessorReview: predecessor.sha256,
       predecessorApplicability: predecessor.sourceApplicability,
       boundary: 'Exact historical case and settled focus and DOM association observations. Current rendering and whole-case acceptance remain open.',
     },
+  };
+}
+
+const exportTransitions = new Map([
+  ['scripts/run-material-input-audit.mjs', ['1a25dc267f6ff83e641b76037d8c1bb394bcd3209e21d2a26560fbb37026a8f9', '04c24ab7298f9c48f89b80714451daa304a0b4db14ea05f35b27eb895aa9aa06']],
+  ['scripts/export-material-input-audit-current-ancestry.mjs', ['e2c3ecf47e9b22ba1b29ec68f01a7e569f1b12e1d4307c47d3371a77be4a6395', 'b02cfae8665006b77f99bfacd82c3abcf7eb5398f807f035499728520512b829']],
+]);
+
+export function createDatepickerMobileOpenDismissHistoricalRead({ root = process.cwd(), read = readFileSync } = {}) {
+  const transitions = new Map([...exportTransitions].map(([file, hashes]) => [path.resolve(root, file), { file, hashes }]));
+  const recovered = new Map();
+  return (name, options) => {
+    const absolute = path.resolve(root, name);
+    const transition = transitions.get(absolute);
+    if (!transition) return read(name, options);
+    const bytes = read(absolute);
+    const source = bytes.toString().replaceAll('\r\n', '\n');
+    const actual = digest(source);
+    const [live, prior] = transition.hashes;
+    if (actual !== live) {
+      assert.ok(!source.includes('datepicker-mobile-open-dismiss'), 'Unexpected Datepicker export source drift');
+      return read(name, options);
+    }
+    if (!recovered.has(absolute)) {
+      const before = execFileSync('git', ['show', '1b2dc42e:' + transition.file], { cwd: root });
+      assert.equal(digest(before), prior);
+      recovered.set(absolute, before);
+    }
+    const selected = recovered.get(absolute);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? selected.toString(encoding) : Buffer.from(selected);
   };
 }

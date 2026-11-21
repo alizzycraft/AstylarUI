@@ -143,6 +143,15 @@ delegates inherited evidence to the verified Snackbar opener reader. The
 accepted pointer remains 0c2cc1b9 pending reversible export wiring, conservation,
 cold equality and verified import.
 
+The maintained exporter now selects the verified proposal with
+--datepicker-mobile-open-dismiss. The dry run changes only the proposal path
+and digest relative to the prior span/opener route. Mixed selectors reject.
+Both modified export files recover their exact predecessor Git blobs for
+historical reads and reject edits to the new route. The join source is tracked
+in the new applicability record. One candidate export is running with
+datepicker-mobile-open-dismiss-export-20261122 stdout and stderr. Keep the
+accepted pointer at 0c2cc1b9 through conservation, cold equality and import.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
