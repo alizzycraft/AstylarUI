@@ -366,6 +366,12 @@ to 8fe97bd4, restores exact d0c5c4d7 predecessor bytes and rejects unrelated
 changes in either direction. No live producer change was made during the
 Datepicker export.
 
+The staged mobile picker historical reader now reverses the two exact
+registration sources before delegating to the published span/opener adapter.
+Virtual checks on the policy and producer preserve that adapter's complete
+output, recover exact predecessor bytes for absolute and relative reads,
+and reject unrelated drift. Live policy and producer remain frozen.
+
 The production source fingerprint collector matches the accepted metadata's
 1,162 ordered paths. Exactly five hashes differ, with 1,157 conserved:
 audit-findings-store.spec.mjs (6c7fcfee to 9295e972),

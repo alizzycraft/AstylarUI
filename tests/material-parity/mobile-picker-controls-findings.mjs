@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
 
 const source = 'examples/material-showcase/src/app/astylar.component.ts';
 const artifacts = 'artifacts/material-parity/';
@@ -110,4 +111,20 @@ export function restoreMobilePickerControlsProducer(bytes) {
   const previous = changeProducer(normalized(bytes), producerEdits.map(([before, after]) => [after, before]));
   assert.equal(hash(previous), producerParentSha256, 'Unexpected mobile picker producer drift');
   return previous;
+}
+
+export function createMobilePickerControlsHistoricalRead({ root, read }) {
+  const boundaries = new Map([
+    ['tests/material-parity/input-equivalence-policy.mjs', ['"id":"fixture-autocomplete-controls-association-outlives-popup"', restoreMobilePickerControlsPolicy]],
+    ['tests/material-parity/input-equivalence-audit.mjs', ["'tests/material-parity/mobile-picker-controls-findings.mjs',", restoreMobilePickerControlsProducer]],
+  ].map(([file, rule]) => [path.resolve(root, file), rule]));
+  return (name, options) => {
+    const rule = boundaries.get(path.resolve(root, name));
+    if (!rule) return read(name, options);
+    const bytes = read(name);
+    const [marker, restore] = rule;
+    const predecessor = bytes.toString().includes(marker) ? Buffer.from(restore(bytes)) : Buffer.from(bytes);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? predecessor.toString(encoding) : predecessor;
+  };
 }
