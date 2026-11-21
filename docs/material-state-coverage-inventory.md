@@ -125,6 +125,14 @@ diagnostic runner. The strict loader and canonical export are separate gates.
 Do not advance the accepted pointer without complete dependency verification,
 conservation, independent cold equality and verified import.
 
+The Datepicker review now has a reproducible join in
+scripts/join-material-datepicker-mobile-open-dismiss.mjs. It authenticates
+the exact accepted index, original report, diagnostic report and runner,
+then validates six paired boundary samples. Focused replay rebuilt all 2,311
+groups and matched the already staged proposal byte digest. A changed
+diagnostic runner was rejected. The full dependency replay remains a separate
+gate before export wiring and promotion.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
