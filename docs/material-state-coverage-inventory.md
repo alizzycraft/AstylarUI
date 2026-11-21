@@ -183,9 +183,28 @@ Removing the eight new children restores the complete Datepicker predecessor
 case list. No inherited dispositions, case acceptance or canonical pointer
 changed. Run the strict dependency replay before selecting this extension.
 
-The strict Timepicker replay is running against proposal 40f45d05, with
-timepicker-mobile-dependency-replay-20261122.log reserved for its result.
-The Datepicker export inputs remain frozen.
+The strict Timepicker replay passed proposal 40f45d05. All 2,311 case groups
+and 19,370 dependency receipts verified. The two Timepicker cases were the
+only changes relative to the Datepicker proposal. The accepted generation
+retains its prior dispositions. Keep the supplemental-versus-original
+resource boundary explicit before eventual export selection. Replay log
+timepicker-mobile-dependency-replay-20261122.log SHA-256
+62888d25bc6cb3218cb4d87805d34f5d87eba88d736dd96d1911fb15ce59ab4e.
+
+The exact light mobile DPR2 Datepicker case now has six paired focus and DOM
+association observations from the dark probe's action and settlement code.
+The maintained catalog preflight passed. Both sides opened and dismissed in
+each cycle. Material focused a calendar gridcell while open and exposed the
+input-to-calendar aria-owns link. Astylar kept the opener focused and exposed
+none of the inspected association links. Both openers held focus after Escape.
+All 1,887 served hashes match the original capture. This is an instrumented
+Chromium 157 replay, with current runtime and AX behavior unverified. Preserve
+datepicker-mobile-open-dismiss-light-20261122/latest-report.json SHA-256
+947531feb6677c1ee1e6ba0eb4cb1332ac086095d3d23a1a078f119f02f15d7c and its
+diagnostic-runner.mjs SHA-256
+57b56d0407e1371fabcb7935143fdf8e18a7c9941f254dabd0ad9a44ee866151.
+Join the light case in the next coherent batch. The active dark export has
+frozen inputs.
 
 Read-only triage of the three shared benchmark caret-block failures reproduced
 the exact historical support bytes e74ef1d5. The live benchmark source
