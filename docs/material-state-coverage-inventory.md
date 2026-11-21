@@ -336,6 +336,16 @@ replay for the four Autocomplete/Select additions is running in
 mobile-picker-select-dependency-replay-20261122.log. The active dark Datepicker
 export has reached case-obligation joining. Keep its inputs frozen.
 
+The Autocomplete and Select controls findings are staged in
+tests/material-parity/mobile-picker-controls-findings.mjs for one shared
+relationship-lifetime batch. Both definitions authenticate their report,
+runner and original served source map receipts. The patterns uniquely match
+the two authored declarations at lines 917 and 949, and each rejects its
+open-state-conditioned variant. The retained DOM samples verify working open
+references and unresolved dismissed references. The candidate definitions
+do not duplicate existing registry IDs. Register and run scanner conservation
+after the active export releases its source freeze.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs

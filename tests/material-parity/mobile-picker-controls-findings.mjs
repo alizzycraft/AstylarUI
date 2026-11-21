@@ -1,0 +1,56 @@
+const source = 'examples/material-showcase/src/app/astylar.component.ts';
+const artifacts = 'artifacts/material-parity/';
+const retainedMap = {
+  file: artifacts + 'icon-fresh-producer-retained-build-20261016-browser/chunk-JPEJK334.js.map',
+  sha256: '47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e',
+};
+
+const captures = [
+  {
+    family: 'autocomplete',
+    pattern: String.raw`ariaControls: family === 'autocomplete' \? 'field-options' : undefined`,
+    target: 'field-options',
+    reportSha256: 'a3b46749cf8106e39839fa1134f7cc9a7d09586990401e55e6ce273cd4f18739',
+    runnerSha256: 'df6c6e575a71a52ff427e5dbe52d4d3f793cdaf909899172a5e51069bf28f803',
+  },
+  {
+    family: 'select',
+    pattern: "ariaControls: 'select-options'",
+    target: 'select-options',
+    reportSha256: 'fafd1f92ae76f807b63ac285ea334295532979440a1bf793da644dbf80fd292a',
+    runnerSha256: 'afcb9ff1ea1b44c236ce1d9563bc6ca19213a5ff8630849744f80bc7ed6c01c8',
+  },
+];
+
+export const mobilePickerControlsFindings = Object.freeze(captures.map(capture => {
+  const { family, pattern, target, reportSha256, runnerSha256 } = capture;
+  const directory = artifacts + family + '-mobile-open-dismiss-20261122/';
+  return Object.freeze({
+    id: `fixture-${family}-controls-association-outlives-popup`,
+    file: source,
+    pattern,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase control and popup relationship lifetime',
+    evidence: Object.freeze([
+      Object.freeze({ file: directory + 'latest-report.json', sha256: reportSha256 }),
+      Object.freeze({ file: directory + 'diagnostic-runner.mjs', sha256: runnerSha256 }),
+      Object.freeze({ ...retainedMap }),
+    ]),
+    observation: Object.freeze({
+      component: family,
+      element: `${family}-control`,
+      property: 'aria-controls',
+      target,
+      states: 'light and dark mobile DPR2 open-dismiss',
+      reference: 'resolves to the open listbox and is removed on dismissal',
+      astylar: 'resolves to the open listbox and remains after its target detaches',
+      stage: 'application relationship authoring before DOM projection',
+    }),
+    justification: 'The retained fixture authors the reference independently of popup existence. The original served asset vector and mapped fixture source authenticate. Both implementations resolve the relationship while open and Astylar alone preserves an unresolved reference afterward.',
+    recommendation: 'For later implementation, align the authored relationship with the popup lifetime using the public semantic API.',
+    verificationPlan: 'Verify focused controls, relationship removal and restoration, target resolution, and accessibility tree exposure across the maintained action and viewport matrix.',
+    boundary: 'Settled DOM observations in a retained-build Chromium 157 replay. AX impact, intermediate frames, other action cohorts, and current rendering remain unverified.',
+    inputEquivalent: false,
+    currentRenderingAccepted: false,
+  });
+}));
