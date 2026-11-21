@@ -24,11 +24,19 @@ const captures = [
     reportSha256: 'fafd1f92ae76f807b63ac285ea334295532979440a1bf793da644dbf80fd292a',
     runnerSha256: 'afcb9ff1ea1b44c236ce1d9563bc6ca19213a5ff8630849744f80bc7ed6c01c8',
   },
+  {
+    family: 'timepicker',
+    pattern: String.raw`ariaControls: family === 'timepicker' \? 'timepicker-options' : undefined`,
+    target: 'timepicker-options',
+    captureDirectory: 'timepicker-mobile-original-action-20261122',
+    reportSha256: 'b37d7a0ae318c57921a4c2d9b3cf3572c2ec2e34fb1527d39fade1a80ce50521',
+    runnerSha256: '07fc3680b68da8a1f4141d161df6273abbf0faa318754d6a776e94b45f420492',
+  },
 ];
 
 export const mobilePickerControlsFindings = Object.freeze(captures.map(capture => {
   const { family, pattern, target, reportSha256, runnerSha256 } = capture;
-  const directory = artifacts + family + '-mobile-open-dismiss-20261122/';
+  const directory = artifacts + (capture.captureDirectory ?? family + '-mobile-open-dismiss-20261122') + '/';
   return Object.freeze({
     id: `fixture-${family}-controls-association-outlives-popup`,
     file: source,
@@ -83,8 +91,8 @@ export function restoreMobilePickerControlsPolicy(bytes) {
 const producerParentSha256 = 'd0c5c4d72e1050569e4d6d8cdbe7152d61425629cbf89eab08272826f1b604dd';
 const sharedPlan = Object.freeze({
   priority: 4.32,
-  rootCause: 'Autocomplete and Select author controls references beyond popup lifetime',
-  action: 'Align the authored controls relationship with the conditional listbox in both showcase families. Preserve resolved open controls and active-option links. Verify closed reference removal, re-open resolution, focus, and accessibility-tree exposure across the maintained actions and viewports. Keep this separate from the Menu focusability finding and from sampled resource ownership.',
+  rootCause: 'Autocomplete, Select and Timepicker author controls references beyond popup lifetime',
+  action: 'Align the authored controls relationship with the conditional listbox in the three showcase families. Preserve resolved open controls and active-option links. Verify closed reference removal, re-open resolution, focus, and accessibility-tree exposure across the maintained actions and viewports. Keep this separate from the Menu focusability finding and from sampled resource ownership.',
 });
 const producerEdits = [
   ['function sourceFingerprints(root) {\n  const files = [\n',

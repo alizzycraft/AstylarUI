@@ -392,6 +392,20 @@ b37d7a0ae318c57921a4c2d9b3cf3572c2ec2e34fb1527d39fade1a80ce50521,
 runner SHA-256 07fc3680b68da8a1f4141d161df6273abbf0faa318754d6a776e94b45f420492.
 Chromium 157 and instrumented settled replay do not prove current rendering.
 
+The staged relationship registration now covers Autocomplete, Select and
+Timepicker under one implementation plan. The Timepicker finding is scoped
+to the authored DOM association in the two retained matrix cases. The
+source scanner matched all 211 accepted complete-row digests and added
+exactly three unique declarations at lines 917, 949 and 1031. All evidence
+dependencies matched their hashes. The 78 previous plan entries were
+conserved, with one additional shared plan. The staged policy and producer
+SHA-256 are b36dd3d7e2dbaf1e2525b7cf78887edcc30e63a29300ebdb8c3ec47770f691be
+and 04da16662f759ee03b32d13cb4fa7d1d01ae239330132904c64cb7c969715e80.
+The historical reader restores both exact parent files and rejects drift.
+After the source freeze lifts, register the three findings and join the
+two Timepicker matrix observations alongside the supplemental lifecycle
+evidence, preserving each action and its resource result.
+
 The production source fingerprint collector matches the accepted metadata's
 1,162 ordered paths. Exactly five hashes differ, with 1,157 conserved:
 audit-findings-store.spec.mjs (6c7fcfee to 9295e972),
