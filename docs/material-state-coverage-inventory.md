@@ -23,15 +23,22 @@ focus actions. Check other retained reports for the exact mobile open-dismiss
 action boundary before requesting a bounded capture. The missing observation
 is the actual focused descendant and its target association at that boundary.
 
-The existing span/opener export payload hashes to 0c2cc1b9. Its complete section
-receipt (span-opener-candidate-section-digests-20261105.log, SHA-256
-68910b55cadd5a04b52e1d8a5c90f2f6a6e1f1905c3e1212b6edf927ffa4c243)
-records 69 conserved and 11 changed sections. The smallest check for the five
-derived sections compares their complete leaf paths, types and values to test
-whether the changes are restricted to regenerated receipts. The November 21
-derived-leaf comparison and independent cold --slider-span-opener --check
-are in progress. Explain all changed sections and verify the compact import
-before promotion. The accepted pointer is ab2c875a. All final gates remain open.
+The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
+Section comparison conserved 69 of 80 sections. Metadata conserved all prior
+case groups after removing exactly 26 Snackbar opener paint additions. It
+also accounted for four new source fingerprints, five reversible source
+fingerprint changes, one Slider finding, two proofs and one plan entry.
+All 147 derived receipt changes were independently reproduced from the
+producer, 48 complete control proofs and the motion report.
+
+The independent cold check passed canonical equality with zero disk cache
+hits and 5,210,920,573 verified bytes. The isolated import passed and all 86
+immutable files were hash checked during promotion. The accepted store
+verified before and after pointer advancement. Promotion receipt
+span-opener-accepted-promotion-20261121.log SHA-256 5b22543da57b0908b1816dfab5b3918e688cf361a7eceeccb086a723071b6de3.
+The predecessor and original and failure evidence remain retained. All 2,311
+cases remain partial and current rendering remains unverified. Accepted local
+paint dispositions are now 768 pending joins and 1,543 partial.
 
 November5 frozen1d3da334 direct collector preflight passes all four expected
 groups/observations:72/4016,49/2677,4/178,146/6295. Log
