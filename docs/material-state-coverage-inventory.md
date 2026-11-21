@@ -346,6 +346,15 @@ references and unresolved dismissed references. The candidate definitions
 do not duplicate existing registry IDs. Register and run scanner conservation
 after the active export releases its source freeze.
 
+The actual source scanner was replayed in memory against the accepted
+metadata. All 211 complete predecessor rows matched, and the staged
+Autocomplete and Select definitions add exactly two uniquely detected rows.
+The policy registration helper adds only those rows, preserves property
+groups and the plugin boundary verdict, restores the exact parent bytes,
+and rejects unrelated drift in either direction. Staged policy SHA-256
+6cbd3db0fcf4cea5edb9f87d4ff0e446224ce55eaac219f329c2475981e5e8c4.
+Live policy bytes remain frozen pending the active Datepicker export.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs

@@ -1,3 +1,6 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+
 const source = 'examples/material-showcase/src/app/astylar.component.ts';
 const artifacts = 'artifacts/material-parity/';
 const retainedMap = {
@@ -54,3 +57,24 @@ export const mobilePickerControlsFindings = Object.freeze(captures.map(capture =
     currentRenderingAccepted: false,
   });
 }));
+
+const policyParentSha256 = 'abeb73cafe696f0c6e104908cefde3c6e97d1637db695c2bad031a5c5f86e39d';
+const policyBoundary = ']);\n\nexport const pluginBoundaryVerdict = Object.freeze({';
+const registration = mobilePickerControlsFindings.map(finding => '  Object.freeze(' + JSON.stringify(finding) + '),\n').join('');
+const hash = source => createHash('sha256').update(source).digest('hex');
+const normalized = source => source.toString().replaceAll('\r\n', '\n');
+
+export function prepareMobilePickerControlsPolicy(bytes) {
+  const source = normalized(bytes);
+  assert.equal(hash(source), policyParentSha256, 'Unknown mobile picker policy parent');
+  assert.equal(source.split(policyBoundary).length, 2);
+  return source.replace(policyBoundary, () => registration + policyBoundary);
+}
+
+export function restoreMobilePickerControlsPolicy(bytes) {
+  const source = normalized(bytes);
+  assert.equal(source.split(registration + policyBoundary).length, 2, 'Missing exact mobile picker registration');
+  const previous = source.replace(registration + policyBoundary, () => policyBoundary);
+  assert.equal(hash(previous), policyParentSha256, 'Unexpected mobile picker policy drift');
+  return previous;
+}
