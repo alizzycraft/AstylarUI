@@ -331,10 +331,13 @@ adds the two Select rows to the staged Autocomplete extension d47c1f8d.
 It binds the verified report and runner for the exact theme/action cohort
 under activation, focus, semantics and sampled resource history. Removing
 the eight Select children restores the complete predecessor case list.
-All case flags and inherited dispositions are conserved. A single strict
-replay for the four Autocomplete/Select additions is running in
-mobile-picker-select-dependency-replay-20261122.log. The active dark Datepicker
-export has reached case-obligation joining. Keep its inputs frozen.
+All case flags and inherited dispositions are conserved. The strict replay
+process ended without a result and left an empty preserved log at
+mobile-picker-select-dependency-replay-20261122.log. A focused delta check
+authenticated the 19,372-receipt predecessor result, restored all rows by
+removing only the sixteen new children, and hash-verified all four added
+receipt paths. This does not reauthenticate inherited dependencies. Run
+the complete gate separately after the Datepicker export finishes.
 
 The Autocomplete and Select controls findings are staged in
 tests/material-parity/mobile-picker-controls-findings.mjs for one shared
