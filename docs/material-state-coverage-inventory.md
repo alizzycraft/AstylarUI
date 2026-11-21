@@ -372,6 +372,26 @@ Virtual checks on the policy and producer preserve that adapter's complete
 output, recover exact predecessor bytes for absolute and relative reads,
 and reject unrelated drift. Live policy and producer remain frozen.
 
+The light/dark Timepicker matrix-action replay distinguishes the two retained
+resource results. The matrix targets Astylar timepicker-icon and leaves that
+opener focused at all settled boundaries. Material focuses timepicker-control.
+The supplemental lifecycle test first blurs via 10,10 then clicks the input
+center on both sides and samples input focus. The matrix-action replay with
+all 1,887 original served assets reproduces 25/25/25 materials in both themes;
+the separate input-click probe's 26/27/28 remains a valid failure observation.
+This is an action/owner distinction, not an isolated proof of every contributor
+to the resource difference. Keep both scopes explicit in the next join.
+
+The matrix replay also finds a closed Timepicker DOM association difference:
+both sides resolve controls and active descendant while open; after Escape
+only Astylar retains the unresolved controls link. This matches the
+unconditional timepicker-options request in the retained component. Add this
+exact-case observation separately from the supplemental AX popup-kind finding.
+Report timepicker-mobile-original-action-20261122/latest-report.json SHA-256
+b37d7a0ae318c57921a4c2d9b3cf3572c2ec2e34fb1527d39fade1a80ce50521,
+runner SHA-256 07fc3680b68da8a1f4141d161df6273abbf0faa318754d6a776e94b45f420492.
+Chromium 157 and instrumented settled replay do not prove current rendering.
+
 The production source fingerprint collector matches the accepted metadata's
 1,162 ordered paths. Exactly five hashes differ, with 1,157 conserved:
 audit-findings-store.spec.mjs (6c7fcfee to 9295e972),
