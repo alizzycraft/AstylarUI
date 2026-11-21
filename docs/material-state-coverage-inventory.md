@@ -292,6 +292,19 @@ samples and the distinct supplemental 19/20/21 failure. The staged join
 retains every case disposition and acceptance flag. Reuse the ongoing
 combined picker replay before running the next coherent dependency gate.
 
+Autocomplete source classification: the accepted 211-finding inventory has a
+related Menu controls finding, but its detector matches only menu-popup.
+Stage fixture-autocomplete-controls-association-outlives-popup as an
+application authoring defect in showcase relationship lifetime. The exact
+ariaControls declaration matches once at astylar.component.ts:917, and
+conditioning it on open state in memory removes the match. Live and retained
+mapped component bytes match SHA-256
+71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd.
+The observed difference is the dangling closed DOM ID reference in those
+two retained mobile cases. AX impact, intermediate focus and other configured
+states remain unverified. Register the finding with the next batch after
+the active export releases its source freeze.
+
 Export fingerprint reconciliation identifies three tracked source changes
 since publication commit a295a240: audit-findings-store.spec.mjs
 (6c7fcfee to 9295e972), semantic-text-transform-registration.mjs
