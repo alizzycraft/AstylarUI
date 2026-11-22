@@ -483,6 +483,18 @@ keyboard receipts leave pointer blocking open. Use raw event target,
 active owner and value or checked-state observations to distinguish
 hit routing from suppression after delivery.
 
+The retained application maps match both current component sources byte
+for byte. The Material components bind disabled on both controls.
+Astylar authors ARIA-disabled role divs. Its click callback records the
+event before handleClick, whose disabled guard precedes each checked-state
+mutation. This identifies how a delivered click could leave state intact.
+The pointer probe will sample the unchecked Radio owner and the checked
+Slide Toggle at their measured visual centers. Actual delivery and focus
+are open. The probe is bound to the 1,887 original served assets.
+
+Receipt disabled-radio-switch-pointer-source-20261122.log SHA-256
+039fe4932d6d8d2fe3b97a89925ebd284a742c2d6d678a2bfc03acc1d7189570.
+
 The existing focused proofs passed 2/2 using the hash-identical retained
 candidate source map. The first run passed the owner inventory and
 stopped the keyboard proof at the missing dist path. Keep both logs.
