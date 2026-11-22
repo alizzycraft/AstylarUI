@@ -199,6 +199,32 @@ plan is mobile-picker-material-identity-next-join-20261122.log, SHA-256
 488bae2c546306c19ac1f0f2e75244b4747953a323ee6ae0eca4879bee8d8079.
 Keep the original captures and scope the join to sampled ownership.
 
+Review 68836d43 already contains the four closed-state identity joins.
+Across 36 authenticated samples, both Timepicker themes add an unbound
+hover-active material by each settled opening. Earlier IDs persist, with
+no observed mesh assignment. The first opening also adds the retained
+hover material. Select adds one unbound caret material by its first
+opening and retains that identity without adding one per later cycle.
+Both families replace their sampled input material IDs across opening
+and dismissal. Phase receipt SHA-256
+d2fddb12542f6ba7dfbf1797737c96ed44ee1bf572c8460aac08ea3b49afb0ec.
+
+The served map identifies pseudo-state material creation in
+applyElementPseudoState and caret creation in createTextCursor. Their
+parsed method structures match the installed and freshly transpiled
+current sources. The resource tracker still records materials added
+within its replace transaction. The samples leave allocation call
+ordering, tracker membership per identity, and teardown open.
+Source receipt SHA-256 124e104c3cea852ef50b5762d7e9dd943aa961e1d54fe085e205fcd85a7479d4.
+Syntax receipt SHA-256 801a052b876bc37c09b4dd551026f69d7b1556c0211fe8c4a558988e8237367f.
+Retain first-pass whole-source and wrapper-selection failures
+21da5043eb5d8fa5ee5f548f7db635c3b2d6a5775746990ae45d7295daa6689b and
+6bb80fa6d5f2394d25d4c59f75ba71ca16870d704efdefc077692073c08b6c68.
+
+Successor 0a9e5dfd stages four reversible history observations on
+68836d43. All 2,311 rows and acceptance flags are preserved.
+Delta SHA-256 d5bb397154b6c73d52f19ec069745687a5e182ce5a7194cf70d99e985f8e7e92.
+
 The authenticated accepted 844c896c index has 1,335 cases with both
 focus and activation evidence joins pending. The largest cohorts are
 static 324 across 27 families, hover 209 across 26, held 193 across 24,
