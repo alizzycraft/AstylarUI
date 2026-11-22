@@ -1337,6 +1337,22 @@ requires paired glyph and selection paint evidence. This replay uses
 retained served assets and the recorded November date.
 Opening child-paint verification SHA-256 69948ad67e232d2162c5770580b12f023bd90d47d1414785ba1b077418d9c400.
 
+In the same November capture, the 15 odd-numbered ordinary days give
+a median Astylar glyph centroid about 1 px lower within the aligned
+cell. Using that one measured offset on 14 held-out even-numbered
+ordinary days reduces mean RGB error from 0.01947 to 0.00674 and
+improves every pair. This bounds the placement contribution without
+assigning it to line height, rasterization or another stage.
+For focused day 22, Material records a 12% background tint and
+Astylar records a transparent day and ring fill. All 440 sampled
+pixels outside the ordinary glyph envelope and inside the ring
+show the tint on Material and base fill on Astylar. They account
+for 34.4% of the cell RGB error after cell alignment. Both sides
+request the same purple border. The sampled tint difference has
+unequal inputs. Remaining glyph, ring and other paint stay open.
+Ordinary day ink receipt SHA-256 39763a3aad1aa461efebabf6a76a8d90db69cc7270a791e8ea3f91d5fbe15581.
+Focused date tint receipt SHA-256 4f40313096f567377de0eeb3ac1efec1a2cc3e14d2c8f1b560547cfe27fecb92.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

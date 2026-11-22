@@ -241,6 +241,13 @@ served-asset scratch was cleaned. The October and November captures
 remain separate evidence.
 Opening child-paint verification SHA-256 69948ad67e232d2162c5770580b12f023bd90d47d1414785ba1b077418d9c400.
 
+Keep datepicker-ordinary-day-ink-20261122.log and
+datepicker-focused-date-tint-20261122.log with the authenticated
+November opening screenshot and tree pair. The diagnostic translations
+and samples were computed in memory.
+Ordinary day ink receipt SHA-256 39763a3aad1aa461efebabf6a76a8d90db69cc7270a791e8ea3f91d5fbe15581.
+Focused date tint receipt SHA-256 4f40313096f567377de0eeb3ac1efec1a2cc3e14d2c8f1b560547cfe27fecb92.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
