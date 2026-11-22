@@ -349,6 +349,11 @@ review 590f4aec and both static action projection receipts. The
 comparison streamed the parent and saved 72 additions with row digests.
 Static action AX delta SHA-256 c8ef18ad9ee3e6e0289aeb7f2547413f3cb6cc68ebb585cc093fade2746269a6.
 
+Keep tooltip-static-actual-description-projection-20261122.log with
+the static AX report, manifest, independent verification and 24 raw
+Tooltip observations. The original open-state controls remain retained.
+Static Tooltip AX receipt SHA-256 43abf300a7952633988a8ef0d794a239308fbce7ef42b546b0eb9fd4f48747ca.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.

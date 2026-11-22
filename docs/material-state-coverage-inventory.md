@@ -1339,6 +1339,17 @@ partial and unverified. The delta awaits the existing loader before
 selection for export.
 Static action AX delta SHA-256 c8ef18ad9ee3e6e0289aeb7f2547413f3cb6cc68ebb585cc093fade2746269a6.
 
+All 12 configured static Tooltip pairs now have verified retained
+actual accessibility-tree description observations. Both sides expose
+the button role and the name Hover for help. Material exposes Create
+a project as the description in all 12. Each relation resolves to its
+backend DOM description node. Astylar exposes neither a description
+nor a relation in those static captures. No open tooltip appears in
+the observed accessibility trees. This extends the existing finding
+for the popup-conditional description input. Open-state transitions,
+screen reader output and current runtime applicability remain open.
+Static Tooltip AX receipt SHA-256 43abf300a7952633988a8ef0d794a239308fbce7ef42b546b0eb9fd4f48747ca.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,
