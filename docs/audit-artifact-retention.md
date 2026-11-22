@@ -133,6 +133,15 @@ delta ba0a965b and the Sort caller source linkage used by the 32
 early-release cases. The successful served-asset scratch was cleaned.
 Verification SHA-256 cddd5089575797f9752d0e9d05a70be44430c9d773e31da5679fb143aad4ef7f.
 
+Keep early-release-configured-activation-focus-20261122 with its
+runner, manifest, 64 checkpoints, paired captures and logs. Retain
+compact delta 635b5433, the initial action-source comparison failure
+and the successful v2 verification. The successful served-asset
+scratch was cleaned. Keep the first remaining-configured-activation
+capture failure and its scratch for the omitted short viewport.
+Runner SHA-256 cdb6a3b5d8d156358bdf8cfd382b8093046a21b275bca4ba20156c50f77670bc.
+Verification SHA-256 2481d0b8ab15b72219d72871c1b079dd4f7ea3dc994c6d9e80d86815d2821114.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

@@ -1148,6 +1148,22 @@ Runner SHA-256 49f62d1d682d2604958dd33928202e22bd90e1d4a18c9b1ae1b70dcf6e6c3974.
 Source linkage SHA-256 8f5593f1d18bd5c28b5bb879f61b27cf075d68d69c5c9ccc47bcf6f4e2fca622.
 Delta SHA-256 00b4f96f31a89e2067b8b0f3969728fae9e26fb256ce8614cd35f7ad1ae30bbe.
 
+The paired activation replay authenticates 64 focus observations across
+32 Sort, Tree, Autocomplete and Select pairs. The original normalized
+focus, event, interaction-state and runtime-error fields agree in all
+64 cases. Material has no post-click focus events. Astylar Sort,
+Autocomplete and Select each blur and refocus the same DOM node in
+both stationary and departure traces. Tree has no post-click focus
+events. Settled owners agree across the two actions for each side in
+every pair. Departure is unnecessary for the observed transitions.
+The replay does not isolate the DOM mutation that causes the blur.
+The staged successor 635b5433 retains 2,311 partial case rows, binds
+30,718 dependencies and leaves 493 focus joins pending. The remaining
+224 activation and departure cases are the next batch. The frozen
+canonical candidate and rendering acceptance are tracked above.
+Report SHA-256 439362d55ed1919cf7a23a7662d0c5b0c8f5f40a1ae3c93b628dc1728de2c218.
+Delta SHA-256 f9d99b3e5e65bdeb8446f4f8e7554c0ef2c927f91b1bbb8733a4b5cb90553032.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
