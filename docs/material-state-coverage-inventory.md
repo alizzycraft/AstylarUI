@@ -344,6 +344,17 @@ Successor c1760e7e adds these 24 partial paint inspections to the
 292-row reversible batch. If accepted, 480 local-paint joins remain pending.
 Delta SHA-256 9df4b8171df037463c4fdc649c8f8a1750891446181f2baae3bd2df2a06a06d6.
 
+The eight disabled Checkbox cases also have a lower-right mark-box
+interior sample. Material composites its 38% disabled fill over the
+captured background and the candidate uses an opaque theme-primary fill.
+All native samples match the input model within one channel value. All
+candidate samples match exactly. The result covers the box fill at the
+sampled positions. It leaves the check stroke, edges and current rendering open.
+Replay SHA-256 c1aaf0528d7a36d5fbb0bba93021cd850ed6d9bd506d45cde4e769f7dd29230f.
+Successor ee9d2646 attaches the eight observations to the existing 292
+changed rows. Full reversal preserves all 2,311 parent rows.
+Delta SHA-256 f20191f77ab9162155965074406774788ba83ae8b0c56152e77b93c49ce27784.
+
 The authenticated accepted 844c896c index has 1,335 cases with both
 focus and activation evidence joins pending. The largest cohorts are
 static 324 across 27 families, hover 209 across 26, held 193 across 24,
