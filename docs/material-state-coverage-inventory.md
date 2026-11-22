@@ -52,6 +52,18 @@ The verified source maps and sampled owners locate the missing Datepicker
 restore request in the showcase action. The mechanism that focuses the
 canvas and any separate equal-input core behavior remain unisolated.
 
+The two desktop dismissal event logs narrow the canvas focus path. Both
+show a page-target pointerdown, opener blur, then page pointerup and click.
+The surface has no focused logical element at settlement. This rules out
+the no-target branch for these actions. The authenticated core bundle
+chunk-3JXWRYJY focuses the canvas for a dispatched pointerdown that is
+not canceled, then looks for a focusable ancestor. The authenticated
+Babylon bundle chunk-5CIHDZW4 also has its own conditional canvas focus
+call on pointerdown. The earlier text-held trace shares the Babylon chunk
+but uses different core bytes and a different action. The desktop event
+logs do not establish the first focus caller. A one-case focus-call trace
+could resolve that ordering if needed for a separate core attribution.
+
 Report datepicker-desktop-focus-boundaries-v2-20261122/latest-report.json
 SHA-256 643a072637a75d1bd28b8cd0dba253442cc0a23a7d15246c35eb0d1ba28c23ef.
 The preserved runner SHA-256 is
