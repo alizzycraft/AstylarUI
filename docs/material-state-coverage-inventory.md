@@ -164,6 +164,19 @@ Receipt semantic-reader-local-receipt-transition-20261122.log SHA-256
 a9303edc575939e6d414b21ef8ec27f0a84a607915a361e464928bb0730492ac.
 Initial stderr SHA-256 be17be64534d8e24007d7ecbdefd41668091abfbf20a5885618f9af522a9e56f.
 
+The materialized 68836d43 review binds semantic-text-transform-registration
+through receipt 60056387 in all 436 static and 379 interaction rows.
+Neither static-semantic-registration nor the picker read adapter appears
+as a direct row receipt. The canonical source inventory includes all three.
+Census SHA-256 8acb924c8db6ec5e13ce70153de8602c6dc5bff3c66e839079aa4ba644de6c48.
+
+The direct older Snackbar reader accepts its authenticated historical
+static helper and rejects both the frozen and replacement modern bytes.
+This control localizes the dependency on its own historical generation.
+The active chain still needs verification after live integration. Preserve
+the 815 recorded receipts and verify all changed canonical fingerprints.
+Boundary receipt SHA-256 7f8fd319425037f2ddb891f9f6a24d5d1ec0573be25080ba1570ff57b7542c6a.
+
 The accepted 844c896c bundle is backed up before the picker export. Freeze
 this coherent source generation through export conservation and cold checks.
 All case groups remain partial and current rendering remains unverified.
