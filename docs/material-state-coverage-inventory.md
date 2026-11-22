@@ -1060,12 +1060,17 @@ Report SHA-256 1bf7a80bc5e34a0525052ebb081d8d9431c1f80b3a0aff79f8d10bd313bca160.
 Runner SHA-256 da6ca6817144a0f02ca9a181d650e266c305f52865763196f4df5126afb182b2.
 Delta SHA-256 e0a8ce6ea86de609dcc448f0c168650c758e1b8e6eac9e83caa089198e48e848.
 
-Canonical candidate 20baa74b passed section comparison against
-1a64273f. The 77 other sections conserve and only sourceFingerprints,
-coverage and focusedProofs change. The candidate binds frozen review
-919dbc1c. Independent cold verification is running, with isolated
-import queued afterward. Generation 1a64273f remains accepted.
+Canonical generation 20baa74b and index 62014e1a are accepted for
+frozen review 919dbc1c. Section comparison against 1a64273f preserves
+77 sections and changes sourceFingerprints, coverage and focusedProofs.
+The independent cold comparison passes with zero disk hits. Isolated
+import verifies 84 shards, and the accepted store verifies before and
+after pointer promotion. The verified totals remain 8,483 differences,
+389,202 occurrences and 215 source findings. All 2,311 cases remain
+partial and current rendering acceptance is open.
 Section receipt SHA-256 ae9af90deeac2847c0cf46a57ad858e67c0d0905959f47d2824f3d8c77aa70cc.
+Cold receipt SHA-256 3747f8cef1b3c7dac40805317588f6f3c33d030f2bf5e68cc2313a487d0c050d.
+Isolated import SHA-256 91b6ff775a0cd6095b8c36a58c013d231615ed599e3912fc76f4a04cef95e88b.
 
 The 63 pending popup hover cases now have startup, pre-move and
 settled focus observations. Both sides kept BODY active at every

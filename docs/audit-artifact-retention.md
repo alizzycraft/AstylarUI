@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Retain accepted 20baa74b and index 62014e1a with the verified 86 hard
+links to the isolated store. Keep predecessor 1a64273f, all canonical
+gate receipts and the pinned 919dbc1c dependency replay.
+Promotion SHA-256 64dc53397a73e58e456c0310cd6e9c3d9c93e452a81bdd14b1ff916834ae2efd.
+NTFS compression recovered publication space while preserving accepted
+index bytes and both hard-link identities.
+Headroom SHA-256 e5df2adc761910981fe187c9347d491411e9c99867bae321f9ed3209297f71e3.
+
 Retain accepted 1a64273f and index 57f9c86b with the verified 86
 hard links to the isolated store. Keep predecessor 0c103b3d and its
 pre-export backup, the zero-disk-hit cold logs, isolated import, and
@@ -102,8 +110,7 @@ entry path. The v3 replay has the runner, manifest, eight checkpoints,
 paired captures and logs. Keep compact delta 5e45c350. The successful
 v3 served-asset scratch assembly was cleaned.
 Verification SHA-256 530afb703bea1a29d9101c29496197edf38d32ef9cae29784f32c37096617936.
-Keep the warm 20baa74b export logs and section-comparison receipt while
-the independent cold and isolated import checks run.
+Keep the warm 20baa74b export logs and the verified section comparison.
 Section receipt SHA-256 ae9af90deeac2847c0cf46a57ad858e67c0d0905959f47d2824f3d8c77aa70cc.
 
 Keep popup-configured-hover-focus-20261122 with its runner, manifest,

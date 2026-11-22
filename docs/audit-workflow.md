@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+The retained case observations generation 20baa74b now passes section
+conservation, independent cold equality, isolated import and accepted
+store verification. Frozen review 919dbc1c binds all 2,311 cases and
+21,667 dependency receipts. The 77 conserved sections and three expected
+changes are recorded in the coverage ledger. The newer activation and
+mobile focus observations stay staged for the next integration batch.
+Final browser gates and current rendering acceptance remain open.
+
 November 22 retained paint and ownership generation 1a64273f passed
 section conservation, independent cold byte equality, and isolated and
 accepted store verification. Review 24c22d1a replays all 2,311 case rows
