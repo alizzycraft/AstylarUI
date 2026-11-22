@@ -36,6 +36,32 @@ dismissal action. Compare calendar versus trigger focus and restoration
 versus blur while recording the active node and its ancestry. Keep the
 retained mobile Escape finding scoped to that action.
 
+The three light desktop DPR1 Datepicker actions now have six paired
+settled samples. In all three opening samples Material focuses a calendar
+gridcell button and Astylar stays on the opener. Hover leaves those owners
+in place. Both pointer dismissals close the popup, then Material focuses
+the opener and Astylar focuses the canvas. Thus the empty candidate ID
+in these two original dismissal records corresponds to canvas focus in
+the retained replay. The opening DOM association difference also recurs.
+
+The retained Astylar component dismisses on an outside target by patching
+open to false. Its explicit focus request on that path is scoped to Dialog.
+The complete method matches the current fixture. Retained Material records
+the pre-open focus owner and restores it in its datepicker close path.
+The verified source maps and sampled owners locate the missing Datepicker
+restore request in the showcase action. The mechanism that focuses the
+canvas and any separate equal-input core behavior remain unisolated.
+
+Report datepicker-desktop-focus-boundaries-v2-20261122/latest-report.json
+SHA-256 643a072637a75d1bd28b8cd0dba253442cc0a23a7d15246c35eb0d1ba28c23ef.
+The preserved runner SHA-256 is
+2df8647dbb5575e08da77d2e2e621c35c86586cc7448804771604fd48402de6a.
+The replay matches all 1,887 original served files. It uses Chromium
+157.0.8103.51 and adds only read-only observation hooks to the original
+action method. The target, hover and settlement methods match the recovered
+original. Join only these three exact cases after the frozen export gates.
+Other profiles, DPR2, transition timing, AX and current rendering remain open.
+
 Datepicker, Autocomplete, Timepicker and Select account for 393 pending
 programmatic-focus joins. All 393 have recorded structure and DOM target
 comparisons, and 345 also have retained serialized focus identity. In the

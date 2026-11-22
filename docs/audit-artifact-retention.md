@@ -1,5 +1,14 @@
 # Audit artifact retention
 
+Retain Datepicker desktop focus-boundaries v2, including its runner, report,
+checkpoint and logs. The report binds the original served bundle and both
+chunk-JPEJK334 and chunk-7SL66K3U source maps. The first desktop attempt
+resolved relative imports through the shared artifact junction and failed
+before browser launch. Keep its directory and failure scratch
+datepicker-desktop-browser-temp-dEFK3A. The retry ran from worktree-local
+scratch and copied the exact runner to the retained capture. Successful
+temporary runner and browser scratch were removed by withAuditScratch.
+
 November 22 Datepicker export predecessor is preserved at
 datepicker-mobile-pre-export-0c2c-20261122. Its manifest and Markdown come
 from publication commit a295a240. Its payload is a verified hard link to the
