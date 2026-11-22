@@ -632,7 +632,8 @@ three Escape cycles. Its checkpoint, served call sites, 1,887 asset
 hashes, normalized events and settled focus boundaries verify against
 the original light replay. The mechanism now has a witness in each
 retained mobile theme. Desktop, other dismissal routes and current
-rendering remain open. Join the light case in the next compact review.
+rendering remain open. Trace a retained desktop Escape cohort next
+to check whether the same focus boundary applies.
 Light verification SHA-256 7716d6ebe3cca57f1ced722f3a70620d131036679be2b22d9c1826e6ef5d61f3.
 
 The composed delta binds expected successor 3c1a6807, reverses all
@@ -642,6 +643,13 @@ programmatic-focus rows pending.
 Identity report SHA-256 e75cbf52916286a1b6b53ef2dc7f6ecdd429effb887134a5b1171bbf07e90125.
 Mutation report SHA-256 fd687979db4a63053a5742e07ad8dc454b9b6498eb060f2f3b16b7ca92cf9373.
 Mutation delta SHA-256 7b6b09d4482f2c0276d1b92aa66b2a5ecc5bd0e3b446648d0081c6384860316e.
+
+The light case adds one partial focus observation in the composed
+delta for expected successor e421ed21. Ten changed rows reverse to
+the materialized parent. The delta conserves prior dependency
+receipts, authenticates five new paths and leaves 1,486 programmatic
+focus rows pending. Accepted coverage remains at generation 0c103b3d.
+Light delta SHA-256 034b9877e21c4fe9be120c3531e6222f76465b2effa620cdfe5728beaaa7d459.
 Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
 Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
 
