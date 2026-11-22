@@ -1741,6 +1741,20 @@ without a modal input. These are DOM and authored-input observations.
 The candidate open accessibility projection remains to be measured.
 Open Datepicker relation receipt SHA-256 846ba6448e4e12992a2e9f2ac40e314a4f92f781f4c6c80ce687a54cc0f2abfa.
 
+The retained light desktop DPR1 Datepicker opening now has an
+authenticated actual Chromium accessibility tree. Material projects
+the expanded dialog toggle and textbox ownership of the calendar.
+Its modal dialog is named Due date through the resolved label.
+Astylar projects a nonmodal dialog named Choose date. The button
+has neither popup type nor expanded state, and the textbox has
+no ownership relationship. Both textboxes expose popup type dialog.
+The candidate retains toggle focus. The 1,887-asset list and
+pointer event types match the retained opening route. The actual
+accessibility projection applies to this one Chromium 157 capture.
+The verifier initially expected per-side runtime errors. It now
+checks the report?s empty combined error array.
+Open Datepicker AX verification SHA-256 51156240cf721775b294426612492bced7ddfd8933ced09c29b81492a22f27ee.
+
 The Datepicker opening paint delta adds one local-paint child to
 each of the eight configured October desktop openings. It binds
 the tint and ordinary-date placement observations to their exact

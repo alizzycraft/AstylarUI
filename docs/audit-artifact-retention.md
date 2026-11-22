@@ -415,6 +415,11 @@ projection receipts. It authenticates the added evidence and
 records the dependency list expected by the existing strict loader.
 Combined accessibility conservation SHA-256 2c05f76cec11e17d5529182976d544f0a8415072a823d3b6707a951e607e543f.
 
+Keep datepicker-open-actual-ax-20261122 and its independent
+verification with the paired capture, runner, checkpoint and
+prior open DOM and authored ownership receipt.
+Open Datepicker AX verification SHA-256 51156240cf721775b294426612492bced7ddfd8933ced09c29b81492a22f27ee.
+
 Keep datepicker-opening-paint-composed-delta-20261122.log with
 the eight October checkpoints, original paired trees and images,
 and the separate November light DPR1 diagnostic and paint receipts.
