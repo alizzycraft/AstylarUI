@@ -610,6 +610,20 @@ inspection within 307 changed rows. Its reverse recovers all 2,311 parent
 rows and preserves whole-case and rendering flags.
 Delta SHA-256 1db7920f7bb94b79acec292b5c1d30e77adb92995a0204b562e977d72063ee71.
 
+The original report records one primary pointerdown, pointerup and click
+on each side in all 72 pending open cases. Replaying the same normalization
+on original raw arrays finds the same sequence in all 40 pending
+open-hover-content cases. The original comparator passes the hover action
+by default. The report contains paired measured overlay targets for 40
+open and 24 open-hover-content cases. Exact hit targets, popup movement,
+focus timing and current rendering remain open. Replay SHA-256
+1d57c37638446be4a58547c8fe88e09a83537b169997ad53d3f6c8fdde19234c.
+
+Successor 6d059870 stages these 112 partial activation observations.
+The combined batch changes 419 of 2,311 rows and reproduces the preceding
+successor and full parent, including every case and rendering flag.
+Delta SHA-256 4140f858b3f28554c43ac117dd8090deb29319f17eeb4228dff92258b2a9bf26.
+
 The remaining 14 causal traces are queued after the frozen pointer
 export to avoid competing for memory. Their earlier focus traces remain
 valid for the sampled owners and events.
