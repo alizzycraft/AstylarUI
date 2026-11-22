@@ -8,8 +8,12 @@ three changed audit files. The other 78 canonical sections conserve.
 Reuse these receipts while their inputs match. All cases remain partial
 and the final browser gates remain open. The live static and transform
 semantic suites now pass with the authenticated historical readers.
-Reconcile their six source changes, the three proof-line shifts and the
-picker reader source receipt in the next coherent canonical export.
+The next coherent export selects review 919dbc1c with
+--retained-case-observations. It reconciles the reader changes and
+three proof-line shifts alongside the staged paint and focus coverage.
+Verify the complete dependency list and source census before export.
+Then compare all sections, run the independent cold check and verify
+isolated import before advancing the accepted store.
 
 November 22 picker export 87915914 passed section conservation,
 independent cold equality and isolated and accepted store verification.

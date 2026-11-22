@@ -175,6 +175,7 @@ export function restoreMobilePickerControlsProducer(bytes) {
 export const pickerFocusSemanticsReview = '78616399f9964684b86232fb63ac2945027a6ef7c461ea9bab5f2953e6861096';
 export const retainedPointerCoverageReview = '3a0dfc9c476e49a6c5878be3f287b8eadbecfae98fd8c35cc4c88035abc0068c';
 export const retainedPaintOwnershipReview = '24c22d1ae764ec131a2f1ca5a0d7be1fdb6729a5328406ab2a9abe6721e46031';
+export const retainedCaseObservationsReview = '919dbc1c33cebb522b5fb1d002f19100f3fe17a43b5ecc371b6c527aea2955a3';
 
 // Reverse the exact coverage selector before each older picker transition.
 const retainedPointerLauncherEdits = [
@@ -204,6 +205,21 @@ const retainedPaintRunnerEdits = [
   ["pickerFocusSemanticsReview, retainedPointerCoverageReview }","pickerFocusSemanticsReview, retainedPointerCoverageReview, retainedPaintOwnershipReview }"],
   ["[pickerFocusSemanticsReview,retainedPointerCoverageReview].includes(options.caseObligationReviewSha256)","[pickerFocusSemanticsReview,retainedPointerCoverageReview,retainedPaintOwnershipReview].includes(options.caseObligationReviewSha256)"],
   ["diagnosticRead: [pickerFocusSemanticsReview,retainedPointerCoverageReview,","diagnosticRead: [pickerFocusSemanticsReview,retainedPointerCoverageReview,retainedPaintOwnershipReview,"],
+];
+
+const retainedCaseLauncherEdits = [
+  ["retainedPaintOwnershipReview }", "retainedPaintOwnershipReview, retainedCaseObservationsReview }"],
+  ["const retainedPaintOwnership = rawRequested.includes('--retained-paint-ownership');\n", "const retainedPaintOwnership = rawRequested.includes('--retained-paint-ownership');\nconst retainedCaseObservations = rawRequested.includes('--retained-case-observations');\nassert.ok(!retainedCaseObservations || rawRequested.every(argument => ['--retained-case-observations', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n"],
+  [".filter(argument => argument !== '--retained-paint-ownership')", ".filter(argument => argument !== '--retained-paint-ownership').filter(argument => argument !== '--retained-case-observations')"],
+  ["|--retained-paint-ownership]');", "|--retained-paint-ownership|--retained-case-observations]');"],
+  ["if (retainedPaintOwnership) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedPaintOwnershipReview}.json`;\n", "if (retainedPaintOwnership) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedPaintOwnershipReview}.json`;\nif (retainedCaseObservations) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedCaseObservationsReview}.json`;\n"],
+  ["if (retainedPaintOwnership) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedPaintOwnershipReview}`;\n", "if (retainedPaintOwnership) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedPaintOwnershipReview}`;\nif (retainedCaseObservations) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedCaseObservationsReview}`;\n"],
+];
+
+const retainedCaseRunnerEdits = [
+  ["retainedPaintOwnershipReview }", "retainedPaintOwnershipReview, retainedCaseObservationsReview }"],
+  ["retainedPointerCoverageReview,retainedPaintOwnershipReview].includes(options.caseObligationReviewSha256)", "retainedPointerCoverageReview,retainedPaintOwnershipReview,retainedCaseObservationsReview].includes(options.caseObligationReviewSha256)"],
+  ["diagnosticRead: [pickerFocusSemanticsReview,retainedPointerCoverageReview,retainedPaintOwnershipReview,", "diagnosticRead: [pickerFocusSemanticsReview,retainedPointerCoverageReview,retainedPaintOwnershipReview,retainedCaseObservationsReview,"],
 ];
 
 function restoreRetainedReviewSelection(source, marker, edits, predecessorSha256) {
@@ -242,7 +258,9 @@ export function preparePickerFocusSemanticsLauncher(bytes) {
 }
 
 export function restorePickerFocusSemanticsLauncher(bytes) {
-  const retainedPointerSource = restoreRetainedReviewSelection(normalized(bytes), 'const retainedPaintOwnership = ', retainedPaintLauncherEdits,
+  const retainedPaintSource = restoreRetainedReviewSelection(normalized(bytes), 'const retainedCaseObservations = ', retainedCaseLauncherEdits,
+    '00e62c58718d21f578332e4683fe188500ad996eb0ad7b5852910539cb8a5295');
+  const retainedPointerSource = restoreRetainedReviewSelection(retainedPaintSource, 'const retainedPaintOwnership = ', retainedPaintLauncherEdits,
     '97c0380ffd8e283cf42c12d86f388d8719abfa365ed057725039d965b40f8629');
   const source = restoreRetainedReviewSelection(retainedPointerSource, 'const retainedPointerCoverage = ', retainedPointerLauncherEdits,
     'e404363f7852d71e02d490a5163a34ba798dc3772c2054376aa75c8ec790f6a1');
@@ -301,7 +319,9 @@ export function preparePickerFocusSemanticsRunner(bytes) {
 }
 
 export function restorePickerFocusSemanticsRunner(bytes) {
-  const retainedPointerSource = restoreRetainedReviewSelection(normalized(bytes), 'retainedPointerCoverageReview, retainedPaintOwnershipReview }', retainedPaintRunnerEdits,
+  const retainedPaintSource = restoreRetainedReviewSelection(normalized(bytes), 'retainedPaintOwnershipReview, retainedCaseObservationsReview }', retainedCaseRunnerEdits,
+    'b0f88c8aa525fd6fd335a2e00e8173ea669997b379678216666909306f14e0b1');
+  const retainedPointerSource = restoreRetainedReviewSelection(retainedPaintSource, 'retainedPointerCoverageReview, retainedPaintOwnershipReview }', retainedPaintRunnerEdits,
     '06b9f63206cf314dfccad5a7a7e6ab12752536a9bcdb6f63dc628a18535a1a90');
   const source = restoreRetainedReviewSelection(retainedPointerSource, 'pickerFocusSemanticsReview, retainedPointerCoverageReview }', retainedPointerRunnerEdits,
     '477526cb178996d9b79056847c48d69b060dd37254634da343e4ecda5d3d0dc3');
@@ -360,6 +380,10 @@ export function createPickerFocusSemanticsReviewReader({ root, read, predecessor
     [retainedPointerCoverageReview]: {
       mode: 'retained-pointer-coverage',
       boundary: 'Exact retained hover, held, disabled pointer, keyboard and focus observations. Current rendering and whole-case acceptance remain open.',
+    },
+    [retainedCaseObservationsReview]: {
+      mode: 'retained-case-observations',
+      boundary: 'Exact retained paint, ownership, activation and programmatic focus observations. Current rendering and whole-case acceptance remain open.',
     },
     [retainedPaintOwnershipReview]: {
       mode: 'retained-paint-ownership',

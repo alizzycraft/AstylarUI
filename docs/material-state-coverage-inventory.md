@@ -792,6 +792,18 @@ Transform suite SHA-256 7036bf0e0c0c4c34a914fc76d32c9b9146cc26e9693582f9719377f5
 Dependency replay SHA-256 5cdc3cbc4ad6db4499646208f828539db7da9bdc3d78dac7c5ff48da05811f4d.
 Fingerprint census SHA-256 68b89144149e08328829e0108b721dc7fa08063d51052a4d3965436f00375687.
 
+Review 919dbc1c materializes the 480 staged paint rows and 59 later
+case updates against the accepted review lineage. The compact proposal
+reverses to the exact parent, binds 21,667 dependency receipts and
+leaves 1,439 programmatic-focus and 583 authored-activation rows
+pending. Every case remains partial. The new selector keeps the
+prior launcher and runner reversals byte-exact and rejects drift.
+The canonical export waits on full dependency and fingerprint replay.
+Only source fingerprints, coverage and focused proof lines are
+expected to change. Accepted 1a64273f remains authoritative.
+Materialization SHA-256 d36ae9dcc2eefd874b069cead96064643009d4a27971134e7487acee0144d2b6.
+Backup SHA-256 ae61408bd4e4df3a59176ef4e8473b398f2c0a7282506b17edb0194ed4e89ca2.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

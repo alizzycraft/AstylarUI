@@ -14,6 +14,13 @@ The two retained proposal hashes and file identities also verify after
 compression. The export volume still needs a fresh capacity check.
 Proposal compression SHA-256
 6d1df5da8f6f3e0a4b0b2b006cc10062ee1313458d7e7eb2a9abfa2049a168f4.
+Retain review 919dbc1c and its compact materialization receipt. Keep
+the initial ENOSPC stderr and its empty temporary file. The pre-export
+1a64273f backup hard-links the accepted payload and conserves the
+manifest and markdown hashes. NTFS compression recovered about 346 MB
+across two retained metadata logs with both hashes preserved.
+Export headroom SHA-256
+a4715ad8f3760dac0102524962dda5c0fe29b38839d0c349770d3f35ebffb2d2.
 
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
