@@ -1223,6 +1223,21 @@ boundaries to isolate any focus changes added by pointer movement.
 Report SHA-256 fbfcbdffeb3389a136552fd0c68579afc43453c649d5ac67537868fae11d9faf.
 Delta SHA-256 c4aba7ee51b0e1954fa1ae869b7a1f0ee8da5e9af5d64e671d052107b79a9e30.
 
+All 48 popup content-hover cases retain their respective focus owners
+from settled opening through pointer movement. Neither side records a
+focus or blur event in that interval. All pre-hover owner selectors,
+tags and roles agree with the corresponding opening-only observations.
+Eight Datepicker cases reach day 1 at a horizontal coordinate 160 px
+left of the original. Opening events and hover event types, targets and
+values match. The verifier preserves both coordinate traces. The other
+40 event comparisons agree in full. All normalized focus, interaction
+state and runtime-error fields agree. Staged successor 5fa2f4f8 binds
+34,180 receipts and leaves 135 focus joins pending across 2,311 partial
+cases. The next 70 replay outside and canvas dismissal with the same
+opening boundary.
+Report SHA-256 3468edcfd5dbc29237a0c8e91e34dfff9915d6725c386ebde012af70b85850f2.
+Delta SHA-256 5293f6de5ed3c278b489035656a562b3bd1a35fb1192175b1a119f0e5e409db3.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

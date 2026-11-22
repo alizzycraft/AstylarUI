@@ -177,6 +177,15 @@ Verification SHA-256 237a5489eff82cb7d821c8c8cac9cb10090970fe6c5a94621f42ec3c719
 Compression of four staged deltas preserves their bytes and identities.
 Headroom SHA-256 02afc933e30a27d934a985a54b3ff2fae69a43855a4e302b4371fb8f92d9366.
 
+Keep remaining-configured-popup-hover-focus-20261122 with its runner,
+manifest, 48 checkpoints, paired captures and logs. Keep compact delta
+5fa2f4f8 and the eight original and replay Datepicker coordinate traces.
+The successful served-asset scratch was cleaned. The first verifier
+waiter was replaced before it ran. Compression preserves delta bytes
+and file identity.
+Verification SHA-256 d793daf3671b87515fd8e651a3adb2b95de577049642a5e043231873642ed685.
+Headroom SHA-256 ef844a376ca55f025dd80732e5329d67d7ee689917d558fdbe2417a723018265.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
