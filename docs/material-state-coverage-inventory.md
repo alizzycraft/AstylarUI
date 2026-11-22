@@ -772,6 +772,16 @@ three hashes predicts sourceFingerprints SHA-256
 Preflight SHA-256 2a350cba54030ec10fce804df5206de471a891fb8ac45457132bb646709b4eb5.
 Compare that prediction with the exported section before promotion.
 
+The authenticated backup and verified 3a0dfc9c review also predict the
+complete coverage section. The preflight preserves the original case
+inventory and base coverage, reproduces the sorted 19,539-receipt digest
+and applies the current reader metadata to all 2,311 partial rows.
+Expected coverage SHA-256 e00c5d9b7b276e3fd57c4aff30acae00bf97a7c85c32b2e8ea4c0d7713a48032.
+Preflight SHA-256 bc9d036ffdf7e206bb8e80ad3d6cec9d361d4905cd9c9591350133b4f50f4a1c.
+After the warm export, authenticate the candidate and compare all 80
+sections with both predictions. The independent cold equality and
+isolated import are queued behind this check.
+
 The successor has no row receipts for the launcher, audit runner or
 picker reader. All three are declared source fingerprints. The semantic
 reader remains bound to the earlier receipt in 815 rows, so keep that
