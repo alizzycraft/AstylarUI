@@ -302,6 +302,22 @@ cohort report and manifest and its captured core and showcase maps.
 The getter control used the captured source in memory.
 Retired callback receipt SHA-256 8dbdf5b197732b1754172bd5f8d1c8784050496efcbda5c456e1f7869fabd89b.
 
+Keep datepicker-day-texture-20261122 and datepicker-open-owner-geometry-20261122
+with both runners, manifests, checkpoints, paired screenshots and
+logs. Successful served-asset scratch was cleaned. The original
+opening and all prior receipts remain retained.
+Owner and texture receipt SHA-256 be4258ee6e804344dc1840a26908102f4e7d54db2f42c9439749874dce1df003.
+
+Keep the first completed-focus section, cold and isolated import
+launcher logs. The warm export exited 0 with an empty progress
+stderr. The original section wrapper stopped at its progress marker
+assertion. The dependent wrappers stopped while reading its empty
+receipt. Keep the corrected v2 receipts separately.
+Keep the original Divider trusted peer runner and failed launcher
+stderr. The artifact junction resolved its relative import in a
+different worktree. A module-resolution probe passed with the main
+module path preserved. Successful probe scratch was cleaned.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.

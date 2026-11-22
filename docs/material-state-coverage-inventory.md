@@ -1503,6 +1503,24 @@ remaining ink error requires equivalent inputs before it can be
 assigned to rendering.
 Month-marker receipt SHA-256 21f45b27eb9161b92babc93bf2bbd5907ca4815139f1054929fa09631b2d0e7b.
 
+The two focused Datepicker replays authenticate all 1,887 served
+assets and reproduce both November opening screenshots byte for byte.
+Both Astylar month-navigation buttons are 6.002 CSS px lower. Each
+glyph starts four more raster pixels lower relative to its rounded
+button top. The month control and its text ink both start one pixel
+higher, leaving equal top ink insets there. The measured date ring
+has the same 36 px square and 2 px inset on both sides, leaving the
+observed edge residual amid different fills and paint paths.
+
+Day 2 and day 10 label textures match their own readbacks before
+and after the screenshots. The 141 translucent and eight opaque
+texels match the requested #1d1b20 ink within one premultiplied
+channel value. Each texel carries one alpha value. The shared
+coverage is already present in these canvas textures before
+composition. The native raster algorithm and other cohorts remain
+unverified.
+Owner and texture receipt SHA-256 be4258ee6e804344dc1840a26908102f4e7d54db2f42c9439749874dce1df003.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
