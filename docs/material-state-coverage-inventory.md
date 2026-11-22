@@ -250,6 +250,11 @@ digest d905129e and computes nine-row successor 6eee4e41. The complete
 Its compact 142,894,715-byte envelope has SHA-256
 bf03c7cbffe793ac080ba287a73793aa89ff9abc1bc5f78186e9a0274544aee7.
 The complete parent and successor review digests match the staged delta.
+The full receipt census conserves every one of the picker parent?s
+19,385 dependency paths and hashes. All 28 added files match their
+receipts, yielding 19,413 total. Only the nine expected rows differ.
+Receipt picker-pointer-history-dependency-delta-20261122.log has SHA-256
+c71711e6dd8215e49d19f4e70981384576e4fef7ae01a60c2316bb000353e755.
 Full dependency replay and publication remain pending.
 
 Delta picker-pointer-history-nine-case-delta-20261122.log has SHA-256
