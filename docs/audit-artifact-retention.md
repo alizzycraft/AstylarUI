@@ -57,6 +57,9 @@ Headroom receipt SHA-256 772368ddd50c114f560447688bbff073945503f263f76b1c9a65e02
 Retain the verified section comparison for candidate 1a64273f.
 Keep the Slider explicit-focus replay and delta 3876cf3a with the
 original runner, raw event receipt and checkpoint they authenticate.
+Keep the Datepicker dark mobile dismissal focus-call report, runner,
+checkpoint, capture and source verifier, and compact successor 175b2009.
+The successful temporary served asset assembly was cleaned.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the

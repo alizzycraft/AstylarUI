@@ -596,12 +596,31 @@ and current rendering remain open.
 Compact successor 3876cf3a adds these eight partial focus observations
 on ded9e7ce and reverses to every parent row. It adds one replay
 receipt and leaves 1,488 programmatic-focus dispositions pending.
-For the pending picker dismissal cohorts, first check whether a
-retained action trace establishes focus restoration on the actual
-owner. Pointer-induced focus and settled aliases alone give a
-different observation.
 Slider focus replay SHA-256 57d75900d2fce3b169400d65616239bf774b98ec9a6006eec6b1f2a1d4fd8b03.
 Composed delta SHA-256 a71712777208d2e4094e8c8243fec9bfd989baeee3b99fa8b813b17717ba6663.
+
+The retained Datepicker dark mobile DPR2 replay now distinguishes
+explicit Escape restoration from persistence. In all three cycles,
+trusted Escape arrives on the calendar day button in native and on
+datepicker-icon in the candidate. Native calls focus on the saved
+opener from its close-animation callback. The candidate calls focus
+on datepicker-icon with BODY active, through queued semantic bridge
+synchronization. Both calls reach the opener or icon. The exact call
+sites match the authenticated served assets. The instrumentation
+preserves the prior normalized events and settled focus boundaries.
+It runs Chromium 157 with the original 1,887 served assets. The
+candidate's transition to BODY, the relation to its authored focus
+request, other profiles and dismissal routes, and current rendering
+remain open.
+
+Compact successor 175b2009 adds this partial programmatic-focus
+observation to the eight Slider joins and reverses to all 2,311
+parent rows. It preserves 21,250 dependencies and authenticates
+six new paths. This leaves 1,487 pending programmatic-focus rows.
+Use the recorded candidate call-site boundary to scope the next
+picker case without re-running this dark mobile action.
+Focus source verification SHA-256 525c50c75f8d85623235df050b581dca42803dd85e63f03ecfd34a846fad2cc7.
+Composed delta SHA-256 548c770080e26198807b4ab542ab95692b5e83eb4c8e7dc49da66b28a7d9ab5c.
 Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
 Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
 
