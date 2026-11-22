@@ -1414,8 +1414,8 @@ It authenticates 276 distinct receipts referenced by the additions.
 Eighty are new to 590f4aec, for 35,412 total dependency paths. The
 complete roster is 436 static, 1,857 ordinary interaction and 18
 mobile lifecycle cases. The first membership check missed the
-separate mobile-flow export and stopped at 2,293. The combined
-strict replay uses the full roster and follows the live promotion.
+separate mobile-flow export and stopped at 2,293. The strict replay
+uses the full roster and includes the Datepicker paint delta below.
 All 2,311 cases remain partial and current rendering is unverified.
 Combined accessibility conservation SHA-256 2c05f76cec11e17d5529182976d544f0a8415072a823d3b6707a951e607e543f.
 
@@ -1714,8 +1714,12 @@ The light DPR1 row also links the separate November diagnostic.
 Its 1,887 served assets match the October vector. Its date, browser
 and measured geometry remain specific to that capture. Removing
 the eight children restores all 2,311 rows of a5616e5a. Successor
-d34df931 authenticates 53 receipts and awaits strict replay and
-export selection. Current rendering remains unverified.
+d34df931 authenticates 53 paint receipts and adds 27 dependency paths
+to the accessibility batch. Together they add 152 observations across
+140 cases and preserve every predecessor row and case disposition.
+The combined strict replay is queued after promotion and checks all
+35,439 dependency paths in one pass. Export selection remains pending.
+Combined dependency list SHA-256 e7540799c4c300a9207c027f8c322e096b329b81d7d79d259f3679cf709589b4.
 Datepicker opening paint delta SHA-256 bb2097f6b4b86e04446940bdf971d2555b497a0057a0dae779a3187c4f7bc321.
 
 All 12 pending static Dialog cases have an authenticated opener crop.
