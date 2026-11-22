@@ -601,6 +601,31 @@ are open. The probe is bound to the 1,887 original served assets.
 Receipt disabled-radio-switch-pointer-source-20261122.log SHA-256
 039fe4932d6d8d2fe3b97a89925ebd284a742c2d6d678a2bfc03acc1d7189570.
 
+The retained light desktop DPR1 pointer attempt now records the actual
+disabled owner routing in both families. Material keeps BODY focused.
+Radio routes the DOM click to MAT-RADIO-GROUP. Slide Toggle records
+pointer-down and pointer-up on a SPAN with no click. Astylar routes both
+attempts through CANVAS, then focuses radio-solo or slide-toggle-primary
+by pointer-up. Its application stream records one click on radio-solo-ring
+or slide-toggle-state-layer. Checked state and candidate selection remain
+stable at every sample. Both cases still need other pointer points, direct
+programmatic focus and current browser applicability.
+
+The first verifier rejected the workspace artifact junction. The guarded
+reader pins its real root, rehashes all 1,887 original served files and
+verifies the capture, runner, checkpoint, trees and screenshots.
+Keep the first verifier logs and the original capture.
+Report SHA-256 dd0fac1bc604f02a505bdc9299706a6c75dff2b3a9e8aaa59caa402e31dc4743.
+Guarded verification SHA-256 af2da322fb625b190e7f722654a245ba5b00b43260a1abef25f8519399dda21a.
+Initial verifier stderr SHA-256 f6fe1bd27b5b418d51ea382a22636052296c9b6408ca8b59d6471c1b8ca2c381.
+
+The disjoint hover, held and keyboard batch is materialized as 41e4d35b.
+It adds 401 observations across 399 of the 2,311 rows. The file SHA-256 is
+8ffd7113bbdcd8bcc61e09c50e21fe184ff900610a49655392f2cce5f51c987d.
+Materialization receipt SHA-256 9f32090edfc106b604bd4390d7a6085ac08ed9ee693b9193bec26742289642ba.
+Join these two pointer attempts to that proposal before replaying the
+coherent batch. The existing 8835fb08 dependency replay is active.
+
 The existing focused proofs passed 2/2 using the hash-identical retained
 candidate source map. The first run passed the owner inventory and
 stopped the keyboard proof at the missing dist path. Keep both logs.
