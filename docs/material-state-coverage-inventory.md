@@ -690,6 +690,28 @@ rows. Both checkpoints and their captures verify, and 11 new evidence
 paths authenticate. The prior review reverses exactly. Pending counts
 remain 1,484 programmatic-focus and 583 authored-activation rows.
 Held delta SHA-256 c789832b3a96080c34d87f3741a3200fd10687ab045eadcc19cdc752c421b724.
+
+The retained Tooltip mouse probes cover all nine configured hover
+and nine held cases. Hover leaves BODY active on both sides. During
+hold, Astylar semantic focus moves to the opener and blurs the canvas.
+Babylon clears the pressed device input and routes a logical pointerup
+and click while the browser still records a trusted pointerdown with
+buttons 1. The trusted release adds no second logical click. Material
+focuses the opener and records pointerup and click on physical release.
+The immediate trigger here is semantic focus during the Tooltip hold.
+The public held-update reproduction verifies the same blur and device
+release mechanism under its separate compatible-update trigger.
+
+The Chromium 157 runs match the original capture's 1,887 served assets,
+recorded focus aliases and normalized events. The original Chromium 154
+call ordering and current rendering remain unverified. Delta 6df9971b
+binds both packages and all 18 checkpoints. It adds partial focus
+evidence to 18 rows and release-order evidence to the nine held rows.
+The review now has 1,466 programmatic-focus and 583 authored-activation
+rows pending. The prior coverage and accepted pointer verify on reversal.
+Tooltip two-case report SHA-256 a6a1dd10ecdcd2043dc307aff58b63d635ce548fa3f121c090550e04a801dfe4.
+Tooltip remaining report SHA-256 39d93e1430e791df1a87eeb01a6d635c47f4170a2edb460fe67d20438edc7cf2.
+Tooltip delta SHA-256 81bb61d5b5e42312ccb82a193d637d2f640c0793cfa0b44eb0e7b4cdb6b6ed.
 Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
 Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
 

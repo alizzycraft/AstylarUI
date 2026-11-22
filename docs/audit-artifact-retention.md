@@ -72,7 +72,10 @@ Keep the datepicker-desktop-outside-dismiss-focus-caller-20261122
 package with compact delta dcd805e8. Both successful desktop scratch
 assemblies were cleaned. Keep dialog-sheet-held-focus-caller-20261122
 with its runner, paired captures, two checkpoint records and compact
-delta f2ccf964.
+delta f2ccf964. Keep tooltip-hover-held-focus-20261122 and
+its remaining-cohort package with the runners, both manifests,
+18 checkpoint records, paired captures and compact delta 6df9971b.
+The successful Tooltip scratch assemblies were cleaned.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the
