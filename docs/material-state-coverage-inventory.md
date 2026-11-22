@@ -623,8 +623,34 @@ The disjoint hover, held and keyboard batch is materialized as 41e4d35b.
 It adds 401 observations across 399 of the 2,311 rows. The file SHA-256 is
 8ffd7113bbdcd8bcc61e09c50e21fe184ff900610a49655392f2cce5f51c987d.
 Materialization receipt SHA-256 9f32090edfc106b604bd4390d7a6085ac08ed9ee693b9193bec26742289642ba.
-Join these two pointer attempts to that proposal before replaying the
-coherent batch. The existing 8835fb08 dependency replay is active.
+The 8835fb08 replay passed all 19,519 dependencies and preserved the
+accepted pointer and all case flags. Replay SHA-256
+e2b4aeb371e6e2bb588692bfbca9e96e27c548f83c4cdc740b7fc4d61abe423c.
+
+The two verified Radio and Slide Toggle pointer attempts now have four
+staged observations on the exact 41e4d35b rows. The retained Material
+controls are natively disabled with pointer-events none. Astylar authors
+ARIA-disabled role owners and neither hit descendant has a disabled flag.
+The earlier keyboard observations are conserved.
+
+Light desktop DPR1 disabled Expansion now has a verified paired attempt.
+Material stays collapsed after a DOM click on the title and focuses its
+disabled header. Astylar registers a click on expansion-primary, sets open
+true at pointer-up and focuses its role DIV after CANVAS. The exact
+captured click handler requests that state change with disabled set.
+The missing guard is in the fixture click route. Continuous focus and
+runtime applicability outside this retained context remain open.
+
+The first Expansion verifier rejected the artifact junction. The scoped
+reader verified the same capture and its 1,887 assets. Keep the failure
+stderr SHA-256 2246389a2206ad695f439ff950d3ef2f62820f084c3820b2e50a5e7ee80563a1
+and verification SHA-256 10960d02b16fcda36cdbd3248299bd7300410686c973ba559abb3fda8c2dbd5a.
+Expansion report SHA-256 afd83a21610a726e7dfe23da0042e47fdb8455c011c149038b462ff4894a7158.
+
+The three-case pointer delta adds six observations to the 2,311-row
+parent. Reversal preserves the complete parent and all acceptance flags.
+Expected successor 3a0dfc9c; materialization and integration remain pending.
+Delta SHA-256 34408f342486abd9110a98810ab6f02c639f8fb64301a788ce858f168e723cec.
 
 The existing focused proofs passed 2/2 using the hash-identical retained
 candidate source map. The first run passed the owner inventory and
