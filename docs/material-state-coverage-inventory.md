@@ -546,6 +546,18 @@ Node identity report SHA-256 5d9d71f5fb0aa48fba794ccfbd54f623e7f728ee5b79fd7d6e2
 Runner SHA-256 a35dc03d2bf1fa6d30b8d91d6d1a399f29f6ef14f64f59d5a169878c2a36e2b0.
 Verification SHA-256 bdc1dc96e732e0c34087cf9abb7db841bdf47547970a5346f4951875689c3c9e.
 
+Composed successor 31b58316 stages the two exact first-operation
+observations alongside the 126 activation and 14 departure-focus
+observations. It represents 128 changed rows on the 2,311-row 3a0dfc9c
+parent. The comparison reproduced the previous successor digest before
+adding the two disjoint traces. Reversal preserves the complete parent
+and every case and rendering flag.
+Delta SHA-256 1886d8882709ad1423ee8e84ab4833ef358643ed1da30af643f7e2537bd4533a.
+
+The remaining 14 causal traces are queued after the frozen pointer
+export to avoid competing for memory. Their earlier focus traces remain
+valid for the sampled owners and events.
+
 Trace dialog-sheet-activate-leave-focus-20261122/latest-report.json
 SHA-256 f34578c470431fb915c0ff8ef5d30ddc3a3cf6492659f4ffcf1251bcb57e0a24.
 Runner SHA-256 f470b14daf0f47bef478f0414d8ca630dbcf87b38c484a238671ec5612c96eb3.
