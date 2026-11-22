@@ -219,6 +219,19 @@ Verified report and scope receipt
 original-static-hover-focus-activation-boundaries-verified-20261122.log
 SHA-256 0a8c3d8133277fa9fdce5b977aba6f93a051a8b2a3383eb0eca334e529d6b47f.
 
+Successor 8835fb08 already carries the exact light desktop DPR1 Select
+hover evidence. The remaining 208 rows now have a staged activation
+join from their retained movement-only actions. The 26 families record
+208 pointer moves and 903 pointer enters on the candidate, with no
+activation events on either side in the captured interval. The original
+and maintained action and listener setup methods match. The reference
+listener omits movement and starts after setup, and actual focus owners
+remain open. The delta recovers every parent row when reversed and
+preserves all case and rendering flags.
+
+Receipt retained-hover-movement-activation-delta-20261122.log SHA-256
+61a3cfed414db77d09b57991792609008649e7b6f67c9c92a27fe05eff2c2939.
+
 The light desktop DPR1 Select hover replay resolves one missing focus
 owner. Both pages record BODY with HTML ancestry before the move and
 at settled hover. Reference records no events. Candidate records five
