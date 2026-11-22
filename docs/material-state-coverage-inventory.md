@@ -974,6 +974,29 @@ Report SHA-256 c21753332e9909a71daff71da2319b6bf6faeb1bebb1484829bcde5891fa5e8b.
 Manifest SHA-256 2df7ee6ea4ecfde4b306cca6214a1247938021d5d3276823a4cc9f6a95dee6c3.
 Delta SHA-256 b06b52642ff6337e579925fcabf6af520952fb0f49da8d00af312214f9b96c1f.
 
+The 14 remaining disabled Radio and Slide Toggle contexts reproduce
+the earlier light DPR1 pointer evidence. Material keeps BODY focused.
+Radio records the click on its group. Slide Toggle records pointer-down
+and pointer-up without a click. Astylar delivers an application click
+to radio-solo-ring or slide-toggle-state-layer and focuses the
+corresponding disabled semantic owner. Both sides preserve checked
+state at every sample. Astylar also preserves selection.
+
+The authenticated handler returns without requesting a state change
+when disabled. The state result therefore agrees with suppression
+after application delivery for these center pointer attempts. Direct
+focus requests, keyboard coverage, other pointer points and current
+rendering remain open.
+
+Compact successor 566804b3 reverses to fc1dd4e1 and leaves 960
+programmatic-focus and 64 authored-activation joins pending. The
+latter include 16 disabled Button and Select cases, 40 cases whose
+disabled label has no disabled mapped owner, and eight mobile
+dismissal cases.
+Report SHA-256 3969da6b35abfff3519b25258e70bd90610dd2f05ee6581c7bc7caaa7e9caad0.
+Manifest SHA-256 0f14be522b228947302c3894f51d86af5189966fe2251f68eca9f74dceb8c321.
+Delta SHA-256 c9f492b1bed35bb50698e760f807352fab46c4ee793da6a05982d6cfb70b6e2b.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
