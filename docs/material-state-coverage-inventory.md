@@ -3,7 +3,7 @@
 The repaired picker export passed validation and wrote candidate 87915914.
 It covers 436 static and 1,875 interaction rows, with 8,483 differences,
 389,202 occurrences and 215 source findings. Input equivalence remains
-false. The accepted pointer is still 844c896c. The 80-section comparison
+false. The 80-section comparison against predecessor 844c896c
 conserves 70 whole sections and reconciles ten. Five sections match the
 preflight changes exactly. The other five preserve every path, container
 and non-receipt value. Of their 147 changes, 98 are direct producer hashes,
@@ -14,8 +14,17 @@ The corrected result checks actual section order and exact changed membership.
 
 Reconciled receipt picker-repaired-candidate-reconciled-20261122.log SHA-256
 c690f664e8fd08ff1832c47a5d0c547bb687db0ef328ac1004885af4227be245.
-Independent cold replay v2 is running. Isolated import and accepted pointer
-advancement remain pending. Keep the candidate and frozen sources.
+Independent cold equality passed with zero disk-cache hits, 20,947 files
+and 5,459,259,495 verified bytes. Isolated import verifies all 84 shards.
+The accepted store advances to 87915914 and index 64a72bdb. It was verified
+before and after pointer advancement using 86 hash-verified hard links.
+All 2,311 cases remain partial and current rendering remains unverified.
+
+Cold stdout SHA-256 14d267d230f1e12fec49f898231c15878610b9ae1d10f49e86aa9c0dd1bc0d26.
+Cold stderr SHA-256 8601f0ed4eb6acbfe4976e1c82d063c07d024ab633ae4e393e12a64d0aedf23b.
+Isolated import SHA-256 66145acf6f8033696e36e5d15e8f0cf1bbdad040b3923f751ad6247e28cc1ea3.
+Promotion SHA-256 3cdda9b61a00a647e2126ba97f8045f498b962d19096a5fc680376a5c2630d8e.
+The retained 844c896c predecessor and all original evidence remain available.
 
 Export stdout SHA-256 99070870eed93390e5845c22b81012850157823b620afa314520885db49c409d.
 Export stderr SHA-256 633626b69f9d99e5b32f9917264a54ff90ac45a6672005e2e6a860ac7541d386.

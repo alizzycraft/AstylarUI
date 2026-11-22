@@ -1,5 +1,11 @@
 # Efficient Material input-audit workflow
 
+November 22 picker export 87915914 passed section conservation,
+independent cold equality and isolated and accepted store verification.
+The audit accounts for 8,483 differences, 389,202 occurrences and
+215 source findings. Use the existing receipts for this generation.
+All 2,311 cases remain partial and the final browser gates remain open.
+
 November5 frozen1d3da334 direct collectors pass all four expected groups;exact
 acceptedab2c backup is independently copied/hash-verified with275542016 D:bytes
 free afterward. Run one --slider-span-opener canonical export with fresh logs;

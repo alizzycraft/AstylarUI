@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain the accepted picker package 87915914 and index 64a72bdb, its
+86 hard-linked verified isolated files, predecessor 844c896c and the
+pre-export backup. Keep the corrected section comparison, independent
+cold replay v2 logs, isolated import and accepted promotion logs.
+See the coverage ledger for the exact hashes and milestone scope.
+
 Keep the failed picker-focus-semantics-export-20261122 stdout and stderr.
 The run exited before publication. Stdout SHA-256
 48b5216679026ea199178f4f69f0fd1a9f555d6e64e0616192abf4c58b37ccf5.
