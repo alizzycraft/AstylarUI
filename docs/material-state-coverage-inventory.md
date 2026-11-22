@@ -712,6 +712,30 @@ rows pending. The prior coverage and accepted pointer verify on reversal.
 Tooltip two-case report SHA-256 a6a1dd10ecdcd2043dc307aff58b63d635ce548fa3f121c090550e04a801dfe4.
 Tooltip remaining report SHA-256 39d93e1430e791df1a87eeb01a6d635c47f4170a2edb460fe67d20438edc7cf2.
 Tooltip delta SHA-256 81bb61d5b5e42312ccb82a193d637d2f640c0793cfa0b44eb0e7b4cdb6b6ed.
+
+The 18 retained Slider drag-start and drag-end cases expose different
+focus timing behind the matching final thumb aliases. Material focuses
+the range input at pointerdown. Astylar holds DOM focus on the canvas
+through the trusted pointerup, then queues semantic input focus before
+the DOM click. There is one subsequent blur and refocus in each case.
+The supplied drag values, normalized events and focus aliases match the
+original report. The drag action and settlement methods match the
+authenticated original runner, and all 1,887 served assets verify.
+
+One light desktop DPR1 drag-start follow-up isolates the post-click
+blur. The semantic root calls replaceChildren during reconciliation,
+reinserts the same connected input and leaves BODY active. The queued
+bridge refocuses that same node. Other cases share the event order.
+Exact mutation identity in those cases and current rendering remain
+unverified.
+
+Compact delta 04a6ce12 binds the 18 focus joins and the single mutation
+probe. Both packages and their 19 checkpoints verify. Reversal restores
+the prior review exactly. Pending counts are 1,448 programmatic-focus
+and 583 authored-activation rows.
+Slider drag report SHA-256 7bbe147681a2e344dda8f44977beb620db7c4232dd92e93d355ca71fd4a68cbc.
+Slider mutation report SHA-256 f2ee4aed7ee0304ce66b0649b5605de85222ff15742c9a82faa8e5f86a8e2d1c.
+Slider drag delta SHA-256 9a4dbf37059abecb4e1b7121a9ca68a12e947b93a95a65c32d97be50ff163c86.
 Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
 Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
 

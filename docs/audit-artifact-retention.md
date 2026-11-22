@@ -75,7 +75,11 @@ with its runner, paired captures, two checkpoint records and compact
 delta f2ccf964. Keep tooltip-hover-held-focus-20261122 and
 its remaining-cohort package with the runners, both manifests,
 18 checkpoint records, paired captures and compact delta 6df9971b.
-The successful Tooltip scratch assemblies were cleaned.
+The successful Tooltip scratch assemblies were cleaned. Keep
+slider-drag-focus-boundaries-20261122 and the post-click mutation
+package with their runners, manifests, 19 checkpoint records, paired
+captures and compact delta 04a6ce12. Both Slider scratch assemblies
+were cleaned.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the
