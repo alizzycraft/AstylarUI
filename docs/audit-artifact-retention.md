@@ -297,6 +297,11 @@ model, custom Divider checkpoint screenshot and live texture evidence.
 The alternate backing was evaluated in memory.
 Backing screen receipt SHA-256 32f3a89fc1245ec6f54c1d7ea1d8a8c14648f54a08f0ddb4a7130b55c5fbccdd.
 
+Keep divider-retired-callback-owner-20261122.log with the Angular
+cohort report and manifest and its captured core and showcase maps.
+The getter control used the captured source in memory.
+Retired callback receipt SHA-256 8dbdf5b197732b1754172bd5f8d1c8784050496efcbda5c456e1f7869fabd89b.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.

@@ -1346,6 +1346,18 @@ output. A rendered 22-row comparison and a paired equal-input native
 comparison remain open.
 Backing screen receipt SHA-256 32f3a89fc1245ec6f54c1d7ea1d8a8c14648f54a08f0ddb4a7130b55c5fbccdd.
 
+The captured Divider runtime keeps a configured handler count of one
+after each of 60 Angular retirements in 20 physical contexts. The
+mounted semantic bridge adds a top-level event callback. The getter
+counts that callback and enumerates handler properties. Showcase target
+handlers come from a lazy Proxy. Direct lookup can return a callback
+while enumeration returns none. The captured getter reproduces this
+distinction. All retired canvases have zero pointer, wheel and
+keyboard registrations in the retained observations. Synthetic events
+sent to them add no callbacks. The peer remains mounted. Trusted peer
+dispatch and eventual garbage collection remain open.
+Retired callback receipt SHA-256 8dbdf5b197732b1754172bd5f8d1c8784050496efcbda5c456e1f7869fabd89b.
+
 The Datepicker local paint census has 99 rows with verified primary
 target crops and remaining work. The eight configured desktop opening
 cases can also be measured from their authenticated full screenshots.
