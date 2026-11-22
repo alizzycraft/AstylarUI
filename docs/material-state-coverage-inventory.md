@@ -1311,6 +1311,18 @@ The October 31 geometry capture has a different action and date.
 Same-frame child geometry and paint ownership are still required.
 Panel interior receipt SHA-256 887ca4b86b5f1cae65ce335755bf5b645f0ca0c82b334a224a169ca31b1bee2a.
 
+The separate October 31 contrast DPR1 activation capture contains both
+settled day-cell bounds and screenshots. All 31 candidate cells are
+34 physical px lower after rounding. Sampling each side at its own
+cell bounds reduces mean RGB error from 0.03096 to 0.00847, a 72.6%
+reduction, and improves every pair. Across the 30 cells excluding
+the focused date, mean error falls from 0.02818 to 0.00634, a 77.5%
+reduction. This measures the contribution of cell placement in that
+capture. The retained day-1 text inputs include different color and
+inner box size. Residual contributions require separate evidence.
+The October 5 openings still lack used child rectangles.
+Cell paint receipt SHA-256 2f9486a3ff8cd8179a3bf1cc79a1feb1fba477afb7d8b6eb9531e36eef1f6cee.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

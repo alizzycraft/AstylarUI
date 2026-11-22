@@ -230,6 +230,11 @@ Keep datepicker-panel-paint-interior-20261122.log with its two
 original screenshot and checkpoint dependencies.
 Panel interior receipt SHA-256 887ca4b86b5f1cae65ce335755bf5b645f0ca0c82b334a224a169ca31b1bee2a.
 
+Keep datepicker-settled-cell-paint-localization-20261122.log with the
+October 31 paired geometry and screenshots. Cell crops were evaluated
+in memory.
+Cell paint receipt SHA-256 2f9486a3ff8cd8179a3bf1cc79a1feb1fba477afb7d8b6eb9531e36eef1f6cee.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
