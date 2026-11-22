@@ -468,6 +468,18 @@ ancestry nor focus timing. Scope receipt activate-leave-focus-scope-
 20261122.log has SHA-256
 1e8d7a38d9af3637bb97efd94ae0762b2790009d12663da47b6bf4ae97ea5a8e.
 
+Successor 3a0dfc9c already includes the two direct light desktop DPR1
+traces. For the other 126 cases, the original activate and activate-leave
+siblings preserve the same normalized primary-target sequence, including
+a click in each case. The action and comparator methods match the maintained
+runner. The comparator filters movement, deduplicates adjacent event types
+and omits the input/change tail for checkbox and slider. The remaining
+14 focus alias differences still need direct owner and timing evidence.
+
+The reversible delta stages 126 activation comparisons on parent 3a0dfc9c.
+All 2,311 case rows and acceptance flags are preserved. Expected successor
+545a436b. Delta SHA-256 e81d51884f04bb64c85128504fa4240223310073477281a3c1bc331b145a6364.
+
 The two light desktop DPR1 activate-leave traces preserve focus ancestry
 from immediately before pointer departure to the settled sample. Material
 holds the sheet link or Dialog action button. Astylar holds the sheet opener
