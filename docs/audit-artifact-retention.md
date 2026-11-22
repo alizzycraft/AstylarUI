@@ -71,6 +71,12 @@ Keep configured-focus-activation-20261122 with its runner, manifest,
 scratch assembly was cleaned.
 Verification SHA-256 30e6dbec84a56012fad48af3c6fe9ba05ae6bf7a513216ba604a3c2a569f7362.
 
+Keep disabled-expansion-pointer-remaining-20261122, its runner and
+provenance directory, paired trees and screenshots, capture logs, and
+compact delta fc1dd4e1. The verifier pins the artifact junction and
+rehashes the complete 1,887-file served build against the original manifest.
+Verification SHA-256 184046a40831f3414ae7ebf3540df929765405e19f235816fd50e0130ca27ace.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

@@ -954,6 +954,26 @@ Report SHA-256 6588db5b5f9606e864ce047b4928b73b5d835b12a74a6843ddfca2365f3ed243.
 Runner SHA-256 f929c59c2d09fa9b33a497c6563e96fc589b79d80e3d3458eac248a1531ba208.
 Delta SHA-256 f3bd07b4725a63bdacaa6fef5c241b7577d1def2f71283244cb540c39a0710bf.
 
+Seven additional disabled Expansion contexts reproduce the earlier
+light desktop DPR1 pointer result. Material focuses the header and
+stays collapsed after a trusted click on the title. Astylar focuses
+the canvas on pointer-down, then its header on pointer-up. The
+application receives one click on expansion-primary, and the panel
+opens on release and stays open at settlement in all seven cases.
+
+Both headers report disabled before the attempt. The retained handler
+trial requests open=true with the disabled flag set, which binds
+the delivered click to the existing fixture-authoring cause. This
+covers one center pointer attempt in all eight configured theme and
+DPR contexts. Other pointer points, keyboard activation, direct focus
+requests and current rendering remain open.
+
+Compact successor fc1dd4e1 reverses to 6c043e6d and leaves 974
+programmatic-focus and 78 authored-activation joins pending.
+Report SHA-256 c21753332e9909a71daff71da2319b6bf6faeb1bebb1484829bcde5891fa5e8b.
+Manifest SHA-256 2df7ee6ea4ecfde4b306cca6214a1247938021d5d3276823a4cc9f6a95dee6c3.
+Delta SHA-256 b06b52642ff6337e579925fcabf6af520952fb0f49da8d00af312214f9b96c1f.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
