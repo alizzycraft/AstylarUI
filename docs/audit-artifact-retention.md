@@ -65,6 +65,12 @@ e36829a6 and the verification receipt. The successful served-asset
 scratch assembly was cleaned.
 Verification SHA-256 c1331ef9bd4a6e9e9c81d6c01f3062bb3dce866265ee92c3dac6cfc0728e10f5.
 
+Keep configured-focus-activation-20261122 with its runner, manifest,
+64 checkpoints, paired captures and logs. Retain compact delta
+6c043e6d and the verification receipt. The successful served-asset
+scratch assembly was cleaned.
+Verification SHA-256 30e6dbec84a56012fad48af3c6fe9ba05ae6bf7a513216ba604a3c2a569f7362.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

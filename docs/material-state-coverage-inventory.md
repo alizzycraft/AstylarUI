@@ -933,6 +933,27 @@ Report SHA-256 4915636ac747600f35d4a079f885b786f259f0d520020a56bbdb3364cd0e59bc.
 Runner SHA-256 3e606461d4728f9d05e7d62206364c0093d1c1a4b62ed2709cb760bb3ba321f9.
 Delta SHA-256 b363a02ff11933ad2e537cf3b8c12a326b932eda6213dad6661fdd05f59425ab.
 
+The remaining 64 configured focus cases now have activation
+observations from initialization through settlement. No activation
+events were recorded on either side during setup or after the original
+programmatic focus call. All 64 original and replay checkpoints
+verified, and the replay used all 1,887 original served assets.
+
+Both sides settle on the corresponding logical owner. Astylar records
+focus, blur and refocus in all 32 Tree, Form Field, Input and Datepicker
+cases. Material records one focus in each. The other 32 paired cases
+record one focus on both sides. These are retained Chromium 157
+observations. Explicit pointer and keyboard activation remain separate
+from the configured focus action.
+
+Compact successor 6c043e6d reverses to e36829a6 and leaves 981
+programmatic-focus and 85 authored-activation joins pending. The latter
+include 77 disabled and eight mobile dismissal cases. Whole-case
+inspection and current rendering remain open.
+Report SHA-256 6588db5b5f9606e864ce047b4928b73b5d835b12a74a6843ddfca2365f3ed243.
+Runner SHA-256 f929c59c2d09fa9b33a497c6563e96fc589b79d80e3d3458eac248a1531ba208.
+Delta SHA-256 f3bd07b4725a63bdacaa6fef5c241b7577d1def2f71283244cb540c39a0710bf.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
