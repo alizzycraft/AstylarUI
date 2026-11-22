@@ -519,6 +519,23 @@ keyboard receipts leave pointer blocking open. Use raw event target,
 active owner and value or checked-state observations to distinguish
 hit routing from suppression after delivery.
 
+The captured click methods request identical state changes with and
+without the disabled store bit for Button Toggle, Chips, Menu, Stepper
+and Tabs. Expansion also requests open=true in both trials, although
+its authored trigger has ariaDisabled=true and tabindex=-1. Radio and
+Slide Toggle request a change only with the disabled bit off.
+
+The captured event dispatcher method matches the current method after
+transpilation. Its predicate accepts the ARIA-disabled role DIV and
+rejects the disabled native button in the controlled trial. This leaves
+physical hit routing and callback delivery open. After the queued
+Radio and Slide Toggle probe, sample the actual disabled Expansion
+header at one paired visual center. Read callback, expanded and focus
+boundaries to determine whether the authoring gap reaches the browser.
+
+Receipt disabled-activation-handler-boundaries-20261122.log SHA-256
+70ad54b8b7302b1712180782146befd7ba2faba29bc9686398a2ee23912b4797.
+
 The retained application maps match both current component sources byte
 for byte. The Material components bind disabled on both controls.
 Astylar authors ARIA-disabled role divs. Its click callback records the
