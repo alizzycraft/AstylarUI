@@ -54,6 +54,21 @@ test and its drift controls. Passing overlay SHA-256
 The live exporter remains frozen. Apply the tested historical routes
 after promotion, then run the wider suites to verify other boundaries.
 
+The attribute-focus, inline-image and border-contact registration tests
+all reached the same Slider opener restore failure when their direct
+callers still read the full picker sources. Failure receipt
+picker-static-semantic-older-registration-20261122.log has SHA-256
+582059859c0561868af416fd656a16272355c6041ef8dd2767d57addd45f9a90.
+Reversing the exact picker policy and producer changes at the shared
+legacy clip entry points passes all three original tests and the
+semantic historical-boundary regression, including their drift checks.
+The older-registration-overlay replay log has SHA-256
+58b67b4e56342f634ecf2fa69adcbc20ebba47a91e917168518d33fafd52026d.
+The replay overlay has SHA-256
+c58ae99cc0241bed13ff03bc234b1b6bb88e0982ddf68a026bb1167bb5aeecc0.
+Use the shared reversal when integrating after the export freeze.
+The browser assertion and complete final suites remain pending.
+
 The accepted 844c896c bundle is backed up before the picker export. Freeze
 this coherent source generation through export conservation and cold checks.
 All case groups remain partial and current rendering remains unverified.
