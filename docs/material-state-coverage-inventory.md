@@ -431,6 +431,22 @@ Join the two exact actions after the frozen milestone. Continuous focus,
 later events and current rendering remain open.
 
 
+The disabled cohort has 120 cases across 15 families with both focus and
+activation joins pending. The original report contains all 136 disabled
+cases. Neither side records an event or a focus alias in any of those rows.
+All 136 candidate interaction diagnostics record no logical focus ID.
+The complete original and maintained action methods match after line ending
+normalization. The disabled branch returns before target lookup or input.
+The retained rows establish a no-action baseline for each exact case.
+They leave the settled DOM focus owner and the control response to an
+attempted activation open. The event and focus comparators pass by default
+for this state. Start with a paired raw active-node sample and a separate
+trusted activation attempt against the same disabled target, using the
+original no-action run as the baseline.
+
+Receipt original-disabled-action-focus-boundaries-20261122.log SHA-256
+fb7d21a83735f3241876f5da3bea4a060e41fbde44b06b90c4857dae8bd91439.
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
