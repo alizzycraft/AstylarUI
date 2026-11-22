@@ -195,6 +195,14 @@ Verification SHA-256 2a7c28d54a0714ca6e6681c9e498bab023f97a1a96a5196972f5ca100b6
 Dismissal headroom SHA-256 6f190f9b964859c480ae00391aa9029545923dbeffbfb0797140cadec6f44205.
 Prior report headroom SHA-256 7dfc97f7c5a961bb5db00843da5a806464b3a13d07878a8eee129c86f3e08935.
 
+Keep remaining-configured-editing-focus-20261122 with its runner,
+manifest, 32 checkpoints, paired captures and logs. Successful
+served-asset scratch was cleaned. Retain compact delta 66e07fad.
+Compression preserved the editing report and delta and the historical
+enforced-full-2b6cddc report bytes and file identities.
+Verification SHA-256 5992affad07ba8edd2b133a1794871ac00fc663829d31db4daa97af75f91ee4a.
+Headroom SHA-256 fcbacf6c6ddba0a54fa9a33ee837f87a01ab7e6f3449683b73bd81e8dfa80eb3.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

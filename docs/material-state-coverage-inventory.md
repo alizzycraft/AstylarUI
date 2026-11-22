@@ -1250,6 +1250,20 @@ The live 1,164-source fingerprint section matches accepted 20baa74b.
 Report SHA-256 e29028791f75fab63a98b15d25b07285c9e7e46b663d45ea5dd76a62f222d577.
 Delta SHA-256 aa18a517ea369f6d43c6b261093798b9662e7704f5be14889ef05aaa40875014.
 
+The 16 Form Field and Input empty-edit cases focus the corresponding
+control on both sides before the final outside click. Material then
+settles on BODY and Astylar on CANVAS. The 16 Autocomplete and Select
+cases focus their respective controls after opening. During option
+commit, Material retains the same control node through its blur and
+refocus, while Astylar settles on CANVAS. Reopening restores Astylar
+control focus. The four normalized comparison fields match the
+original in all 32 cases. Staged successor 66e07fad retains 35,034
+dependency receipts and leaves 33 focus joins pending. The remaining
+actions are alternate and repeated activation, secondary Datepicker
+opening, Timepicker scrolling and Snackbar automatic dismissal.
+Report SHA-256 454ffa72b23e33fa95eaa4005883d2428157070c0d2a720214a1b2332f9de534.
+Delta SHA-256 70b3d7b6fd4b1d5ed3d86315772c35c6867b1c1a31e021380b1009825e04cfd5.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
