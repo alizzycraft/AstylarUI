@@ -594,6 +594,22 @@ after the exact light desktop DPR1 activate click. The missing native
 alias could represent focus in the calendar or a return to the document.
 Delta SHA-256 9d3daac7d6349cb03c8a76a28be52c49ccfead2c324b71455807d861ab2e253c.
 
+All 17 pending activate-twice rows record two normalized pointerdown,
+pointerup and click sequences on both sides. The paired reports and 34
+input trees authenticate, and the action, target and comparator methods
+agree with the original runner. All eight Sort cases end with descending
+aria-sort in the native tree and descending ariaSort in the authored
+candidate tree. All nine Snackbar cases retain a measured surface on
+both sides and satisfy the recorded placement check. The interaction-state
+flag passes by default. These endpoints leave intermediate Sort direction,
+actual event targets, Snackbar timer restart and current rendering open.
+Replay SHA-256 8d9bc46f20a63afbf6d4fdd629669ded10df6f42033475d7848d20cbe1c687dc.
+
+Successor 7c989f68 stages these 17 exact observations as partial activation
+inspection within 307 changed rows. Its reverse recovers all 2,311 parent
+rows and preserves whole-case and rendering flags.
+Delta SHA-256 1db7920f7bb94b79acec292b5c1d30e77adb92995a0204b562e977d72063ee71.
+
 The remaining 14 causal traces are queued after the frozen pointer
 export to avoid competing for memory. Their earlier focus traces remain
 valid for the sampled owners and events.
