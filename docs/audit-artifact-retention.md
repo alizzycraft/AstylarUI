@@ -324,6 +324,11 @@ stderr. The artifact junction resolved its relative import in a
 different worktree. A module-resolution probe passed with the main
 module path preserved. Successful probe scratch was cleaned.
 
+Keep datepicker-label-texture-composition-20261122.log with the
+existing owner/texture verification, settled input tree and original
+Astylar screenshot. Compositing and controls were computed in memory.
+Label texture composition receipt SHA-256 4fb4a1a186dc5813c7e3248c3c87643e7421c24206b8851c8e91396737770890.
+
 Keep datepicker-opening-header-and-focus-applicability-20261122.log
 with the October full report, its 16 opening input trees, and the
 November owner geometry report. The comparison used retained files.

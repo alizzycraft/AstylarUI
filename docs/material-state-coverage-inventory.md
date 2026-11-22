@@ -1633,6 +1633,17 @@ composition. The native raster algorithm and other cohorts remain
 unverified.
 Owner and texture receipt SHA-256 be4258ee6e804344dc1840a26908102f4e7d54db2f42c9439749874dce1df003.
 
+A source-over model using the exact retained day 2 and day 10 label
+texels reproduces the November Astylar screenshot at their centered
+DPR1 cell positions. Of 3,000 sampled RGB channel values, 2,988
+agree within one and all agree within two. A one-pixel offset or
+linear-light blending raises the total error by more than 100 times
+for each label. All sampled pixels outside the texture bounds are
+the recorded panel fill. The candidate?s shared channel coverage
+therefore survives composition for these two labels. The native
+raster path and equal-input attribution across other cases stay open.
+Label texture composition receipt SHA-256 4fb4a1a186dc5813c7e3248c3c87643e7421c24206b8851c8e91396737770890.
+
 The eight October configured desktop openings retain the same period
 and navigation graphic substitutions and text color differences as the
 November opening. All 16 October trees authenticate. The served asset
