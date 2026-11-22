@@ -254,6 +254,24 @@ wrapped methods. The retained-browser run is queued after strict replay.
 Runner SHA-256 3ea47f8936899fccb1cd7068a20d72c08ac185f532ad852bf1d778d8138ed016.
 Instrumentation check SHA-256 f2add7b0f433493f553981cecbbac7ba0363b63e2f1192571736c341c673a74f.
 
+The retained light mobile DPR2 Timepicker trace reproduces the original
+focus aliases, normalized events and 1,887 served asset receipts. In
+each of three cycles, setElementActiveState routes through
+applyElementPseudoState and allocates hover-active material before the
+opening rebuild. The tracker never adopts any of those three IDs before
+the last dismissal. All six input-material controls allocate inside
+the rebuild and appear in the tracker at transaction end. This locates
+the sampled retention at a core resource-ownership boundary. Surface
+teardown, dark profile, broader reach and current rendering remain open.
+Transaction replay SHA-256 e0d8d7b6068528013d37beba23e321385cb126cdfd50f6261b0fb1b6aac92baf.
+
+Review 24c22d1a materializes the 292 verified paint and ownership rows
+on 68836d43. It reverses to all 2,311 rows, keeps all 19,626 parent
+dependencies, and verifies 606 new receipts. Next wire the exact
+review selector and preserve inherited reader routes before full live
+dependency replay and source-fingerprint reconciliation.
+Materialization SHA-256 baf4b21e6d2d2bc952997daa9284d82bf05ed0021b3836e9deff00f536bddd15.
+
 For the 768 pending local-paint rows in 68836d43, the exact original cases
 contain no configured focused raster, state-paint detail, uniform
 background or shadow check. The largest missing groups include 62 each
