@@ -554,6 +554,26 @@ adding the two disjoint traces. Reversal preserves the complete parent
 and every case and rendering flag.
 Delta SHA-256 1886d8882709ad1423ee8e84ab4833ef358643ed1da30af643f7e2537bd4533a.
 
+An authenticated census of 3a0dfc9c counts 1,511 pending programmatic-focus
+joins, 959 activation joins and 768 local-paint joins. All 2,311 cases
+still have partial semantics, input/style/structure, history/ownership,
+and source currentness. Pending focus includes 322 static, 208 hover,
+189 held, 158 activate-leave and 153 activate cases. Some already have
+bounded observations. Census SHA-256
+7e1830e3398c70f416753810104ab7a00ca73d1aaec27048b077c98bf22c30d9.
+
+All 105 pending activate cases have exact pairs in the original report.
+Each records a click on both sides and equal normalized primary-target
+events. The original and maintained action and comparison methods agree.
+Source events outside that comparison, state effects and currentness
+remain open. Comparison SHA-256
+9dc3dd1ddda65fed35eeecaf8d2de7287aeb10bcfe604bf750bd1f90d5ae5536.
+
+Reversible successor 783119d6 combines the 105 activate comparisons with
+the earlier 128 changed rows. The check reproduces both the complete
+2,311-row parent and successor 31b58316 and preserves acceptance flags.
+Delta SHA-256 ea0488326fd5eaa656a0a333be5294256e092ad8e228a161becee4d5aeefec3d.
+
 The remaining 14 causal traces are queued after the frozen pointer
 export to avoid competing for memory. Their earlier focus traces remain
 valid for the sampled owners and events.
