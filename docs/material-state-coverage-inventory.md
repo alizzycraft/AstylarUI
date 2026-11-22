@@ -576,8 +576,32 @@ Materialized successor ded9e7ce stages 480 partial joins on
 dependencies. All 2,311 local-paint rows now have partial observations.
 Every whole-case inspection remains partial and all current rendering
 is unverified. The largest explicitly pending dispositions are 1,496
-programmatic focus and 583 authored activation. Prioritize them by
-actual owner and action applicability while the current export runs.
+programmatic focus and 583 authored activation. Autocomplete and
+Timepicker each account for 94 pending focus rows, Datepicker 93
+and Select 76. Their configured focus rows already have observations.
+The 583 activation gaps occur in static, disabled, selected, focus,
+error and mobile dismissal cases. Reuse an action only where its
+exact owner, preconditions and delivery are authenticated.
+
+Eight Slider activation rows qualify for a scoped programmatic-focus
+join. The original and maintained runners match all 12 action bodies
+in the raw probe receipt. Their Slider activation branch explicitly
+focuses the end handle before pressing End. In all eight retained
+raw probes, both sides emit focus, keydown, input and change on
+slider-primary, in that order, with values 65, 65, 100 and 100.
+The original report provides a settled alias. The ordered events come
+from the separate probe. Original event-time DOM identity, restoration
+and current rendering remain open.
+
+Compact successor 3876cf3a adds these eight partial focus observations
+on ded9e7ce and reverses to every parent row. It adds one replay
+receipt and leaves 1,488 programmatic-focus dispositions pending.
+For the pending picker dismissal cohorts, first check whether a
+retained action trace establishes focus restoration on the actual
+owner. Pointer-induced focus and settled aliases alone give a
+different observation.
+Slider focus replay SHA-256 57d75900d2fce3b169400d65616239bf774b98ec9a6006eec6b1f2a1d4fd8b03.
+Composed delta SHA-256 a71712777208d2e4094e8c8243fec9bfd989baeee3b99fa8b813b17717ba6663.
 Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
 Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
 
