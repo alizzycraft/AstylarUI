@@ -246,7 +246,11 @@ recovers every predecessor row. The other 2,302 rows and all case flags
 conserve. The existing loader authenticates 43 dependencies across the
 changed evidence projections. The stream reproduces the earlier seven-row
 digest d905129e and computes nine-row successor 6eee4e41. The complete
-successor envelope and full dependency replay remain pending.
+2,311-row successor is saved separately in the working proposal store.
+Its compact 142,894,715-byte envelope has SHA-256
+bf03c7cbffe793ac080ba287a73793aa89ff9abc1bc5f78186e9a0274544aee7.
+The complete parent and successor review digests match the staged delta.
+Full dependency replay and publication remain pending.
 
 Delta picker-pointer-history-nine-case-delta-20261122.log has SHA-256
 56abc7dc9dbcfdc94fdfe3a8dbf68d81f4107580385b93add2da8aa70baf856b.
