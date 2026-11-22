@@ -6,6 +6,13 @@ pre-export backup. Keep the corrected section comparison, independent
 cold replay v2 logs, isolated import and accepted promotion logs.
 See the coverage ledger for the exact hashes and milestone scope.
 
+Closed indexes for 844c896c, 0c2cc1b9, ab2c875a and a58e7a47 now use NTFS
+compression. Their hashes, byte counts and hard links match before and after.
+The operation recovered 756,195,328 bytes and preserved the accepted pointer.
+Keep disabled-successor-index-headroom-20261122.log SHA-256
+3b8af7ee9cd24a601b41a758a365c1ba87552f160882a1fd17a296edecad4685
+and its summary SHA-256 905c4d10dea121a4ba2b2da6c24f696f70a103dfffbfb3383c3327517107871d.
+
 Keep the failed picker-focus-semantics-export-20261122 stdout and stderr.
 The run exited before publication. Stdout SHA-256
 48b5216679026ea199178f4f69f0fd1a9f555d6e64e0616192abf4c58b37ccf5.

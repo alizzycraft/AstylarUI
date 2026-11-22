@@ -649,7 +649,13 @@ Expansion report SHA-256 afd83a21610a726e7dfe23da0042e47fdb8455c011c149038b462ff
 
 The three-case pointer delta adds six observations to the 2,311-row
 parent. Reversal preserves the complete parent and all acceptance flags.
-Expected successor 3a0dfc9c; materialization and integration remain pending.
+Successor 3a0dfc9c is materialized with 19,539 dependency receipts.
+The strict integration replay is running against accepted 87915914.
+Materialization SHA-256 3f04488a6ea1269bd3cfeb0502bfe1c0b54868bb253a91ab3b241d517cf479fb.
+
+Four closed indexes were compressed in place to recover 756,195,328 bytes.
+Each index retains its original SHA-256, logical size and hard links.
+The accepted pointer stays at 87915914. Retention lists the exact receipt.
 Delta SHA-256 34408f342486abd9110a98810ab6f02c639f8fb64301a788ce858f168e723cec.
 
 The existing focused proofs passed 2/2 using the hash-identical retained
