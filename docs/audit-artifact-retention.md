@@ -14,6 +14,13 @@ replay. Keep both reports, checkpoints, trees, logs and runner copies.
 withAuditScratch cleared both runs? temporary runner and browser trees.
 
 
+Retain original-held-action-focus-boundaries-20261122.log as the first
+census extraction, whose event filter omitted all targeted events. Its
+verified successor authenticates the same cases and restores the event
+records. Retain popup-held-focus-boundaries-20261122 with runner, report,
+tree, checkpoint and logs. withAuditScratch cleared successful scratch.
+
+
 Retain picker-static-boundary-virtual-wUB04C and
 picker-static-boundary-virtual-8fiiTY. The two isolated semantic runs
 identify successive source restoration boundaries without touching the

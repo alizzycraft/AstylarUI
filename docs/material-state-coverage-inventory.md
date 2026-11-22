@@ -186,6 +186,35 @@ The checkpoint authenticates those runner bytes. The first capture had
 the same result with the base runner recorded in the checkpoint.
 
 
+All 193 held rows with both joins pending record a click on each side in
+the event arrays read after release. Datepicker, Menu, Bottom Sheet and
+Dialog account for the 32 differing post-release aliases. Each lacks a
+reference alias and records the candidate primary alias. The candidate
+pre-release diagnostics contain a logical focus ID in all 193 cases.
+The original data leave the raw held DOM owner and release timing open.
+Census original-held-action-focus-boundaries-verified-20261122.log
+SHA-256 929fc8d07f027a686620ed5d476b94b518a9226af4d88329ee133145c0d39f66.
+
+The retained light desktop DPR1 Datepicker and Menu held replay used all
+1,887 original served assets and five byte-matched action and setup methods.
+Both pages start with BODY active. During held settlement and immediately
+before explicit release, reference focuses a BUTTON and candidate focuses
+the CANVAS. Trusted pointerdown has buttons 1. Both in-hold samples omit
+DOM pointerup and click, and the candidate event stream omits both too.
+After explicit release, reference focuses a calendar gridcell button or
+menu item, and candidate focuses the opener. The two original aliases
+recur. The Menu event sequence conserves. Datepicker preserves the original
+prefix and records one later reference blur and focus in the observed run.
+
+Join the exact retained activation and focus observations for those two
+cases. The first focus caller, other contexts, timing between samples
+and current rendering remain open. Report popup-held-focus-boundaries-
+20261122/latest-report.json SHA-256
+ae9a947ac7297e9587931dba1250e823b92161d3640ff949fe450b4d3fdd6d28.
+Checkpoint-bound runner SHA-256
+a7978b84facd699a9a16ba613b94661d11743d56ceab0cbb6a0020c852732ac7.
+
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
