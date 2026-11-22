@@ -467,11 +467,20 @@ Both sides keep the sampled input values. The eight Select observations
 join direct focus only. Their key attempt does not cover pointer activation.
 
 The delta rehashes 198 report, checkpoint, tree and screenshot receipts.
-Removing the 88 added observations and restoring the partial obligation
+Removing the 88 added observations and restoring the pending obligation
 dispositions recovers each exact parent row. All 48 earlier editing
-observations and the 2,311-case scope are preserved. The expected
-successor is 8835fb08f327c2173b1eea273b7a6ffc04aac8beac2279575aba8bbe4b80d3ef.
-Full materialization and dependency replay remain pending.
+observations and the 2,311-case scope are preserved.
+
+Proposal 8835fb08f327c2173b1eea273b7a6ffc04aac8beac2279575aba8bbe4b80d3ef
+is materialized. Its file SHA-256 is
+afefecfc89fa310e9b9cbb54294437733f0b757ebfd666bc0950daad5a9eddd8.
+Its inventory preserves all 19,433 inherited receipts, adds 86 verified
+files and totals 19,519 dependencies. Full historical-reader replay
+remains pending.
+Receipt disabled-exact-focus-action-materialization-20261122.log SHA-256
+bb3f3f472e1993d9fd61dbcb3a6926d72ebaa63279d25be58a8336afa03895f4.
+Receipt disabled-exact-focus-action-dependency-delta-20261122.log SHA-256
+59ab4ee0dc668a564ac97846f34c16b152c57cedc559e4d76feb5609b33980bc.
 Receipt disabled-exact-focus-action-delta-20261122.log SHA-256
 f498c3fd388848919350732edee40def850ca0a656ece97f77a9b9e81d37ae99.
 
