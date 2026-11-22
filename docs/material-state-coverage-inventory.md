@@ -225,6 +225,16 @@ Successor 0a9e5dfd stages four reversible history observations on
 68836d43. All 2,311 rows and acceptance flags are preserved.
 Delta SHA-256 d5bb397154b6c73d52f19ec069745687a5e182ce5a7194cf70d99e985f8e7e92.
 
+The next Timepicker light mobile DPR2 diagnostic distinguishes allocation
+within a tracked rebuild from allocation ahead of it. It preserves the
+exact three-cycle open-dismiss action and traces scene additions and
+removals, rebuild boundaries, explicit adoption and material membership
+at the original sampling points. A local check exercises both allocation
+paths and proves that the hooks preserve return values and restore the
+wrapped methods. The retained-browser run is queued after strict replay.
+Runner SHA-256 3ea47f8936899fccb1cd7068a20d72c08ac185f532ad852bf1d778d8138ed016.
+Instrumentation check SHA-256 f2add7b0f433493f553981cecbbac7ba0363b63e2f1192571736c341c673a74f.
+
 The authenticated accepted 844c896c index has 1,335 cases with both
 focus and activation evidence joins pending. The largest cohorts are
 static 324 across 27 families, hover 209 across 26, held 193 across 24,
