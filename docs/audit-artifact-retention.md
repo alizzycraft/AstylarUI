@@ -52,6 +52,13 @@ and modification time after NTFS compression. Its allocation fell
 from 291,697,232 to 136,364,032 bytes.
 Headroom receipt SHA-256 3f620b7e033f108b4e46295b89f4a9270f23d8e1dca14942c8b10c37aa0534d9.
 
+Keep the five mobile picker replay packages, including manifests,
+eight checkpoints and paired captures, plus compact delta afcbf9c3.
+Retain the first verification stderr for the archived runner name and
+the v2 stderr for the dormant selection branch. The v3 verifier binds
+the archived runner bytes and checks the inactive branch guard.
+Verification SHA-256 b51f0d27f77b38643bebc623d9c5da7b4711c19fd58c0f286c4be287a4efb59e.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

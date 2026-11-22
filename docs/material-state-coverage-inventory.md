@@ -898,6 +898,22 @@ Report SHA-256 6fb6ac809b91020fde8b281ab13218e8b667fc335b210f5ebfd08bdce7c66654.
 Runner SHA-256 18f641378a7fe512364160d13e2c962fa9e70750f004b45806774cefa51cf0bb.
 Delta SHA-256 82ef8f2bf8ede49b9a7b5b48e5727858156784183d0e2d02c35a74ba7e3b704c.
 
+The eight light and dark mobile DPR2 Autocomplete, Select, Datepicker
+and Timepicker open-dismiss cases now bind activation and dismissal
+to the original action. The replay drivers conserve the click target
+selection, input commands, settlement and event comparison. All eight
+original and replay checkpoints verify against the bound reports and
+the replay manifests carry all 1,887 original served asset hashes.
+
+Both sides record three normalized opener pointer sequences per case.
+Each settled click opens the popup and each settled Escape closes it
+in the retained Chromium 157 replays. Raw event delivery and other
+activation paths remain open. Compact successor afcbf9c3 reverses to
+50229baf and leaves 1,148 programmatic-focus and 316 authored-activation
+rows pending. The other eight mobile dismissal rows need scoped action
+evidence. All cases remain partial and current rendering unverified.
+Delta SHA-256 79e20022113176c1eca2fcdf6f10ae3ff4f64134dfa2ea2696b021e9e98288e8.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
