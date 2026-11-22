@@ -70,7 +70,9 @@ Keep the datepicker-desktop-canvas-dismiss-focus-caller-20261122
 runner, report, captures and checkpoint with compact delta 838adb11.
 Keep the datepicker-desktop-outside-dismiss-focus-caller-20261122
 package with compact delta dcd805e8. Both successful desktop scratch
-assemblies were cleaned.
+assemblies were cleaned. Keep dialog-sheet-held-focus-caller-20261122
+with its runner, paired captures, two checkpoint records and compact
+delta f2ccf964.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the

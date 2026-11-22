@@ -660,8 +660,7 @@ event comparison and settled boundaries, verifies the checkpoint and
 matches all 1,887 served assets. The separately authenticated outside
 dismissal gives the same trusted event order, active owners and focus
 call sites. Both findings are scoped to retained light desktop DPR1.
-Current runtime remains unverified. Check the related held Dialog and
-Bottom Sheet focus receipts for the next coverage join.
+Current runtime remains unverified.
 
 The compact delta for expected successor 838adb11 adds one partial
 focus disposition, authenticates five new receipt paths and conserves
@@ -676,6 +675,21 @@ reversal to the canvas successor and leaves 1,484 programmatic-focus
 rows pending. Accepted coverage is still 0c103b3d.
 Desktop outside report SHA-256 f115be2a2b054446d8ae14849c83848497c379d4e103f09bf89e1c22d175703d.
 Desktop outside delta SHA-256 85665358e66419f92c741fbefb4f817eddbd7584575be54b6c3faaa810014f19.
+
+The retained light desktop DPR1 Dialog and Bottom Sheet held rows now
+bind the trusted release sequence and the actual focus calls. Material
+holds focus on the opener and calls its focus trap after click. Astylar
+holds DOM focus on the canvas, then its semantic bridge focuses the
+opener after pointerup and before click. The Chromium 157 replay
+matches the Chromium 154 original asset inventory, event comparisons
+and recorded focus aliases. Later authored focus requests and current
+rendering remain unverified.
+
+Delta f2ccf964 adds four bounded observations to two existing partial
+rows. Both checkpoints and their captures verify, and 11 new evidence
+paths authenticate. The prior review reverses exactly. Pending counts
+remain 1,484 programmatic-focus and 583 authored-activation rows.
+Held delta SHA-256 c789832b3a96080c34d87f3741a3200fd10687ab045eadcc19cdc752c421b724.
 Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
 Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
 
@@ -1037,8 +1051,8 @@ The reference active node is the opener during the hold. After release
 it is a navigation link for Bottom Sheet and an action button for Dialog.
 Astylar moves from the canvas to its opener at the observed endpoint.
 This samples immediate release. Later transfer and the existing, distinct
-application focus-request mechanisms need their own evidence. Join these
-two exact activation and focus observations after the frozen export.
+application focus-request mechanisms need their own evidence. The
+coverage entry for f2ccf964 binds both activation and focus observations.
 Report dialog-sheet-held-focus-caller-20261122/latest-report.json SHA-256
 3c066b2aacdd076c9e3cd18cba200374c212224ee4b9202e40fe798ddcd09d30.
 The existing tracer SHA-256 is
