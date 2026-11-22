@@ -1371,6 +1371,25 @@ successor before export selection. Open Datepicker AX, whole-case
 inspection and current rendering remain unverified.
 Static popup trigger AX delta SHA-256 85bd321957713c856f2465fdb0bf225d1c0e48eaa7f8ebcd85773078a37c2658.
 
+All 36 configured static Autocomplete, Select and Timepicker pairs
+now have an authenticated closed combobox relationship check. Each
+Astylar control retains a DOM aria-controls reference to its absent
+listbox. Material omits the attribute. Both captured Chromium trees
+show collapsed comboboxes without controls or active-descendant
+relationships, exposed listboxes or options. The browser therefore
+exposes no stale relationship at these initial boundaries.
+The captured showcase map matches the current owner source. It
+authors aria-controls independently of listbox creation in all three
+controls, extending the existing mobile lifecycle findings to these
+static cases. Open, transient and current-runtime projection remain open.
+Static combobox relationship receipt SHA-256 0f9bb4cafae194162b99507086ca5793cb481c702d752bb82af5ced69ce827d5.
+
+The compact delta binds 36 semantics children to successor 2984d203.
+It authenticates 78 distinct receipts and restores the prior 96-case
+staged review 1a7ac05a across all 2,311 rows. The combined successor
+awaits strict dependency replay and canonical export selection.
+Static combobox relationship delta SHA-256 829300d72e8bde10436253314ef31924efabed1789c1850809001c75e5307727.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,

@@ -376,6 +376,13 @@ receipts and their original observations and source maps.
 The streamed comparison retained row digests for 24 additions.
 Static popup trigger AX delta SHA-256 85bd321957713c856f2465fdb0bf225d1c0e48eaa7f8ebcd85773078a37c2658.
 
+Keep static-combobox-closed-relationships-20261122.log and
+static-combobox-closed-relationships-composed-delta-20261122.log
+with the 72 original static observations, independent verification,
+checkpoint, showcase map and the two predecessor deltas.
+Static combobox relationship receipt SHA-256 0f9bb4cafae194162b99507086ca5793cb481c702d752bb82af5ced69ce827d5.
+Static combobox relationship delta SHA-256 829300d72e8bde10436253314ef31924efabed1789c1850809001c75e5307727.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
