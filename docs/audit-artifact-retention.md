@@ -235,6 +235,12 @@ October 31 paired geometry and screenshots. Cell crops were evaluated
 in memory.
 Cell paint receipt SHA-256 2f9486a3ff8cd8179a3bf1cc79a1feb1fba477afb7d8b6eb9531e36eef1f6cee.
 
+Keep datepicker-open-child-paint-20261122 with its runner, manifest,
+paired screenshot, tree and before/after geometry receipts. The
+served-asset scratch was cleaned. The October and November captures
+remain separate evidence.
+Opening child-paint verification SHA-256 69948ad67e232d2162c5770580b12f023bd90d47d1414785ba1b077418d9c400.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

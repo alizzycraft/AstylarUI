@@ -1323,6 +1323,20 @@ inner box size. Residual contributions require separate evidence.
 The October 5 openings still lack used child rectangles.
 Cell paint receipt SHA-256 2f9486a3ff8cd8179a3bf1cc79a1feb1fba477afb7d8b6eb9531e36eef1f6cee.
 
+A separate November 22 light desktop DPR1 opening replay records the
+same used rectangles immediately before and after the screenshots.
+All 1,887 served assets and the original normalized action fields
+verify. Material places NOV in a seven-column, 40 px body row before
+day 1. In the October activation capture, OCT shares the first row
+with three days. The extra Material row accounts for 40 px of the
+40.011 px change between the two measured day-position offsets.
+The November candidate days are 5.998 CSS px higher. Comparing
+each side at its own cell bounds reduces mean RGB error from
+0.03277 to 0.02073 across all 30 days, a 36.7% reduction. The residual
+requires paired glyph and selection paint evidence. This replay uses
+retained served assets and the recorded November date.
+Opening child-paint verification SHA-256 69948ad67e232d2162c5770580b12f023bd90d47d1414785ba1b077418d9c400.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
