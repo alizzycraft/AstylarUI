@@ -627,9 +627,13 @@ again. Queued syncFocus focuses that same icon. Native restores focus
 to the saved opener before removing the calendar day button. The
 mutation replay preserves the normalized events and settled focus
 boundaries and authenticates the served bridge and showcase call sites.
-Other profiles, dismissal routes and current rendering remain open.
-Use the identified mutation and focus boundaries in the next pending
-picker case.
+The light mobile DPR2 replay reproduces the same sequence in all
+three Escape cycles. Its checkpoint, served call sites, 1,887 asset
+hashes, normalized events and settled focus boundaries verify against
+the original light replay. The mechanism now has a witness in each
+retained mobile theme. Desktop, other dismissal routes and current
+rendering remain open. Join the light case in the next compact review.
+Light verification SHA-256 7716d6ebe3cca57f1ced722f3a70620d131036679be2b22d9c1826e6ef5d61f3.
 
 The composed delta binds expected successor 3c1a6807, reverses all
 2,311 rows and authenticates 21,259 dependencies. It adds three

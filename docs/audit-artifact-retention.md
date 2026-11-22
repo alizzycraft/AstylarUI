@@ -62,8 +62,10 @@ checkpoint, capture and source verifier, and compact successor 175b2009.
 Keep the datepicker-dark-mobile-dismiss-focus-identity-20261122 and
 datepicker-dark-mobile-dismiss-focus-mutation-20261122 packages with
 their runners, checkpoints, captures and reports. Keep the mutation
-delta binding expected successor 3c1a6807. The successful temporary
-served asset assemblies were cleaned.
+delta binding expected successor 3c1a6807. Keep the light mobile
+mutation v2 package, its verification receipt and the initial profile
+guard failure. The successful temporary runner was cleaned. The
+initial failed scratch contains the retained served asset assembly.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the
