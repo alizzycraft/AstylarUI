@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
+import { restoreMobilePickerControlsProducer } from './mobile-picker-controls-findings.mjs';
 import {createChipsAlternatePriorRead,restoreChipsAlternateRegistrationIfPresent} from './chips-alternate-registration.mjs';
 import {createDividerMarginPriorRead,restoreDividerMarginRegistryIfPresent} from './divider-margin-registration.mjs';
 import {createTimepickerProgrammaticFocusReviewReader} from '../../scripts/join-material-timepicker-programmatic-focus.mjs';
@@ -73,6 +74,8 @@ export function prepareFocusSelectionAuditRegistry(bytes,kind,read){
   for(const [anchor,prefix]of additions[kind])source=once(source,anchor,anchor+prefix);return source;
 }
 export function restoreFocusSelectionAuditRegistry(bytes,kind){
+  if (kind === 'producer' && bytes.toString().includes("'tests/material-parity/mobile-picker-controls-findings.mjs',"))
+    bytes = restoreMobilePickerControlsProducer(bytes);
   bytes=restoreChipsAlternateRegistrationIfPresent(bytes,kind);
   assert.ok(Object.hasOwn(registryPrior,kind));let source=bytes.toString().replaceAll('\r\n','\n');
   if(kind==='producer')source=restoreDividerMarginRegistryIfPresent(source);

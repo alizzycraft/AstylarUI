@@ -315,6 +315,19 @@ export function createPickerFocusSemanticsReviewReader({ root, read, predecessor
   };
 }
 
+const focusSelectionReaderImport = "import { restoreMobilePickerControlsProducer } from './mobile-picker-controls-findings.mjs';\n";
+const focusSelectionProducerGuard =
+  "  if (kind === 'producer' && bytes.toString().includes(\"'tests/material-parity/mobile-picker-controls-findings.mjs',\"))\n" +
+  '    bytes = restoreMobilePickerControlsProducer(bytes);\n';
+const focusSelectionReaderEdits = [[focusSelectionReaderImport, ''], [focusSelectionProducerGuard, '']];
+
+export function restorePickerFocusSelectionReader(bytes) {
+  const previous = applySourceEdits(normalized(bytes), focusSelectionReaderEdits);
+  assert.equal(hash(previous), 'dc5d90614fe15b0a03e61d643dedfa480572c9089e6735ce4a2f3fa4a3d689cb',
+    'Unexpected picker focus-selection reader drift');
+  return previous;
+}
+
 export function createMobilePickerControlsHistoricalRead({ root, read }) {
   const boundaries = new Map([
     ['tests/material-parity/input-equivalence-policy.mjs', ['"id":"fixture-autocomplete-controls-association-outlives-popup"', restoreMobilePickerControlsPolicy]],
@@ -323,6 +336,7 @@ export function createMobilePickerControlsHistoricalRead({ root, read }) {
     ['scripts/run-material-input-audit.mjs', ['const pickerHistoricalRead = ', restorePickerFocusSemanticsRunner]],
     [datepickerReaderFile, ['envelope ??= Buffer.from', restorePickerFocusSemanticsDatepickerReader]],
     [benchmarkReaderFile, ['const readBeforePickerRegistration = ', restorePickerFocusSemanticsBenchmarkReader]],
+    ['tests/material-parity/public-tab-selection-finding.mjs', [focusSelectionReaderImport, restorePickerFocusSelectionReader]],
   ].map(([file, rule]) => [path.resolve(root, file), rule]));
   return (name, options) => {
     const rule = boundaries.get(path.resolve(root, name));

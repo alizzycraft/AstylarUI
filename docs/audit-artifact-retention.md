@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep the failed picker-focus-semantics-export-20261122 stdout and stderr.
+The run exited before publication. Stdout SHA-256
+48b5216679026ea199178f4f69f0fd1a9f555d6e64e0616192abf4c58b37ccf5.
+Stderr SHA-256 e4e14b8c8b10d4498a4f89e5ee9f6d1d6e128f2c61f3a4cf320109c4d7d7a2e8.
+Keep picker-direct-collector-binding-overlay-20261122.log for the isolated
+restoration. SHA-256 be0b72f662f4ebdca612931a427240c1ceddc8d99d253dbb103c1edbcd62bd42.
+
+
 Retain picker-static-boundary-virtual-wUB04C and
 picker-static-boundary-virtual-8fiiTY. The two isolated semantic runs
 identify successive source restoration boundaries without touching the

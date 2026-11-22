@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+The first picker export exited 1 before writing a candidate. Four historical
+source bindings became invalid, leaving 259 style groups unattributed.
+Accepted generation 844c896c still matches the canonical manifest and
+working-store pointer. The failure is in historical producer restoration.
+The first picker batch routed the case dependency reader through the newer
+registration, while the four collectors enter the older focus-selection
+registry directly. Slider restoration then fails on the extra picker bytes.
+
+An isolated exact picker reversal before that direct entry restores the
+existing predecessor SHA-256 and rejects unrelated source drift. All four
+collectors bind with 72/4,016, 49/2,677, 4/178 and 134/3,325 groups and
+observations respectively. The live audit reader applies the same guard and
+restores its own prior source. All four complete live collector sections
+match the accepted token counts and SHA-256 digests. The focused receipt
+picker-direct-collector-section-conservation-20261122.log has SHA-256
+6b3446998e534fac04c2646f2608c836c9fd6b1b685e73883d4f2839332c724f.
+No receipt in the 2,311 proposed case rows references either modified reader.
+The audit source census adds the guarded revision of the existing focus-selection
+reader to the picker fingerprint delta. Repeat the canonical validation on
+this repaired source generation, then run conservation, cold replay and import.
+
+
 Picker proposal 78616399 passed the existing strict loader across all
 2,311 configured cases and 19,385 dependencies. Replay v3 SHA-256
 60f83ec191d8a8ae5eecf8930502ba2efe480b483f0c51603c861f4b53678842.
