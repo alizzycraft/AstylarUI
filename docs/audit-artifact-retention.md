@@ -27,6 +27,11 @@ and identify the authenticated source-map call sites. withAuditScratch
 cleared the successful temporary browser and runner trees.
 
 
+Keep dialog-sheet-held-focus-caller-20261122 with its original report,
+checkpoint, trees, logs and the reused tracer bytes. withAuditScratch
+cleared the successful runner and browser scratch directories.
+
+
 Retain picker-static-boundary-virtual-wUB04C and
 picker-static-boundary-virtual-8fiiTY. The two isolated semantic runs
 identify successive source restoration boundaries without touching the

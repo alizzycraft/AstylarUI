@@ -252,6 +252,26 @@ The first projection attempt exhausted its 1 GiB heap building an older
 review envelope. The verified stream recovered the frozen proposal digest
 without rebuilding that envelope.
 
+The light desktop DPR1 Bottom Sheet and Dialog opener holds now have
+eight paired boundaries. The same tracer, browser and 1,887 original
+assets reproduce both cases? original event sequences and focus aliases.
+Both retain the four authenticated focus call sites from Datepicker and
+Menu. Babylon focuses the canvas first, then Astylar calls focus on it.
+Both sides record trusted pointerdown with buttons 1 during the hold.
+The DOM sequences contain no release or click before explicit release.
+
+The reference active node is the opener during the hold. After release
+it is a navigation link for Bottom Sheet and an action button for Dialog.
+Astylar moves from the canvas to its opener at the observed endpoint.
+This samples immediate release. Later transfer and the existing, distinct
+application focus-request mechanisms need their own evidence. Join these
+two exact activation and focus observations after the frozen export.
+Report dialog-sheet-held-focus-caller-20261122/latest-report.json SHA-256
+3c066b2aacdd076c9e3cd18cba200374c212224ee4b9202e40fe798ddcd09d30.
+The existing tracer SHA-256 is
+622d15718cf6e7910744f7613643936dbfcb87f9302657048de93aea06b0cbe0.
+
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
