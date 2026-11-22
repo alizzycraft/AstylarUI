@@ -653,6 +653,29 @@ their activation and focus dispositions pending. The complete 539-row
 delta reproduces its predecessor and reverses to all 2,311 parent rows.
 Delta SHA-256 715fc310e27c8007758d7591642b2eefb396bc49ba0045ca70054c65bcc84f79.
 
+The remaining 14 Dialog and Bottom Sheet departure traces authenticate
+to the prior endpoints and all 1,887 served asset receipts. Twelve first
+lose focus in root reconcile.replaceChildren. Two Bottom Sheet cases
+first lose focus in descendant reconcileElement.replaceChildren, then
+again at root reconciliation. Each of the 16 calls that loses focus in
+this batch blurs synchronously and syncFocus restores the same active
+node. Material emits no focus events during the sampled departure.
+The two earlier control cases bring the total to 16 exact desktop cases,
+with three descendant-first and thirteen root-first. Pointer departure
+focus loss is attributable to semantic reconciliation in these traces.
+Operation replay SHA-256 d5f781b6a0a0e595f2265011a696fcf3f0903124bd3b5bd8019b29b5283d1abb.
+
+The exact light desktop DPR1 Datepicker activate replay starts with
+BODY focused on both sides and ends with Material focus on an ID-less
+button inside the open calendar. Astylar remains on datepicker-icon.
+Both calendars open and the original focus aliases are reproduced.
+This resolves what the omitted native alias represented in this case.
+Datepicker replay SHA-256 141d85f665331d7edc6d386c6196b7dd8364ff330668d6a567086d12686b65f8.
+
+Successor 68836d43 reversibly attaches the 15 exact observations to the
+existing 539 changed rows. Current rendering remains unverified.
+Delta SHA-256 e0f1659cff66ebf9457f3c29bbcd1ce75d46b6ede966e1b4f4193e3c4f2a6919.
+
 The remaining 14 causal traces are queued after the frozen pointer
 export to avoid competing for memory. Their earlier focus traces remain
 valid for the sampled owners and events.
@@ -860,6 +883,17 @@ Preflight SHA-256 bc9d036ffdf7e206bb8e80ad3d6cec9d361d4905cd9c9591350133b4f50f4a
 After the warm export, authenticate the candidate and compare all 80
 sections with both predictions. The independent cold equality and
 isolated import are queued behind this check.
+
+The warm export writes 0c103b3d. The authenticated comparison conserves
+78 sections and the two changes match the predicted sourceFingerprints
+and coverage digests exactly. Markdown matches the accepted package.
+Section receipt SHA-256 9ddf039cb8a63d26d0405a857923b4c7c697834d20ba716d51e95200b8627ae6.
+The first cold command stops on the PowerShell stderr wrapper. A null
+log comparison in the waiting importer lets the isolated import proceed.
+That import verifies the exact candidate and 84 shards with index
+10cad8ea. A direct-redirection cold retry is running. After it passes,
+reverify the existing isolated package against the same candidate bytes
+before accepted-store promotion. The accepted pointer remains 87915914.
 
 The successor has no row receipts for the launcher, audit runner or
 picker reader. All three are declared source fingerprints. The semantic
