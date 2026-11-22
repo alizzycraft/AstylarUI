@@ -203,6 +203,16 @@ enforced-full-2b6cddc report bytes and file identities.
 Verification SHA-256 5992affad07ba8edd2b133a1794871ac00fc663829d31db4daa97af75f91ee4a.
 Headroom SHA-256 fcbacf6c6ddba0a54fa9a33ee837f87a01ab7e6f3449683b73bd81e8dfa80eb3.
 
+Keep remaining-configured-secondary-action-focus-20261122 with its
+runner, manifest, 33 checkpoints, paired captures and logs. Successful
+served-asset scratch was cleaned. Retain compact delta 590f4aec and
+the original and replay Datepicker event receipts. Keep both ENOSPC
+attempts and their empty and partial proposal scratch. The verified
+secondary report, delta and historical enforced-full-e26c6cb report
+retain their hashes and identities after compression.
+Verification SHA-256 d4fa3af15f9024bd2ba8f841ad77d8d1ad19fc9463f6bf46d058075292651c33.
+Headroom SHA-256 d52955dbacd7fb1e0acc14ae7e362de59d1ba32fcb984ef74ec68019736e8c41.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

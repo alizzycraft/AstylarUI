@@ -1264,6 +1264,22 @@ opening, Timepicker scrolling and Snackbar automatic dismissal.
 Report SHA-256 454ffa72b23e33fa95eaa4005883d2428157070c0d2a720214a1b2332f9de534.
 Delta SHA-256 70b3d7b6fd4b1d5ed3d86315772c35c6867b1c1a31e021380b1009825e04cfd5.
 
+The final 33 configured focus cases resolve the remaining joins.
+Both sides change focus owner after alternate Chip activation and the
+secondary Datepicker click. Sort retains the same before/after owner
+on each side, with six intermediate Astylar focus events in each case.
+Timepicker scrolling adds no focus events on either side. In the one
+Snackbar case, Astylar records four events during the dismissal wait
+and settles on the same opener node. The eight Datepicker comparisons
+retain the changed month label, subpixel coordinates and hover routing.
+The verified activation event types and focus ordering agree.
+Staged review 590f4aec binds 35,332 receipts with zero pending focus
+or authored-activation joins. Whole-case inspection and current
+rendering remain open. The existing dependency reader is replaying
+the staged review in memory after the on-disk proposal writes failed.
+Report SHA-256 1ed590643697cd8fbe1b7af567ff8df531516272d35a049f8ed8793851c084fa.
+Delta SHA-256 93942ba899620c40b9da15cdb49b3b60c45f0c2b752d79f5be7d32a15cb1d64f.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
