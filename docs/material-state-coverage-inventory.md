@@ -331,6 +331,19 @@ all 268 changes to the full 2,311-row parent. If accepted, 504 local-paint
 joins remain pending.
 Delta SHA-256 e753fbb12970b188e68d37a4e4d4e8ef8d6867d67e56c91b8b034f67ad93a721.
 
+The other 24 Checkbox cases use the same patch and selected controls.
+All eight native activate and eight activate-leave patches follow the
+captured 12% layer. Astylar follows its 8% layer after activation and its
+transparent layer after departure. Neither side changes the patch in
+the eight disabled cases. Every prediction agrees within one channel
+value. The trees record unequal disabled mark fill inputs, and the
+patch sits outside the mark. Mark paint and current rendering remain open.
+Replay SHA-256 099d885316abe95ba50adff09708eefe03274ca1f23243e8ccfac773dc17546f.
+
+Successor c1760e7e adds these 24 partial paint inspections to the
+292-row reversible batch. If accepted, 480 local-paint joins remain pending.
+Delta SHA-256 9df4b8171df037463c4fdc649c8f8a1750891446181f2baae3bd2df2a06a06d6.
+
 The authenticated accepted 844c896c index has 1,335 cases with both
 focus and activation evidence joins pending. The largest cohorts are
 static 324 across 27 families, hover 209 across 26, held 193 across 24,
