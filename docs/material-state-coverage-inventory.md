@@ -1277,8 +1277,12 @@ Staged review 590f4aec binds 35,332 receipts with zero pending focus
 or authored-activation joins. Whole-case inspection and current
 rendering remain open. The existing case reader authenticated all
 2,311 rows and 35,332 dependencies in memory. Accepted 20baa74b
-still serves the prior review. On-disk materialization and canonical
-registration are pending.
+still serves the prior review. The verified gzip proposal now selects
+through --retained-focus-boundaries. The reader authenticates both
+the archive and its decoded bytes. The 1,164-source census changes
+only the launcher, runner and historical reader. None is referenced
+by the staged case rows. The canonical export gates are pending.
+Registration SHA-256 32030d06865f7e44fa6eff0cac8df54943b3b9eebe975c3187fce5769c945049.
 Dependency replay SHA-256 20d6555cd48fc3f264fe3ec73898e2929d3dee68ee1b581e99ba12ccce3935e0.
 Report SHA-256 1ed590643697cd8fbe1b7af567ff8df531516272d35a049f8ed8793851c084fa.
 Delta SHA-256 93942ba899620c40b9da15cdb49b3b60c45f0c2b752d79f5be7d32a15cb1d64f.

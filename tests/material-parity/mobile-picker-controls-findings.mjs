@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { gunzipSync } from 'node:zlib';
 
 const source = 'examples/material-showcase/src/app/astylar.component.ts';
 const artifacts = 'artifacts/material-parity/';
@@ -176,6 +177,7 @@ export const pickerFocusSemanticsReview = '78616399f9964684b86232fb63ac2945027a6
 export const retainedPointerCoverageReview = '3a0dfc9c476e49a6c5878be3f287b8eadbecfae98fd8c35cc4c88035abc0068c';
 export const retainedPaintOwnershipReview = '24c22d1ae764ec131a2f1ca5a0d7be1fdb6729a5328406ab2a9abe6721e46031';
 export const retainedCaseObservationsReview = '919dbc1c33cebb522b5fb1d002f19100f3fe17a43b5ecc371b6c527aea2955a3';
+export const retainedFocusBoundariesReview = '590f4aecfe3092c1b9af9d47e1f47aa4c06dce51a10708d2c2084b96c44781ed';
 
 // Reverse the exact coverage selector before each older picker transition.
 const retainedPointerLauncherEdits = [
@@ -251,6 +253,15 @@ const launcherEdits = [
     "if (requested.includes('--dry-run')) console.log("],
 ];
 
+const retainedFocusBoundariesLauncherEdits = [
+  ["retainedPaintOwnershipReview, retainedCaseObservationsReview }","retainedPaintOwnershipReview, retainedCaseObservationsReview, retainedFocusBoundariesReview }"],
+  ["const retainedCaseObservations = rawRequested.includes('--retained-case-observations');\n","const retainedCaseObservations = rawRequested.includes('--retained-case-observations');\nconst retainedFocusBoundaries = rawRequested.includes('--retained-focus-boundaries');\nassert.ok(!retainedFocusBoundaries || rawRequested.every(argument => ['--retained-focus-boundaries', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n"],
+  ["filter(argument => argument !== '--retained-case-observations')","filter(argument => argument !== '--retained-case-observations').filter(argument => argument !== '--retained-focus-boundaries')"],
+  ["|--retained-case-observations]","|--retained-case-observations|--retained-focus-boundaries]"],
+  ["if (retainedCaseObservations) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedCaseObservationsReview}.json`;","if (retainedCaseObservations) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedCaseObservationsReview}.json`;\nif (retainedFocusBoundaries) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedFocusBoundariesReview}.json.gz`;"],
+  ["if (retainedCaseObservations) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedCaseObservationsReview}`;","if (retainedCaseObservations) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedCaseObservationsReview}`;\nif (retainedFocusBoundaries) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedFocusBoundariesReview}`;"]
+];
+
 export function preparePickerFocusSemanticsLauncher(bytes) {
   const source = normalized(bytes);
   assert.equal(hash(source), launcherParentSha256, 'Unknown picker launcher parent');
@@ -258,7 +269,9 @@ export function preparePickerFocusSemanticsLauncher(bytes) {
 }
 
 export function restorePickerFocusSemanticsLauncher(bytes) {
-  const retainedPaintSource = restoreRetainedReviewSelection(normalized(bytes), 'const retainedCaseObservations = ', retainedCaseLauncherEdits,
+  const retainedCaseSource = restoreRetainedReviewSelection(normalized(bytes), 'const retainedFocusBoundaries = ', retainedFocusBoundariesLauncherEdits,
+    '4028f09096226e4febafad0abda946626913c41277714f0558c75e76522b10f3');
+  const retainedPaintSource = restoreRetainedReviewSelection(retainedCaseSource, 'const retainedCaseObservations = ', retainedCaseLauncherEdits,
     '00e62c58718d21f578332e4683fe188500ad996eb0ad7b5852910539cb8a5295');
   const retainedPointerSource = restoreRetainedReviewSelection(retainedPaintSource, 'const retainedPaintOwnership = ', retainedPaintLauncherEdits,
     '97c0380ffd8e283cf42c12d86f388d8719abfa365ed057725039d965b40f8629');
@@ -312,6 +325,12 @@ const runnerEdits = [
     '    diagnosticRead: [pickerFocusSemanticsReview,datepickerMobileOpenDismissReview,'],
 ];
 
+const retainedFocusBoundariesRunnerEdits = [
+  ["retainedPaintOwnershipReview, retainedCaseObservationsReview }","retainedPaintOwnershipReview, retainedCaseObservationsReview, retainedFocusBoundariesReview }"],
+  ["retainedPaintOwnershipReview,retainedCaseObservationsReview].includes(options.caseObligationReviewSha256)","retainedPaintOwnershipReview,retainedCaseObservationsReview,retainedFocusBoundariesReview].includes(options.caseObligationReviewSha256)"],
+  ["retainedPaintOwnershipReview,retainedCaseObservationsReview,datepickerMobileOpenDismissReview,","retainedPaintOwnershipReview,retainedCaseObservationsReview,retainedFocusBoundariesReview,datepickerMobileOpenDismissReview,"]
+];
+
 export function preparePickerFocusSemanticsRunner(bytes) {
   const source = normalized(bytes);
   assert.equal(hash(source), runnerParentSha256, 'Unknown picker runner parent');
@@ -319,7 +338,9 @@ export function preparePickerFocusSemanticsRunner(bytes) {
 }
 
 export function restorePickerFocusSemanticsRunner(bytes) {
-  const retainedPaintSource = restoreRetainedReviewSelection(normalized(bytes), 'retainedPaintOwnershipReview, retainedCaseObservationsReview }', retainedCaseRunnerEdits,
+  const retainedCaseSource = restoreRetainedReviewSelection(normalized(bytes), 'retainedPaintOwnershipReview, retainedCaseObservationsReview, retainedFocusBoundariesReview }', retainedFocusBoundariesRunnerEdits,
+    'cdedefd7250a14b277ebd792a4d2bfe4130af1c9b59a5b6d3ff3a47c835bea96');
+  const retainedPaintSource = restoreRetainedReviewSelection(retainedCaseSource, 'retainedPaintOwnershipReview, retainedCaseObservationsReview }', retainedCaseRunnerEdits,
     'b0f88c8aa525fd6fd335a2e00e8173ea669997b379678216666909306f14e0b1');
   const retainedPointerSource = restoreRetainedReviewSelection(retainedPaintSource, 'retainedPointerCoverageReview, retainedPaintOwnershipReview }', retainedPaintRunnerEdits,
     '06b9f63206cf314dfccad5a7a7e6ab12752536a9bcdb6f63dc628a18535a1a90');
@@ -373,6 +394,10 @@ export function restorePickerFocusSemanticsBenchmarkReader(bytes, root = process
 
 export function createPickerFocusSemanticsReviewReader({ root, read, predecessor, reviewSha256 = pickerFocusSemanticsReview }) {
   const applicability = {
+    [retainedFocusBoundariesReview]: {
+      mode: 'retained-focus-boundaries',
+      boundary: 'Exact retained interaction, editing and focus observations. Whole-case inspection and current rendering remain open.',
+    },
     [pickerFocusSemanticsReview]: {
       mode: 'retained-picker-focus-and-semantics',
       boundary: 'Exact retained picker actions and ownership observations. Current rendering and whole-case acceptance remain open.',
@@ -393,12 +418,19 @@ export function createPickerFocusSemanticsReviewReader({ root, read, predecessor
   assert.ok(Object.hasOwn(applicability, reviewSha256));
   assert.equal(predecessor.sha256, 'a095cf9b57430eb73acc3a3d33f4092644cfef4ac21a1a494ec71acde09c719f');
   assert.equal(predecessor.sourceApplicability.joinSource.sha256, datepickerReaderParentSha256);
-  const file = path.resolve(root, artifacts, 'working-audit', 'proposals', reviewSha256 + '.json');
+  const archived = reviewSha256 === retainedFocusBoundariesReview;
+  const file = path.resolve(root, artifacts, 'working-audit', 'proposals', reviewSha256 + (archived ? '.json.gz' : '.json'));
   const joinSource = 'tests/material-parity/mobile-picker-controls-findings.mjs';
   return {
     read(name, options) {
-      if (path.resolve(root, name) === file) return read(name, options);
-      return predecessor.read(name, options);
+      if (path.resolve(root, name) !== file) return predecessor.read(name, options);
+      if (!archived) return read(name, options);
+      const packed = read(name);
+      assert.equal(hash(packed), 'cef2772fcf8ca26257bc3750733ad128fdabd64e5f752f6327fba81104836d57', 'Focus proposal archive changed');
+      const decoded = gunzipSync(packed, { maxOutputLength: 168502973 });
+      assert.equal(hash(decoded), 'c245be37f311103ef136b9a91bcc97dafc8603409425c64e809d6e7373fb3e63', 'Decoded focus proposal changed');
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? decoded.toString(encoding) : decoded;
     },
     sourceApplicability: {
       ...applicability[reviewSha256],

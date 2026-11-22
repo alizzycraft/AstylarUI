@@ -206,7 +206,7 @@ Headroom SHA-256 fcbacf6c6ddba0a54fa9a33ee837f87a01ab7e6f3449683b73bd81e8dfa80eb
 Keep remaining-configured-secondary-action-focus-20261122 with its
 runner, manifest, 33 checkpoints, paired captures and logs. Successful
 served-asset scratch was cleaned. Retain compact delta 590f4aec and
-the original and replay Datepicker event receipts. Keep both ENOSPC
+the original and replay Datepicker event receipts. Keep all ENOSPC
 attempts and their empty and partial proposal scratch. The verified
 secondary report, delta and historical enforced-full-e26c6cb report
 retain their hashes and identities after compression.
@@ -215,6 +215,12 @@ Headroom SHA-256 d52955dbacd7fb1e0acc14ae7e362de59d1ba32fcb984ef74ec68019736e8c4
 Keep the virtual dependency replay stdout and stderr with review
 590f4aec and both failed materialization attempts.
 Replay SHA-256 20d6555cd48fc3f264fe3ec73898e2929d3dee68ee1b581e99ba12ccce3935e0.
+Retain the verified 590f4aec gzip proposal in the proposal store.
+Native copy verified both the compressed and decoded hashes. The
+verified temporary duplicate and successful scratch were cleaned.
+Keep the storage, copy, and selector preflight receipts.
+Archive copy SHA-256 0bbe8f7f930fa64e5ad74650baf5eb2961c9545e38603255fb31e99cec7bb9f4.
+Registration SHA-256 32030d06865f7e44fa6eff0cac8df54943b3b9eebe975c3187fce5769c945049.
 
 Keep the Datepicker panel comparison receipt with the original
 opening checkpoints and full screenshots. Panel crops were measured
