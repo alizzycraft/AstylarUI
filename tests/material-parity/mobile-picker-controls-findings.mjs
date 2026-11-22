@@ -67,9 +67,48 @@ export const mobilePickerControlsFindings = Object.freeze(captures.map(capture =
   });
 }));
 
+const desktopDatepickerCapture = artifacts + 'datepicker-desktop-focus-boundaries-v2-20261122/';
+const datepickerPointerDismissalFinding = Object.freeze({
+  id: 'fixture-datepicker-pointer-dismissal-focus-restoration-omitted',
+  file: source,
+  pattern: [
+    String.raw`private dismissPopupForOutsideTarget\(targetId: string\): void \{\s*if \(!this\.store\.state\(\)\.open\) return;\s*const family = this\.family\(\);\s*`,
+    String.raw`const insidePrefixes: Partial<Record<MaterialFamily, readonly string\[\]>> = \{[^{}]*datepicker: \['datepicker-icon',[^\r\n]+\],[^{}]*\};\s*`,
+    String.raw`const prefixes = insidePrefixes\[family\];\s*if \(!prefixes \|\| prefixes\.some\(\(prefix\) => targetId\.startsWith\(prefix\)\)\) return;\s*`,
+    String.raw`this\.store\.patchState\(\{ open: false \}\);\s*if \(family === 'dialog'\) this\.surface\?\.focus\('dialog-primary', \{ focusVisible: true \}\);\s*\}`,
+  ].join(''),
+  classification: 'application-plugin-authoring-defect',
+  owner: 'showcase Datepicker outside-target dismissal focus intent',
+  evidence: Object.freeze([
+    Object.freeze({ file: desktopDatepickerCapture + 'latest-report.json',
+      sha256: '643a072637a75d1bd28b8cd0dba253442cc0a23a7d15246c35eb0d1ba28c23ef' }),
+    Object.freeze({ file: desktopDatepickerCapture + 'diagnostic-runner.mjs',
+      sha256: '2df8647dbb5575e08da77d2e2e621c35c86586cc7448804771604fd48402de6a' }),
+    Object.freeze({ ...retainedMap }),
+    Object.freeze({ file: artifacts + 'icon-fresh-producer-retained-build-20261016-browser/chunk-7SL66K3U.js.map',
+      sha256: '67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4' }),
+  ]),
+  observation: Object.freeze({
+    component: 'datepicker',
+    states: ['open-dismiss-outside', 'open-dismiss-canvas'],
+    profile: 'light',
+    viewport: 'desktop-dpr1',
+    reference: 'Closes and restores the opener as active focus.',
+    astylar: 'Closes with the canvas focused and no focused logical element.',
+    stage: 'unequal application focus-restoration request at pointer dismissal',
+  }),
+  justification: 'The capture observes both configured pointer dismissals. The candidate page-target click closes the popup and the retained fixture requests restoration only for Dialog on this branch. Retained Material records the pre-open active node and restores it in the close path. The original served bundle and source maps authenticate.',
+  recommendation: 'During later implementation, express equivalent pointer-dismiss restoration through the supported focus lifecycle.',
+  verificationPlan: 'Exercise outside and canvas pointer dismissals and reopening across the maintained viewports. Check the separate Escape route and focus ownership through the transition.',
+  boundary: 'Two settled pointer dismissal cases in a retained-build Chromium 157 replay. Canvas focus call ordering, other cohorts, current rendering and equal-input core behavior remain unverified.',
+  inputEquivalent: false,
+  currentRenderingAccepted: false,
+});
+
 const policyParentSha256 = 'abeb73cafe696f0c6e104908cefde3c6e97d1637db695c2bad031a5c5f86e39d';
 const policyBoundary = ']);\n\nexport const pluginBoundaryVerdict = Object.freeze({';
-const registration = mobilePickerControlsFindings.map(finding => '  Object.freeze(' + JSON.stringify(finding) + '),\n').join('');
+const registration = [...mobilePickerControlsFindings, datepickerPointerDismissalFinding]
+  .map(finding => '  Object.freeze(' + JSON.stringify(finding) + '),\n').join('');
 const hash = source => createHash('sha256').update(source).digest('hex');
 const normalized = source => source.toString().replaceAll('\r\n', '\n');
 
@@ -94,11 +133,17 @@ const sharedPlan = Object.freeze({
   rootCause: 'Autocomplete, Select and Timepicker author controls references beyond popup lifetime',
   action: 'Align the authored controls relationship with the conditional listbox in the three showcase families. Preserve resolved open controls and active-option links. Verify closed reference removal, re-open resolution, focus, and accessibility-tree exposure across the maintained actions and viewports. Keep this separate from the Menu focusability finding and from sampled resource ownership.',
 });
+const datepickerDismissalPlan = Object.freeze({
+  priority: 5.855,
+  rootCause: 'Datepicker pointer dismissal omits opener focus restoration',
+  action: 'Supply equivalent Datepicker restoration intent for outside-target pointer dismissal through the supported focus lifecycle. Verify the opener, logical focus and active node after both configured pointer dismissals and on re-open. Check Escape and opening focus independently. Account for surface canvas focus separately from the omitted request.',
+});
 const producerEdits = [
   ['function sourceFingerprints(root) {\n  const files = [\n',
     "function sourceFingerprints(root) {\n  const files = [\n    'tests/material-parity/mobile-picker-controls-findings.mjs',\n"],
   ['function implementationPlan() {\n  return [\n',
-    'function implementationPlan() {\n  return [\n    ' + JSON.stringify(sharedPlan) + ',\n'],
+    'function implementationPlan() {\n  return [\n    ' + JSON.stringify(sharedPlan) + ',\n    '
+      + JSON.stringify(datepickerDismissalPlan) + ',\n'],
 ];
 
 function changeProducer(source, edits) {

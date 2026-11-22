@@ -82,6 +82,19 @@ desktop report and runner are new dependency receipts, both authenticated.
 The total is 19,380 receipts. Run the strict inherited-dependency replay
 after the frozen Datepicker cold check and isolated import release memory.
 
+The staged picker source registry now includes the Datepicker missing
+pointer-dismiss restore request, separately from opening focus transfer
+and close-control structure. It binds the two exact dismissal observations
+and both served source maps. The detector matches the complete outside
+handler at line 360 and stops matching when a Datepicker restore request is
+inserted. The staged scanner conserved all 211 accepted source rows and
+adds this finding plus the three mobile relationship findings. The plan
+conserves all 78 entries and adds the two corresponding implementation
+actions. Policy SHA-256 c280df735708226b324576340388a76b50726f1cf6c1c803cc0ed486c123c76e.
+Producer SHA-256 2c09853e4155016f28010884ad951b9e7e1fe28eaaf247fb0f09cbfc8bb9d896.
+Both draft registrations reverse to exact predecessor bytes. The live
+policy and producer stay frozen for the pending Datepicker candidate gates.
+
 Datepicker, Autocomplete, Timepicker and Select account for 393 pending
 programmatic-focus joins. All 393 have recorded structure and DOM target
 comparisons, and 345 also have retained serialized focus identity. In the
