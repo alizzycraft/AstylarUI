@@ -301,6 +301,20 @@ original images bound by checkpoints. Its 204-row delta reverses to
 all 2,311 parent cases. If accepted, 568 local-paint joins remain pending.
 Delta and measurement receipt SHA-256 fdf2253765971c736d96628986d199b7c80432103e076a88d3c115cd12ac7775.
 
+All 32 pending Input and Form Field disabled/error interior samples
+follow their captured fill inputs within one channel value. Material
+composites the disabled fill at 4% over the captured container. The
+candidate supplies an opaque fill. Twelve disabled light, contrast and
+custom cases differ by up to 9, 8 and 11 channel values, respectively.
+The four dark disabled cases differ by one channel value. All 16 error
+cases have identical sampled colors. Underlines, labels, edges and
+current rendering remain open.
+
+Successor 06487559 stages the 32 partial inspections with 64 original
+images bound by checkpoints. It keeps the full 2,311-row inventory and
+reverses all 236 changes. If accepted, 536 local-paint joins remain pending.
+Delta and measurement receipt SHA-256 7c62f40491f04dfaa4e74365f4e5cd131cd6345f524b5f25ced29e5164b91524.
+
 The authenticated accepted 844c896c index has 1,335 cases with both
 focus and activation evidence joins pending. The largest cohorts are
 static 324 across 27 families, hover 209 across 26, held 193 across 24,
