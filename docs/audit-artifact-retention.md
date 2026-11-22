@@ -217,6 +217,10 @@ Keep the Datepicker panel comparison receipt with the original
 opening checkpoints and full screenshots. Panel crops were measured
 in memory.
 
+Keep datepicker-panel-paint-interior-20261122.log with its two
+original screenshot and checkpoint dependencies.
+Panel interior receipt SHA-256 887ca4b86b5f1cae65ce335755bf5b645f0ca0c82b334a224a169ca31b1bee2a.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

@@ -1292,6 +1292,16 @@ calendar contents. This observation adds no acceptance threshold.
 Dark, contrast and custom receipt SHA-256
 036b30a22b8cc9a147418adca04c1a95f240604c1956ee76fb79b05079e95f71.
 
+On the two retained light-theme openings, 98.8% and 98.0% of raw RGB
+error is inside the 12 CSS px perimeter band at DPR1 and DPR2. The
+interior contains 85.7% of the sampled area. At the mismatched
+interior pixels, one side shows the exact shared fill in 5,027 of
+6,427 pixels at DPR1 and 20,012 of 23,303 at DPR2. This localizes the
+next attribution check to calendar content paint. Text, selection
+and other interior content have yet to be separated. The retained
+October date remains the boundary of this comparison.
+Panel interior receipt SHA-256 887ca4b86b5f1cae65ce335755bf5b645f0ca0c82b334a224a169ca31b1bee2a.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
