@@ -364,6 +364,12 @@ Keep datepicker-open-toggle-and-ownership-inputs-20261122.log with the
 separate static toggle AX evidence.
 Open Datepicker relation receipt SHA-256 846ba6448e4e12992a2e9f2ac40e314a4f92f781f4c6c80ce687a54cc0f2abfa.
 
+Keep static-popup-actual-ax-composed-delta-20261122.log with the
+72-case action delta, compressed review 590f4aec, both projection
+receipts and their original observations and source maps.
+The streamed comparison retained row digests for 24 additions.
+Static popup trigger AX delta SHA-256 85bd321957713c856f2465fdb0bf225d1c0e48eaa7f8ebcd85773078a37c2658.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.

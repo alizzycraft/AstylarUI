@@ -1361,6 +1361,16 @@ The first observed divergence is therefore in showcase authoring.
 Historical execution and open-state transport remain open.
 Static Datepicker toggle AX receipt SHA-256 4147a0cde1f902affc8ac01c7686634bda72018268a0f8811b49251ffd57b1f6.
 
+The static Tooltip and Datepicker projections now stage 24 additional
+semantics children on the 72-case action delta. The comparison
+authenticated 56 distinct evidence receipts, replayed all 72 parent
+additions and verified all 2,311 case rows. Removing the new children
+restores f2da53e2. The projected successor is 1a7ac05a.
+The existing dependency loader still needs to verify the composed
+successor before export selection. Open Datepicker AX, whole-case
+inspection and current rendering remain unverified.
+Static popup trigger AX delta SHA-256 85bd321957713c856f2465fdb0bf225d1c0e48eaa7f8ebcd85773078a37c2658.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,
