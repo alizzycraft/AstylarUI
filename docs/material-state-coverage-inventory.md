@@ -459,6 +459,22 @@ sample preserves value and collapsed state on both sides. Reuse those
 exact receipts for bounded focus and action joins. Current rendering
 and other activation paths remain open.
 
+A compact delta stages 48 focus observations and 40 pointer observations
+on b14c8a05. In all 40 text-control pointer attempts, Material records
+trusted pointer-down and pointer-up on the disabled INPUT with no click.
+Astylar records all three DOM events on HTML and no application event.
+Both sides keep the sampled input values. The eight Select observations
+join direct focus only. Their key attempt does not cover pointer activation.
+
+The delta rehashes 198 report, checkpoint, tree and screenshot receipts.
+Removing the 88 added observations and restoring the partial obligation
+dispositions recovers each exact parent row. All 48 earlier editing
+observations and the 2,311-case scope are preserved. The expected
+successor is 8835fb08f327c2173b1eea273b7a6ffc04aac8beac2279575aba8bbe4b80d3ef.
+Full materialization and dependency replay remain pending.
+Receipt disabled-exact-focus-action-delta-20261122.log SHA-256
+f498c3fd388848919350732edee40def850ca0a656ece97f77a9b9e81d37ae99.
+
 Of the 72 pending rows outside those supplements, 40 have a disabled
 state label without an authored disabled control. These are all eight
 contexts each for Button Toggle, Chips, Menu, Stepper and Tabs. The
