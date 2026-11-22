@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Picker proposal storage recovery compressed cde07143 and 4bcec81b at
+rest with equal whole-file hashes and logical sizes. It freed 201,703,424
+bytes and preserved the accepted pointer. Keep picker-proposal-headroom-
+20261122.log, SHA-256 d114b6b1b03a292f2853c7b2a08d11e68f86d8a152d8a7adec262c1a601f5c01.
+Retain the failed dry-run source under picker-launcher-dry-run-first-
+failure-20261122 and the picker dependency replay v2 stderr log.
+
 Retain the two reports, checkpoints, runner and logs in
 autocomplete-dark-mobile-caret-prelude-20261122. They distinguish tracked
 material counts from the live scene and bind the opt-in blur click.

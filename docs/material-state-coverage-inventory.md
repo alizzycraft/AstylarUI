@@ -106,6 +106,20 @@ through relative and absolute paths and rejects unrelated policy changes.
 The full case loader and export selection still need verification.
 The live policy and producer stay frozen for the Datepicker candidate gates.
 
+The staged launcher adds --picker-focus-semantics for proposal 78616399.
+The dry-run and intercepted check route pass the exact proposal path and
+digest. All 37 older invocations match byte-for-byte after parsing their
+arguments, and 38 invalid combinations are rejected. The first test
+combined --check and --dry-run and hit the existing exclusivity rule.
+The staged launcher SHA-256 is
+e404363f7852d71e02d490a5163a34ba798dc3772c2054376aa75c8ec790f6a1.
+The reverse transition restores the live source exactly before the
+existing Datepicker historical reader. No live launcher edit yet.
+
+Picker strict replay v2 reached the loader and failed on its workspace-
+relative path guard. Replay v3 uses the proposal relative to the same
+workspace and binds the accepted Datepicker promotion receipt.
+
 Datepicker, Autocomplete, Timepicker and Select account for 393 pending
 programmatic-focus joins. All 393 have recorded structure and DOM target
 comparisons, and 345 also have retained serialized focus identity. In the

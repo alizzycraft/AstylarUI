@@ -146,9 +146,9 @@ const producerEdits = [
       + JSON.stringify(datepickerDismissalPlan) + ',\n'],
 ];
 
-function changeProducer(source, edits) {
+function applySourceEdits(source, edits) {
   for (const [before, after] of edits) {
-    assert.equal(source.split(before).length, 2, 'Expected one mobile picker producer boundary');
+    assert.equal(source.split(before).length, 2, 'Expected one picker source boundary');
     source = source.replace(before, () => after);
   }
   return source;
@@ -157,12 +157,47 @@ function changeProducer(source, edits) {
 export function prepareMobilePickerControlsProducer(bytes) {
   const source = normalized(bytes);
   assert.equal(hash(source), producerParentSha256, 'Unknown mobile picker producer parent');
-  return changeProducer(source, producerEdits);
+  return applySourceEdits(source, producerEdits);
 }
 
 export function restoreMobilePickerControlsProducer(bytes) {
-  const previous = changeProducer(normalized(bytes), producerEdits.map(([before, after]) => [after, before]));
+  const previous = applySourceEdits(normalized(bytes), producerEdits.map(([before, after]) => [after, before]));
   assert.equal(hash(previous), producerParentSha256, 'Unexpected mobile picker producer drift');
+  return previous;
+}
+
+export const pickerFocusSemanticsReview = '78616399f9964684b86232fb63ac2945027a6ef7c461ea9bab5f2953e6861096';
+
+const launcherParentSha256 = 'e2c3ecf47e9b22ba1b29ec68f01a7e569f1b12e1d4307c47d3371a77be4a6395';
+const pickerMode = '--picker-focus-semantics';
+const launcherEdits = [
+  ["import { spawnSync } from 'node:child_process';\n",
+    "import { spawnSync } from 'node:child_process';\n" +
+    "import { pickerFocusSemanticsReview } from '../tests/material-parity/mobile-picker-controls-findings.mjs';\n"],
+  ['const datepickerMobile = rawRequested.includes(',
+    `const pickerFocusSemantics = rawRequested.includes('${pickerMode}');\n` +
+    `assert.ok(!pickerFocusSemantics || rawRequested.every(argument => ['${pickerMode}', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n` +
+    'const datepickerMobile = rawRequested.includes('],
+  ['const requested = rawRequested.filter(argument => argument !== \'--datepicker-mobile-open-dismiss\')',
+    `const requested = rawRequested.filter(argument => argument !== '${pickerMode}').filter(argument => argument !== '--datepicker-mobile-open-dismiss')`],
+  ["|--datepicker-mobile-open-dismiss]');", `|--datepicker-mobile-open-dismiss|${pickerMode}]');`],
+  ['for (const [name, relative] of Object.entries(inputs)) {',
+    "if (pickerFocusSemantics) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${pickerFocusSemanticsReview}.json`;\n" +
+    'for (const [name, relative] of Object.entries(inputs)) {'],
+  ["if (requested.includes('--dry-run')) console.log(",
+    "if (pickerFocusSemantics) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${pickerFocusSemanticsReview}`;\n" +
+    "if (requested.includes('--dry-run')) console.log("],
+];
+
+export function preparePickerFocusSemanticsLauncher(bytes) {
+  const source = normalized(bytes);
+  assert.equal(hash(source), launcherParentSha256, 'Unknown picker launcher parent');
+  return applySourceEdits(source, launcherEdits);
+}
+
+export function restorePickerFocusSemanticsLauncher(bytes) {
+  const previous = applySourceEdits(normalized(bytes), launcherEdits.map(([before, after]) => [after, before]));
+  assert.equal(hash(previous), launcherParentSha256, 'Unexpected picker launcher drift');
   return previous;
 }
 
@@ -170,6 +205,7 @@ export function createMobilePickerControlsHistoricalRead({ root, read }) {
   const boundaries = new Map([
     ['tests/material-parity/input-equivalence-policy.mjs', ['"id":"fixture-autocomplete-controls-association-outlives-popup"', restoreMobilePickerControlsPolicy]],
     ['tests/material-parity/input-equivalence-audit.mjs', ["'tests/material-parity/mobile-picker-controls-findings.mjs',", restoreMobilePickerControlsProducer]],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', ['const pickerFocusSemantics = ', restorePickerFocusSemanticsLauncher]],
   ].map(([file, rule]) => [path.resolve(root, file), rule]));
   return (name, options) => {
     const rule = boundaries.get(path.resolve(root, name));
