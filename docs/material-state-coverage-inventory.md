@@ -430,6 +430,13 @@ Move-only report SHA-256 2a557bedf74890c79e0d93aaa87f93970b2754fd89c4d8fb5e1ffb6
 Blur-click report SHA-256 6e006806e0549b7ea9ca48d57bb1853e206fd348f7805c92a7ce97822f9deb14.
 Runner SHA-256 75a0308d54b88d97d40d0a0082a77c0351e7c30cc6e9294842ae2c1e72f887d7.
 
+Proposal 78616399f9964684b86232fb63ac2945027a6ef7c461ea9bab5f2953e6861096
+binds this ownership observation to the one dark mobile case. Removing
+that child restores 4bcec81b exactly across all 2,311 cases. The controlled
+reports, runner and older dark log are the four new authenticated paths.
+The strict replay against the 844c896c accepted parent is running with
+19,385 dependencies. Tracked counts and case acceptance flags are unchanged.
+
 Autocomplete source classification: the accepted 211-finding inventory has a
 related Menu controls finding, but its detector matches only menu-popup.
 Stage fixture-autocomplete-controls-association-outlives-popup as an
