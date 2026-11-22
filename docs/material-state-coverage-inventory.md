@@ -387,6 +387,25 @@ samples and the distinct supplemental 19/20/21 failure. The staged join
 retains every case disposition and acceptance flag. Reuse the ongoing
 combined picker replay before running the next coherent dependency gate.
 
+Autocomplete shares the retained caret material finding in the older
+dark mobile input-click probe. The closed samples retain cursor material
+IDs 115, then 115 and 303, then 115, 303 and 488. The input material
+remains one instance by name and sampled whole-surface disposal clears
+all materials. In both this probe and the dark matrix replay the settled
+active node is autocomplete-control. The unequal 19/20/21 and 18/18/18
+counts therefore persist despite the same settled focus owner.
+
+The dark probe receipt field-popup-cursor-retention-8c2f911-verified.log
+SHA-256 937d29cc8c215465bb9aeb547fd18ab6390da341b7fbf46cf442598b176433a3
+records material identities. The historical test introduced in 7442d090
+includes an explicit blur before the input click and popup-detachment
+waits. The log has no served-file vector for an exact build comparison.
+Join the identity evidence to dark only in the next coherent picker
+batch. To distinguish action timing from build or browser variation,
+replay the matrix and blur-first routes on one authenticated build and
+browser, sampling active ownership and material identities at the same
+boundaries. Current rendering and late disposal remain unverified.
+
 Autocomplete source classification: the accepted 211-finding inventory has a
 related Menu controls finding, but its detector matches only menu-popup.
 Stage fixture-autocomplete-controls-association-outlives-popup as an
