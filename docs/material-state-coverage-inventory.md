@@ -743,6 +743,15 @@ Backup receipt SHA-256 b2c578514aa155f3adc9d6c7d05ed1fd21dc7ef2eacf0f073928141c1
 The canonical comparison, cold replay, isolated import and promotion
 remain required for the new generation.
 
+The authenticated 87915914 receipt supplies all 80 section digests for
+the comparison. A focused preflight reconstructed the 1,164-entry source
+section and verified the launcher, runner and picker reader against both
+accepted commit 784d6805 and frozen source bd147027. Updating exactly those
+three hashes predicts sourceFingerprints SHA-256
+4661190ba0ccb0569bc540fd703eb3b8d366068a39477f67b0d1d566e9d3d234.
+Preflight SHA-256 2a350cba54030ec10fce804df5206de471a891fb8ac45457132bb646709b4eb5.
+Compare that prediction with the exported section before promotion.
+
 The successor has no row receipts for the launcher, audit runner or
 picker reader. All three are declared source fingerprints. The semantic
 reader remains bound to the earlier receipt in 815 rows, so keep that
