@@ -1287,6 +1287,26 @@ Dependency replay SHA-256 20d6555cd48fc3f264fe3ec73898e2929d3dee68ee1b581e99ba12
 Report SHA-256 1ed590643697cd8fbe1b7af567ff8df531516272d35a049f8ed8793851c084fa.
 Delta SHA-256 93942ba899620c40b9da15cdb49b3b60c45f0c2b752d79f5be7d32a15cb1d64f.
 
+The authenticated 590f4aec proposal still leaves five shared inspection
+obligations partial in every case. They are input and anonymous structure,
+local paint, actual semantics, history and resource ownership, and
+source/runtime applicability. There are no pending focus or activation
+joins. A joined observation can still leave an obligation partial.
+Local paint lists remaining work in 1,100 cases and retains partial
+status in all 2,311. This counts overlapping obligations.
+
+The 24 Divider cases are the only cases with just the five shared
+obligations open. Their three authored exclusions already meet the
+schema 2 obligation checks. For the light desktop case, the earlier
+capture-availability field applies to three older runs. Its later
+retained and fresh capture children prove bounded build and case
+correspondence. Use those receipts for the next Divider requirement
+review. Reconcile remaining material-property and anonymous line-box
+stages and verify what the served runtime evidence covers before
+another capture. All 2,311 cases still need full source/runtime and
+enforced current rendering evidence.
+Inspection census SHA-256 0128938be06a96c3d4f8ae16691d3fb401f02280473867d5a04e9ca1b221a18e.
+
 The Datepicker local paint census has 99 rows with verified primary
 target crops and remaining work. The eight configured desktop opening
 cases can also be measured from their authenticated full screenshots.

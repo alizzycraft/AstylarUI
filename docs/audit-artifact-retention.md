@@ -274,6 +274,11 @@ paired trees and screenshots, and panel region receipt. The glyph
 and divider samples were computed in memory.
 Weekday receipt SHA-256 1d99adf82895f5ef4955c9f7ab1a6886d9941569548c65e6a62d0f8b44239976.
 
+Keep completed-focus-inspection-blockers-20261122.log with the
+authenticated compressed 590f4aec proposal and its replay receipts.
+The census streamed the archived bytes without materializing the proposal.
+Inspection census SHA-256 0128938be06a96c3d4f8ae16691d3fb401f02280473867d5a04e9ca1b221a18e.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
