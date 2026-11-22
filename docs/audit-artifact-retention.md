@@ -248,6 +248,12 @@ and samples were computed in memory.
 Ordinary day ink receipt SHA-256 39763a3aad1aa461efebabf6a76a8d90db69cc7270a791e8ea3f91d5fbe15581.
 Focused date tint receipt SHA-256 4f40313096f567377de0eeb3ac1efec1a2cc3e14d2c8f1b560547cfe27fecb92.
 
+Keep datepicker-ordinary-day-residual-20261122.log and
+datepicker-ordinary-day-channel-coverage-20261122.log with their
+authenticated November opening capture and alignment receipt.
+Residual receipt SHA-256 82f6eabde1c507f445555785ee304e75e319b3008312a43d2ead2c63804fe865.
+Channel coverage receipt SHA-256 c6d13caa3988f583e69aca130506cbe1c14ad17b0b4148a5882bdfdff60c2479.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

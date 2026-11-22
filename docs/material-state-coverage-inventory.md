@@ -1353,6 +1353,19 @@ unequal inputs. Remaining glyph, ring and other paint stay open.
 Ordinary day ink receipt SHA-256 39763a3aad1aa461efebabf6a76a8d90db69cc7270a791e8ea3f91d5fbe15581.
 Focused date tint receipt SHA-256 4f40313096f567377de0eeb3ac1efec1a2cc3e14d2c8f1b560547cfe27fecb92.
 
+Across the 14 held-out ordinary dates after glyph alignment, fewer
+than 1% of residual RGB error lies where only one side paints ink.
+Red and green account for 79.8% of the error even though the recorded
+text colors agree in those channels. Within the 1,212 paired ink
+pixels, an encoded-RGB blend model gives median channel coverage
+spread of 35.1 percentage points on Material and 0.26 on Astylar.
+The retained bundle connects Astylar labels to canvas 2D fillText
+and its control texture. The final pixels establish a channel
+difference. A label texture readback is queued to locate the Astylar
+coverage boundary before or after texture composition.
+Residual receipt SHA-256 82f6eabde1c507f445555785ee304e75e319b3008312a43d2ead2c63804fe865.
+Channel coverage receipt SHA-256 c6d13caa3988f583e69aca130506cbe1c14ad17b0b4148a5882bdfdff60c2479.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
