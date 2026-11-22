@@ -997,6 +997,28 @@ Report SHA-256 3969da6b35abfff3519b25258e70bd90610dd2f05ee6581c7bc7caaa7e9caad0.
 Manifest SHA-256 0f14be522b228947302c3894f51d86af5189966fe2251f68eca9f74dceb8c321.
 Delta SHA-256 c9f492b1bed35bb50698e760f807352fab46c4ee793da6a05982d6cfb70b6e2b.
 
+All 16 disabled Button and Select contexts now have a trusted center
+pointer attempt starting with BODY active. In Material, the hit
+and click go to button-root or select-primary and BODY stays focused.
+In Astylar, the canvas receives the pointer and retains focus.
+The application click targets button-content or select-input-region.
+The authenticated trees identify those targets as the direct parents
+of the disabled button or input. Neither disabled owner takes focus.
+The observed expanded, selected and open values remain stable.
+
+The Select observation covers a pointer attempt without a preceding
+focus request. The retained light DPR1 programmatic focus and keyboard
+evidence keeps its original scope. Other pointer points and current
+rendering remain open.
+
+Compact successor a487dc26 reverses to 566804b3 and leaves 952
+programmatic-focus and 48 authored-activation joins pending. The
+activation gaps are 40 disabled-labeled cases with enabled owners and
+eight mobile dismissals.
+Report SHA-256 b74eb106408e7f15b6f6f2e79dc0019f2e29e8e377ae06aaedbba99a2e6319d8.
+Manifest SHA-256 b49e0edc4451ec11642c0ca42e7725c17c61324c1999b3900915f42d3170b1a7.
+Delta SHA-256 1b560a01279fa092bdd5296f35b1ba0c7e4a9990ae5c884e7a4eacd9b6bc5708.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
