@@ -48,6 +48,18 @@ receipts are in picker-repaired-source-section-preflight-v2-20261122.log,
 SHA-256 2afff3118ebb124cf2e0b48fd39b284a5e004ce27d6715447bf0d14e22cae13a.
 Keep the first preflight log. It compared plan offsets before accounting
 for priority order. The corrected check compares sorted membership.
+
+The expected live summary conserves the accepted counts and dispositions
+apart from the source finding count rising from 211 to 215. The expected
+coverage digest binds the 2,311 ordered frozen cases, 19,385 receipts and
+the source-applicability chain reconstructed from the accepted index.
+Use picker-repaired-expected-summary-20261122.log (SHA-256
+1165ecd978092371c04976ec3de8134d19bd2c1f4c29e6df91689ab74261a592)
+and picker-repaired-expected-coverage-20261122.log (SHA-256
+e0132e300e5450c7010059ff1e2070abace32db4b0fe7eebe63133d23d815438).
+The full comparison is queued behind the live export. It authenticates
+the final payload, checks all 80 sections and requires exactly the five
+expected changes before proceeding to independent cold replay.
 The two maintained catalog preflight tests pass. The historical benchmark
 adapter recovers all 159 prior definitions and rejects unrelated drift.
 A separate semantic suite still stops at the older static registration
