@@ -269,6 +269,16 @@ a9adf7f0ccbbe6ae0595d804ad7e60b0020c3d9c4b2dff5cae1576edd40eda59.
 picker-pointer-static-successor-20261122.log SHA-256
 ec7c759786d11aa6d6a9b3657d03fc4b6cebe4e37789ebd7379a30d0beb76010.
 
+The two pointer-departure rows have a verified additive delta on 5fb578bb.
+Removing the two activation and two focus children restores both ordered
+parent rows and dispositions exactly. The existing loader rehashes the
+13 new files. The prospective successor b14c8a05 has 22 added children in
+13 cases relative to frozen 78616399 and 19,433 dependency receipts.
+Its case flags stay partial and rendering stays unverified.
+Compact delta picker-pointer-departure-next-delta-20261122.log SHA-256
+ec4eac78a5b7f1abf368a6a948e30ff0be6fa89e53ae193c9181150d4f376a77.
+Materialize it with the next coherent join and perform full replay.
+
 The revised successor delta adds 14 observation children to nine exact
 rows of picker proposal 78616399. Four mobile rows gain sampled material
 identities and five desktop rows gain pointer activation and focus
