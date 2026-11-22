@@ -830,6 +830,29 @@ Core queue report SHA-256 b723fd1375d6b43580574e4ab35c0ebf213eab1d5c2d5b25df1593
 Toolbar and Card queue report SHA-256 d052db1494c24075c037b179d8db7c80581745d03f86b0afc7eb3ccf81453a1c.
 Held delta SHA-256 e229332eccdd1955c9428028f2909670aff50ce43578f0a9a39281c2c97202f6.
 
+The 64 Selected and 40 Error interaction presets now have startup
+focus and activation observations for every configured case. The
+original runner loads the preset without issuing an activation. To
+check whether setup itself moves focus or dispatches activation,
+the replay installed observers before page scripts and sampled
+after setup, before the configured action and after settlement.
+Both sides retained BODY at all three boundaries in all 104 cases.
+No focus calls, element focus or activation events were recorded,
+and the candidate event arrays stayed empty at the sampled boundaries.
+
+The verifier matched 1,887 retained served assets and checked all
+104 checkpoints against the original focus aliases, event arrays,
+interaction state and runtime errors. Chromium 157.0.8103.51 ran the
+retained builds. Intentional user activation and current rendering
+remain open. Compact successor f60ea0fa reverses to e5056bc3 and leaves
+1,303 programmatic-focus and 479 authored-activation rows pending.
+All cases remain partial. The 322 static rows with both joins pending
+need startup evidence because their trees show no explicit autofocus
+and do not record focus calls during initialization.
+Report SHA-256 ece3a3dbfa13f63083078bc68e31c236dc52b399aa983c1e5b02479bb8876cfd.
+Runner SHA-256 b3951ad184cd97053f761a38d3259d98ff430446264a3c55b66109f9b4a65869.
+Delta SHA-256 610ecc1d22807b2deba763a312ffead1afca463bed6aa40ef7892c9e5e6d3ccb.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

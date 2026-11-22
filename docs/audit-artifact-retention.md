@@ -26,6 +26,16 @@ and toolbar-card-held-focus-queue-20261122 with the three runners,
 manifests, 35 checkpoints, paired captures and compact delta e5056bc3.
 Successful served-asset scratch assemblies were cleaned.
 
+Keep selected-error-startup-focus-20261122 with its runner, manifest,
+104 checkpoints, paired captures and logs. Retain compact delta
+f60ea0fa and selected-error-startup-focus-verify-20261122.log.
+Verification receipt SHA-256 ea141492f6dcec9bd831da068e3290afb2136bb70d47fc55a332501d22ede543.
+The successful served-asset scratch assembly was cleaned.
+NTFS compression reduced the October 28 Datepicker metadata log
+allocation from 293,877,760 to 137,580,544 bytes and preserved its
+SHA-256 and file identity.
+Export headroom receipt SHA-256 e4eca0bc20a787187f49d33af5222461ce1730e347904cc32621bc6016c0b6b4.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
