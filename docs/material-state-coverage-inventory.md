@@ -1,5 +1,16 @@
 # Material comparison/state coverage inventory
 
+The repaired picker export passed validation and wrote candidate 87915914.
+It covers 436 static and 1,875 interaction rows, with 8,483 differences,
+389,202 occurrences and 215 source findings. Input equivalence remains
+false. The accepted pointer is still 844c896c. The 80-section comparison
+is running, with independent cold equality and isolated import queued
+in that order. Preserve the candidate and frozen source until those
+gates pass before moving the accepted pointer.
+
+Export stdout SHA-256 99070870eed93390e5845c22b81012850157823b620afa314520885db49c409d.
+Export stderr SHA-256 633626b69f9d99e5b32f9917264a54ff90ac45a6672005e2e6a860ac7541d386.
+
 The first picker export exited 1 before writing a candidate. Four historical
 source bindings became invalid, leaving 259 style groups unattributed.
 Accepted generation 844c896c still matches the canonical manifest and
