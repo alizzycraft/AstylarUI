@@ -1611,6 +1611,16 @@ windows. Full used child geometry and the remaining ordinary-date ink
 differences in these October captures remain open.
 Ordinary-date alignment receipt SHA-256 aa851c01712b4122642f48a2a73fbd28b949bcf079e7ba1f35282faaf9908db2.
 
+The eight October openings and the separate November replay retain
+the open-state toggle and relationship inputs. Native DOM records
+dialog popup type and expanded=true on all nine toggles. Its textbox
+aria-owns resolves to the calendar inside the modal dialog. The
+candidate authors neither toggle attribute nor an input-to-calendar
+relationship in all nine cases. It authors a dialog named Choose date
+without a modal input. These are DOM and authored-input observations.
+The candidate open accessibility projection remains to be measured.
+Open Datepicker relation receipt SHA-256 846ba6448e4e12992a2e9f2ac40e314a4f92f781f4c6c80ce687a54cc0f2abfa.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

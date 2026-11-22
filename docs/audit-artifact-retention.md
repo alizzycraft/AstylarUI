@@ -359,6 +359,11 @@ AX report and all 24 paired observations, captured showcase and
 bridge maps, and the explicit authored branch history in Git.
 Static Datepicker toggle AX receipt SHA-256 4147a0cde1f902affc8ac01c7686634bda72018268a0f8811b49251ffd57b1f6.
 
+Keep datepicker-open-toggle-and-ownership-inputs-20261122.log with the
+18 retained opening trees, the cohort applicability receipt and the
+separate static toggle AX evidence.
+Open Datepicker relation receipt SHA-256 846ba6448e4e12992a2e9f2ac40e314a4f92f781f4c6c80ce687a54cc0f2abfa.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
