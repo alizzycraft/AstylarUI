@@ -123,6 +123,28 @@ receipts support an exact observation or whether page setup or focus
 owner evidence is missing. Scope held focus to its recorded boundary
 and reuse existing in-hold traces only for their authenticated cases.
 
+Original report ab42dbec has an exact row for each of the 324 static
+and 209 hover cases with both joins pending. The static rows have no
+event or focus records. Their candidate diagnostic focus ID is omitted.
+Across the 209 hover rows reference logs are empty and the candidate
+logs 908 pointerenter and 209 pointermove events. Neither side records
+activation in the sampled interval. The reference listener excludes
+pointer movement and begins after page setup, which bounds that result.
+The hover comparator returns true by default for these actions.
+
+Both hover focus aliases are omitted in all 209 rows. Every candidate
+resource snapshot has an interaction diagnostic with the logical focus
+ID omitted. No row records the raw active node or ancestry. Six paired
+Button, Select and Datepicker tree receipts authenticate without adding
+an active-node observation. Use the exact hover rows for the bounded
+action and recorded-event join. Resolve setup focus and raw node ownership
+with a paired pre-move and settled-hover sample. Static needs its own
+settled page observation. Preserve all original acceptance flags.
+
+Verified report and scope receipt
+original-static-hover-focus-activation-boundaries-verified-20261122.log
+SHA-256 0a8c3d8133277fa9fdce5b977aba6f93a051a8b2a3383eb0eca334e529d6b47f.
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
