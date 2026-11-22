@@ -639,6 +639,20 @@ editing and pointer focus evidence to the same rows. The 435-row batch
 reproduces its prior successor and reverses to the full 2,311-row parent.
 Delta SHA-256 1737b296161894d84187f599942099f4fb002941d50c1d44dab45ca5fd2dcd7f.
 
+All 64 selected and 40 error cases in the pending activation cohort load
+the named preset and return from the configured action before target
+lookup. The original and maintained action and listener methods agree.
+The original report records the requested candidate preset in each case.
+Both event arrays are empty after setup and both focus aliases and the
+candidate logical ID are omitted at settlement. Startup focus, actual
+active-node identity, activation attempts and current rendering remain open.
+Replay SHA-256 f7adee739dda0e6e2ff50e016473dc4902a82647b4f4bd439ff7072540b90bde.
+
+Successor 297fd91e attaches both observations to the 104 cases and leaves
+their activation and focus dispositions pending. The complete 539-row
+delta reproduces its predecessor and reverses to all 2,311 parent rows.
+Delta SHA-256 715fc310e27c8007758d7591642b2eefb396bc49ba0045ca70054c65bcc84f79.
+
 The remaining 14 causal traces are queued after the frozen pointer
 export to avoid competing for memory. Their earlier focus traces remain
 valid for the sampled owners and events.
