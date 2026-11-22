@@ -59,6 +59,12 @@ the v2 stderr for the dormant selection branch. The v3 verifier binds
 the archived runner bytes and checks the inactive branch guard.
 Verification SHA-256 b51f0d27f77b38643bebc623d9c5da7b4711c19fd58c0f286c4be287a4efb59e.
 
+Keep static-remaining-startup-focus-20261122 with its runner, manifest,
+167 checkpoints, paired captures and logs. Retain compact delta
+e36829a6 and the verification receipt. The successful served-asset
+scratch assembly was cleaned.
+Verification SHA-256 c1331ef9bd4a6e9e9c81d6c01f3062bb3dce866265ee92c3dac6cfc0728e10f5.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

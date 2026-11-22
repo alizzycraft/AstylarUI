@@ -914,6 +914,25 @@ rows pending. The other eight mobile dismissal rows need scoped action
 evidence. All cases remain partial and current rendering unverified.
 Delta SHA-256 79e20022113176c1eca2fcdf6f10ae3ff4f64134dfa2ea2696b021e9e98288e8.
 
+The remaining 167 static cases across 14 families now have startup
+focus and activation observations. Both retained builds settled with
+BODY active in every replay. Observers installed before navigation
+recorded no focus calls, element focus events or activation events.
+All 1,887 original served assets and both sets of checkpoints verified.
+The reference trees match byte for byte. The Astylar tree differences
+are confined to the style revision and two position properties in an
+unused Datepicker rule.
+
+Compact successor e36829a6 reverses to afcbf9c3. All 436 static cases
+now have evidence joined for both obligations. The 981 remaining
+programmatic-focus and 149 authored-activation joins are interaction
+cases. The activation gaps are 77 disabled, 64 configured focus and
+eight mobile dismissal cases. All whole-case inspections remain
+partial and current rendering remains unverified.
+Report SHA-256 4915636ac747600f35d4a079f885b786f259f0d520020a56bbdb3364cd0e59bc.
+Runner SHA-256 3e606461d4728f9d05e7d62206364c0093d1c1a4b62ed2709cb760bb3ba321f9.
+Delta SHA-256 b363a02ff11933ad2e537cf3b8c12a326b932eda6213dad6661fdd05f59425ab.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
