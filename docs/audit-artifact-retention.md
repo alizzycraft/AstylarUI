@@ -59,7 +59,11 @@ Keep the Slider explicit-focus replay and delta 3876cf3a with the
 original runner, raw event receipt and checkpoint they authenticate.
 Keep the Datepicker dark mobile dismissal focus-call report, runner,
 checkpoint, capture and source verifier, and compact successor 175b2009.
-The successful temporary served asset assembly was cleaned.
+Keep the datepicker-dark-mobile-dismiss-focus-identity-20261122 and
+datepicker-dark-mobile-dismiss-focus-mutation-20261122 packages with
+their runners, checkpoints, captures and reports. Keep the mutation
+delta binding expected successor 3c1a6807. The successful temporary
+served asset assemblies were cleaned.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the

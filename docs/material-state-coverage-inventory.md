@@ -608,19 +608,36 @@ on datepicker-icon with BODY active, through queued semantic bridge
 synchronization. Both calls reach the opener or icon. The exact call
 sites match the authenticated served assets. The instrumentation
 preserves the prior normalized events and settled focus boundaries.
-It runs Chromium 157 with the original 1,887 served assets. The
-candidate's transition to BODY, the relation to its authored focus
-request, other profiles and dismissal routes, and current rendering
-remain open.
+It runs Chromium 157 with the original 1,887 served assets.
 
 Compact successor 175b2009 adds this partial programmatic-focus
 observation to the eight Slider joins and reverses to all 2,311
 parent rows. It preserves 21,250 dependencies and authenticates
 six new paths. This leaves 1,487 pending programmatic-focus rows.
-Use the recorded candidate call-site boundary to scope the next
-picker case without re-running this dark mobile action.
 Focus source verification SHA-256 525c50c75f8d85623235df050b581dca42803dd85e63f03ecfd34a846fad2cc7.
 Composed delta SHA-256 548c770080e26198807b4ab542ab95692b5e83eb4c8e7dc49da66b28a7d9ab5c.
+
+The follow-up identity and DOM mutation replays locate the focus loss
+in all three retained dark mobile Escape cycles. The authored
+surface.focus('datepicker-primary') request returns false while the
+original icon is active. AstylarSemanticBridge.reconcileElement then
+calls replaceChildren on the primary semantic container. Immediately
+after that call BODY is active and the original icon is connected
+again. Queued syncFocus focuses that same icon. Native restores focus
+to the saved opener before removing the calendar day button. The
+mutation replay preserves the normalized events and settled focus
+boundaries and authenticates the served bridge and showcase call sites.
+Other profiles, dismissal routes and current rendering remain open.
+Use the identified mutation and focus boundaries in the next pending
+picker case.
+
+The composed delta binds expected successor 3c1a6807, reverses all
+2,311 rows and authenticates 21,259 dependencies. It adds three
+receipts to the existing Datepicker observation and leaves 1,487
+programmatic-focus rows pending.
+Identity report SHA-256 e75cbf52916286a1b6b53ef2dc7f6ecdd429effb887134a5b1171bbf07e90125.
+Mutation report SHA-256 fd687979db4a63053a5742e07ad8dc454b9b6498eb060f2f3b16b7ca92cf9373.
+Mutation delta SHA-256 7b6b09d4482f2c0276d1b92aa66b2a5ecc5bd0e3b446648d0081c6384860316e.
 Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
 Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
 
