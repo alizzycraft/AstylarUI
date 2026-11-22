@@ -74,6 +74,7 @@ registerHooks({
     const result = next(url, context); if (url !== historicalPolicyUrl) return result;
     const live = result.source.toString().replaceAll('\r\n', '\n');
     const accepted = new Set([
+      'c280df735708226b324576340388a76b50726f1cf6c1c803cc0ed486c123c76e',
       '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f',
       'a38dc20ab17b392fcd1eeac4e8ff693859c3dbfaf4395ae0e0a782326bd72a6c',
       'b85f901b0b19ce6422ba4194aef63f558b6ca476f0e20b9f903b3a51c0bff0b3',

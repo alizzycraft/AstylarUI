@@ -5,6 +5,15 @@ hard links to the isolated store. Keep predecessor 0c103b3d and its
 pre-export backup, the zero-disk-hit cold logs, isolated import, and
 accepted promotion receipt SHA-256
 9c81c6c64ef0054cdbce00d238ee23aaf525f6a8df82dd48ed03f5522d951806.
+Keep both initial live static suite failures and the verified retries,
+the transform suite, live picker dependency replay and source census.
+NTFS compression preserves the accepted index bytes and both hard
+links. Compression receipt SHA-256
+b0e9d8d421ca4a24e0a92bdee5165d2655531a2a23c78a9f8f102d9971a1bbf7.
+The two retained proposal hashes and file identities also verify after
+compression. The export volume still needs a fresh capacity check.
+Proposal compression SHA-256
+6d1df5da8f6f3e0a4b0b2b006cc10062ee1313458d7e7eb2a9abfa2049a168f4.
 
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.

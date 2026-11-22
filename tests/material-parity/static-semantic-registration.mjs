@@ -5,7 +5,32 @@ import ts from 'typescript';
 import { restorePendingEvidenceProducer, restoreOriginalRunnerExportSource } from './pending-evidence-registration.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 // Explicit historical population only. Production retains the complete current registry.
+import { readFileSync } from 'node:fs';
+import { restoreMobilePickerControlsPolicy } from './mobile-picker-controls-findings.mjs';
+const staticPolicy = 'tests/material-parity/input-equivalence-policy.mjs';
+const staticBeforePicker = 'abeb73cafe696f0c6e104908cefde3c6e97d1637db695c2bad031a5c5f86e39d';
+const staticBeforeSpan = '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f';
+function staticPolicyDefinitions(source) {
+  return new Function(source.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+}
+function historicalStaticPolicyAfterPicker(source) {
+  const original = source.toString().replaceAll('\r\n', '\n');
+  const prior = original.includes('fixture-autocomplete-controls-association-outlives-popup')
+    ? restoreMobilePickerControlsPolicy(original) : original;
+  assert.equal(hash(prior), staticBeforePicker, 'Unexpected 211-row picker predecessor');
+  const older = execFileSync('git', ['show', '49e1adc5:' + staticPolicy], { encoding: 'utf8' });
+  assert.equal(hash(older), staticBeforeSpan);
+  const expected = staticPolicyDefinitions(older);
+  const ids = new Set(expected.map(row => row.id));
+  assert.deepEqual(staticPolicyDefinitions(prior).filter(row => ids.has(row.id)), expected);
+  return older;
+}
 export function retainedStaticSemanticPopulation(current) {
+  if (current.length > 205) {
+    const live = readFileSync(staticPolicy, 'utf8');
+    assert.deepEqual(current, staticPolicyDefinitions(live), 'Unreviewed live static semantic population');
+    current = staticPolicyDefinitions(historicalStaticPolicyAfterPicker(live));
+  }
   // Datepicker opening added exactly one later finding. Authenticate the
   // complete current and predecessor populations before historical replay.
   if (current.length === 205) {
@@ -71,6 +96,7 @@ export function restoreScrollbarSupplementSuite(source) {
 }
 export function restoreRootDepthPolicy(source) {
   let text = source.toString().replaceAll('\r\n', '\n');
+  if (text.includes('fixture-slider-thumb-span-substitution')) text = historicalStaticPolicyAfterPicker(text);
   if (text.includes('fixture-datepicker-opening-focus-transfer-omitted')) {
     assert.equal(hash(text), '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f');
     text = execFileSync('git', ['show', '83b9ad89:tests/material-parity/input-equivalence-policy.mjs'], { maxBuffer: 8_000_000 }).toString().replaceAll('\r\n', '\n');

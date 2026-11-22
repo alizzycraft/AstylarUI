@@ -774,6 +774,24 @@ Cold log SHA-256 c5108bee801812027e539952648365e42eb5a69a51fff9c70c9e9c6569a4987
 Isolated import SHA-256 8067105b7f7b6d63e94419dde9bca7a841233775bef6b3991fda14e973b5a614.
 Accepted promotion SHA-256 9c81c6c64ef0054cdbce00d238ee23aaf525f6a8df82dd48ed03f5522d951806.
 
+The historical semantic readers now run directly in the audit checkout.
+The static suite passes 4/4, including nine retained reviewer replays
+and the exact predecessor case join. The transform suite passes 6/6.
+The older Text Backing reader now reverses the picker reader before
+its own restoration. Its queued-control drift checks pass. The live
+picker dependency replay reproduces all 2,311 rows and the exact
+20,232-receipt list for review 24c22d1a.
+
+Six changed source fingerprints reconcile against the accepted
+1,164-source census. Three of the four static proof anchors move by
+four lines. The next export also needs the new picker reader receipt in
+coverage. Accepted generation 1a64273f remains the checked baseline.
+Rendering and the final browser gates remain open.
+Static suite SHA-256 b78b54eff4a052b8a1a3aa75bb48a80c2ad1a6201ff7f73a9ff44d62397cef93.
+Transform suite SHA-256 7036bf0e0c0c4c34a914fc76d32c9b9146cc26e9693582f9719377f5b5039ac2.
+Dependency replay SHA-256 5cdc3cbc4ad6db4499646208f828539db7da9bdc3d78dac7c5ff48da05811f4d.
+Fingerprint census SHA-256 68b89144149e08328829e0108b721dc7fa08063d51052a4d3965436f00375687.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

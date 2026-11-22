@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync as readActual } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
-import { createMobilePickerControlsHistoricalRead } from './mobile-picker-controls-findings.mjs';
+import { createMobilePickerControlsHistoricalRead, restoreMobilePickerControlsPolicy, restoreMobilePickerControlsProducer } from './mobile-picker-controls-findings.mjs';
 import { restoreSharedButtonTouchPolicy, restoreSharedButtonTouchProducer, sharedButtonTouchDefinitions } from './button-touch-registration.mjs';
 
 const digest = s => createHash('sha256').update(s).digest('hex');
@@ -121,7 +121,9 @@ export function restoreTextBackingProducer(source) {
   assert.equal(digest(restored),'e486c704013f4d3f132cd9922accd048d745aa27307010218d0967d68d74d84d');return restored;
 }
 export function restoreLegacyClipPolicy(source) {
-  const current = restoreTextBackingPolicy(source);
+  const input = normalized(source);
+  const current = restoreTextBackingPolicy(input.includes('fixture-autocomplete-controls-association-outlives-popup')
+    ? restoreMobilePickerControlsPolicy(input) : source);
   if (!current.includes(clipId)) return current;
   assert.equal(digest(current), 'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512',
     'unreviewed legacy clip policy change');
@@ -134,7 +136,9 @@ export function restoreLegacyClipPolicy(source) {
   return restored;
 }
 export function restoreLegacyClipProducer(source) {
-  const current = restoreTextBackingProducer(source);
+  const input = normalized(source);
+  const current = restoreTextBackingProducer(input.includes('tests/material-parity/mobile-picker-controls-findings.mjs')
+    ? restoreMobilePickerControlsProducer(input) : source);
   if (!current.includes('public legacy CSS clip support limitation and retained controls')) return current;
   assert.equal(digest(current), 'e486c704013f4d3f132cd9922accd048d745aa27307010218d0967d68d74d84d',
     'unreviewed legacy clip producer change');
@@ -283,7 +287,9 @@ export function restoreBorderContactProducer(source) {
   return restored;
 }
 export function restoreSemanticTextTransformPolicy(source) {
-  const current = restoreBorderContactPolicy(source);
+  const input = normalized(source);
+  const current = restoreBorderContactPolicy(input.includes('fixture-autocomplete-controls-association-outlives-popup')
+    ? restoreMobilePickerControlsPolicy(input) : source);
   if (!current.includes(`id: '${id}'`)) return current;
   assert.equal(digest(current), '5cc34579bc381bd5719f32830bef61da71afae3a8cba2185d6566d1d902220e8');
   const tree = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true);
@@ -295,7 +301,9 @@ export function restoreSemanticTextTransformPolicy(source) {
   return restored;
 }
 export function restoreSemanticTextTransformProducer(source) {
-  const current = restoreBorderContactProducer(source);
+  const input = normalized(source);
+  const current = restoreBorderContactProducer(input.includes('tests/material-parity/mobile-picker-controls-findings.mjs')
+    ? restoreMobilePickerControlsProducer(input) : source);
   if (!current.includes('public semantic text-transform support gap and complete predecessor conservation')) return current;
   assert.equal(digest(current), 'b7746df868577d3934930c073b6423b9621c38bd4514b5dc0670e4d204940d66');
   const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true);
@@ -358,7 +366,7 @@ function benchmarkPolicySource(raw) {
 export function historicalSemanticDefinitions(current) {
   const live = normalized(readActual(policyFile));
   const previous = normalized(readBeforePickerRegistration(policyFile));
-  if (live !== previous) {
+  if (live !== previous && current.length > 211) {
     const definitions = text => new Function(text.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
     assert.deepEqual(current, definitions(live), 'Unreviewed picker definition population');
     current = definitions(previous);
@@ -401,6 +409,10 @@ export function historicalSemanticDefinitions(current) {
 }
 export function restoreSemanticRegistrationTransitionSource(source) {
   let restored = normalized(source);
+  if (digest(restored) === '5132fefc28a59669cd9407298dddf3bb884cd17c8338d159b690d6186fe9a541') {
+    restored = execFileSync('git', ['show', 'f4899d85:tests/material-parity/position-composition-producer-transition.mjs'], { encoding: 'utf8' });
+    assert.equal(digest(restored), '6bd3537e6df49c0cd58ac441c27f4cf8b49dbdf4f606403dad93cfeb61d4b175');
+  }
   const changes = [
     ["import { restoreSemanticTextTransformPolicy, restoreSemanticTextTransformProducer } from './semantic-text-transform-registration.mjs';\n", ''],
     ['  let current = restoreSemanticTextTransformProducer(source);', "  let current = source.toString().replaceAll('\\r\\n', '\\n');"],
@@ -424,6 +436,11 @@ export function readHistoricalBenchmarkSource(file, options) {
   else if (name === 'position-composition-producer-transition.mjs') restored = restoreSemanticRegistrationTransitionSource(raw);
   else {
     restored = normalized(raw);
+    const usesRetainedBenchmark = digest(restored) === 'f383821eef926747bd1de6ce675a858e0a3f75ff170e3c00cce81a77427b86e7';
+    if (usesRetainedBenchmark) {
+      restored = execFileSync('git', ['show', '96fd626066a4f6e3691c7a9f7ff662091c77b078:tests/material-parity/benchmark-config.spec.mjs'], { encoding: 'utf8' });
+      assert.equal(digest(restored), 'a270e3d3330d361512593efa60f69771c71709f70f2f679c8787f186ceb275d0');
+    }
     // QUEUED_CONTROL_OWNER_RECEIPT_BEGIN
     if(digest(restored)==='dc30dfac735721633f6fe04d8319255f41b305f113118fe96de0d757c313cb47'){
       const current='58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea';
@@ -472,7 +489,7 @@ export function readHistoricalBenchmarkSource(file, options) {
     const caretEnd = restored.indexOf(caretEndMarker, caretStart);
     assert.ok(caretStart >= 0 && caretEnd > caretStart);
     assert.equal(digest(restored.slice(caretStart, caretEnd + caretEndMarker.length)),
-      'fc3f20524e782e645d3ecb086cfbba47496e41b2451443a97216ba66fe90eaff');
+      usesRetainedBenchmark ? '35e9feec3e009b354fc999444551474b47153e4e979fe895df222c40ca7b0689' : 'fc3f20524e782e645d3ecb086cfbba47496e41b2451443a97216ba66fe90eaff');
     restored = restored.slice(0, caretStart)
       + "  const currentProof = readFileSync('tests/material-parity/input-boundary-evidence.spec.mjs', 'utf8');\n"
       + restored.slice(caretEnd + caretEndMarker.length);
@@ -482,7 +499,7 @@ export function readHistoricalBenchmarkSource(file, options) {
     const ownerEnd = restored.indexOf(ownerEndMarker, ownerStart);
     assert.ok(ownerEnd > ownerStart);
     assert.equal(digest(restored.slice(ownerStart, ownerEnd + ownerEndMarker.length)),
-      '770dc607ca140b8938afd8f4ad8409739a1d09e8ce6ed6ee7dbadb5c80308678');
+      usesRetainedBenchmark ? 'cdc254af1d25ca47d00b016279c2a14ea8268d3f13e547602a3ac8be027af49d' : '770dc607ca140b8938afd8f4ad8409739a1d09e8ce6ed6ee7dbadb5c80308678');
     restored = restored.slice(0, ownerStart) + restored.slice(ownerEnd + ownerEndMarker.length);
     assert.equal(restored.split('hash(readRootOwner(receipt.file))').length, 2);
     assert.equal(restored.split("readRootOwner(r.owner.file, 'utf8')").length, 2);

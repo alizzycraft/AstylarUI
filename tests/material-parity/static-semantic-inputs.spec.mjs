@@ -14,14 +14,18 @@ const sourceAuditDefinitions = retainedStaticSemanticPopulation(currentSourceAud
 const hash = b => createHash('sha256').update(b).digest('hex');
 const normalize = b => b.toString().replaceAll('\r\n', '\n');
 test('October27 historical semantic population preserves every prior definition', () => {
-  assert.equal(currentSourceAuditDefinitions.length, 205);
   const before = structuredClone(currentSourceAuditDefinitions);
+  const retainedPolicy = normalize(execFileSync('git', ['show', '49e1adc5:tests/material-parity/input-equivalence-policy.mjs']));
+  assert.equal(hash(retainedPolicy), '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f');
+  const retained205 = new Function(retainedPolicy.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+  assert.equal(retained205.length, 205);
   const historical = retainedStaticSemanticPopulation(currentSourceAuditDefinitions);
   assert.deepEqual(currentSourceAuditDefinitions, before);
   assert.equal(historical.length, 191);
   assert.equal(hash(JSON.stringify(historical)), '13c86852010dbff5153a44c53756eff3c59344c66b5391b9a2b3f2430c22c064');
-  assert.deepEqual(historical, currentSourceAuditDefinitions.slice(11, -3));
-  for (const i of [0, 10, 11, 100, 203, 204]) {
+  assert.deepEqual(historical, retained205.slice(11, -3));
+  assert.deepEqual(retainedStaticSemanticPopulation(retained205), historical);
+  for (const i of [0, 10, 11, 100, before.length - 2, before.length - 1]) {
     const changed = structuredClone(before); changed[i].id += '-drift';
     assert.throws(() => retainedStaticSemanticPopulation(changed));
   }

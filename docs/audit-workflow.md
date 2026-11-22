@@ -6,9 +6,10 @@ accepted store verification. Review 24c22d1a replays all 2,311 case rows
 with 20,232 dependency receipts. The 1,164-source census reconciles the
 three changed audit files. The other 78 canonical sections conserve.
 Reuse these receipts while their inputs match. All cases remain partial
-and the final browser gates remain open. The freeze on this export has
-ended. Integrate the already tested static semantic historical readers
-against their exact predecessor bytes and run the owning suites.
+and the final browser gates remain open. The live static and transform
+semantic suites now pass with the authenticated historical readers.
+Reconcile their six source changes, the three proof-line shifts and the
+picker reader source receipt in the next coherent canonical export.
 
 November 22 picker export 87915914 passed section conservation,
 independent cold equality and isolated and accepted store verification.

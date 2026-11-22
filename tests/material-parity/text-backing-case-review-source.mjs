@@ -5,6 +5,7 @@ import path from 'node:path';
 import ts from 'typescript';
 import { restoreTextBackingPolicy } from './semantic-text-transform-registration.mjs';
 import { restoreSharedButtonSemanticHelper } from './button-touch-registration.mjs';
+import { restorePickerFocusSemanticsBenchmarkReader } from './mobile-picker-controls-findings.mjs';
 
 export const textBackingRetainedReview='33a0bd8b71e92c7ededcc6f8e2cbf9ef1f5e981034362793c0531851672fe617';
 export const dividerReviewedBoundariesReview='be99cd383dabb304da259cef9046b6b81ce44922c3ae4d8fe6dfc2a76ab33f6f';
@@ -38,8 +39,11 @@ export function restoreInputBoundaryReadonlyAppend(source){
   assert.equal(hash(text.slice(start)),'0344aa16c76792afd9fab101e4f48a3bb03d1f958565efd1473d1fb3da74f69c');
   assert.equal(hash(text.slice(0,start)),previous);return text.slice(0,start);
 }
-export function restoreQueuedControlHelperSource(source){
+export function restoreQueuedControlHelperSource(source, root = process.cwd()){
   let text = source.toString().replaceAll('\r\n', '\n');
+  if (text.includes('const readBeforePickerRegistration = ')) {
+    text = restorePickerFocusSemanticsBenchmarkReader(text, root);
+  }
   if (hash(text) === '91f806eb4d7f87a9ed77e762c1f88f1f7bfe4bcadf01159643b326274f8b751b') {
     const file = 'tests/material-parity/semantic-text-transform-registration.mjs';
     text = execFileSync('git', ['show', '717c5245:' + file], { encoding: 'utf8' });
@@ -171,7 +175,7 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
   bind(suite,suiteCurrentText,suiteText.slice(0,addition[0].getFullStart())+suiteText.slice(addition[0].end),
     '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367');
   const helper='tests/material-parity/semantic-text-transform-registration.mjs',helperText=read(path.resolve(root,helper),'utf8');
-  let reviewedHelperText=restoreQueuedControlHelperSource(helperText),replayRestorationBlock;
+  let reviewedHelperText=restoreQueuedControlHelperSource(helperText,root),replayRestorationBlock;
   if(hash(reviewedHelperText)==='18eec69ef63dc741a3edba301dbba9a8b221f808f583c67cd0b3867160363bc8'){
     const start=reviewedHelperText.indexOf('    // QUEUED_CONTROL_OWNER_RECEIPT_BEGIN\n');
     const marker='    // QUEUED_CONTROL_OWNER_RECEIPT_END\n',end=reviewedHelperText.indexOf(marker,start)+marker.length;

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 
@@ -337,8 +338,15 @@ export function preparePickerFocusSemanticsBenchmarkReader(bytes) {
   return applySourceEdits(source, benchmarkReaderEdits);
 }
 
-export function restorePickerFocusSemanticsBenchmarkReader(bytes) {
-  const previous = applySourceEdits(normalized(bytes), reverseSourceEdits(benchmarkReaderEdits));
+export function restorePickerFocusSemanticsBenchmarkReader(bytes, root = process.cwd()) {
+  let source = normalized(bytes);
+  // This later reader has its own exact registration. Recover the earlier
+  // picker reader before reversing its changes for historical receipts.
+  if (hash(source) === '3a57cfcd60ecf9f1828d1ee3c2f0368237366d0d77dc65841032ce43c957fe8e') {
+    source = normalized(execFileSync('git', ['show', '2a04b6e4e56a5490a614fd50f94485d3305b0bdc:' + benchmarkReaderFile], { cwd: root }));
+    assert.equal(hash(source), '8141afaa96c7ddce1225265d39379d5996d22d2435a46e409192cc6695f16195');
+  }
+  const previous = applySourceEdits(source, reverseSourceEdits(benchmarkReaderEdits));
   assert.equal(hash(previous), benchmarkReaderParentSha256, 'Unexpected picker benchmark reader drift');
   return previous;
 }
@@ -397,7 +405,7 @@ export function createMobilePickerControlsHistoricalRead({ root, read }) {
     ['scripts/export-material-input-audit-current-ancestry.mjs', ['const pickerFocusSemantics = ', restorePickerFocusSemanticsLauncher]],
     ['scripts/run-material-input-audit.mjs', ['const pickerHistoricalRead = ', restorePickerFocusSemanticsRunner]],
     [datepickerReaderFile, ['envelope ??= Buffer.from', restorePickerFocusSemanticsDatepickerReader]],
-    [benchmarkReaderFile, ['const readBeforePickerRegistration = ', restorePickerFocusSemanticsBenchmarkReader]],
+    [benchmarkReaderFile, ['const readBeforePickerRegistration = ', bytes => restorePickerFocusSemanticsBenchmarkReader(bytes, root)]],
     ['tests/material-parity/public-tab-selection-finding.mjs', [focusSelectionReaderImport, restorePickerFocusSelectionReader]],
   ].map(([file, rule]) => [path.resolve(root, file), rule]));
   return (name, options) => {
