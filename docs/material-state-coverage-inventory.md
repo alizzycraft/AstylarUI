@@ -268,7 +268,24 @@ Interaction replay SHA-256 8d62614dd51dfd731f491dcef4820624027829849e92486f47df1
 Successor 69ba5ccf stages these 62 partial local-paint inspections.
 The combined delta changes 128 of 2,311 rows and reverses exactly.
 If accepted, 644 local-paint joins remain pending.
-Delta SHA-256 601a8f025dbe6c73a7d5489edf7f5e9a9265bf48a3f277d0049130c4cecfea.
+Delta SHA-256 601a8f025dbe6c73a7d5489fed7f95e9a96265bf448fa277d0049130c4cecfea.
+
+The 12 static Input controls have equal base fills, zero native overlay
+opacity and identical interior samples. All 16 pending Input and Form
+Field hover cases also have equal base fills. Native adds an 8% overlay
+and the candidate retains the base. In 12 light, contrast and custom
+cases the native sample is RGB 216,208,220 and the candidate sample is
+232,224,235. The four dark samples agree where the native overlay color
+is close to the base. All sampled colors follow the captured inputs
+within one channel value. Edges, text, transition paint and current
+rendering remain open.
+Replay SHA-256 7db2c9cc050ca5e366d39da48ad1c9276186631b4f892ac636e395f0f1c71c6a.
+
+Successor 751b13cc stages all 28 partial paint inspections in the
+reversible 156-row batch. If accepted, 616 local-paint joins remain
+pending. The first composition rejected a mistyped Sidenav receipt.
+Failure SHA-256 e041f5dadfe8863e6d79a53c1531d415661a62a7861b41e73db1f3b9ff42054a.
+Verified delta SHA-256 7a4d3c9a136a0a50f14ad58f3b1dd54651057074b75ebfcb35fcd257f8b6b903.
 
 The authenticated accepted 844c896c index has 1,335 cases with both
 focus and activation evidence joins pending. The largest cohorts are
