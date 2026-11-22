@@ -37,10 +37,17 @@ picker-focus-semantics-expected-coverage-delta-20261122.log has SHA-256
 c88ecd0fedd8c8f4534ab6c30a6f341944b9ace0f4510463b434f38f3b94d9db.
 Use it to check the exported candidate against the exact scope.
 
-The live source census matches the accepted 1,162 path receipt when
-reversed. It adds the picker registration and Datepicker reader paths and
-changes exactly the launcher, runner, policy, producer and benchmark reader
-fingerprints. The registry has 215 findings and the plan has 80 entries.
+The repaired source census reconstructs the accepted digests for
+fingerprints, findings, implementation plan and focused proofs. The 1,164
+live fingerprints preserve 1,156 existing paths and hashes. They add two
+paths and change six, including the guarded focus-selection reader. The
+producer finds all four added findings and preserves the 211 prior findings.
+The sorted plan keeps all 78 previous entries and adds two. All 501
+focused proof entries match the accepted digest. Exact candidate section
+receipts are in picker-repaired-source-section-preflight-v2-20261122.log,
+SHA-256 2afff3118ebb124cf2e0b48fd39b284a5e004ce27d6715447bf0d14e22cae13a.
+Keep the first preflight log. It compared plan offsets before accounting
+for priority order. The corrected check compares sorted membership.
 The two maintained catalog preflight tests pass. The historical benchmark
 adapter recovers all 159 prior definitions and rejects unrelated drift.
 A separate semantic suite still stops at the older static registration
