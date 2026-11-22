@@ -71,8 +71,16 @@ The preserved runner SHA-256 is
 The replay matches all 1,887 original served files. It uses Chromium
 157.0.8103.51 and adds only read-only observation hooks to the original
 action method. The target, hover and settlement methods match the recovered
-original. Join only these three exact cases after the frozen export gates.
-Other profiles, DPR2, transition timing, AX and current rendering remain open.
+original. Other profiles, DPR2, transition timing, AX and current rendering
+remain open.
+
+Proposal cde0714396735a781b6975d9dd54a23dd738143cdd21ca4a2bea488f23812565
+stages activation, programmatic focus and DOM semantics in those three
+exact cases. Removing the nine children restores predecessor 0ff6f39f by
+digest across all 2,311 rows. The source maps were already bound. Only the
+desktop report and runner are new dependency receipts, both authenticated.
+The total is 19,380 receipts. Run the strict inherited-dependency replay
+after the frozen Datepicker cold check and isolated import release memory.
 
 Datepicker, Autocomplete, Timepicker and Select account for 393 pending
 programmatic-focus joins. All 393 have recorded structure and DOM target
