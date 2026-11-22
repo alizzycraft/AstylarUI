@@ -1319,6 +1319,17 @@ review. Live activation, screen reader output and source/runtime
 applicability remain open.
 Static Button AX receipt SHA-256 33fd8a2ebc3fd8cb6a34f44a185ccb7df294b6f82071096ab086cd723c801c9a.
 
+The retained static capture also supplies 60 configured Toolbar,
+Menu, Dialog, Bottom Sheet and Snackbar pairs without a direct actual
+accessibility-tree record in the staged review. All 120 observations
+authenticate. Backend DOM identity binds the action in each case.
+Its role, name and recorded AX properties agree in all 60 pairs.
+All 12 menus expose the popup type menu and expanded=false on both
+sides. Material reports ignored direct children and Astylar reports
+one named StaticText child. Open popup relationships, live action
+delivery and current runtime applicability remain separate.
+Static action AX receipt SHA-256 a18ceb1fc2a2676b5c1b7e5a3af7f07aedf3abbe75507613e3dd760079b6a5d1.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,

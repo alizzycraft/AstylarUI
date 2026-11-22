@@ -339,6 +339,11 @@ static AX manifest, report, verification and 24 raw Button observations.
 The comparison used the archived observations and staged case keys.
 Static Button AX receipt SHA-256 33fd8a2ebc3fd8cb6a34f44a185ccb7df294b6f82071096ab086cd723c801c9a.
 
+Keep static-action-actual-ax-projection-20261122.log with the retained
+static AX report, manifest, independent verification and 120 raw
+Toolbar, Menu, Dialog, Bottom Sheet and Snackbar observations.
+Static action AX receipt SHA-256 a18ceb1fc2a2676b5c1b7e5a3af7f07aedf3abbe75507613e3dd760079b6a5d1.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
