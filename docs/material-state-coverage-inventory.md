@@ -1106,6 +1106,22 @@ Report SHA-256 f492d8c083161268016ac36e2f65f9642c1caf7d6689d4bcf5cfb777d6dd4efd.
 Runner SHA-256 f25ffff146305aeecc3aad93d8cf88fb75cf23b51c623cc22fa780ca0c5011e0.
 Delta SHA-256 195d4480145f2a923b490114790f4d0efe724e6783f99258784ba0157fc36ea2.
 
+The remaining 136 hover cases across 17 families now bind the original
+configured pointer move to startup, pre-move and settled observations.
+Both sides kept BODY active at all three boundaries, with no focus
+calls or captured DOM focus or activation events. Astylar records one
+pointermove per case and preserves each original pointerenter sequence.
+All 136 original and replay checkpoints and 1,887 served assets verify.
+
+Compact successor cec24e45 reverses to be5932cb. No hover focus
+evidence joins remain pending. The staged review has 677 other
+programmatic-focus joins pending and no pending authored-activation
+joins. These are retained Chromium 157 observations. Broader focus
+paths, whole-case inspection and current rendering remain open.
+Report SHA-256 b1fd4941c897af281b58cbb8d67d1eb2badcd1b2b4b44efbac42d7dda8bd188a.
+Runner SHA-256 57e9c4c13b1c1bdcffed1002daeb46a5811f8845dcd6ecffa5a94c362a120820.
+Delta SHA-256 09263a97e5a590b0d45fcdec8d2c03a35f837329f13a30e62208b81b162e7553.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

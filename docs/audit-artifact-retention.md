@@ -118,6 +118,15 @@ be5932cb and the verification receipt. The successful served-asset
 scratch assembly was cleaned.
 Verification SHA-256 88cf73a6e211f1da010db51ed14c78080e6d2c7dc66e6955d349699b1d1d332f.
 
+Keep remaining-configured-hover-focus-20261122 with its runner,
+manifest, 136 checkpoints, paired captures and logs. Retain compact
+delta cec24e45. The successful served-asset scratch assembly was cleaned.
+Verification SHA-256 d784b010f3153580dd0c023307738ae787228bd45b1d43e8eb862a41a331b636.
+NTFS compression reduced the October 28 Tooltip metadata log allocation
+from 292,550,774 to 136,802,304 bytes. Its SHA-256, file identity and
+modification time verify after compression.
+Headroom SHA-256 3579bbdc767a0372423364d48a7b2efe9fd49ede1c220a63d5283cbf31277f18.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
