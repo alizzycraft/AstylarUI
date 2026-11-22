@@ -512,6 +512,25 @@ focus observations. It reverses to the complete 2,311-row 3a0dfc9c parent
 and retains every acceptance flag. Expected successor 00295837.
 Composed delta SHA-256 00617419972307e2020bfee18143e264625e7d77e039cbec363367c61a0518b9.
 
+The light desktop DPR1 node-token probe separates replacement from
+detachment and reinsertion. Both Material owners retain their tokens
+without focus events during departure. Both Astylar owners are removed
+and reinserted with their original object tokens, then refocused through
+the semantic bridge. Dialog has one blur and focus pair. Bottom Sheet
+has two in this run, versus one in the earlier trace. Both runs preserve
+the original endpoint ancestry and primary-target activation sequence.
+
+The observed detachment involves an existing ancestor on each side of
+the candidate reconciliation. The first synchronous source operation
+and the trigger for the extra Bottom Sheet cycle remain open. Use a
+scoped operation trace only if needed to distinguish root from descendant
+reconciliation or earlier attribute changes. Other contexts still have
+logical IDs and sampled ancestry only.
+
+Node identity report SHA-256 5d9d71f5fb0aa48fba794ccfbd54f623e7f728ee5b79fd7d6e29d8499bbc43fa.
+Runner SHA-256 a35dc03d2bf1fa6d30b8d91d6d1a399f29f6ef14f64f59d5a169878c2a36e2b0.
+Verification SHA-256 bdc1dc96e732e0c34087cf9abb7db841bdf47547970a5346f4951875689c3c9e.
+
 Trace dialog-sheet-activate-leave-focus-20261122/latest-report.json
 SHA-256 f34578c470431fb915c0ff8ef5d30ddc3a3cf6492659f4ffcf1251bcb57e0a24.
 Runner SHA-256 f470b14daf0f47bef478f0414d8ca630dbcf87b38c484a238671ec5612c96eb3.
