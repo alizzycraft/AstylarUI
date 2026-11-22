@@ -101,16 +101,16 @@ export function buildDatepickerMobileOpenDismissReview({ root = process.cwd(), r
 }
 
 export function createDatepickerMobileOpenDismissReviewReader({ root = process.cwd(), read = readFileSync } = {}) {
-  const review = buildDatepickerMobileOpenDismissReview({ root, read });
   const sha256 = datepickerMobileOpenDismissReview;
   const file = path.resolve(root, base + 'working-audit/proposals/' + sha256 + '.json');
-  const envelope = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256, review }));
+  let envelope;
   const predecessor = createSnackbarOpenerReviewReader({ root, read: createDatepickerMobileOpenDismissHistoricalRead({ root, read }) });
   assert.equal(predecessor.sha256, '1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5');
   return {
     file, sha256,
     read(name, options) {
       if (path.resolve(root, name) !== file) return predecessor.read(name, options);
+      envelope ??= Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256, review: buildDatepickerMobileOpenDismissReview({ root, read }) }));
       const encoding = typeof options === 'string' ? options : options?.encoding;
       return encoding ? envelope.toString(encoding) : Buffer.from(envelope);
     },

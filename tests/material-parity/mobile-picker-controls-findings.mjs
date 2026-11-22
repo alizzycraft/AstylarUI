@@ -140,18 +140,23 @@ const datepickerDismissalPlan = Object.freeze({
 });
 const producerEdits = [
   ['function sourceFingerprints(root) {\n  const files = [\n',
-    "function sourceFingerprints(root) {\n  const files = [\n    'tests/material-parity/mobile-picker-controls-findings.mjs',\n"],
+    "function sourceFingerprints(root) {\n  const files = [\n    'tests/material-parity/mobile-picker-controls-findings.mjs',\n" +
+    "    'scripts/join-material-datepicker-mobile-open-dismiss.mjs',\n"],
   ['function implementationPlan() {\n  return [\n',
     'function implementationPlan() {\n  return [\n    ' + JSON.stringify(sharedPlan) + ',\n    '
       + JSON.stringify(datepickerDismissalPlan) + ',\n'],
 ];
 
 function applySourceEdits(source, edits) {
-  for (const [before, after] of edits) {
-    assert.equal(source.split(before).length, 2, 'Expected one picker source boundary');
-    source = source.replace(before, () => after);
+  for (const [before, after, instances = 1] of edits) {
+    assert.equal(source.split(before).length - 1, instances, 'Unexpected picker source boundary');
+    source = source.replaceAll(before, () => after);
   }
   return source;
+}
+
+function reverseSourceEdits(edits) {
+  return edits.map(([before, after, instances]) => [after, before, instances]).reverse();
 }
 
 export function prepareMobilePickerControlsProducer(bytes) {
@@ -161,7 +166,7 @@ export function prepareMobilePickerControlsProducer(bytes) {
 }
 
 export function restoreMobilePickerControlsProducer(bytes) {
-  const previous = applySourceEdits(normalized(bytes), producerEdits.map(([before, after]) => [after, before]));
+  const previous = applySourceEdits(normalized(bytes), reverseSourceEdits(producerEdits));
   assert.equal(hash(previous), producerParentSha256, 'Unexpected mobile picker producer drift');
   return previous;
 }
@@ -196,9 +201,118 @@ export function preparePickerFocusSemanticsLauncher(bytes) {
 }
 
 export function restorePickerFocusSemanticsLauncher(bytes) {
-  const previous = applySourceEdits(normalized(bytes), launcherEdits.map(([before, after]) => [after, before]));
+  const previous = applySourceEdits(normalized(bytes), reverseSourceEdits(launcherEdits));
   assert.equal(hash(previous), launcherParentSha256, 'Unexpected picker launcher drift');
   return previous;
+}
+
+const datepickerReaderFile = 'scripts/join-material-datepicker-mobile-open-dismiss.mjs';
+const datepickerReaderParentSha256 = '8189e9f219e53e0e63709fb82c0903839bb733faa6a15605e49476c7d0375270';
+const eagerEnvelope = "  const envelope = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256, review }));\n";
+const datepickerDelegation = '      if (path.resolve(root, name) !== file) return predecessor.read(name, options);\n';
+// Keep the old proposal bytes reproducible on demand. A successor reads only
+// the historical dependencies, so it does not need the old envelope in memory.
+const datepickerReaderEdits = [
+  ['  const review = buildDatepickerMobileOpenDismissReview({ root, read });\n  const sha256 = datepickerMobileOpenDismissReview;\n',
+    '  const sha256 = datepickerMobileOpenDismissReview;\n'],
+  [eagerEnvelope, '  let envelope;\n'],
+  [datepickerDelegation, datepickerDelegation +
+    "      envelope ??= Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256, review: buildDatepickerMobileOpenDismissReview({ root, read }) }));\n"],
+];
+
+export function preparePickerFocusSemanticsDatepickerReader(bytes) {
+  const source = normalized(bytes);
+  assert.equal(hash(source), datepickerReaderParentSha256, 'Unknown Datepicker reader parent');
+  return applySourceEdits(source, datepickerReaderEdits);
+}
+
+export function restorePickerFocusSemanticsDatepickerReader(bytes) {
+  const previous = applySourceEdits(normalized(bytes), reverseSourceEdits(datepickerReaderEdits));
+  assert.equal(hash(previous), datepickerReaderParentSha256, 'Unexpected Datepicker reader drift');
+  return previous;
+}
+
+const runnerParentSha256 = '1a25dc267f6ff83e641b76037d8c1bb394bcd3209e21d2a26560fbb37026a8f9';
+const runnerEdits = [
+  ['({root,read:auditReadFileSync', '({root,read:pickerHistoricalRead', 10],
+  ['import { createSliderOpenerHistoricalRead }',
+    "import { createMobilePickerControlsHistoricalRead, createPickerFocusSemanticsReviewReader, pickerFocusSemanticsReview } from '../tests/material-parity/mobile-picker-controls-findings.mjs';\n" +
+    'import { createSliderOpenerHistoricalRead }'],
+  ["  progress('build-audit');\n", "  progress('build-audit');\n" +
+    '  const pickerHistoricalRead = createMobilePickerControlsHistoricalRead({ root, read: auditReadFileSync });\n'],
+  ['    const applicability=options.caseObligationReviewSha256===datepickerMobileOpenDismissReview\n',
+    '    const applicability=options.caseObligationReviewSha256===pickerFocusSemanticsReview\n' +
+    '      ? createPickerFocusSemanticsReviewReader({ root, read: auditReadFileSync,\n' +
+    '        predecessor: createDatepickerMobileOpenDismissReviewReader({ root, read: pickerHistoricalRead }) })\n' +
+    '      : options.caseObligationReviewSha256===datepickerMobileOpenDismissReview\n'],
+  ['    diagnosticRead: [datepickerMobileOpenDismissReview,',
+    '    diagnosticRead: [pickerFocusSemanticsReview,datepickerMobileOpenDismissReview,'],
+];
+
+export function preparePickerFocusSemanticsRunner(bytes) {
+  const source = normalized(bytes);
+  assert.equal(hash(source), runnerParentSha256, 'Unknown picker runner parent');
+  return applySourceEdits(source, runnerEdits);
+}
+
+export function restorePickerFocusSemanticsRunner(bytes) {
+  const previous = applySourceEdits(normalized(bytes), reverseSourceEdits(runnerEdits));
+  assert.equal(hash(previous), runnerParentSha256, 'Unexpected picker runner drift');
+  return previous;
+}
+
+const benchmarkReaderFile = 'tests/material-parity/semantic-text-transform-registration.mjs';
+const benchmarkReaderParentSha256 = '91f806eb4d7f87a9ed77e762c1f88f1f7bfe4bcadf01159643b326274f8b751b';
+const benchmarkReaderEdits = [
+  ["import ts from 'typescript';\n",
+    "import ts from 'typescript';\n" +
+    "import { createMobilePickerControlsHistoricalRead } from './mobile-picker-controls-findings.mjs';\n"],
+  ["const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';\n",
+    "const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';\n" +
+    'const readBeforePickerRegistration = createMobilePickerControlsHistoricalRead({ root: process.cwd(), read: readActual });\n'],
+  ['  const source = benchmarkPolicySource(readActual(policyFile));\n',
+    '  const live = normalized(readActual(policyFile));\n' +
+    '  const previous = normalized(readBeforePickerRegistration(policyFile));\n' +
+    '  if (live !== previous) {\n' +
+    "    const definitions = text => new Function(text.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();\n" +
+    "    assert.deepEqual(current, definitions(live), 'Unreviewed picker definition population');\n" +
+    '    current = definitions(previous);\n' +
+    '  }\n' +
+    '  const source = benchmarkPolicySource(previous);\n'],
+  ['  const raw = readActual(file, options), name = path.basename(String(file));\n',
+    '  const raw = readBeforePickerRegistration(file, options), name = path.basename(String(file));\n'],
+];
+
+export function preparePickerFocusSemanticsBenchmarkReader(bytes) {
+  const source = normalized(bytes);
+  assert.equal(hash(source), benchmarkReaderParentSha256, 'Unknown picker benchmark reader parent');
+  return applySourceEdits(source, benchmarkReaderEdits);
+}
+
+export function restorePickerFocusSemanticsBenchmarkReader(bytes) {
+  const previous = applySourceEdits(normalized(bytes), reverseSourceEdits(benchmarkReaderEdits));
+  assert.equal(hash(previous), benchmarkReaderParentSha256, 'Unexpected picker benchmark reader drift');
+  return previous;
+}
+
+export function createPickerFocusSemanticsReviewReader({ root, read, predecessor }) {
+  assert.equal(predecessor.sha256, 'a095cf9b57430eb73acc3a3d33f4092644cfef4ac21a1a494ec71acde09c719f');
+  assert.equal(predecessor.sourceApplicability.joinSource.sha256, datepickerReaderParentSha256);
+  const file = path.resolve(root, artifacts, 'working-audit', 'proposals', pickerFocusSemanticsReview + '.json');
+  const joinSource = 'tests/material-parity/mobile-picker-controls-findings.mjs';
+  return {
+    read(name, options) {
+      if (path.resolve(root, name) === file) return read(name, options);
+      return predecessor.read(name, options);
+    },
+    sourceApplicability: {
+      mode: 'retained-picker-focus-and-semantics',
+      joinSource: { file: joinSource, sha256: hash(read(path.resolve(root, joinSource))) },
+      predecessorReview: predecessor.sha256,
+      predecessorApplicability: predecessor.sourceApplicability,
+      boundary: 'Exact retained picker actions and ownership observations. Current rendering and whole-case acceptance remain open.',
+    },
+  };
 }
 
 export function createMobilePickerControlsHistoricalRead({ root, read }) {
@@ -206,6 +320,9 @@ export function createMobilePickerControlsHistoricalRead({ root, read }) {
     ['tests/material-parity/input-equivalence-policy.mjs', ['"id":"fixture-autocomplete-controls-association-outlives-popup"', restoreMobilePickerControlsPolicy]],
     ['tests/material-parity/input-equivalence-audit.mjs', ["'tests/material-parity/mobile-picker-controls-findings.mjs',", restoreMobilePickerControlsProducer]],
     ['scripts/export-material-input-audit-current-ancestry.mjs', ['const pickerFocusSemantics = ', restorePickerFocusSemanticsLauncher]],
+    ['scripts/run-material-input-audit.mjs', ['const pickerHistoricalRead = ', restorePickerFocusSemanticsRunner]],
+    [datepickerReaderFile, ['envelope ??= Buffer.from', restorePickerFocusSemanticsDatepickerReader]],
+    [benchmarkReaderFile, ['const readBeforePickerRegistration = ', restorePickerFocusSemanticsBenchmarkReader]],
   ].map(([file, rule]) => [path.resolve(root, file), rule]));
   return (name, options) => {
     const rule = boundaries.get(path.resolve(root, name));

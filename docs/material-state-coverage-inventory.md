@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+Picker proposal 78616399 passed the existing strict loader across all
+2,311 configured cases and 19,385 dependencies. Replay v3 SHA-256
+60f83ec191d8a8ae5eecf8930502ba2efe480b483f0c51603c861f4b53678842.
+All case, inspection and rendering flags are conserved. The live launcher
+now selects this batch and keeps the Datepicker predecessor reproducible
+on demand. Reading picker dependencies does not build that prior envelope.
+
+The live source census matches the accepted 1,162 path receipt when
+reversed. It adds the picker registration and Datepicker reader paths and
+changes exactly the launcher, runner, policy, producer and benchmark reader
+fingerprints. The registry has 215 findings and the plan has 80 entries.
+The two maintained catalog preflight tests pass. The historical benchmark
+adapter recovers all 159 prior definitions and rejects unrelated drift.
+A separate semantic suite still stops at the older static registration
+reader expecting 192 live definitions. Preserve the full final gates.
+
+The accepted 844c896c bundle is backed up before the picker export. Freeze
+this coherent source generation through export conservation and cold checks.
+All case groups remain partial and current rendering remains unverified.
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are

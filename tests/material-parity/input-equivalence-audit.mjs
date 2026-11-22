@@ -8922,6 +8922,8 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/mobile-picker-controls-findings.mjs',
+    'scripts/join-material-datepicker-mobile-open-dismiss.mjs',
     "tests/material-parity/slider-thumb-span-findings.mjs",
     "tests/material-parity/slider-thumb-span-inputs.spec.mjs",
     "scripts/join-material-snackbar-opener-paint.mjs",
@@ -11043,6 +11045,8 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
+    {"priority":4.32,"rootCause":"Autocomplete, Select and Timepicker author controls references beyond popup lifetime","action":"Align the authored controls relationship with the conditional listbox in the three showcase families. Preserve resolved open controls and active-option links. Verify closed reference removal, re-open resolution, focus, and accessibility-tree exposure across the maintained actions and viewports. Keep this separate from the Menu focusability finding and from sampled resource ownership."},
+    {"priority":5.855,"rootCause":"Datepicker pointer dismissal omits opener focus restoration","action":"Supply equivalent Datepicker restoration intent for outside-target pointer dismissal through the supported focus lifecycle. Verify the opener, logical focus and active node after both configured pointer dismissals and on re-open. Check Escape and opening focus independently. Account for surface canvas focus separately from the omitted request."},
     {"priority":2.08,"rootCause":"Range plugin substitutes full-width thumb positioning for native inset span","action":"During later implementation, supply reference-equivalent thumb geometry through the supported CSS-space layout/paint contract. First establish ownership of native slider track/inset semantics and any missing general control capability. Do not add fixture-only pixel nudges, change host width or tune projection scale to conceal unequal inputs. Preserve all 78 retained cases. After equivalent inputs are supplied, verify endpoint geometry, RTL, min/max, full-domain drag identity, keyboard steps, transitions, DPR edges and current browser rendering separately. Endpoint transforms alone do not prove pointer-path or smoothness behavior."},
     {"priority":2.07,"rootCause":"Core interaction material does not clear transparent background after hover","action":"Fix the shared interaction material reset so transparent clears prior fill. Preserve the public DPR1/2 failure and passing explicit alpha-zero/opaque controls. Do not convert fixture transparent to rgba,add Material-specific paint branches,or conflate this reset with allocation/adoption and focus-layer authoring defects. Extend updates,gradients,focus/pressed transitions and disposal before general acceptance."},
     {"priority":5.87,"rootCause":"Toolbar action omits native focus layer input","action":"Preserve equivalent toolbar focus composition through supported public owners. Keep this unfilled action distinct from the prior filled-button scope;reduce unsupported general state-layer capability at core rather than authoring sampled colors. Verify actual focus paint,semantics and current rendering after equivalent inputs."},

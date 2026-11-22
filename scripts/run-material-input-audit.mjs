@@ -46,6 +46,7 @@ import { createFilledFocusReviewReader, createFilledFocusHistoricalRead } from '
 import { createButtonToolbarReviewReader, createButtonToolbarHistoricalRead } from './join-material-button-toolbar-paint.mjs';
 import { createSnackbarOpenerReviewReader } from './join-material-snackbar-opener-paint.mjs';
 import { createDatepickerMobileOpenDismissHistoricalRead, createDatepickerMobileOpenDismissReviewReader, datepickerMobileOpenDismissReview } from './join-material-datepicker-mobile-open-dismiss.mjs';
+import { createMobilePickerControlsHistoricalRead, createPickerFocusSemanticsReviewReader, pickerFocusSemanticsReview } from '../tests/material-parity/mobile-picker-controls-findings.mjs';
 import { createSliderOpenerHistoricalRead } from '../tests/material-parity/slider-thumb-span-findings.mjs';
 import { dividerConsumerReview, createDividerConsumerRegistrationHistoricalRead } from '../tests/material-parity/divider-consumer-registration.mjs';
 import { createCaptureAvailabilityHistoricalRead } from '../tests/material-parity/capture-availability-registration.mjs';
@@ -69,6 +70,7 @@ progress('read-reference');
 const parityReport = JSON.parse(readFileSync(parityPath, 'utf8'));
 const { audit, errors } = withAuditEvidenceSession(() => {
   progress('build-audit');
+  const pickerHistoricalRead = createMobilePickerControlsHistoricalRead({ root, read: auditReadFileSync });
   const audit = buildMaterialInputAudit(parityReport, { ...options, root });
   if (options.caseObligationReview !== undefined) {
     progress('join-case-obligations');
@@ -96,7 +98,7 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const tooltipOpenReaderFactory = options.caseObligationReviewSha256===tooltipOpenReview ? createTooltipOpenReviewReader : datepickerOpeningReaderFactory;
     const badgeLabelPaintReaderFactory = options.caseObligationReviewSha256===badgeLabelPaintReview ? createBadgeLabelPaintReviewReader : tooltipOpenReaderFactory;
     const captureAvailabilityReaderFactory = options.caseObligationReviewSha256===captureAvailabilityReview ? createCaptureAvailabilityReviewReader : badgeLabelPaintReaderFactory;
-    const historicalRead = createDatepickerMobileOpenDismissHistoricalRead({root,read:auditReadFileSync});
+    const historicalRead = createDatepickerMobileOpenDismissHistoricalRead({root,read:pickerHistoricalRead});
     const sliderOpenerHistoricalRead = createSliderOpenerHistoricalRead({root,read:historicalRead});
     const buttonToolbarHistoricalRead = createButtonToolbarHistoricalRead({root,read:sliderOpenerHistoricalRead});
     const filledFocusHistoricalRead = createFilledFocusHistoricalRead({root,read:buttonToolbarHistoricalRead});
@@ -104,16 +106,19 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const dividerConsumerEvidenceRead = createDividerConsumerRegistrationHistoricalRead({root,read:triggerPaintHistoricalRead});
     const captureAvailabilityEvidenceRead = (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256===dividerConsumerReview) ? dividerConsumerEvidenceRead : createCaptureAvailabilityHistoricalRead({root,read:dividerConsumerEvidenceRead});
     const dividerConsumerReaderFactory = options.caseObligationReviewSha256===dividerConsumerReview ? createDividerConsumerReviewReader : captureAvailabilityReaderFactory;
-    const applicability=options.caseObligationReviewSha256===datepickerMobileOpenDismissReview
-      ? createDatepickerMobileOpenDismissReviewReader({root,read:auditReadFileSync})
+    const applicability=options.caseObligationReviewSha256===pickerFocusSemanticsReview
+      ? createPickerFocusSemanticsReviewReader({ root, read: auditReadFileSync,
+        predecessor: createDatepickerMobileOpenDismissReviewReader({ root, read: pickerHistoricalRead }) })
+      : options.caseObligationReviewSha256===datepickerMobileOpenDismissReview
+      ? createDatepickerMobileOpenDismissReviewReader({root,read:pickerHistoricalRead})
       : options.caseObligationReviewSha256==='1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5'
       ? createSnackbarOpenerReviewReader({root,read:historicalRead})
       : options.caseObligationReviewSha256==='904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4'
-      ? createButtonToolbarReviewReader({root,read:auditReadFileSync})
+      ? createButtonToolbarReviewReader({root,read:pickerHistoricalRead})
       : options.caseObligationReviewSha256==='9eb4cb42066d5e50347b6ae269354a8702ddeae694f971a9ba5f26ccb421409f'
-      ? createFilledFocusReviewReader({root,read:auditReadFileSync})
+      ? createFilledFocusReviewReader({root,read:pickerHistoricalRead})
       : options.caseObligationReviewSha256==='9105f2b3bd08a5c30c8c04fc422248fd4fbcf34506feb1ca2bef22b7f0d9cc03'
-      ? createTriggerPaintReviewReader({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256})
+      ? createTriggerPaintReviewReader({root,read:pickerHistoricalRead,reviewSha256:options.caseObligationReviewSha256})
       : dividerConsumerReaderFactory?.({root,read:captureAvailabilityEvidenceRead,reviewSha256:options.caseObligationReviewSha256});
     assert.ok(!applicability || typeof applicability.then !== 'function', 'Audit evidence readers must be synchronous within evidence session');
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
@@ -123,16 +128,16 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);
   const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial,
-    diagnosticRead: [datepickerMobileOpenDismissReview,'1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5'].includes(options.caseObligationReviewSha256)
-      ? createCaptureAvailabilityHistoricalRead({root,read:createSliderOpenerHistoricalRead({root,read:createDatepickerMobileOpenDismissHistoricalRead({root,read:auditReadFileSync})})})
+    diagnosticRead: [pickerFocusSemanticsReview,datepickerMobileOpenDismissReview,'1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5'].includes(options.caseObligationReviewSha256)
+      ? createCaptureAvailabilityHistoricalRead({root,read:createSliderOpenerHistoricalRead({root,read:createDatepickerMobileOpenDismissHistoricalRead({root,read:pickerHistoricalRead})})})
       : options.caseObligationReviewSha256==='904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4'
-      ? createCaptureAvailabilityHistoricalRead({root,read:createButtonToolbarHistoricalRead({root,read:auditReadFileSync})})
+      ? createCaptureAvailabilityHistoricalRead({root,read:createButtonToolbarHistoricalRead({root,read:pickerHistoricalRead})})
       : options.caseObligationReviewSha256==='9eb4cb42066d5e50347b6ae269354a8702ddeae694f971a9ba5f26ccb421409f'
-      ? createCaptureAvailabilityHistoricalRead({root,read:createFilledFocusHistoricalRead({root,read:auditReadFileSync})})
+      ? createCaptureAvailabilityHistoricalRead({root,read:createFilledFocusHistoricalRead({root,read:pickerHistoricalRead})})
       : options.caseObligationReviewSha256==='9105f2b3bd08a5c30c8c04fc422248fd4fbcf34506feb1ca2bef22b7f0d9cc03'
-      ? createCaptureAvailabilityHistoricalRead({root,read:createTriggerPaintHistoricalRead({root,read:auditReadFileSync})})
+      ? createCaptureAvailabilityHistoricalRead({root,read:createTriggerPaintHistoricalRead({root,read:pickerHistoricalRead})})
       : (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256==='b49ef7e0b1470909f1b41f306642c946f4ccec3afda6b3fadedf31d9fd170d21')
-      ? createCaptureAvailabilityHistoricalRead({root,read:auditReadFileSync}) : readFileSync });
+      ? createCaptureAvailabilityHistoricalRead({root,read:pickerHistoricalRead}) : readFileSync });
   progress('verify-evidence-session');
   return { audit, errors };
 }, { root, cold: process.env.ASTYLAR_AUDIT_COLD === '1', onMetrics: metrics => console.log(JSON.stringify({ evidenceSession: metrics })) });

@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync as readActual } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
+import { createMobilePickerControlsHistoricalRead } from './mobile-picker-controls-findings.mjs';
 import { restoreSharedButtonTouchPolicy, restoreSharedButtonTouchProducer, sharedButtonTouchDefinitions } from './button-touch-registration.mjs';
 
 const digest = s => createHash('sha256').update(s).digest('hex');
@@ -341,6 +342,7 @@ export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntr
   return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
 }
 const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+const readBeforePickerRegistration = createMobilePickerControlsHistoricalRead({ root: process.cwd(), read: readActual });
 const historicalPolicyHash = '7381e8fba08553caec77947e88ce5246e1c3fc01a6da18b81f3c07ea945a336f';
 
 function benchmarkPolicySource(raw) {
@@ -354,7 +356,14 @@ function benchmarkPolicySource(raw) {
 }
 
 export function historicalSemanticDefinitions(current) {
-  const source = benchmarkPolicySource(readActual(policyFile));
+  const live = normalized(readActual(policyFile));
+  const previous = normalized(readBeforePickerRegistration(policyFile));
+  if (live !== previous) {
+    const definitions = text => new Function(text.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+    assert.deepEqual(current, definitions(live), 'Unreviewed picker definition population');
+    current = definitions(previous);
+  }
+  const source = benchmarkPolicySource(previous);
   if (digest(source) === historicalPolicyHash && current.length > 205) {
     assert.equal(digest(JSON.stringify(current)), '7473bad68688ffed9e215f4ecf711aa6e1849e4def0b28db5a07347e00d4ae2d');
     const predecessor = new Function(source.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
@@ -406,7 +415,7 @@ export function restoreSemanticRegistrationTransitionSource(source) {
 // This read boundary belongs ONLY to the pre-registration benchmark assertions.
 // Current registration is independently tested against all163 actual definitions.
 export function readHistoricalBenchmarkSource(file, options) {
-  const raw = readActual(file, options), name = path.basename(String(file));
+  const raw = readBeforePickerRegistration(file, options), name = path.basename(String(file));
   if (!['input-equivalence-policy.mjs', 'input-equivalence-audit.mjs', 'benchmark-config.spec.mjs', 'position-composition-producer-transition.mjs'].includes(name)) return raw;
   if (path.resolve(String(file)) !== path.resolve('tests/material-parity', name)) return raw;
   let restored;

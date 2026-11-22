@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep picker-focus-semantics-pre-export-844c-20261122 through export, cold
+equality and import. The manifest and Markdown are exact copies of the
+accepted files. The payload links to immutable generation 844c896c and
+has a different file ID from the mutable docs destination.
+Manifest SHA-256 5f9610afffcca828f23d562ff12b73fa4a72e02088232b9a0c07bcb0384817ed.
+Markdown SHA-256 8d0cae77d6915e45bc3e6571f653c582bfbd7df26c616787e6d23b7261f8a27a.
+Retain the passing picker dependency replay v3 and both earlier failures.
+
 Picker proposal storage recovery compressed cde07143 and 4bcec81b at
 rest with equal whole-file hashes and logical sizes. It freed 201,703,424
 bytes and preserved the accepted pointer. Keep picker-proposal-headroom-
