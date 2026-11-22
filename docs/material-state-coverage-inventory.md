@@ -1334,6 +1334,18 @@ effect of the extra row. The model leaves horizontal sampling, live
 GPU filtering and the final composite unverified.
 Backing alpha receipt SHA-256 4a62059d2e7151d9d77d6b78b26083df5279dd4083bf05a2b9bd425b61c73eff.
 
+The same-build custom Divider screenshot distinguishes the two
+backing heights at the measured Above position. Sampling the full
+23-row backing at projected pixel centers and compositing over the
+recorded flat fill reproduces all 2,222 sampled interior pixels
+across Above and Below within one RGB channel value. The hypothetical
+22-row backing misses by more than two channel values at 377 of
+1,122 Above pixels. At Below, both models give identical samples.
+This binds the phase-dependent effect to the retained Astylar
+output. A rendered 22-row comparison and a paired equal-input native
+comparison remain open.
+Backing screen receipt SHA-256 32f3a89fc1245ec6f54c1d7ea1d8a8c14648f54a08f0ddb4a7130b55c5fbccdd.
+
 The Datepicker local paint census has 99 rows with verified primary
 target crops and remaining work. The eight configured desktop opening
 cases can also be measured from their authenticated full screenshots.

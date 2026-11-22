@@ -292,6 +292,11 @@ module from a different authenticated build. The bound receipt pins
 the map from the actual Divider capture.
 Backing alpha receipt SHA-256 4a62059d2e7151d9d77d6b78b26083df5279dd4083bf05a2b9bd425b61c73eff.
 
+Keep divider-backing-screen-replay-20261122.log with the bound backing
+model, custom Divider checkpoint screenshot and live texture evidence.
+The alternate backing was evaluated in memory.
+Backing screen receipt SHA-256 32f3a89fc1245ec6f54c1d7ea1d8a8c14648f54a08f0ddb4a7130b55c5fbccdd.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
