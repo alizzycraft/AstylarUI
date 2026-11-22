@@ -1019,6 +1019,26 @@ Report SHA-256 b74eb106408e7f15b6f6f2e79dc0019f2e29e8e377ae06aaedbba99a2e6319d8.
 Manifest SHA-256 b49e0edc4451ec11642c0ca42e7725c17c61324c1999b3900915f42d3170b1a7.
 Delta SHA-256 1b560a01279fa092bdd5296f35b1ba0c7e4a9990ae5c884e7a4eacd9b6bc5708.
 
+The 40 disabled-labeled Chips, Button Toggle, Menu, Tabs and Stepper
+cases map to enabled controls on both sides. The original disabled
+branch returns before target lookup and sends no action. The exact
+replay began observing before page scripts. Both sides kept BODY
+active after setup, before the configured action and at settlement.
+No focus calls, element focus events or activation events were recorded.
+
+All 40 original and replay checkpoints and all 1,887 served asset
+hashes verified. This joins the configured setup observations for
+these enabled controls. Actual pointer and keyboard activation in
+this preset and current rendering remain open.
+
+Compact successor 7118086b reverses to a487dc26 and leaves 912
+programmatic-focus and eight authored-activation joins pending.
+The eight activation gaps are light and dark mobile DPR2 Menu, Tabs,
+Bottom Sheet and Dialog cases.
+Report SHA-256 96d2b92f43794eab81695e0666194924140d3cac43e319f9a69e1f6afdfd17c2.
+Runner SHA-256 9d7f01fd869f6624f8572972764dd0b401cd2e2e40fe99821f8e220e7c6093c2.
+Delta SHA-256 ed74fab554afe5607ca76d3fc6146b0f2675de53ff94204451325141be2464e2.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

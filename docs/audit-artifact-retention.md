@@ -89,6 +89,14 @@ compact delta a487dc26. The existing reader verifies the artifacts
 against all 1,887 original served assets and the supplemental manifest.
 Verification SHA-256 97f87832d485ca1f75a520cd7f91534ff57725126bc570f92a777b4530e57781.
 
+Keep disabled-labeled-startup-activation-20261122 with its runner,
+manifest, 40 checkpoints, paired captures and logs. Retain compact
+delta 7118086b and the verification receipt. The successful served-asset
+scratch assembly was cleaned.
+Verification SHA-256 59e14f9206e93af981c3b83bdaecbd7e0e4db6380f495af3d61a4fe0409882dd.
+Keep the first mobile-menu-tabs-sheet-dialog-actions-20261122 launch
+and its scratch directory for the archived runner import-path failure.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
