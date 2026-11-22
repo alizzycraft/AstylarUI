@@ -154,6 +154,14 @@ Keep mobile-popup-escape-restoration-source-20261122.log with the
 retained bundle and map receipts. The source check reuses the six
 verified captures.
 
+Keep remaining-configured-activation-focus-v2-20261122 with its runner,
+manifest, 224 checkpoints, paired captures and logs. The served-asset
+scratch was cleaned. Retain the first failed launch, v3 verification
+and composed delta 7f2aeb27. The previous verifier waiter stopped
+before it ran after raw label forwarding exposed its narrow assumption.
+Verification SHA-256 cc58dbe344ec2a9b3fc5b52162245120ae7ff1eea903d766791e9eeab8f255e7.
+Composition SHA-256 90dfd4a5214035de8039c1ebf92126e2d2f98161c422fb0609371e4c103d5d1e.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

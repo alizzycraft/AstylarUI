@@ -1188,6 +1188,22 @@ binds the restoration code to current source. The blur trigger and
 current runtime behavior still require direct evidence.
 Source receipt SHA-256 62c18eda693a025080bb826c7344967836fc680773961673510ea6ba90dbfae8.
 
+The remaining 224 configured activation cases now have verified focus
+intervals, including 103 matched activate and activate-leave pairs.
+Departure changes neither side's settled focus owner nor Astylar's
+post-click focus event sequence in those pairs. Astylar records no
+post-click focus events in 56 Card, Form Field, Input and Slider cases,
+one blur and refocus in 144 cases, and two in 24 Datepicker and Dialog
+cases. Eight Material Checkbox and four Radio cases record a forwarded
+input click after the label click and retain one trusted pointer release.
+All 224 normalized focus, event, interaction-state and runtime-error
+fields match the original. The two verified batches compose without row
+overlap into 7f2aeb27 with 32,942 receipts and 263 pending focus joins.
+All 2,311 cases remain partial. The next 80 replay the configured
+opening action before checking compound hover and dismissal states.
+Report SHA-256 ff817cf52058f2c080c1d1ae08886d453133fe915f766dd208a64d3d099d557d.
+Composed delta SHA-256 b835f631287528cdf20517b349fccffa4e9502db2d7bacb2f6a77b79460b4747.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
