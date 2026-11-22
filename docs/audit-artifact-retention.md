@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Retain picker-static-boundary-virtual-wUB04C and
+picker-static-boundary-virtual-8fiiTY. The two isolated semantic runs
+identify successive source restoration boundaries without touching the
+live picker exporter. The second overlay SHA-256 is
+3fcd08e5a554f339a7e182d4f3a3babd15a5820075fb06af69c2b0244ea443e0.
+Its result SHA-256 is 1f8c97bcf0910dadd8c2555658fc631bc3bc57b986641dd17d5ce31ddbfb1137.
+
 Keep the light Timepicker original-icon capture and both Select
 original-control captures, including reports, checkpoints, logs and
 runners. Their closed material inventories support exact-case scope.

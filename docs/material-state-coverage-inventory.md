@@ -32,6 +32,17 @@ rows and 171 native-checkable predecessor rows, and reject a changed row.
 Wire the exact population transition after the export freeze and check
 the downstream suite separately.
 
+The isolated semantic-suite replay now reaches the selected assertion.
+It authenticates the 215-to-205 static population transition and keeps
+the separate 170-definition caller on its existing historical route.
+Its direct policy and producer restorers then need to reverse picker
+registration before entering the older Slider restorer. A second isolated
+run with that routing reaches the known caret support receipt at
+benchmark-config.spec.mjs. It expects fc3f2052 and receives dd8c3f3d.
+The existing Text Backing recovery binds the needed Git benchmark bytes
+at 96fd6260. Compose and test that route once export memory is available.
+The focused suite remains red. Live export source was untouched.
+
 The accepted 844c896c bundle is backed up before the picker export. Freeze
 this coherent source generation through export conservation and cold checks.
 All case groups remain partial and current rendering remains unverified.
