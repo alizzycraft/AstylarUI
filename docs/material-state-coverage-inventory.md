@@ -272,6 +272,22 @@ The existing tracer SHA-256 is
 622d15718cf6e7910744f7613643936dbfcb87f9302657048de93aea06b0cbe0.
 
 
+The older click trace cc12796e, the held replay?s authenticated component
+map and current source have identical complete handleClick and
+familyElements methods. They share one open-path request computed from
+the opener ID after whenSettled. Dialog requests dialog-dismiss while its
+open tree authors dialog-cancel and omits dialog-dismiss. Bottom Sheet
+requests bottom-sheet-dismiss, which is present after the open update.
+In the older trace both focus calls return false before the first open
+update. After that update only Bottom Sheet?s requested target exists.
+
+The current source therefore supports separate authoring explanations for
+these endpoints. The held replay records focus calls through immediate
+release but does not record the asynchronous request?s result or its
+ordering against the open update. Keep the historical scheduling proof
+scoped to its click trace and the Dialog target mismatch scoped to
+the verified authored methods. No new core attribution.
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
