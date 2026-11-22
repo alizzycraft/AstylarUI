@@ -237,20 +237,22 @@ Checkpoint-bound runner SHA-256
 622d15718cf6e7910744f7613643936dbfcb87f9302657048de93aea06b0cbe0.
 
 
-The seven-case successor delta is staged against picker proposal 78616399.
-It adds ten observation children. Four mobile rows gain sampled material
-identities, and three desktop pointer rows gain activation and focus
-observations. Removing the children and restoring six obligation dispositions
-recovers all seven predecessor rows. The other 2,304 rows and all case
-acceptance flags conserve. The existing loader validates 36 dependencies
-across the projected rows and their original anchors. The full review
-digest streamed from the exact ordered rows is d905129e. The complete
-successor and all inherited dependencies still need integration replay.
-Delta picker-pointer-history-next-delta-20261122.log has SHA-256
-d62d25f5232cd3b56977ac94a5de2953ac8dee6629ce12527ebdad4ed42788a8.
-The first projection attempt exhausted its 1 GiB heap building an older
-review envelope. The verified stream recovered the frozen proposal digest
-without rebuilding that envelope.
+The revised successor delta adds 14 observation children to nine exact
+rows of picker proposal 78616399. Four mobile rows gain sampled material
+identities and five desktop rows gain pointer activation and focus
+observations, including the Bottom Sheet and Dialog held captures.
+Removing the children and restoring the changed obligation dispositions
+recovers every predecessor row. The other 2,302 rows and all case flags
+conserve. The existing loader authenticates 43 dependencies across the
+changed evidence projections. The stream reproduces the earlier seven-row
+digest d905129e and computes nine-row successor 6eee4e41. The complete
+successor envelope and full dependency replay remain pending.
+
+Delta picker-pointer-history-nine-case-delta-20261122.log has SHA-256
+56abc7dc9dbcfdc94fdfe3a8dbf68d81f4107580385b93add2da8aa70baf856b.
+Keep its seven-row predecessor receipt. Its earliest check exhausted a
+1 GiB heap rebuilding the historical envelope. The nine-row verification
+streamed the frozen proposal with a 128 MiB V8 heap limit.
 
 The light desktop DPR1 Bottom Sheet and Dialog opener holds now have
 eight paired boundaries. The same tracer, browser and 1,887 original
