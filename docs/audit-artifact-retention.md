@@ -254,6 +254,11 @@ authenticated November opening capture and alignment receipt.
 Residual receipt SHA-256 82f6eabde1c507f445555785ee304e75e319b3008312a43d2ead2c63804fe865.
 Channel coverage receipt SHA-256 c6d13caa3988f583e69aca130506cbe1c14ad17b0b4148a5882bdfdff60c2479.
 
+Keep datepicker-focused-date-ring-20261122.log with the authenticated
+November opening checkpoint, geometry, trees and screenshots.
+The ring masks and background bounds were computed in memory.
+Focused date ring receipt SHA-256 2f7527b19973b1eaba53bffc58fd36d352c8ede6e791663670865e949ca316e0.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

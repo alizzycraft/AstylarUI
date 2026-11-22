@@ -1366,6 +1366,21 @@ coverage boundary before or after texture composition.
 Residual receipt SHA-256 82f6eabde1c507f445555785ee304e75e319b3008312a43d2ead2c63804fe865.
 Channel coverage receipt SHA-256 c6d13caa3988f583e69aca130506cbe1c14ad17b0b4148a5882bdfdff60c2479.
 
+The focused Datepicker ring has matching 1 px solid purple border
+inputs and a 36 px native used box and Astylar requested box. After
+aligning the day cells, four cardinal samples locate the same ring
+edge. The unshifted ring mask has the best overlap over all translations
+within two pixels on each axis at four blue thresholds. At blue 236,
+121 of 189 pixels in either mask overlap. The exact border color
+occurs at 32 Astylar pixels and zero Material pixels. All four Material
+cardinal samples are within two channel values of the requested color.
+In the encoded green channel model, the Astylar coverage sum of 108.4
+pixel equivalents lies inside the Material range of 102.6 to 119.2
+allowed by the sampled inner and outer backgrounds. This records the
+edge pixel distribution. Used Astylar ring geometry and fill-versus-
+raster attribution remain open.
+Focused date ring receipt SHA-256 2f7527b19973b1eaba53bffc58fd36d352c8ede6e791663670865e949ca316e0.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
