@@ -167,6 +167,25 @@ Verified report and scope receipt
 original-static-hover-focus-activation-boundaries-verified-20261122.log
 SHA-256 0a8c3d8133277fa9fdce5b977aba6f93a051a8b2a3383eb0eca334e529d6b47f.
 
+The light desktop DPR1 Select hover replay resolves one missing focus
+owner. Both pages record BODY with HTML ancestry before the move and
+at settled hover. Reference records no events. Candidate records five
+pointerenter events and one pointermove. The complete setup, target,
+action, phase and settle methods match the authenticated original runner.
+All 1,887 served assets match. The reference tree is byte-identical and
+the candidate tree conserves every node. Its only differences are the
+style revision and the top and left of an unused .datepicker-selected rule.
+
+Use this for the exact case?s sampled focus and hover action. Continuous
+DOM focus, other contexts and current rendering remain open. Report
+select-hover-focus-boundaries-v2-20261122/latest-report.json SHA-256
+1c32fd1b8c27fd2efa261e2b284c50d567941629c7eabb434af56af8070c0f6b.
+Its diagnostic runner SHA-256 is
+35e580df22b7759227467b68815954a5bca8e9867f312739e3e23cd9b05c8d19.
+The checkpoint authenticates those runner bytes. The first capture had
+the same result with the base runner recorded in the checkpoint.
+
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are

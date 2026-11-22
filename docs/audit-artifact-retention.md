@@ -8,6 +8,12 @@ Keep picker-direct-collector-binding-overlay-20261122.log for the isolated
 restoration. SHA-256 be0b72f662f4ebdca612931a427240c1ceddc8d99d253dbb103c1edbcd62bd42.
 
 
+Retain select-hover-focus-boundaries-20261122 as the checkpoint binding
+failure and select-hover-focus-boundaries-v2-20261122 as the verified
+replay. Keep both reports, checkpoints, trees, logs and runner copies.
+withAuditScratch cleared both runs? temporary runner and browser trees.
+
+
 Retain picker-static-boundary-virtual-wUB04C and
 picker-static-boundary-virtual-8fiiTY. The two isolated semantic runs
 identify successive source restoration boundaries without touching the
