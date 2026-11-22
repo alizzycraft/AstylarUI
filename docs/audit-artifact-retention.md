@@ -389,6 +389,12 @@ projection, checkpoint, independent verification and showcase map.
 Static Menu relationship receipt SHA-256 3eb9b48b541c3ceacbebfee6e23d08c6b011d2db66c90940a12d0d09c37220f8.
 Static Menu relationship delta SHA-256 66daf79371bc51280022b4d47015e19ea55cb28ea167508f0bdea35c16ea2f2b.
 
+Keep static-accessibility-batch-conservation-20261122.log with
+compressed review 590f4aec, all four compact deltas and their
+projection receipts. It authenticates the added evidence and
+records the dependency list expected by the existing strict loader.
+Combined accessibility conservation SHA-256 2c05f76cec11e17d5529182976d544f0a8415072a823d3b6707a951e607e543f.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.

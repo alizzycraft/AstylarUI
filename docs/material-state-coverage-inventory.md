@@ -1408,6 +1408,17 @@ a5616e5a now stages 144 additions across 132 cases. Strict replay
 and export selection remain pending for the combined successor.
 Static Menu relationship delta SHA-256 66daf79371bc51280022b4d47015e19ea55cb28ea167508f0bdea35c16ea2f2b.
 
+The combined accessibility conservation check verifies all four
+review digests through a5616e5a and restores every predecessor row.
+It authenticates 276 distinct receipts referenced by the additions.
+Eighty are new to 590f4aec, for 35,412 total dependency paths. The
+complete roster is 436 static, 1,857 ordinary interaction and 18
+mobile lifecycle cases. The first membership check missed the
+separate mobile-flow export and stopped at 2,293. The combined
+strict replay uses the full roster and follows the live promotion.
+All 2,311 cases remain partial and current rendering is unverified.
+Combined accessibility conservation SHA-256 2c05f76cec11e17d5529182976d544f0a8415072a823d3b6707a951e607e543f.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,
