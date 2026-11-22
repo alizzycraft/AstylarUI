@@ -92,8 +92,12 @@ adds this finding plus the three mobile relationship findings. The plan
 conserves all 78 entries and adds the two corresponding implementation
 actions. Policy SHA-256 c280df735708226b324576340388a76b50726f1cf6c1c803cc0ed486c123c76e.
 Producer SHA-256 2c09853e4155016f28010884ad951b9e7e1fe28eaaf247fb0f09cbfc8bb9d896.
-Both draft registrations reverse to exact predecessor bytes. The live
-policy and producer stay frozen for the pending Datepicker candidate gates.
+Both draft registrations reverse to exact predecessor bytes. Composing
+that reversal ahead of the Datepicker, Slider/Opener and Capture
+Availability diagnostic reads preserves all six sampled historical outputs
+through relative and absolute paths and rejects unrelated policy changes.
+The full case loader and export selection still need verification.
+The live policy and producer stay frozen for the Datepicker candidate gates.
 
 Datepicker, Autocomplete, Timepicker and Select account for 393 pending
 programmatic-focus joins. All 393 have recorded structure and DOM target
@@ -526,8 +530,12 @@ report are the only new case dependencies, and all 19,366 predecessor
 receipts are conserved. The Datepicker applicability record wraps the
 prior chain. Within that chain only the Text Backing reader current hash
 changes, from 56922108 to 91f806eb, with retained receipt 60056387 intact.
-The independent cold canonical run is active. Isolated import and promotion
-remain pending, and all current rendering gates remain open.
+The independent cold canonical run is active. The original import waiter
+expected optional phase messages that this launch did not enable. The
+replacement waits for the exact launcher and child running --check,
+requires both successful exits and zero disk hits, and compares the three
+candidate file hashes before importing. Promotion and current rendering
+gates remain open.
 
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
