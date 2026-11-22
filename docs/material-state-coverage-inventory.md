@@ -103,6 +103,26 @@ plan is mobile-picker-material-identity-next-join-20261122.log, SHA-256
 488bae2c546306c19ac1f0f2e75244b4747953a323ee6ae0eca4879bee8d8079.
 Keep the original captures and scope the join to sampled ownership.
 
+The authenticated accepted 844c896c index has 1,335 cases with both
+focus and activation evidence joins pending. The largest cohorts are
+static 324 across 27 families, hover 209 across 26, held 193 across 24,
+activate-leave 128 across 16 and disabled 120 across 15. The count uses
+the exact dispositions of all 2,311 rows. Receipt
+accepted-focus-activation-overlap-20261122.log has SHA-256
+c5fc35eae65c487af2e0438ab5ad793db0c2f1598d3c6e6135ee9ebbd26421bf.
+
+Prioritize the first three cohorts. The original and maintained
+captureCase and capturePage methods match exactly after normalizing
+line endings. Static capture supplies no explicit harness interaction.
+The matching performInteraction methods use move only for hover,
+pointer down with deferred release for held, and return before action
+for disabled. The original held screenshot precedes release, and its
+recorded focus identity follows release. Start with the original paired
+static and hover rows. Check whether retained event and mapped-owner
+receipts support an exact observation or whether page setup or focus
+owner evidence is missing. Scope held focus to its recorded boundary
+and reuse existing in-hold traces only for their authenticated cases.
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
