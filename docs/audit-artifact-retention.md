@@ -21,6 +21,10 @@ manifest and markdown hashes. NTFS compression recovered about 346 MB
 across two retained metadata logs with both hashes preserved.
 Export headroom SHA-256
 a4715ad8f3760dac0102524962dda5c0fe29b38839d0c349770d3f35ebffb2d2.
+Keep button-family-held-focus-20261122, core-held-focus-queue-20261122
+and toolbar-card-held-focus-queue-20261122 with the three runners,
+manifests, 35 checkpoints, paired captures and compact delta e5056bc3.
+Successful served-asset scratch assemblies were cleaned.
 
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.

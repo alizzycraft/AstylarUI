@@ -804,6 +804,32 @@ expected to change. Accepted 1a64273f remains authoritative.
 Materialization SHA-256 d36ae9dcc2eefd874b069cead96064643009d4a27971134e7487acee0144d2b6.
 Backup SHA-256 ae61408bd4e4df3a59176ef4e8473b398f2c0a7282506b17edb0194ed4e89ca2.
 
+The 32 retained Core, Toolbar, Card and Button held cases now bind
+DOM focus and release order before and after trusted pointerup.
+Material focuses the opener on pointerdown and retains it in all 32.
+Core and Toolbar transfer Astylar DOM focus to the semantic button
+during the hold. The canvas blur routes Babylon pointerup and Astylar
+emits logical pointerup and click before trusted release. Card and
+Button keep the canvas focused during the hold and focus the semantic
+button after trusted pointerup. All cases target the intended logical
+button and the final focus aliases agree with the original report.
+
+The light desktop DPR1 Core and Toolbar queue traces identify renderer
+reflow as the first caller of semantic focus synchronization during the
+hold. The later focus queue follows the logical click. The paired Card
+control records no held focus queue. These are retained build outcomes.
+The public held-update and focus-delay reproductions support the two
+mechanisms in their own scopes. Current rendering remains unverified.
+
+Compact delta e5056bc3 stages 32 partial focus observations and
+strengthens the corresponding release records. It verifies 35
+checkpoints and reverses to 919dbc1c. The review has 1,407 programmatic
+focus and 583 authored-activation rows pending.
+Held report SHA-256 a209951406d20f7d05d2234eb4c4456cd63e60539398777039e23a86b3219216.
+Core queue report SHA-256 b723fd1375d6b43580574e4ab35c0ebf213eab1d5c2d5b25df15937294057d93.
+Toolbar and Card queue report SHA-256 d052db1494c24075c037b179d8db7c80581745d03f86b0afc7eb3ccf81453a1c.
+Held delta SHA-256 e229332eccdd1955c9428028f2909670aff50ce43578f0a9a39281c2c97202f6.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
