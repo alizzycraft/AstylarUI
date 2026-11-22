@@ -43,6 +43,12 @@ The trace has the checkpoint-bound runner. withAuditScratch cleared
 the successful temporary browser and runner directories.
 
 
+Retain the initial picker section-comparison failure, the paired leaf
+comparison, independently recomputed control and motion receipts, and
+the corrected complete reconciliation. The first gate chain stopped
+before cold build or isolated import. Keep the fresh cold v2 logs.
+
+
 Retain picker-static-boundary-virtual-wUB04C and
 picker-static-boundary-virtual-8fiiTY. The two isolated semantic runs
 identify successive source restoration boundaries without touching the

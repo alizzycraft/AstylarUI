@@ -4,9 +4,18 @@ The repaired picker export passed validation and wrote candidate 87915914.
 It covers 436 static and 1,875 interaction rows, with 8,483 differences,
 389,202 occurrences and 215 source findings. Input equivalence remains
 false. The accepted pointer is still 844c896c. The 80-section comparison
-is running, with independent cold equality and isolated import queued
-in that order. Preserve the candidate and frozen source until those
-gates pass before moving the accepted pointer.
+conserves 70 whole sections and reconciles ten. Five sections match the
+preflight changes exactly. The other five preserve every path, container
+and non-receipt value. Of their 147 changes, 98 are direct producer hashes,
+48 are recomputed complete control proofs and one is the complete motion
+report hash. The first comparison missed these derived receipts. The first
+reconciliation check also assumed the wrong order for two changed names.
+The corrected result checks actual section order and exact changed membership.
+
+Reconciled receipt picker-repaired-candidate-reconciled-20261122.log SHA-256
+c690f664e8fd08ff1832c47a5d0c547bb687db0ef328ac1004885af4227be245.
+Independent cold replay v2 is running. Isolated import and accepted pointer
+advancement remain pending. Keep the candidate and frozen sources.
 
 Export stdout SHA-256 99070870eed93390e5845c22b81012850157823b620afa314520885db49c409d.
 Export stderr SHA-256 633626b69f9d99e5b32f9917264a54ff90ac45a6672005e2e6a860ac7541d386.
@@ -288,7 +297,9 @@ parent rows and dispositions exactly. The existing loader rehashes the
 Its case flags stay partial and rendering stays unverified.
 Compact delta picker-pointer-departure-next-delta-20261122.log SHA-256
 ec4eac78a5b7f1abf368a6a948e30ff0be6fa89e53ae193c9181150d4f376a77.
-Materialize it with the next coherent join and perform full replay.
+The materialized 2,311-row successor has file SHA-256
+a757b086d41c3507dc7b4be4959d13fb03ac3089b4e9dade957622e8f0ddf3d2.
+Full replay remains pending.
 
 The revised successor delta adds 14 observation children to nine exact
 rows of picker proposal 78616399. Four mobile rows gain sampled material
