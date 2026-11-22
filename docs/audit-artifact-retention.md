@@ -85,7 +85,10 @@ The successful Tooltip scratch assemblies were cleaned. Keep
 slider-drag-focus-boundaries-20261122 and the post-click mutation
 package with their runners, manifests, 19 checkpoint records, paired
 captures and compact delta 04a6ce12. Both Slider scratch assemblies
-were cleaned.
+were cleaned. Retain snackbar-activate-twice-focus-20261122 and the
+mutation follow-up with both runners, 10 checkpoints, paired captures
+and compact delta 919dbc1c. Both Snackbar scratch assemblies were
+cleaned.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the

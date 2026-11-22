@@ -736,6 +736,28 @@ and 583 authored-activation rows.
 Slider drag report SHA-256 7bbe147681a2e344dda8f44977beb620db7c4232dd92e93d355ca71fd4a68cbc.
 Slider mutation report SHA-256 f2ee4aed7ee0304ce66b0649b5605de85222ff15742c9a82faa8e5f86a8e2d1c.
 Slider drag delta SHA-256 9a4dbf37059abecb4e1b7121a9ca68a12e947b93a95a65c32d97be50ff163c86.
+
+All nine retained Snackbar activate-twice cases show the same focus
+order. Material focuses the opener on the first press and keeps focus
+there through both clicks. In Astylar, Babylon focuses the canvas on
+each press. The semantic bridge focuses the opener after each trusted
+pointerup and before the DOM click. Three more opener blur and refocus
+pairs follow the clicks. Both sides finish on the opener.
+
+The light desktop DPR1 follow-up ties those three extra blurs to
+replaceChildren during reconciliation. One call is on the Snackbar
+container and two are on the semantic root. Each leaves BODY active
+while preserving the connected opener node. The bridge restores that
+same node. The exact mutations are verified in one case. Timer reset,
+other contexts and current rendering remain separate obligations.
+
+Delta 919dbc1c verifies both runners, all 1,887 served assets and 10
+checkpoints and reverses to the prior compact review. It moves nine
+programmatic-focus rows to partial. Pending counts are 1,439 focus and
+583 authored-activation rows.
+Snackbar report SHA-256 eab3d0e04d58a125d55e11da110f1eaadb1243b388bf5fe7893cb25936471643.
+Snackbar mutation report SHA-256 d9981310fd4ee54ed98aaccca7216e57b78f0c04210ae446fb9b1e8f877103fe.
+Snackbar delta SHA-256 26baba40fbe7f3d7e9498d8f4bb3669cfacdab88438966f55b7e04cf5454bacd.
 Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
 Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
 
