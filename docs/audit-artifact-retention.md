@@ -212,6 +212,9 @@ secondary report, delta and historical enforced-full-e26c6cb report
 retain their hashes and identities after compression.
 Verification SHA-256 d4fa3af15f9024bd2ba8f841ad77d8d1ad19fc9463f6bf46d058075292651c33.
 Headroom SHA-256 d52955dbacd7fb1e0acc14ae7e362de59d1ba32fcb984ef74ec68019736e8c41.
+Keep the virtual dependency replay stdout and stderr with review
+590f4aec and both failed materialization attempts.
+Replay SHA-256 20d6555cd48fc3f264fe3ec73898e2929d3dee68ee1b581e99ba12ccce3935e0.
 
 Keep the Datepicker panel comparison receipt with the original
 opening checkpoints and full screenshots. Panel crops were measured

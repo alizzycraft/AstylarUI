@@ -1275,8 +1275,11 @@ retain the changed month label, subpixel coordinates and hover routing.
 The verified activation event types and focus ordering agree.
 Staged review 590f4aec binds 35,332 receipts with zero pending focus
 or authored-activation joins. Whole-case inspection and current
-rendering remain open. The existing dependency reader is replaying
-the staged review in memory after the on-disk proposal writes failed.
+rendering remain open. The existing case reader authenticated all
+2,311 rows and 35,332 dependencies in memory. Accepted 20baa74b
+still serves the prior review. On-disk materialization and canonical
+registration are pending.
+Dependency replay SHA-256 20d6555cd48fc3f264fe3ec73898e2929d3dee68ee1b581e99ba12ccce3935e0.
 Report SHA-256 1ed590643697cd8fbe1b7af567ff8df531516272d35a049f8ed8793851c084fa.
 Delta SHA-256 93942ba899620c40b9da15cdb49b3b60c45f0c2b752d79f5be7d32a15cb1d64f.
 
@@ -1293,13 +1296,15 @@ Dark, contrast and custom receipt SHA-256
 036b30a22b8cc9a147418adca04c1a95f240604c1956ee76fb79b05079e95f71.
 
 On the two retained light-theme openings, 98.8% and 98.0% of raw RGB
-error is inside the 12 CSS px perimeter band at DPR1 and DPR2. The
-interior contains 85.7% of the sampled area. At the mismatched
+error is in the interior at DPR1 and DPR2, excluding the 12 CSS px
+perimeter band. The interior contains 85.7% of the sampled area. At the mismatched
 interior pixels, one side shows the exact shared fill in 5,027 of
 6,427 pixels at DPR1 and 20,012 of 23,303 at DPR2. This localizes the
 next attribution check to calendar content paint. Text, selection
-and other interior content have yet to be separated. The retained
-October date remains the boundary of this comparison.
+and other interior content have yet to be separated. The original
+trees retain text and style evidence without used child rectangles.
+The October 31 geometry capture has a different action and date.
+Same-frame child geometry and paint ownership are still required.
 Panel interior receipt SHA-256 887ca4b86b5f1cae65ce335755bf5b645f0ca0c82b334a224a169ca31b1bee2a.
 
 All 12 pending static Dialog cases have an authenticated opener crop.
