@@ -1644,6 +1644,18 @@ therefore survives composition for these two labels. The native
 raster path and equal-input attribution across other cases stay open.
 Label texture composition receipt SHA-256 4fb4a1a186dc5813c7e3248c3c87643e7421c24206b8851c8e91396737770890.
 
+All 14 held-out November Material date glyphs show horizontal
+channel separation. In encoded contrast, the median red centroid
+is 0.329 px right of green and blue is 0.335 px left. Vertical
+offsets are at most 0.023 px. Astylar channel offsets are below
+0.01 px on both axes. Scaling the contrast in a channel cannot
+move its centroid. Linear-light weighting preserves the direction
+and horizontal dominance, although its 0.070 px vertical residual
+exceeds the initial 0.05 px check. The spatial pattern is consistent
+with horizontal subpixel coverage. The native implementation and
+the platform settings responsible for the pattern remain open.
+Native glyph channel-phase receipt SHA-256 bffd7821ddc2ac1e0915fc36ee293de84233d0b7d1e8801dbbca2f30e6682ff5.
+
 The eight October configured desktop openings retain the same period
 and navigation graphic substitutions and text color differences as the
 November opening. All 16 October trees authenticate. The served asset

@@ -329,6 +329,12 @@ existing owner/texture verification, settled input tree and original
 Astylar screenshot. Compositing and controls were computed in memory.
 Label texture composition receipt SHA-256 4fb4a1a186dc5813c7e3248c3c87643e7421c24206b8851c8e91396737770890.
 
+Keep datepicker-native-glyph-channel-phase-20261122.log with
+the two original screenshots, geometry report, prior channel
+coverage and texture composition receipts. The receipt records
+the initial linear-light control failure alongside the measured bounds.
+Native glyph channel-phase receipt SHA-256 bffd7821ddc2ac1e0915fc36ee293de84233d0b7d1e8801dbbca2f30e6682ff5.
+
 Keep datepicker-opening-header-and-focus-applicability-20261122.log
 with the October full report, its 16 opening input trees, and the
 November owner geometry report. The comparison used retained files.
