@@ -853,6 +853,26 @@ Report SHA-256 ece3a3dbfa13f63083078bc68e31c236dc52b399aa983c1e5b02479bb8876cfd.
 Runner SHA-256 b3951ad184cd97053f761a38d3259d98ff430446264a3c55b66109f9b4a65869.
 Delta SHA-256 610ecc1d22807b2deba763a312ffead1afca463bed6aa40ef7892c9e5e6d3ccb.
 
+The 60 static Menu, Bottom Sheet, Dialog, Snackbar and Tooltip cases
+now have startup focus and activation observations across four themes
+and three viewports. The observer starts before navigation to detect
+setup-driven focus or activation without changing the original static
+setup. Both sides had BODY active at settlement in every case. No
+focus calls, element focus events or activation events were recorded.
+
+The replay used Chromium 157.0.8103.51 and authenticated all 1,887
+original served assets. All 60 original and replay checkpoints verify.
+The reference trees match byte for byte. The Astylar trees conserve
+all nodes and differ only in the recorded style revision and two
+position properties of an unused Datepicker rule.
+Compact successor ab3c6ad9 reverses to f60ea0fa. It leaves 1,243
+programmatic-focus and 419 authored-activation rows pending, including
+262 static rows pending both joins. Later interaction, current
+rendering and full case inspection remain open.
+Report SHA-256 caf3e3c9f620fc2b4cd4032a5762eb04cffef3ac8f31c5b529792be0473aca35.
+Runner SHA-256 d5aa6c529997e330dda2b1f8c3a1b420b04c969c0ccf54f80a49542d2affc10b.
+Delta SHA-256 9350d215c7a55e8f5f0869a8731ae241b9c5b094b4cfe6e70ec6464df5bb1049.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
