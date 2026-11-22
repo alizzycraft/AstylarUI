@@ -1287,6 +1287,16 @@ Dependency replay SHA-256 20d6555cd48fc3f264fe3ec73898e2929d3dee68ee1b581e99ba12
 Report SHA-256 1ed590643697cd8fbe1b7af567ff8df531516272d35a049f8ed8793851c084fa.
 Delta SHA-256 93942ba899620c40b9da15cdb49b3b60c45f0c2b752d79f5be7d32a15cb1d64f.
 
+Candidate 5a208846 passed independent cold byte comparison with
+zero disk-cache hits and 36,806 reverified files. The section check
+conserves 78 sections and reconciles sourceFingerprints and coverage.
+The isolated import v2 launcher stopped at pointer parsing. It read
+only the opening line of a JSON document. The v3 import reads the
+complete pointer and reuses the cold receipt. Accepted 20baa74b
+remains current pending isolated verification and promotion.
+Cold stdout SHA-256 985b88ed87c2676834d0c1e05bab6e32e4fa383f20e18ef6ce9112ff2f885406.
+Cold stderr SHA-256 745b9a3cb9c5f9f3115f8165d542853e302032b0ea0fc56937fa8b3ee2c8f54b.
+
 The authenticated 590f4aec proposal still leaves five shared inspection
 obligations partial in every case. They are input and anonymous structure,
 local paint, actual semantics, history and resource ownership, and
