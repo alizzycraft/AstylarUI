@@ -1521,6 +1521,19 @@ composition. The native raster algorithm and other cohorts remain
 unverified.
 Owner and texture receipt SHA-256 be4258ee6e804344dc1840a26908102f4e7d54db2f42c9439749874dce1df003.
 
+The eight October configured desktop openings retain the same period
+and navigation graphic substitutions and text color differences as the
+November opening. All 16 October trees authenticate. The served asset
+lists match and the browser versions and calendar dates differ. The
+native date tint appears in the two program-focused openings. All six
+mouse-focused openings show transparent date fill. The November opening
+also records program focus and matches the same focus-state rule.
+The candidate ring is transparent in all eight October openings.
+Its dark-profile border differs from Material in both viewport cases.
+The source inputs extend to these eight cases. The November geometry,
+texture readback and pixel measurements apply to its own capture.
+Header and focus applicability receipt SHA-256 9bead90689566abf3e3f73e130aa6ee4bf87e091c73aaa1a11bd0820ca0d57bb.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

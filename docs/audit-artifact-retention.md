@@ -318,6 +318,11 @@ stderr. The artifact junction resolved its relative import in a
 different worktree. A module-resolution probe passed with the main
 module path preserved. Successful probe scratch was cleaned.
 
+Keep datepicker-opening-header-and-focus-applicability-20261122.log
+with the October full report, its 16 opening input trees, and the
+November owner geometry report. The comparison used retained files.
+Header and focus applicability receipt SHA-256 9bead90689566abf3e3f73e130aa6ee4bf87e091c73aaa1a11bd0820ca0d57bb.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
