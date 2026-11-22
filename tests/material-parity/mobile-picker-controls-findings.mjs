@@ -173,6 +173,7 @@ export function restoreMobilePickerControlsProducer(bytes) {
 
 export const pickerFocusSemanticsReview = '78616399f9964684b86232fb63ac2945027a6ef7c461ea9bab5f2953e6861096';
 export const retainedPointerCoverageReview = '3a0dfc9c476e49a6c5878be3f287b8eadbecfae98fd8c35cc4c88035abc0068c';
+export const retainedPaintOwnershipReview = '24c22d1ae764ec131a2f1ca5a0d7be1fdb6729a5328406ab2a9abe6721e46031';
 
 // Reverse the exact coverage selector before each older picker transition.
 const retainedPointerLauncherEdits = [
@@ -190,10 +191,24 @@ const retainedPointerRunnerEdits = [
   ["    diagnosticRead: [pickerFocusSemanticsReview,datepickerMobileOpenDismissReview,","    diagnosticRead: [pickerFocusSemanticsReview,retainedPointerCoverageReview,datepickerMobileOpenDismissReview,"],
 ];
 
-function restoreRetainedPointerSelection(source, marker, edits, predecessorSha256) {
+const retainedPaintLauncherEdits = [
+  ["pickerFocusSemanticsReview, retainedPointerCoverageReview }","pickerFocusSemanticsReview, retainedPointerCoverageReview, retainedPaintOwnershipReview }"],
+  ["const retainedPointerCoverage = rawRequested.includes('--retained-pointer-coverage');\n","const retainedPointerCoverage = rawRequested.includes('--retained-pointer-coverage');\nconst retainedPaintOwnership = rawRequested.includes('--retained-paint-ownership');\nassert.ok(!retainedPaintOwnership || rawRequested.every(argument => ['--retained-paint-ownership', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n"],
+  [".filter(argument => argument !== '--retained-pointer-coverage')",".filter(argument => argument !== '--retained-pointer-coverage').filter(argument => argument !== '--retained-paint-ownership')"],
+  ["|--retained-pointer-coverage]');","|--retained-pointer-coverage|--retained-paint-ownership]');"],
+  ["if (retainedPointerCoverage) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedPointerCoverageReview}.json`;\n","if (retainedPointerCoverage) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedPointerCoverageReview}.json`;\nif (retainedPaintOwnership) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedPaintOwnershipReview}.json`;\n"],
+  ["if (retainedPointerCoverage) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedPointerCoverageReview}`;\n","if (retainedPointerCoverage) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedPointerCoverageReview}`;\nif (retainedPaintOwnership) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedPaintOwnershipReview}`;\n"],
+];
+const retainedPaintRunnerEdits = [
+  ["pickerFocusSemanticsReview, retainedPointerCoverageReview }","pickerFocusSemanticsReview, retainedPointerCoverageReview, retainedPaintOwnershipReview }"],
+  ["[pickerFocusSemanticsReview,retainedPointerCoverageReview].includes(options.caseObligationReviewSha256)","[pickerFocusSemanticsReview,retainedPointerCoverageReview,retainedPaintOwnershipReview].includes(options.caseObligationReviewSha256)"],
+  ["diagnosticRead: [pickerFocusSemanticsReview,retainedPointerCoverageReview,","diagnosticRead: [pickerFocusSemanticsReview,retainedPointerCoverageReview,retainedPaintOwnershipReview,"],
+];
+
+function restoreRetainedReviewSelection(source, marker, edits, predecessorSha256) {
   if (!source.includes(marker)) return source;
   const previous = applySourceEdits(source, reverseSourceEdits(edits));
-  assert.equal(hash(previous), predecessorSha256, 'Unexpected retained pointer source drift');
+  assert.equal(hash(previous), predecessorSha256, 'Unexpected retained review source drift');
   return previous;
 }
 
@@ -226,7 +241,9 @@ export function preparePickerFocusSemanticsLauncher(bytes) {
 }
 
 export function restorePickerFocusSemanticsLauncher(bytes) {
-  const source = restoreRetainedPointerSelection(normalized(bytes), 'const retainedPointerCoverage = ', retainedPointerLauncherEdits,
+  const retainedPointerSource = restoreRetainedReviewSelection(normalized(bytes), 'const retainedPaintOwnership = ', retainedPaintLauncherEdits,
+    '97c0380ffd8e283cf42c12d86f388d8719abfa365ed057725039d965b40f8629');
+  const source = restoreRetainedReviewSelection(retainedPointerSource, 'const retainedPointerCoverage = ', retainedPointerLauncherEdits,
     'e404363f7852d71e02d490a5163a34ba798dc3772c2054376aa75c8ec790f6a1');
   const previous = applySourceEdits(source, reverseSourceEdits(launcherEdits));
   assert.equal(hash(previous), launcherParentSha256, 'Unexpected picker launcher drift');
@@ -283,7 +300,9 @@ export function preparePickerFocusSemanticsRunner(bytes) {
 }
 
 export function restorePickerFocusSemanticsRunner(bytes) {
-  const source = restoreRetainedPointerSelection(normalized(bytes), 'pickerFocusSemanticsReview, retainedPointerCoverageReview }', retainedPointerRunnerEdits,
+  const retainedPointerSource = restoreRetainedReviewSelection(normalized(bytes), 'retainedPointerCoverageReview, retainedPaintOwnershipReview }', retainedPaintRunnerEdits,
+    '06b9f63206cf314dfccad5a7a7e6ab12752536a9bcdb6f63dc628a18535a1a90');
+  const source = restoreRetainedReviewSelection(retainedPointerSource, 'pickerFocusSemanticsReview, retainedPointerCoverageReview }', retainedPointerRunnerEdits,
     '477526cb178996d9b79056847c48d69b060dd37254634da343e4ecda5d3d0dc3');
   const previous = applySourceEdits(source, reverseSourceEdits(runnerEdits));
   assert.equal(hash(previous), runnerParentSha256, 'Unexpected picker runner drift');
@@ -325,7 +344,21 @@ export function restorePickerFocusSemanticsBenchmarkReader(bytes) {
 }
 
 export function createPickerFocusSemanticsReviewReader({ root, read, predecessor, reviewSha256 = pickerFocusSemanticsReview }) {
-  assert.ok([pickerFocusSemanticsReview, retainedPointerCoverageReview].includes(reviewSha256));
+  const applicability = {
+    [pickerFocusSemanticsReview]: {
+      mode: 'retained-picker-focus-and-semantics',
+      boundary: 'Exact retained picker actions and ownership observations. Current rendering and whole-case acceptance remain open.',
+    },
+    [retainedPointerCoverageReview]: {
+      mode: 'retained-pointer-coverage',
+      boundary: 'Exact retained hover, held, disabled pointer, keyboard and focus observations. Current rendering and whole-case acceptance remain open.',
+    },
+    [retainedPaintOwnershipReview]: {
+      mode: 'retained-paint-ownership',
+      boundary: 'Exact retained pointer, local paint and picker ownership observations. Current rendering and whole-case acceptance remain open.',
+    },
+  };
+  assert.ok(Object.hasOwn(applicability, reviewSha256));
   assert.equal(predecessor.sha256, 'a095cf9b57430eb73acc3a3d33f4092644cfef4ac21a1a494ec71acde09c719f');
   assert.equal(predecessor.sourceApplicability.joinSource.sha256, datepickerReaderParentSha256);
   const file = path.resolve(root, artifacts, 'working-audit', 'proposals', reviewSha256 + '.json');
@@ -336,13 +369,10 @@ export function createPickerFocusSemanticsReviewReader({ root, read, predecessor
       return predecessor.read(name, options);
     },
     sourceApplicability: {
-      mode: reviewSha256 === retainedPointerCoverageReview ? 'retained-pointer-coverage' : 'retained-picker-focus-and-semantics',
+      ...applicability[reviewSha256],
       joinSource: { file: joinSource, sha256: hash(read(path.resolve(root, joinSource))) },
       predecessorReview: predecessor.sha256,
       predecessorApplicability: predecessor.sourceApplicability,
-      boundary: reviewSha256 === retainedPointerCoverageReview
-        ? 'Exact retained hover, held, disabled pointer, keyboard and focus observations. Current rendering and whole-case acceptance remain open.'
-        : 'Exact retained picker actions and ownership observations. Current rendering and whole-case acceptance remain open.',
     },
   };
 }

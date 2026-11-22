@@ -267,9 +267,22 @@ Transaction replay SHA-256 e0d8d7b6068528013d37beba23e321385cb126cdfd50f6261b0fb
 
 Review 24c22d1a materializes the 292 verified paint and ownership rows
 on 68836d43. It reverses to all 2,311 rows, keeps all 19,626 parent
-dependencies, and verifies 606 new receipts. Next wire the exact
-review selector and preserve inherited reader routes before full live
-dependency replay and source-fingerprint reconciliation.
+dependencies, and verifies 606 new receipts. The explicit
+`--retained-paint-ownership` selector passed live replay of all 2,311
+cases and 20,232 dependencies, with the same dependency-list hash as
+materialization. The older selectors still select their original
+reviews and recover their historical launcher and runner bytes. The
+1,164-source census found exactly the three selector and reader edits.
+Accepted 0c103b3d and both acceptance flags are preserved.
+Live replay SHA-256 5b1ec4709018592fb6ef9bbc7116b02a806af9c567e50af3015763a41fe6c336.
+Source census SHA-256 751b3728af8d35c49508635a3d9790f67c4a9dc4bb5b1831daa6b3452fdc90e3.
+
+Review 24c22d1a leaves 480 local-paint joins pending. Dialog has 54,
+including 12 static openers and 42 interaction states. Tree has 52
+across static, focus, hover, held, activate and activate-leave. Check
+Dialog's retained opener crops first for input and raster applicability,
+then check Tree's full screenshots for an isolatable leaf paint region.
+A retained paint observation supports only its exact case and region.
 Materialization SHA-256 baf4b21e6d2d2bc952997daa9284d82bf05ed0021b3836e9deff00f536bddd15.
 
 For the 768 pending local-paint rows in 68836d43, the exact original cases

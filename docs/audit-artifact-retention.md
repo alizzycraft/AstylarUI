@@ -5,6 +5,13 @@ links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
 cold retry and post-cold verifier authenticate the same isolated bytes.
 Keep the strict replay for 68836d43 and the browser evidence in the ledger.
+Retain review 24c22d1a, its live replay and source census, and the verified
+0c103b3d canonical copy under retained-paint-pre-export-0c103-20261122.
+Backup receipt SHA-256 6e9bf02414cec1725ce6b09fdb0533263ad225d28eedb07eaff55dbb6a131bf0.
+Retain the two index headroom receipts. The four compressed indexes
+preserve their bytes and hard links.
+Picker index SHA-256 receipt c26a0db0f8c15f6f79b13051676e7a2cb201dc2a9592f26ed912a0e1f9dd8c02.
+Historical indexes receipt SHA-256 fd5b070d2dcc32b08df6bd9c6e5f5414d6ce001cc500808ebcf4158e591a871e.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the

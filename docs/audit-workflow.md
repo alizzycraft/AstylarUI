@@ -3,9 +3,12 @@
 November 22 retained pointer generation 0c103b3d passed section
 conservation, independent cold byte equality, and isolated and accepted
 store verification. Reuse those receipts while their dependencies match.
-The next materialized review 68836d43 passed strict dependency replay.
-Preserve the full equal-input contract, case dispositions and final browser
-gates while integrating the later paint and ownership observations.
+Review 24c22d1a passes the live selector and strict dependency replay.
+Its 1,164-source census reconciles the three changed audit files. Use
+the verified 0c103b3d copy for the next section comparison. The coherent
+export must pass section conservation, independent cold equality and
+isolated import before promotion. All cases remain partial and the
+final browser gates remain open.
 
 November 22 picker export 87915914 passed section conservation,
 independent cold equality and isolated and accepted store verification.
