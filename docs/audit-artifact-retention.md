@@ -14,6 +14,14 @@ verified-20261122 overlay and log. The log SHA-256 is
 1f5267785c2ef2d5d95583dfca001587a635b28396a20f49077347b2ba5b34a1.
 The successful temporary runner directory was cleared via withAuditScratch.
 
+Keep picker-static-semantic-older-registration-20261122.log as the
+shared Slider restoration failure. Keep the older-registration-overlay
+module and the focused and complete replay logs. Together they bind the
+exact historical source routing and the original assertions. The complete
+replay log picker-static-semantic-complete-overlay-20261122.log has SHA-256
+1293fa260507397c72149ca1d42eb5ab15f76dc431694c2bb9fc41779071fc70.
+
+
 Keep the light Timepicker original-icon capture and both Select
 original-control captures, including reports, checkpoints, logs and
 runners. Their closed material inventories support exact-case scope.

@@ -69,6 +69,18 @@ c58ae99cc0241bed13ff03bc234b1b6bb88e0982ddf68a026bb1167bb5aeecc0.
 Use the shared reversal when integrating after the export freeze.
 The browser assertion and complete final suites remain pending.
 
+The complete semantic-text-transform-input suite passes all six tests
+under the same authenticated overlay. The two remaining assertions
+verify four equal-input transform mismatches, two no-transform controls,
+16 Material heading contexts with zero matching titles, and rejection
+of changed root-editing actions. These assertions read retained browser
+captures and current owner source. Complete-suite replay receipt
+picker-static-semantic-complete-overlay-20261122.log has SHA-256
+1293fa260507397c72149ca1d42eb5ab15f76dc431694c2bb9fc41779071fc70.
+After promotion, integrate the historical readers and replay the suite
+with the live audit source. The current browser acceptance gate is open.
+
+
 The accepted 844c896c bundle is backed up before the picker export. Freeze
 this coherent source generation through export conservation and cold checks.
 All case groups remain partial and current rendering remains unverified.
