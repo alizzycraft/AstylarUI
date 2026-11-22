@@ -1702,6 +1702,22 @@ without a modal input. These are DOM and authored-input observations.
 The candidate open accessibility projection remains to be measured.
 Open Datepicker relation receipt SHA-256 846ba6448e4e12992a2e9f2ac40e314a4f92f781f4c6c80ce687a54cc0f2abfa.
 
+The Datepicker opening paint delta adds one local-paint child to
+each of the eight configured October desktop openings. It binds
+the tint and ordinary-date placement observations to their exact
+paired trees, screenshots and checkpoint records. The first check
+compared a rounded 69 px raster shift against 68.5 px before
+rounding. The corrected check uses the same physical-pixel rounding
+as the retained placement measurement.
+
+The light DPR1 row also links the separate November diagnostic.
+Its 1,887 served assets match the October vector. Its date, browser
+and measured geometry remain specific to that capture. Removing
+the eight children restores all 2,311 rows of a5616e5a. Successor
+d34df931 authenticates 53 receipts and awaits strict replay and
+export selection. Current rendering remains unverified.
+Datepicker opening paint delta SHA-256 bb2097f6b4b86e04446940bdf971d2555b497a0057a0dae779a3187c4f7bc321.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

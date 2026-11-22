@@ -406,6 +406,11 @@ projection receipts. It authenticates the added evidence and
 records the dependency list expected by the existing strict loader.
 Combined accessibility conservation SHA-256 2c05f76cec11e17d5529182976d544f0a8415072a823d3b6707a951e607e543f.
 
+Keep datepicker-opening-paint-composed-delta-20261122.log with
+the eight October checkpoints, original paired trees and images,
+and the separate November light DPR1 diagnostic and paint receipts.
+Datepicker opening paint delta SHA-256 bb2097f6b4b86e04446940bdf971d2555b497a0057a0dae779a3187c4f7bc321.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
