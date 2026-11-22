@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain the two reports, checkpoints, runner and logs in
+autocomplete-dark-mobile-caret-prelude-20261122. They distinguish tracked
+material counts from the live scene and bind the opt-in blur click.
+Successful temporary browser and runner folders were removed by
+withAuditScratch. The preserved reports support scoped case review.
+
 Retain Datepicker desktop focus-boundaries v2, including its runner, report,
 checkpoint and logs. The report binds the original served bundle and both
 chunk-JPEJK334 and chunk-7SL66K3U source maps. The first desktop attempt

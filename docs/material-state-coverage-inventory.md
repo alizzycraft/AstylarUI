@@ -406,6 +406,30 @@ replay the matrix and blur-first routes on one authenticated build and
 browser, sampling active ownership and material identities at the same
 boundaries. Current rendering and late disposal remain unverified.
 
+The controlled dark mobile DPR2 replay held the served asset vector,
+Chromium 157, action target and settlement code fixed. Both arms moved
+to 10,10 and settled before each open. Only the blur-click arm clicked
+that point. The move-only arm kept input focus before cycles two and
+three and closed at 19/19/19 live materials with caret ID 115 retained.
+The click moved focus to the canvas before each open. The click arm
+closed at 19/20/21, with retained caret IDs 115, 303 and 488 added one
+at a time. Each new identity was already unbound at settled opening.
+Both arms settled back on autocomplete-control after every dismissal.
+
+The maintained diagnostics reported 18/18/18 tracked materials and
+resourcesStable=true in both arms. The authenticated served core counts
+the intersection of its tracked set with the live scene. The direct
+scene count exceeds it by exactly the number of recorded unbound caret
+materials at each closed boundary. Treat other matrix resource counts,
+including Timepicker 25/25/25, as tracked measurements. The explicit
+prelude click explains growth under these held conditions. Neither arm
+is the unmodified matrix route, and current rendering remains open.
+
+Retained capture autocomplete-dark-mobile-caret-prelude-20261122.
+Move-only report SHA-256 2a557bedf74890c79e0d93aaa87f93970b2754fd89c4d8fb5e1ffb68ff40953e.
+Blur-click report SHA-256 6e006806e0549b7ea9ca48d57bb1853e206fd348f7805c92a7ce97822f9deb14.
+Runner SHA-256 75a0308d54b88d97d40d0a0082a77c0351e7c30cc6e9294842ae2c1e72f887d7.
+
 Autocomplete source classification: the accepted 211-finding inventory has a
 related Menu controls finding, but its detector matches only menu-popup.
 Stage fixture-autocomplete-controls-association-outlives-popup as an
