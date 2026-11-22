@@ -1442,6 +1442,10 @@ The retained build and dependency paths remain available for replay.
 The new workspace-relative capture path resolves to an empty C:
 directory with inherited NTFS compression. The configuration suite
 must pass before the queued package and showcase build can proceed.
+The unfiltered enforced runner waits for the verified build output.
+It checks the current source tree against the snapshot and uses
+--skip-build to serve the isolated bundle. The runner still executes
+its complete configuration suite and all 2,311 browser cases.
 Build snapshot manifest SHA-256 d124867b65cacd73ad89166d8bece6e88ef54d0a236fe8b79579a1bc465b5c4a.
 
 The retained Divider natural-height and copy-aware baseline traces
