@@ -1209,6 +1209,20 @@ opening action before checking compound hover and dismissal states.
 Report SHA-256 ff817cf52058f2c080c1d1ae08886d453133fe915f766dd208a64d3d099d557d.
 Composed delta SHA-256 b835f631287528cdf20517b349fccffa4e9502db2d7bacb2f6a77b79460b4747.
 
+All 80 configured opening cases now record focus owners and events
+across ten families. Material records no post-click focus transition
+in 40 cases and one blur and focus pair in 40. Astylar records one
+pair in 32 and two pairs in 48. Material settles on a calendar button,
+time input, menu item or sheet link for Datepicker, Timepicker, Menu
+and Bottom Sheet. Astylar settles on the corresponding opener in
+these 32 cases. The normalized event and focus comparisons match the
+original report in all 80 cases, as do interaction state and errors.
+The staged successor 0030140a binds 33,697 receipts and leaves 183
+focus joins pending. Next compare the opening and content-hover
+boundaries to isolate any focus changes added by pointer movement.
+Report SHA-256 fbfcbdffeb3389a136552fd0c68579afc43453c649d5ac67537868fae11d9faf.
+Delta SHA-256 c4aba7ee51b0e1954fa1ae869b7a1f0ee8da5e9af5d64e671d052107b79a9e30.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

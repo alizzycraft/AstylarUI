@@ -169,6 +169,14 @@ before it ran after raw label forwarding exposed its narrow assumption.
 Verification SHA-256 cc58dbe344ec2a9b3fc5b52162245120ae7ff1eea903d766791e9eeab8f255e7.
 Composition SHA-256 90dfd4a5214035de8039c1ebf92126e2d2f98161c422fb0609371e4c103d5d1e.
 
+Keep remaining-configured-open-focus-20261122 with its runner, manifest,
+80 checkpoints, paired captures and logs. The successful served-asset
+scratch was cleaned. Retain compact delta 0030140a.
+Runner SHA-256 846884ee4f3bc820f0276d6d14b66148e1f9e3cf6780ac7621ebfdc6ec9cb309.
+Verification SHA-256 237a5489eff82cb7d821c8c8cac9cb10090970fe6c5a94621f42ec3c7191dbe6.
+Compression of four staged deltas preserves their bytes and identities.
+Headroom SHA-256 02afc933e30a27d934a985a54b3ff2fae69a43855a4e302b4371fb8f92d9366.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
