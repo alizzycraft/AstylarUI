@@ -1122,6 +1122,32 @@ Report SHA-256 b1fd4941c897af281b58cbb8d67d1eb2badcd1b2b4b44efbac42d7dda8bd188a.
 Runner SHA-256 57e9c4c13b1c1bdcffed1002daeb46a5811f8845dcd6ecffa5a94c362a120820.
 Delta SHA-256 09263a97e5a590b0d45fcdec8d2c03a35f837329f13a30e62208b81b162e7553.
 
+The remaining 120 held cases now bind the configured hold and release.
+In all 32 Sort, Tree, Autocomplete and Select cases, Astylar records
+application pointer-up and click before trusted DOM pointer-up. The
+call stacks show queued semantic focus, canvas blur and Babylon
+pointer-up in that order. In the other 88 cases, application release
+and click are absent at the pre-release sample.
+
+The six methods in the Sort stack match the captured assets and
+installed code. The three Astylar methods also match transpiled current
+source. This identifies the retained release route. In all eight
+Autocomplete cases, both pre-release trees contain a listbox. In all
+eight Select cases, both trees lack one. The first listbox check
+assumed Material Autocomplete was closed, which the trees disprove.
+
+All eight Slide Toggle reference traces record a label SPAN click
+followed by the forwarded BUTTON click after release. All 120 original
+and replay checkpoints verify, including the original normalized
+events and focus aliases. Compact successor ba0a965b reverses to
+cec24e45 and leaves 557 programmatic-focus joins pending. Held evidence
+joins are accounted for. Whole-case inspection and current rendering
+remain open.
+Report SHA-256 83a68790574734dfce868e3697958f7b59379e1e40ee3ae36d42cee3dee98747.
+Runner SHA-256 49f62d1d682d2604958dd33928202e22bd90e1d4a18c9b1ae1b70dcf6e6c3974.
+Source linkage SHA-256 8f5593f1d18bd5c28b5bb879f61b27cf075d68d69c5c9ccc47bcf6f4e2fca622.
+Delta SHA-256 00b4f96f31a89e2067b8b0f3969728fae9e26fb256ce8614cd35f7ad1ae30bbe.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

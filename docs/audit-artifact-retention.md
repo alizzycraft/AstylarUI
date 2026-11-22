@@ -127,6 +127,12 @@ from 292,550,774 to 136,802,304 bytes. Its SHA-256, file identity and
 modification time verify after compression.
 Headroom SHA-256 3579bbdc767a0372423364d48a7b2efe9fd49ede1c220a63d5283cbf31277f18.
 
+Keep remaining-configured-held-focus-20261122 with its runner,
+manifest, 120 checkpoints, paired captures and logs. Retain compact
+delta ba0a965b and the Sort caller source linkage used by the 32
+early-release cases. The successful served-asset scratch was cleaned.
+Verification SHA-256 cddd5089575797f9752d0e9d05a70be44430c9d773e31da5679fb143aad4ef7f.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
