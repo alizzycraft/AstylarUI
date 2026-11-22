@@ -237,6 +237,19 @@ Checkpoint-bound runner SHA-256
 622d15718cf6e7910744f7613643936dbfcb87f9302657048de93aea06b0cbe0.
 
 
+The staged successor is now 5fb578bb. It carries the verified nine-case
+pointer and material batch and adds startup activation and focus evidence
+for static light desktop Button and Select. There are 18 new children in
+11 cases relative to frozen picker proposal 78616399. The successor
+preserves the 2,311 ordered rows and all case flags, retains 19,413
+predecessor receipts, and binds seven added files through the focused
+loader. Full replay of 19,420 dependencies remains pending.
+
+Compact proposal file SHA-256
+a9adf7f0ccbbe6ae0595d804ad7e60b0020c3d9c4b2dff5cae1576edd40eda59.
+picker-pointer-static-successor-20261122.log SHA-256
+ec7c759786d11aa6d6a9b3657d03fc4b6cebe4e37789ebd7379a30d0beb76010.
+
 The revised successor delta adds 14 observation children to nine exact
 rows of picker proposal 78616399. Four mobile rows gain sampled material
 identities and five desktop rows gain pointer activation and focus
