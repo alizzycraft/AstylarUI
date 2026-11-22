@@ -1039,6 +1039,34 @@ Report SHA-256 96d2b92f43794eab81695e0666194924140d3cac43e319f9a69e1f6afdfd17c2.
 Runner SHA-256 9d7f01fd869f6624f8572972764dd0b401cd2e2e40fe99821f8e220e7c6093c2.
 Delta SHA-256 ed74fab554afe5607ca76d3fc6146b0f2675de53ff94204451325141be2464e2.
 
+The remaining eight mobile DPR2 cases now have their exact three-click,
+three-Escape sequences authenticated. Menu, Bottom Sheet and Dialog
+open after each click and close after each Escape on both sides.
+In the Tabs cases, both sides settle on Activity after each click
+and keep Activity selected after Escape.
+
+Astylar keeps the opener focused while Menu and Bottom Sheet are open.
+Both sides have the opener focused after Escape. Dialog reproduces the
+previously classified restoration difference in both profiles. Material
+restores the opener and Astylar settles on BODY after closing.
+All eight original and replay checkpoints and all 1,887 served assets
+verify. The observations use retained Chromium 157 evidence.
+
+Compact successor 5e45c350 reverses to 7118086b and leaves 904
+programmatic-focus joins pending. All authored-activation joins are
+accounted for in the staged review. Whole-case inspection, broader
+interaction paths and current rendering remain open.
+Report SHA-256 1bf7a80bc5e34a0525052ebb081d8d9431c1f80b3a0aff79f8d10bd313bca160.
+Runner SHA-256 da6ca6817144a0f02ca9a181d650e266c305f52865763196f4df5126afb182b2.
+Delta SHA-256 e0a8ce6ea86de609dcc448f0c168650c758e1b8e6eac9e83caa089198e48e848.
+
+Canonical candidate 20baa74b passed section comparison against
+1a64273f. The 77 other sections conserve and only sourceFingerprints,
+coverage and focusedProofs change. The candidate binds frozen review
+919dbc1c. Independent cold verification is running, with isolated
+import queued afterward. Generation 1a64273f remains accepted.
+Section receipt SHA-256 ae9af90deeac2847c0cf46a57ad858e67c0d0905959f47d2824f3d8c77aa70cc.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

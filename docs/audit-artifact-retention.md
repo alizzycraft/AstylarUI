@@ -97,6 +97,15 @@ Verification SHA-256 59e14f9206e93af981c3b83bdaecbd7e0e4db6380f495af3d61a4fe0409
 Keep the first mobile-menu-tabs-sheet-dialog-actions-20261122 launch
 and its scratch directory for the archived runner import-path failure.
 
+Also retain the v2 failure and scratch for its hard-coded fingerprint
+entry path. The v3 replay has the runner, manifest, eight checkpoints,
+paired captures and logs. Keep compact delta 5e45c350. The successful
+v3 served-asset scratch assembly was cleaned.
+Verification SHA-256 530afb703bea1a29d9101c29496197edf38d32ef9cae29784f32c37096617936.
+Keep the warm 20baa74b export logs and section-comparison receipt while
+the independent cold and isolated import checks run.
+Section receipt SHA-256 ae9af90deeac2847c0cf46a57ad858e67c0d0905959f47d2824f3d8c77aa70cc.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
