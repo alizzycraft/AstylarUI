@@ -1546,6 +1546,17 @@ October placement observation with raster bounds. The November
 used geometry and ink measurements retain their own date and scope.
 Desktop tint raster receipt SHA-256 e9dee31fe7872c8e1b2bf9417eb687ab9baf394712807cd85d87b7306cd8475d.
 
+The October ring displacement predicts ordinary-date ink placement
+across all eight openings. Each ring supplies one rounded physical
+pixel translation. Independent 26 CSS px sample windows around 23 dates
+per case improve in 182 of 184 comparisons. Aggregate RGB error falls
+by 34.1% to 87.8% across the eight cases. Day 7 is the exception in the
+light and dark DPR1 captures. The sample centers derive from the ring
+and authenticated day row and column membership. These are raster
+windows. Full used child geometry and the remaining ordinary-date ink
+differences in these October captures remain open.
+Ordinary-date alignment receipt SHA-256 aa851c01712b4122642f48a2a73fbd28b949bcf079e7ba1f35282faaf9908db2.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

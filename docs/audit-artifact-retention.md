@@ -329,6 +329,11 @@ focus applicability receipt, and the November exact tint receipt.
 Masks and connected components were computed in memory.
 Desktop tint raster receipt SHA-256 e9dee31fe7872c8e1b2bf9417eb687ab9baf394712807cd85d87b7306cd8475d.
 
+Keep datepicker-october-ordinary-day-alignment-20261122.log with the
+October opening screenshots, paired input trees and tint raster receipt.
+The independent windows and translations were evaluated in memory.
+Ordinary-date alignment receipt SHA-256 aa851c01712b4122642f48a2a73fbd28b949bcf079e7ba1f35282faaf9908db2.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
