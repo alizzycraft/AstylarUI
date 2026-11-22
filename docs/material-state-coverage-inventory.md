@@ -1350,6 +1350,17 @@ for the popup-conditional description input. Open-state transitions,
 screen reader output and current runtime applicability remain open.
 Static Tooltip AX receipt SHA-256 43abf300a7952633988a8ef0d794a239308fbce7ef42b546b0eb9fd4f48747ca.
 
+The 12 static Datepicker pairs authenticate the calendar toggle
+and textbox through backend DOM identity. Both textboxes expose
+the same recorded state and the dialog popup type. The Material
+calendar button exposes hasPopup=dialog and expanded=false in DOM
+and AX in all 12 cases. Astylar omits both on that button. The
+exact captured, current and d973f847 explicit button branches
+omit both inputs. The captured bridge supports both properties.
+The first observed divergence is therefore in showcase authoring.
+Historical execution and open-state transport remain open.
+Static Datepicker toggle AX receipt SHA-256 4147a0cde1f902affc8ac01c7686634bda72018268a0f8811b49251ffd57b1f6.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,

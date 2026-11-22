@@ -354,6 +354,11 @@ the static AX report, manifest, independent verification and 24 raw
 Tooltip observations. The original open-state controls remain retained.
 Static Tooltip AX receipt SHA-256 43abf300a7952633988a8ef0d794a239308fbce7ef42b546b0eb9fd4f48747ca.
 
+Keep datepicker-static-toggle-actual-ax-20261122.log with the static
+AX report and all 24 paired observations, captured showcase and
+bridge maps, and the explicit authored branch history in Git.
+Static Datepicker toggle AX receipt SHA-256 4147a0cde1f902affc8ac01c7686634bda72018268a0f8811b49251ffd57b1f6.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
