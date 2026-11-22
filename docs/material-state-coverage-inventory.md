@@ -502,6 +502,17 @@ ID. Retain the Button keyboard proof as supplementary evidence from
 1440 x 900 with no disabled-state query. Its actual disabled owner is
 button-disabled, distinct from the button-primary trace.
 
+The keyboard delta on 8835fb08 adds four observations to these two
+cases. It records the sequential focus owner and selected state at all
+three key endpoints. Reversing the additions restores both complete
+parent rows. Keep the actual programmatic focus, raw key delivery and
+pointer requirements open. Fold the delta into the pointer batch after
+verification. The 40 label-only rows already carry mapped-owner
+applicability, and their action evidence joins remain pending.
+
+Receipt disabled-radio-switch-keyboard-delta-20261122.log SHA-256
+aef0d837a13cda421892a35776dcb3f8a78a9904456468c25bd3e11adc60fad6.
+
 The next small browser check is a trusted pointer attempt on the actual
 disabled Radio and Slide Toggle owners at light desktop DPR1. The retained
 keyboard receipts leave pointer blocking open. Use raw event target,
