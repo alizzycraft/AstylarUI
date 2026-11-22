@@ -739,12 +739,18 @@ Slider drag delta SHA-256 9a4dbf37059abecb4e1b7121a9ca68a12e947b93a95a65c32d97be
 Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
 Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
 
-Candidate 1a64273f for review 24c22d1a completed export and conserved
-78 of 80 sections. Only the predicted source fingerprints and coverage
-sections changed, with both digests matching exactly. Independent cold
-verification is running with isolated import queued. Accepted generation
-0c103b3d remains authoritative.
+Accepted generation 1a64273f with index 57f9c86b promotes review
+24c22d1a. The source fingerprint and coverage digests match their
+predictions and the other 78 sections conserve. Independent cold
+verification passes with zero disk-cache hits. The isolated import and
+accepted store verify all 84 shards, with 86 shared hard-linked files.
+The prior generation 0c103b3d still verifies. This milestone binds
+2,311 partial case rows and 20,232 dependencies. Later compact deltas
+remain staged separately. Current rendering remains unverified.
 Section comparison SHA-256 98fbfc2516f1d1e009409a8a6559c62653d7a558f8a2f0c5e6108e4634bb4391.
+Cold log SHA-256 c5108bee801812027e539952648365e42eb5a69a51fff9c70c9e9c6569a49872.
+Isolated import SHA-256 8067105b7f7b6d63e94419dde9bca7a841233775bef6b3991fda14e973b5a614.
+Accepted promotion SHA-256 9c81c6c64ef0054cdbce00d238ee23aaf525f6a8df82dd48ed03f5522d951806.
 
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original

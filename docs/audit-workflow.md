@@ -1,14 +1,14 @@
 # Efficient Material input-audit workflow
 
-November 22 retained pointer generation 0c103b3d passed section
-conservation, independent cold byte equality, and isolated and accepted
-store verification. Reuse those receipts while their dependencies match.
-Review 24c22d1a passes the live selector and strict dependency replay.
-Its 1,164-source census reconciles the three changed audit files. Use
-the verified 0c103b3d copy for the next section comparison. The coherent
-export must pass section conservation, independent cold equality and
-isolated import before promotion. All cases remain partial and the
-final browser gates remain open.
+November 22 retained paint and ownership generation 1a64273f passed
+section conservation, independent cold byte equality, and isolated and
+accepted store verification. Review 24c22d1a replays all 2,311 case rows
+with 20,232 dependency receipts. The 1,164-source census reconciles the
+three changed audit files. The other 78 canonical sections conserve.
+Reuse these receipts while their inputs match. All cases remain partial
+and the final browser gates remain open. The freeze on this export has
+ended. Integrate the already tested static semantic historical readers
+against their exact predecessor bytes and run the owning suites.
 
 November 22 picker export 87915914 passed section conservation,
 independent cold equality and isolated and accepted store verification.

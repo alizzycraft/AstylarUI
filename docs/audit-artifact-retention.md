@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain accepted 1a64273f and index 57f9c86b with the verified 86
+hard links to the isolated store. Keep predecessor 0c103b3d and its
+pre-export backup, the zero-disk-hit cold logs, isolated import, and
+accepted promotion receipt SHA-256
+9c81c6c64ef0054cdbce00d238ee23aaf525f6a8df82dd48ed03f5522d951806.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
