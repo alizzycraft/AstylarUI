@@ -237,6 +237,21 @@ Checkpoint-bound runner SHA-256
 622d15718cf6e7910744f7613643936dbfcb87f9302657048de93aea06b0cbe0.
 
 
+The seven-case successor delta is staged against picker proposal 78616399.
+It adds ten observation children. Four mobile rows gain sampled material
+identities, and three desktop pointer rows gain activation and focus
+observations. Removing the children and restoring six obligation dispositions
+recovers all seven predecessor rows. The other 2,304 rows and all case
+acceptance flags conserve. The existing loader validates 36 dependencies
+across the projected rows and their original anchors. The full review
+digest streamed from the exact ordered rows is d905129e. The complete
+successor and all inherited dependencies still need integration replay.
+Delta picker-pointer-history-next-delta-20261122.log has SHA-256
+d62d25f5232cd3b56977ac94a5de2953ac8dee6629ce12527ebdad4ed42788a8.
+The first projection attempt exhausted its 1 GiB heap building an older
+review envelope. The verified stream recovered the frozen proposal digest
+without rebuilding that envelope.
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
