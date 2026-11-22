@@ -186,6 +186,15 @@ and file identity.
 Verification SHA-256 d793daf3671b87515fd8e651a3adb2b95de577049642a5e043231873642ed685.
 Headroom SHA-256 ef844a376ca55f025dd80732e5329d67d7ee689917d558fdbe2417a723018265.
 
+Keep remaining-configured-dismissal-focus-20261122 with its runner,
+manifest, 70 checkpoints, paired captures and logs. Retain compact
+delta 3167eb88. Successful served-asset scratch was cleaned.
+Compression preserves the verified focus report and delta hashes and
+file identities.
+Verification SHA-256 2a7c28d54a0714ca6e6681c9e498bab023f97a1a96a5196972f5ca100b69acf5.
+Dismissal headroom SHA-256 6f190f9b964859c480ae00391aa9029545923dbeffbfb0797140cadec6f44205.
+Prior report headroom SHA-256 7dfc97f7c5a961bb5db00843da5a806464b3a13d07878a8eee129c86f3e08935.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

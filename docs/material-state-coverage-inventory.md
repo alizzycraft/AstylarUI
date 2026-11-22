@@ -1238,6 +1238,18 @@ opening boundary.
 Report SHA-256 3468edcfd5dbc29237a0c8e91e34dfff9915d6725c386ebde012af70b85850f2.
 Delta SHA-256 5293f6de5ed3c278b489035656a562b3bd1a35fb1192175b1a119f0e5e409db3.
 
+The 70 remaining outside and canvas dismissal cases each match their
+opening-only owner before dismissal and change DOM owner after it.
+Astylar settles on its canvas in all 70. Material returns focus to
+the initially focused opener for Datepicker, Menu and Dialog in 38
+cases and settles on BODY for Autocomplete and Timepicker in 32.
+The four normalized comparison fields match the original reports.
+Staged successor 3167eb88 binds 34,775 receipts and leaves 65 focus
+joins pending. The 32 editing and commit-reopen cases are next.
+The live 1,164-source fingerprint section matches accepted 20baa74b.
+Report SHA-256 e29028791f75fab63a98b15d25b07285c9e7e46b663d45ea5dd76a62f222d577.
+Delta SHA-256 aa18a517ea369f6d43c6b261093798b9662e7704f5be14889ef05aaa40875014.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
