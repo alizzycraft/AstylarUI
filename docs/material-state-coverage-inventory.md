@@ -1390,6 +1390,24 @@ staged review 1a7ac05a across all 2,311 rows. The combined successor
 awaits strict dependency replay and canonical export selection.
 Static combobox relationship delta SHA-256 829300d72e8bde10436253314ef31924efabed1789c1850809001c75e5307727.
 
+All 12 configured static Menu pairs now have a closed relationship
+check on the same browser observations as the action projection.
+Both triggers expose hasPopup=menu and expanded=false. Astylar
+keeps aria-controls pointing to its absent menu in all 12 cases.
+Material omits aria-controls. Neither captured tree exposes a
+controls relationship, menu or menu item at startup. The captured
+showcase map matches the current component and binds the unconditional
+reference to a popup created only while open. This extends the existing
+Menu authoring finding to every configured static context.
+Static Menu relationship receipt SHA-256 3eb9b48b541c3ceacbebfee6e23d08c6b011d2db66c90940a12d0d09c37220f8.
+
+The compact delta adds 12 relationship children to the Menu rows
+already carrying the action projection. It authenticates 30 distinct
+receipts and restores the 2,311-row predecessor 2984d203. Successor
+a5616e5a now stages 144 additions across 132 cases. Strict replay
+and export selection remain pending for the combined successor.
+Static Menu relationship delta SHA-256 66daf79371bc51280022b4d47015e19ea55cb28ea167508f0bdea35c16ea2f2b.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,

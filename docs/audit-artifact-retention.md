@@ -383,6 +383,12 @@ checkpoint, showcase map and the two predecessor deltas.
 Static combobox relationship receipt SHA-256 0f9bb4cafae194162b99507086ca5793cb481c702d752bb82af5ced69ce827d5.
 Static combobox relationship delta SHA-256 829300d72e8bde10436253314ef31924efabed1789c1850809001c75e5307727.
 
+Keep static-menu-closed-relationship-20261122.log and its composed
+delta with the 24 original static observations and the action
+projection, checkpoint, independent verification and showcase map.
+Static Menu relationship receipt SHA-256 3eb9b48b541c3ceacbebfee6e23d08c6b011d2db66c90940a12d0d09c37220f8.
+Static Menu relationship delta SHA-256 66daf79371bc51280022b4d47015e19ea55cb28ea167508f0bdea35c16ea2f2b.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
