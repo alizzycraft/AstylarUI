@@ -624,6 +624,21 @@ The combined batch changes 419 of 2,311 rows and reproduces the preceding
 successor and full parent, including every case and rendering flag.
 Delta SHA-256 4140f858b3f28554c43ac117dd8090deb29319f17eeb4228dff92258b2a9bf26.
 
+All 16 pending edit-empty-blur cases join to the original report and 32
+verified input trees. The original and maintained action methods request
+Control+A, Backspace and an outside click. In eight Form Field and eight
+Input cases, both retained primary streams agree from click focus through
+keydown, empty input, change and blur. The settled role/value comparator
+records an empty value on both sides, with no reported focus aliases.
+Exact key values, caret and selection timing, settled active-node identity
+and current rendering remain open. Replay SHA-256
+0462fab3c46702f28d4d637c1067c6f7d14eb8fab07b6e047cfbd14033e7d91b.
+
+Successor 26e5ffb8 stages 16 partial activation observations and attaches
+editing and pointer focus evidence to the same rows. The 435-row batch
+reproduces its prior successor and reverses to the full 2,311-row parent.
+Delta SHA-256 1737b296161894d84187f599942099f4fb002941d50c1d44dab45ca5fd2dcd7f.
+
 The remaining 14 causal traces are queued after the frozen pointer
 export to avoid competing for memory. Their earlier focus traces remain
 valid for the sampled owners and events.
