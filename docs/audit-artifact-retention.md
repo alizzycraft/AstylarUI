@@ -32,6 +32,11 @@ checkpoint, trees, logs and the reused tracer bytes. withAuditScratch
 cleared the successful runner and browser scratch directories.
 
 
+Keep static-button-select-focus-20261122 with its authenticated runner,
+report, checkpoint, paired trees and logs. withAuditScratch cleared the
+successful temporary runner and browser trees.
+
+
 Retain picker-static-boundary-virtual-wUB04C and
 picker-static-boundary-virtual-8fiiTY. The two isolated semantic runs
 identify successive source restoration boundaries without touching the

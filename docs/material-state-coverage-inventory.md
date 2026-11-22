@@ -312,6 +312,23 @@ any initial focus transitions. Static census receipt
 static-focus-intent-census-20261122.log has SHA-256
 736c42a3a7afae604b82ba8fb1c24c2d11b04131c84c2d8e7de44dd6cc1bfb38.
 
+The retained light desktop Button and Select static replays both record
+BODY with HTML ancestry at settled startup. The document listener records
+no element focus, blur or activation event from initialization through that
+sample. The five complete original static setup methods match before
+observation instrumentation. All 1,887 served assets match the original
+checkpoint, and the report authenticates the diagnostic runner.
+
+Both reference tree receipts are byte-identical to the original. The
+candidate trees conserve every node. The only changes are the style
+revision and two position values in an unused .datepicker-selected rule.
+Join the observations to these two exact static cases. Later focus,
+other static contexts and current rendering remain open.
+Report static-button-select-focus-20261122/latest-report.json SHA-256
+8ca0f08a0a6e5aad461a9dc31b42ccb3f72604854ff368d9c2b9ce5d844128f9.
+Runner SHA-256 bf801025f529558e140e87bdda3e64f5c3363bac8c25690bfdbd46cd615dc321.
+
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
