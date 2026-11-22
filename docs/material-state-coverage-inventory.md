@@ -520,12 +520,27 @@ the semantic bridge. Dialog has one blur and focus pair. Bottom Sheet
 has two in this run, versus one in the earlier trace. Both runs preserve
 the original endpoint ancestry and primary-target activation sequence.
 
-The observed detachment involves an existing ancestor on each side of
-the candidate reconciliation. The first synchronous source operation
-and the trigger for the extra Bottom Sheet cycle remain open. Use a
-scoped operation trace only if needed to distinguish root from descendant
-reconciliation or earlier attribute changes. Other contexts still have
-logical IDs and sampled ancestry only.
+The scoped operation trace locates the first Bottom Sheet blur inside
+reconcileElement.replaceChildren on bottom-sheet-root. Its later blur
+occurs inside root reconcile.replaceChildren, which also causes the first
+Dialog blur. All three blurs fire synchronously in those calls and
+syncFocus restores the original object token. The native sides record
+no departure focus events. These findings extend the existing descendant
+focus-continuity finding and its root reconciliation branch.
+
+The served JavaScript frames map to the exact installed statements.
+Complete bodies of reconcile, reconcileElement, applyAttributes and
+syncFocus agree after TypeScript erasure. The first verifier compared
+the entire installed file to the embedded source and rejected a trailing
+source-map directive. The corrected check accounts for that exact suffix
+and retains the first failure. Timing and causality in the other 14
+contexts, the trigger for the extra Bottom Sheet update and current
+browser behavior remain open.
+
+Operation report SHA-256 1eb3bc7a75850fc03d064ea3b19a721cb1590a7b9d339c9b9635d8f1e5227745.
+Operation runner SHA-256 b6beb10a7cabc0c60e20e6ddd879aa1da768db83500a905855ab59b7ef5ae2e8.
+Verification SHA-256 7824f02f5cbaf9d0088326eebdb4ff369c9331268d8b758a0c91bfbbc8e32a20.
+First verifier stderr SHA-256 a7a1cbbfa73cb33f5462991f3030141c0fa00e941dd41379d844d1dc8aa62dd5.
 
 Node identity report SHA-256 5d9d71f5fb0aa48fba794ccfbd54f623e7f728ee5b79fd7d6e29d8499bbc43fa.
 Runner SHA-256 a35dc03d2bf1fa6d30b8d91d6d1a399f29f6ef14f64f59d5a169878c2a36e2b0.
