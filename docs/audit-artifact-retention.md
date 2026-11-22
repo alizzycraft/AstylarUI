@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+NTFS compression reduced the retained October 27 Snackbar candidate
+index from 263,536,350 to 112,852,992 allocated bytes. The index hash,
+file identity, link count and modification time match. D: free space
+rose to 298,283,008 bytes for the completed-focus store promotion.
+Headroom receipt SHA-256 2cf4ef49209216d315ce31a7fa8f684ec95c9c01a2964442f29f4dcf1808690b.
+
 Retain accepted 20baa74b and index 62014e1a with the verified 86 hard
 links to the isolated store. Keep predecessor 1a64273f, all canonical
 gate receipts and the pinned 919dbc1c dependency replay.
