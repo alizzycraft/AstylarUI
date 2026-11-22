@@ -299,6 +299,19 @@ ordering against the open update. Keep the historical scheduling proof
 scoped to its click trace and the Dialog target mismatch scoped to
 the verified authored methods. No new core attribution.
 
+All 648 original tree receipts for the 324 pending static cases rehash.
+The captured native attributes and candidate authored nodes contain no
+explicit autofocus in this cohort. The trees retain tabindex in 264
+reference nodes and 204 candidate nodes. Absence of autofocus leaves
+startup focus and programmatic requests unresolved.
+
+Use light desktop Button and Select as the first static samples. Their
+tree receipts distinguish the ordinary button from the combobox with a
+native tabindex of 0. Compare the active node at settled setup and retain
+any initial focus transitions. Static census receipt
+static-focus-intent-census-20261122.log has SHA-256
+736c42a3a7afae604b82ba8fb1c24c2d11b04131c84c2d8e7de44dd6cc1bfb38.
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
