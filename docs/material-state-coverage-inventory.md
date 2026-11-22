@@ -299,7 +299,14 @@ Compact delta picker-pointer-departure-next-delta-20261122.log SHA-256
 ec4eac78a5b7f1abf368a6a948e30ff0be6fa89e53ae193c9181150d4f376a77.
 The materialized 2,311-row successor has file SHA-256
 a757b086d41c3507dc7b4be4959d13fb03ac3089b4e9dade957622e8f0ddf3d2.
-Full replay remains pending.
+The existing case-obligation reader replayed all 2,311 rows and 19,433
+dependencies against accepted generation 844c896c. It verified the 13
+added file receipts and preserved the partial inspection and unverified
+rendering flags. The replay exited 0 with empty stderr.
+Receipt picker-pointer-departure-full-dependency-replay-20261122.log
+SHA-256 e35062b8bffb9cb5f46989c3b436bdb6ff4c0a74f5a989235815b021cd05c9d4.
+The proposal is ready for integration after frozen export 87915914 clears
+its cold replay and isolated import. Keep the frozen export inputs in place.
 
 The revised successor delta adds 14 observation children to nine exact
 rows of picker proposal 78616399. Four mobile rows gain sampled material
