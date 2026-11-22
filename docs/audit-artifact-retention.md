@@ -7,6 +7,13 @@ live picker exporter. The second overlay SHA-256 is
 3fcd08e5a554f339a7e182d4f3a3babd15a5820075fb06af69c2b0244ea443e0.
 Its result SHA-256 is 1f8c97bcf0910dadd8c2555658fc631bc3bc57b986641dd17d5ce31ddbfb1137.
 
+Retain picker-static-boundary-virtual-dxfIOH and
+picker-static-boundary-virtual-3el2bE as caret and position-boundary
+failures. Keep the passing picker-static-semantic-historical-boundary-
+verified-20261122 overlay and log. The log SHA-256 is
+1f5267785c2ef2d5d95583dfca001587a635b28396a20f49077347b2ba5b34a1.
+The successful temporary runner directory was cleared via withAuditScratch.
+
 Keep the light Timepicker original-icon capture and both Select
 original-control captures, including reports, checkpoints, logs and
 runners. Their closed material inventories support exact-case scope.

@@ -43,6 +43,17 @@ The existing Text Backing recovery binds the needed Git benchmark bytes
 at 96fd6260. Compose and test that route once export memory is available.
 The focused suite remains red. Live export source was untouched.
 
+The focused semantic historical-boundary test now passes in isolation.
+The exact benchmark recovery from 96fd6260 requires its previously
+reviewed caret and root-owner block hashes 35e9feec and cdc254af.
+The subsequent position-composition reader needs the authenticated
+f4899d85 helper 6bd3537e for live 5132fefc. Combining those transitions
+with the verified population and picker reversals passes the original
+test and its drift controls. Passing overlay SHA-256
+60ea4924dd27537674d31a1d1628a903017a645c7d50e1cf991afc60b09a7ed0.
+The live exporter remains frozen. Apply the tested historical routes
+after promotion, then run the wider suites to verify other boundaries.
+
 The accepted 844c896c bundle is backed up before the picker export. Freeze
 this coherent source generation through export conservation and cold checks.
 All case groups remain partial and current rendering remains unverified.
