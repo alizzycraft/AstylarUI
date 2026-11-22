@@ -315,6 +315,22 @@ images bound by checkpoints. It keeps the full 2,311-row inventory and
 reverses all 236 changes. If accepted, 536 local-paint joins remain pending.
 Delta and measurement receipt SHA-256 7c62f40491f04dfaa4e74365f4e5cd131cd6345f524b5f25ced29e5164b91524.
 
+All 32 exact Checkbox selected, focus, hover and held cases have bound
+interior samples above the mark. Native focus changes the patch in all
+eight contexts and the candidate focus patch stays at its selected-state
+baseline. Both hover samples follow the captured 8% layer input. In
+the eight held cases, the native 12% layer alone misses the sampled
+color by up to 20 channel values. Adding the captured 10% ripple
+predicts it within one value. The candidate held sample follows its
+single 12% layer. Full layer footprint, mark, edge, ripple timing and
+current rendering remain open.
+Replay SHA-256 95a995703f9091f6a6c37a93a94410a22666d7a667537ad5184029182c267b66.
+
+Successor 771e3694 stages these 32 partial observations and reverses
+all 268 changes to the full 2,311-row parent. If accepted, 504 local-paint
+joins remain pending.
+Delta SHA-256 e753fbb12970b188e68d37a4e4d4e8ef8d6867d67e56c91b8b034f67ad93a721.
+
 The authenticated accepted 844c896c index has 1,335 cases with both
 focus and activation evidence joins pending. The largest cohorts are
 static 324 across 27 families, hover 209 across 26, held 193 across 24,
