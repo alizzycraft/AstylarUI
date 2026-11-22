@@ -1392,6 +1392,18 @@ These are page-coordinate regions. Resolve upper control ownership
 with paired child rectangles before attributing the residual there.
 Panel region receipt SHA-256 56dca21bfc0e3d28a257b8d3edd3ced3a770908b1f04135b4a09f36636f912dc.
 
+Four isolated ink regions account for 93.0% of the upper band
+error. The shared NOV 2026 label alone contributes 64.5%. A one
+pixel downward translation of its Astylar ink reduces the label
+error by 40.5%. Material records text #49454e and Astylar #1d1b20.
+The dropdown and both month arrows use Material SVG geometry and
+Astylar text glyphs. The two Astylar navigation marks align best
+when moved nine pixels up. They retain 35% to 37% of their raw
+error after the best local shift. The graphic inputs are unequal.
+These are measured ink positions. Paired used control rectangles
+are still needed to assign the shifts to layout or ink placement.
+Header receipt SHA-256 62688be9d3530603efcb5b41446deb30f5cc7b740068ccb06779444528d74bdb.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

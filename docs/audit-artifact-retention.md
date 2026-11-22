@@ -264,6 +264,11 @@ November opening checkpoint and full paired screenshots. The
 region masks were generated in memory from the measured child boxes.
 Panel region receipt SHA-256 56dca21bfc0e3d28a257b8d3edd3ced3a770908b1f04135b4a09f36636f912dc.
 
+Keep datepicker-header-control-paint-20261122.log with the opening
+checkpoint, paired trees and screenshots, and panel region receipt.
+The control ink bounds and translations were computed in memory.
+Header receipt SHA-256 62688be9d3530603efcb5b41446deb30f5cc7b740068ccb06779444528d74bdb.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
