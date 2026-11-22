@@ -112,6 +112,12 @@ cf9344cf and the verification receipt. The successful served-asset
 scratch assembly was cleaned.
 Verification SHA-256 7ce154b5cee6cd53f9efb7fe7c7e290083fe59a64fbec467ee9801358887a2a8.
 
+Keep popup-configured-held-focus-20261122 with its runner, manifest,
+28 checkpoints, paired captures and logs. Retain compact delta
+be5932cb and the verification receipt. The successful served-asset
+scratch assembly was cleaned.
+Verification SHA-256 88cf73a6e211f1da010db51ed14c78080e6d2c7dc66e6955d349699b1d1d332f.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

@@ -1084,6 +1084,28 @@ Report SHA-256 2cd74f8c5e6edab4d3d49f5b75955529d2901d0a39e0edef9cd8675d71e98ebc.
 Runner SHA-256 1851e36e3bdea97f62a0d3711a2036f6e7c564e9c4312efd57a7a775216754aa.
 Delta SHA-256 714697aef262c8850fc228d87c1532f6727e19f37946509829fedb580185b651.
 
+The 28 remaining Datepicker, Menu, Bottom Sheet and Dialog holds
+reproduce the light DPR1 call sequence. Astylar focuses the canvas
+during the hold. No DOM pointer-up or click and no candidate release
+or click appear before explicit release. At the sampled release
+endpoint Astylar focuses the opener. Material records its active
+button or link in the opened surface.
+
+Babylon makes the first canvas focus call on pointer-down. Astylar
+Interaction Runtime calls canvas focus next. The release trace records
+Babylon canvas focus followed by Astylar Semantic Bridge focus on the
+opener. All 28 original and replay checkpoints verify. Six Datepicker
+replays add a reference blur and focus after the original click prefix.
+The original and replay event arrays are both retained.
+
+Compact successor be5932cb reverses to cf9344cf and leaves 813
+programmatic-focus joins pending. This covers the observed hold and
+immediate release on the retained build. Later focus transfer and
+current rendering remain open.
+Report SHA-256 f492d8c083161268016ac36e2f65f9642c1caf7d6689d4bcf5cfb777d6dd4efd.
+Runner SHA-256 f25ffff146305aeecc3aad93d8cf88fb75cf23b51c623cc22fa780ca0c5011e0.
+Delta SHA-256 195d4480145f2a923b490114790f4d0efe724e6783f99258784ba0157fc36ea2.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
