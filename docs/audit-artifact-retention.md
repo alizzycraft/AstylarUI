@@ -269,6 +269,11 @@ checkpoint, paired trees and screenshots, and panel region receipt.
 The control ink bounds and translations were computed in memory.
 Header receipt SHA-256 62688be9d3530603efcb5b41446deb30f5cc7b740068ccb06779444528d74bdb.
 
+Keep datepicker-weekday-ink-20261122.log with the opening checkpoint,
+paired trees and screenshots, and panel region receipt. The glyph
+and divider samples were computed in memory.
+Weekday receipt SHA-256 1d99adf82895f5ef4955c9f7ab1a6886d9941569548c65e6a62d0f8b44239976.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

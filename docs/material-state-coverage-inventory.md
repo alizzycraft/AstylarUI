@@ -1404,6 +1404,20 @@ These are measured ink positions. Paired used control rectangles
 are still needed to assign the shifts to layout or ink placement.
 Header receipt SHA-256 62688be9d3530603efcb5b41446deb30f5cc7b740068ccb06779444528d74bdb.
 
+The seven weekday glyphs account for the full 70,872 summed RGB
+error in the measured weekday and header-rule band. Their first
+painted rows agree, and their left edges differ by at most one pixel.
+Every glyph reaches its own recorded text color on both sides.
+Material records #49454e and Astylar #1d1b20. Font size and weight
+agree. All 2,280 sampled pixels per side in the native divider row
+show the shared panel fill after excluding the candidate marker box.
+The observed weekday token difference corroborates the existing
+fixture-calendar-weekday-structure-and-token-substitution finding.
+The header graphic inputs corroborate the existing period-vector
+and navigation-icon authoring findings. A one-case owner measurement
+is queued for the remaining used header control and date-ring bounds.
+Weekday receipt SHA-256 1d99adf82895f5ef4955c9f7ab1a6886d9941569548c65e6a62d0f8b44239976.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
