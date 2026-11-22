@@ -215,6 +215,28 @@ Checkpoint-bound runner SHA-256
 a7978b84facd699a9a16ba613b94661d11743d56ceab0cbb6a0020c852732ac7.
 
 
+The focus-call trace resolves the first canvas caller for the two held
+Datepicker and Menu cases. It preserves the prior active ancestry and
+DOM and candidate event traces. In both cases Babylon InputManager
+calls canvas.focus() after pointerdown and before the canvas focus event.
+AstylarInteractionRuntime.handlePointer calls canvas.focus() after that
+event. At explicit pointerup Babylon calls canvas.focus() again, then
+AstylarSemanticBridge.syncFocus focuses the corresponding opener.
+
+Both retained chunks and maps match their browser receipts. The complete
+Babylon down and up handler assignments match the installed sources.
+The complete Astylar handlePointer and syncFocus methods match the
+installed and current source after transpilation. These are exact source
+comparisons for the observed call chain. Current execution, other held
+contexts and Datepicker dismissal remain open. Join the trace alongside
+the prior held evidence for both exact cases.
+
+Report popup-held-focus-caller-20261122/latest-report.json SHA-256
+8f1da92ab8e603ad5de6386bdb2d92d2d2e6d132349eaaee933cd89db9b4d8da.
+Checkpoint-bound runner SHA-256
+622d15718cf6e7910744f7613643936dbfcb87f9302657048de93aea06b0cbe0.
+
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are

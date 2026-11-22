@@ -21,6 +21,12 @@ records. Retain popup-held-focus-boundaries-20261122 with runner, report,
 tree, checkpoint and logs. withAuditScratch cleared successful scratch.
 
 
+Retain popup-held-focus-caller-20261122 and its checkpoint, runner,
+trees and logs. Its two focus traces conserve the prior held observations
+and identify the authenticated source-map call sites. withAuditScratch
+cleared the successful temporary browser and runner trees.
+
+
 Retain picker-static-boundary-virtual-wUB04C and
 picker-static-boundary-virtual-8fiiTY. The two isolated semantic runs
 identify successive source restoration boundaries without touching the
