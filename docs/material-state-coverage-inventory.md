@@ -1381,6 +1381,17 @@ edge pixel distribution. Used Astylar ring geometry and fill-versus-
 raster attribution remain open.
 Focused date ring receipt SHA-256 2f7527b19973b1eaba53bffc58fd36d352c8ede6e791663670865e949ca316e0.
 
+The November opening panel has 1,580,194 summed RGB channel error
+over 104,784 pixels at matching rounded bounds. The union of the
+measured numbered-day boxes covers 47.4% of the panel and accounts
+for 76.1% of its error. Ordinary day footprints contribute 65.4%
+and the current-date footprint contributes 10.7%. The upper control
+band is the largest remaining region at 11.7%, followed by the
+month-marker band at 7.2% and weekday or header-rule band at 4.5%.
+These are page-coordinate regions. Resolve upper control ownership
+with paired child rectangles before attributing the residual there.
+Panel region receipt SHA-256 56dca21bfc0e3d28a257b8d3edd3ced3a770908b1f04135b4a09f36636f912dc.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

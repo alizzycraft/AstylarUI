@@ -259,6 +259,11 @@ November opening checkpoint, geometry, trees and screenshots.
 The ring masks and background bounds were computed in memory.
 Focused date ring receipt SHA-256 2f7527b19973b1eaba53bffc58fd36d352c8ede6e791663670865e949ca316e0.
 
+Keep datepicker-panel-child-region-error-20261122.log with the same
+November opening checkpoint and full paired screenshots. The
+region masks were generated in memory from the measured child boxes.
+Panel region receipt SHA-256 56dca21bfc0e3d28a257b8d3edd3ced3a770908b1f04135b4a09f36636f912dc.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
