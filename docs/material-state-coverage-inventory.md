@@ -1280,6 +1280,18 @@ the staged review in memory after the on-disk proposal writes failed.
 Report SHA-256 1ed590643697cd8fbe1b7af567ff8df531516272d35a049f8ed8793851c084fa.
 Delta SHA-256 93942ba899620c40b9da15cdb49b3b60c45f0c2b752d79f5be7d32a15cb1d64f.
 
+The Datepicker local paint census has 99 rows with verified primary
+target crops and remaining work. The eight configured desktop opening
+cases can also be measured from their authenticated full screenshots.
+The retained panel bounds round to the same physical rectangle on
+both sides. Four uniform interior swatches match in each case. Whole
+panel SSIM ranges from 0.8258 to 0.8314 using the existing one-pixel
+phase allowance. The recorded difference survives matching sampled
+fill. Attribution still requires child layout and paint inputs for the
+calendar contents. This observation adds no acceptance threshold.
+Dark, contrast and custom receipt SHA-256
+036b30a22b8cc9a147418adca04c1a95f240604c1956ee76fb79b05079e95f71.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

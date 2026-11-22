@@ -213,6 +213,10 @@ retain their hashes and identities after compression.
 Verification SHA-256 d4fa3af15f9024bd2ba8f841ad77d8d1ad19fc9463f6bf46d058075292651c33.
 Headroom SHA-256 d52955dbacd7fb1e0acc14ae7e362de59d1ba32fcb984ef74ec68019736e8c41.
 
+Keep the Datepicker panel comparison receipt with the original
+opening checkpoints and full screenshots. Panel crops were measured
+in memory.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
