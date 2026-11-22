@@ -11,6 +11,31 @@ history and resource ownership. For the next shared owner cohort, join exact
 case, mapped target and source receipts first to distinguish available retained
 observations from missing owner or action evidence before requesting captures.
 
+The accepted 0c2cc1b9 payload confirms 1,571 pending focus joins, 1,408
+activation joins and 768 local paint joins. Semantics, history and source
+currentness remain partial for every case. After the staged mobile joins,
+prioritize shared desktop picker focus boundaries before family-specific
+paint. The original October 5 report covers 32 open-hover-content and 48
+outside/canvas dismissal cases across these four families. All 80 lack
+active-node ancestry and settlement traces. The 48 dismissal comparisons
+record closed popups on both sides. Datepicker alone differs in recorded
+focus identity in all 24 of its rows. The eight open-hover rows record
+reference missing and Astylar primary. The 16 pointer dismissal rows
+record the reverse. The remaining 56 rows record matching primary aliases
+or no ID on either side.
+
+The authenticated original runner e01ef9dc and maintained runner have
+identical focusedIdentity and performInteraction methods after line-ending
+normalization. Identity collapses descendants under the primary host, and
+focus.matches compares IDs only in the configured focus state. Therefore
+the 80 true flags do not resolve whether actual owners agree. A missing ID
+leaves the actual owner unresolved. The next reduced check is light desktop
+DPR1 Datepicker
+at settled opening, after popup hover, and after each distinct pointer
+dismissal action. Compare calendar versus trigger focus and restoration
+versus blur while recording the active node and its ancestry. Keep the
+retained mobile Escape finding scoped to that action.
+
 Datepicker, Autocomplete, Timepicker and Select account for 393 pending
 programmatic-focus joins. All 393 have recorded structure and DOM target
 comparisons, and 345 also have retained serialized focus identity. In the
