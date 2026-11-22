@@ -150,6 +150,10 @@ their scratch. The successful served-asset scratch was cleaned.
 Runner SHA-256 7dae0c88efe275e3d000275be00f778c6ace00f235bcd798a3773cf965237e59.
 Verification SHA-256 c6642e788ddfe225f1238ebeb5177040c1a40d777bcb3a970f7a66e5632a664e.
 
+Keep mobile-popup-escape-restoration-source-20261122.log with the
+retained bundle and map receipts. The source check reuses the six
+verified captures.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

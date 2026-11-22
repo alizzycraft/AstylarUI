@@ -1179,6 +1179,15 @@ leaves 487 focus joins pending and retains all 2,311 partial cases.
 Report SHA-256 acfc8e497da280e9cd6593715ac9cf44da64b0bde94f7ca740b3e5e2bf76982d.
 Delta SHA-256 66de653dd2b54f5789a61bb1fe89d509c50882a4289e511113ebcadc7d0981fb.
 
+The authenticated retained bundle and source map locate all 18 Escape
+restoration calls at the semantic bridge focus invocation. In every
+trace, the recorded blur precedes that call and focus returns during
+it. All 45 class members of the current bridge match the retained
+compiled JavaScript after transpilation and token comparison. This
+binds the restoration code to current source. The blur trigger and
+current runtime behavior still require direct evidence.
+Source receipt SHA-256 62c18eda693a025080bb826c7344967836fc680773961673510ea6ba90dbfae8.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
