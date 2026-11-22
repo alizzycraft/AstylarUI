@@ -649,9 +649,16 @@ Expansion report SHA-256 afd83a21610a726e7dfe23da0042e47fdb8455c011c149038b462ff
 
 The three-case pointer delta adds six observations to the 2,311-row
 parent. Reversal preserves the complete parent and all acceptance flags.
-Successor 3a0dfc9c is materialized with 19,539 dependency receipts.
-The strict integration replay is running against accepted 87915914.
+Successor 3a0dfc9c passed strict replay across 2,311 case rows and 19,539
+dependencies. Accepted 87915914 and all case flags were preserved.
+Replay SHA-256 6167d179c1a393b2ba20c61d85f4b8539f6a2e50a5efb78932bc7ea7cc0ecca0.
 Materialization SHA-256 3f04488a6ea1269bd3cfeb0502bfe1c0b54868bb253a91ab3b241d517cf479fb.
+
+The successor has no row receipts for the launcher, audit runner or
+picker reader. All three are declared source fingerprints. The semantic
+reader remains bound to the earlier receipt in 815 rows, so keep that
+transition separate from the coverage selector and preserve the historical
+read path. Census SHA-256 354f4206648dd053663975b1bb6c8f95e7b613b2c3ed03fdb9bae91011e18f79.
 
 Four closed indexes were compressed in place to recover 756,195,328 bytes.
 Each index retains its original SHA-256, logical size and hard links.
