@@ -85,6 +85,24 @@ The accepted 844c896c bundle is backed up before the picker export. Freeze
 this coherent source generation through export conservation and cold checks.
 All case groups remain partial and current rendering remains unverified.
 
+Next ownership join. All four light and dark mobile DPR2 Select and
+Timepicker open-dismiss rows already have lifecycle histories in proposal
+78616399. The three later reports match their family?s earlier capture
+on browser and all 1,887 served files. Their six report and runner paths
+are absent from the frozen proposal. Add one identity observation under
+history and ownership in each exact row.
+
+At all three closed samples, Timepicker retains its repeated hover and
+hover-active identities. The three other unbound material identities
+change each cycle and earlier IDs are absent from later live inventories.
+Select retains caret 154 while its other unbound input material identity
+changes each cycle. The prior Select input IDs also leave the live inventory.
+These checks distinguish sampled persistence from replacement. Disposal
+order and surface teardown remain unverified. The exact row and receipt
+plan is mobile-picker-material-identity-next-join-20261122.log, SHA-256
+488bae2c546306c19ac1f0f2e75244b4747953a323ee6ae0eca4879bee8d8079.
+Keep the original captures and scope the join to sampled ownership.
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
