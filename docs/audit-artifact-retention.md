@@ -66,6 +66,9 @@ delta binding expected successor 3c1a6807. Keep the light mobile
 mutation v2 package, its verification receipt and compact delta
 for expected successor e421ed21, and the initial profile guard failure. The successful temporary runner was cleaned. The
 initial failed scratch contains the retained served asset assembly.
+Keep the datepicker-desktop-canvas-dismiss-focus-caller-20261122
+runner, report, captures and checkpoint with compact delta 838adb11.
+The successful desktop scratch assembly was cleaned.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the

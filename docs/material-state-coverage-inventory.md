@@ -631,9 +631,9 @@ The light mobile DPR2 replay reproduces the same sequence in all
 three Escape cycles. Its checkpoint, served call sites, 1,887 asset
 hashes, normalized events and settled focus boundaries verify against
 the original light replay. The mechanism now has a witness in each
-retained mobile theme. Desktop, other dismissal routes and current
-rendering remain open. Trace a retained desktop Escape cohort next
-to check whether the same focus boundary applies.
+retained mobile theme. The configured desktop Datepicker dismissal
+cases exercise pointer actions. Desktop Escape and current rendering
+remain open.
 Light verification SHA-256 7716d6ebe3cca57f1ced722f3a70620d131036679be2b22d9c1826e6ef5d61f3.
 
 The composed delta binds expected successor 3c1a6807, reverses all
@@ -650,6 +650,23 @@ the materialized parent. The delta conserves prior dependency
 receipts, authenticates five new paths and leaves 1,486 programmatic
 focus rows pending. Accepted coverage remains at generation 0c103b3d.
 Light delta SHA-256 034b9877e21c4fe9be120c3531e6222f76465b2effa620cdfe5728beaaa7d459.
+
+In the retained light desktop DPR1 canvas-dismissal case, Babylon
+pointerdown moves focus from the Datepicker icon to the canvas.
+AstylarInteractionRuntime then calls focus on the active canvas, as
+does Babylon on pointerup. Material restores the saved opener after
+click at close animation completion. The replay preserves the original
+event comparison and settled boundaries, verifies the checkpoint and
+matches all 1,887 served assets. The trace applies to the canvas action.
+The separate outside action and current runtime remain unverified.
+Use the same call boundary for the pending outside action.
+
+The compact delta for expected successor 838adb11 adds one partial
+focus disposition, authenticates five new receipt paths and conserves
+all 2,311 parent rows on reversal. It leaves 1,485 programmatic-focus
+rows pending. The accepted coverage pointer remains 0c103b3d.
+Desktop report SHA-256 067a36f86a62fb7b1ce40ce501dd07ea866062c21430ceed2efc3643bda800cf.
+Desktop delta SHA-256 9b13f22b8b153aa09a709b31946803429e319c7bcc7df289b0e1e1c9684f9da3.
 Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
 Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
 
@@ -1602,9 +1619,9 @@ chunk-3JXWRYJY focuses the canvas for a dispatched pointerdown that is
 not canceled, then looks for a focusable ancestor. The authenticated
 Babylon bundle chunk-5CIHDZW4 also has its own conditional canvas focus
 call on pointerdown. The earlier text-held trace shares the Babylon chunk
-but uses different core bytes and a different action. The desktop event
-logs do not establish the first focus caller. A one-case focus-call trace
-could resolve that ordering if needed for a separate core attribution.
+but uses different core bytes and a different action. The later retained
+canvas action trace establishes Babylon as the first focus caller for
+that case. The outside action still needs its own call trace.
 
 Report datepicker-desktop-focus-boundaries-v2-20261122/latest-report.json
 SHA-256 643a072637a75d1bd28b8cd0dba253442cc0a23a7d15246c35eb0d1ba28c23ef.
