@@ -1763,6 +1763,14 @@ The verifier initially expected per-side runtime errors. It now
 checks the report?s empty combined error array.
 Open Datepicker AX verification SHA-256 51156240cf721775b294426612492bced7ddfd8933ced09c29b81492a22f27ee.
 
+The actual AX observation now joins the same light desktop DPR1
+Datepicker row as the opening paint evidence. It adds a semantics
+child to d34df931 and binds seven receipts, six new to that review.
+Removing the child restores all 2,311 predecessor rows. Successor
+30b89ded has 35,445 dependency paths. It awaits the next coherent
+replay. Whole-case inspection and current rendering remain open.
+Open Datepicker AX delta SHA-256 c8167d6a7ffccbf1e9112fed483d9d3237ad53f3f147ec16ba2f22ca9cc8123f.
+
 The Datepicker opening paint delta adds one local-paint child to
 each of the eight configured October desktop openings. It binds
 the tint and ordinary-date placement observations to their exact

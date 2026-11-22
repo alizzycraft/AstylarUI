@@ -420,6 +420,11 @@ verification with the paired capture, runner, checkpoint and
 prior open DOM and authored ownership receipt.
 Open Datepicker AX verification SHA-256 51156240cf721775b294426612492bced7ddfd8933ced09c29b81492a22f27ee.
 
+Keep datepicker-opening-actual-ax-composed-delta-20261122.log
+with the actual AX checkpoint, verification and the preceding
+opening paint delta.
+Open Datepicker AX delta SHA-256 c8167d6a7ffccbf1e9112fed483d9d3237ad53f3f147ec16ba2f22ca9cc8123f.
+
 Keep datepicker-opening-paint-composed-delta-20261122.log with
 the eight October checkpoints, original paired trees and images,
 and the separate November light DPR1 diagnostic and paint receipts.
