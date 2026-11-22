@@ -1434,6 +1434,16 @@ paths for evidence replay while preparing the fresh package. The
 unfiltered benchmark configuration suite waits on the combined
 strict replay. It is the enforced runner?s first gate.
 
+The isolated build snapshot binds 437 Git blobs at 62f7b001.
+Windows line endings account for 432 byte differences. Every file
+matches its Git blob after normalization where needed. The normal
+prepare command will replace only the isolated showcase installation.
+The retained build and dependency paths remain available for replay.
+The new workspace-relative capture path resolves to an empty C:
+directory with inherited NTFS compression. The configuration suite
+must pass before the queued package and showcase build can proceed.
+Build snapshot manifest SHA-256 d124867b65cacd73ad89166d8bece6e88ef54d0a236fe8b79579a1bc465b5c4a.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,
