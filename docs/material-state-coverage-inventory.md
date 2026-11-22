@@ -287,6 +287,20 @@ pending. The first composition rejected a mistyped Sidenav receipt.
 Failure SHA-256 e041f5dadfe8863e6d79a53c1531d415661a62a7861b41e73db1f3b9ff42054a.
 Verified delta SHA-256 7a4d3c9a136a0a50f14ad58f3b1dd54651057074b75ebfcb35fcd257f8b6b903.
 
+Across 48 Input and Form Field held, activate and activate-leave cases,
+the same filled-field base inputs yield equal interior samples on both
+sides. All native fields have the focused wrapper class and zero
+overlay opacity at the sampled boundary. All candidate field surfaces
+have the active class. The 16 exact hover siblings carry the 8% native
+overlay established above. The hover difference does not persist at
+these sampled focused boundaries. Underline, text, transient paint and
+current rendering remain open.
+
+Successor 49b4ace3 stages these 48 partial paint inspections with 96
+original images bound by checkpoints. Its 204-row delta reverses to
+all 2,311 parent cases. If accepted, 568 local-paint joins remain pending.
+Delta and measurement receipt SHA-256 fdf2253765971c736d96628986d199b7c80432103e076a88d3c115cd12ac7775.
+
 The authenticated accepted 844c896c index has 1,335 cases with both
 focus and activation evidence joins pending. The largest cohorts are
 static 324 across 27 families, hover 209 across 26, held 193 across 24,
