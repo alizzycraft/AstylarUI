@@ -1,5 +1,12 @@
 # Efficient Material input-audit workflow
 
+November 22 retained pointer generation 0c103b3d passed section
+conservation, independent cold byte equality, and isolated and accepted
+store verification. Reuse those receipts while their dependencies match.
+The next materialized review 68836d43 passed strict dependency replay.
+Preserve the full equal-input contract, case dispositions and final browser
+gates while integrating the later paint and ownership observations.
+
 November 22 picker export 87915914 passed section conservation,
 independent cold equality and isolated and accepted store verification.
 The audit accounts for 8,483 differences, 389,202 occurrences and

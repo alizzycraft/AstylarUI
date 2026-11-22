@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+Accepted generation 0c103b3d and index 10cad8ea passed 80-section
+conservation, independent cold byte equality and isolated and accepted
+store verification. Both changed sections match their predictions.
+The cold gate used zero disk-cache hits and reverified 21,013 files.
+The isolated check verifies 84 shards. Promotion verifies 86 immutable
+hard links before and after pointer advancement. Generation 87915914
+remains retained. All 2,311 cases remain partial and current rendering
+is unverified.
+
+Cold stdout SHA-256 2193e28f357aa531a62e6947fdeb5cc88ff158d4bfcac46df1747da11e1334e9.
+Cold stderr SHA-256 5fdf5a41c14883e9a3a610621711b70b34c7430d953be6c43e7b3b50a1211f0c.
+Post-cold isolated receipt SHA-256 fe02d8c29c009616f08ee599fecc3fbbf4015e6803257f566cee53e801545798.
+Accepted promotion SHA-256 722703859ffe47b3a12fcd1bad15a992c80133ed8cb27de77b4b23ad573a1897.
+
+The existing strict loader passed successor 68836d43 on 2,311 cases
+and 19,626 dependency receipts. It used the frozen source route before
+promotion. This is the next staged review.
+Strict replay SHA-256 2407f067b8756a5d95257a92953154ed465a0e42bb8a5749e63c5d1557d62945.
+
 The repaired picker export passed validation and wrote candidate 87915914.
 It covers 436 static and 1,875 interaction rows, with 8,483 differences,
 389,202 occurrences and 215 source findings. Input equivalence remains

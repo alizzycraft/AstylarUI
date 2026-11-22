@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
+links, predecessor 87915914 and canonical receipts for both generations.
+Keep the stopped cold attempt and early isolated import. The successful
+cold retry and post-cold verifier authenticate the same isolated bytes.
+Keep the strict replay for 68836d43 and the browser evidence in the ledger.
+
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the
 pre-export backup. Keep the corrected section comparison, independent
