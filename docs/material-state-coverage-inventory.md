@@ -260,6 +260,24 @@ The original data leave the raw held DOM owner and release timing open.
 Census original-held-action-focus-boundaries-verified-20261122.log
 SHA-256 929fc8d07f027a686620ed5d476b94b518a9226af4d88329ee133145c0d39f66.
 
+Successor 8835fb08 already joins the four focused popup held traces.
+The other 189 exact held cases now have staged activation observations
+from the event arrays read after explicit release. They record 197
+reference clicks and 189 candidate clicks. All eight extra reference
+clicks occur in Slide Toggle, with both clicks normalized to its host.
+The retained activate and activate-leave traces identify label forwarding
+in 16 separate Slide Toggle actions. The held arrays leave the two raw
+targets and their exact timing open. The 28 other post-release alias
+differences still need direct active-owner evidence.
+
+The initial comparison included movement entries that the census omitted.
+The corrected projection verifies the click and focus entries against
+all underlying rows and preserves the original arrays. Reversing the
+delta restores every parent row with all focus and case flags preserved.
+Receipt retained-held-release-activation-delta-v2-20261122.log SHA-256
+08b6f0780208801bf61812808c46cf3c50c3a6abf78a11c561bd2265fa4793db.
+Initial stderr SHA-256 4eec71ca4263d46cc6f1e532162bcc5faba18434eca8465371a2038adf18afd7.
+
 The retained light desktop DPR1 Datepicker and Menu held replay used all
 1,887 original served assets and five byte-matched action and setup methods.
 Both pages start with BODY active. During held settlement and immediately
