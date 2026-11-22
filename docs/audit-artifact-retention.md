@@ -430,6 +430,11 @@ the eight October checkpoints, original paired trees and images,
 and the separate November light DPR1 diagnostic and paint receipts.
 Datepicker opening paint delta SHA-256 bb2097f6b4b86e04446940bdf971d2555b497a0057a0dae779a3187c4f7bc321.
 
+Keep divider-trusted-peer-v2-20261122, its checkpoint, runner and
+verification with the original alignment provenance. Keep the initial
+failed module-resolution launch logs and the successful retry logs.
+Trusted Divider peer receipt SHA-256 bd582f416e92b5bad0144f63bc4b7396b0f3a900cd39861bb1a80babf32cd96d.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.

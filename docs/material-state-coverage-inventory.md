@@ -1513,9 +1513,20 @@ handlers come from a lazy Proxy. Direct lookup can return a callback
 while enumeration returns none. The captured getter reproduces this
 distinction. All retired canvases have zero pointer, wheel and
 keyboard registrations in the retained observations. Synthetic events
-sent to them add no callbacks. The peer remains mounted. Trusted peer
-dispatch and eventual garbage collection remain open.
+sent to them add no callbacks. The peer remains mounted across those
+observations. The trusted-pointer diagnostic below checks one cohort.
 Retired callback receipt SHA-256 8dbdf5b197732b1754172bd5f8d1c8784050496efcbda5c456e1f7869fabd89b.
+
+The light desktop DPR1 Divider replay verifies trusted dispatch on
+a separately mounted peer before and after routed Angular destruction.
+Both clicks hit the peer canvas and deliver pointermove, pointerdown,
+pointerup and one click to divider-primary. The retired canvas is
+disconnected and has zero pointer, wheel and keyboard registrations.
+Its configured handler count remains one. No routed callbacks appear.
+The declared 1,887-file build matches the retained baseline and all
+519 accessed assets authenticate. This is one Chromium 157 diagnostic.
+Garbage collection, other cohorts and current rendering remain open.
+Trusted Divider peer receipt SHA-256 bd582f416e92b5bad0144f63bc4b7396b0f3a900cd39861bb1a80babf32cd96d.
 
 The Datepicker local paint census has 99 rows with verified primary
 target crops and remaining work. The eight configured desktop opening
