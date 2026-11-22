@@ -1067,6 +1067,23 @@ coverage and focusedProofs change. The candidate binds frozen review
 import queued afterward. Generation 1a64273f remains accepted.
 Section receipt SHA-256 ae9af90deeac2847c0cf46a57ad858e67c0d0905959f47d2824f3d8c77aa70cc.
 
+The 63 pending popup hover cases now have startup, pre-move and
+settled focus observations. Both sides kept BODY active at every
+sample. Neither recorded a focus call, DOM focus event or activation.
+Astylar recorded one pointermove per case and the original pointerenter
+sequences. All 63 original and replay checkpoints and 1,887 served
+asset hashes verified. The already verified light DPR1 Select case
+stays outside this replay.
+
+Compact successor cf9344cf reverses to 5e45c350 and leaves 841
+programmatic-focus joins pending, including 136 hover rows. All
+authored-activation joins have evidence in the staged review. These
+retained Chromium 157 observations cover the configured movement
+and its settlement. Other focus paths and current rendering remain open.
+Report SHA-256 2cd74f8c5e6edab4d3d49f5b75955529d2901d0a39e0edef9cd8675d71e98ebc.
+Runner SHA-256 1851e36e3bdea97f62a0d3711a2036f6e7c564e9c4312efd57a7a775216754aa.
+Delta SHA-256 714697aef262c8850fc228d87c1532f6727e19f37946509829fedb580185b651.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

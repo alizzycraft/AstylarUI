@@ -106,6 +106,12 @@ Keep the warm 20baa74b export logs and section-comparison receipt while
 the independent cold and isolated import checks run.
 Section receipt SHA-256 ae9af90deeac2847c0cf46a57ad858e67c0d0905959f47d2824f3d8c77aa70cc.
 
+Keep popup-configured-hover-focus-20261122 with its runner, manifest,
+63 checkpoints, paired captures and logs. Retain compact delta
+cf9344cf and the verification receipt. The successful served-asset
+scratch assembly was cleaned.
+Verification SHA-256 7ce154b5cee6cd53f9efb7fe7c7e290083fe59a64fbec467ee9801358887a2a8.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
