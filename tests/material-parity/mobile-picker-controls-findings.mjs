@@ -172,6 +172,31 @@ export function restoreMobilePickerControlsProducer(bytes) {
 }
 
 export const pickerFocusSemanticsReview = '78616399f9964684b86232fb63ac2945027a6ef7c461ea9bab5f2953e6861096';
+export const retainedPointerCoverageReview = '3a0dfc9c476e49a6c5878be3f287b8eadbecfae98fd8c35cc4c88035abc0068c';
+
+// Reverse the exact coverage selector before each older picker transition.
+const retainedPointerLauncherEdits = [
+  ["import { pickerFocusSemanticsReview }","import { pickerFocusSemanticsReview, retainedPointerCoverageReview }"],
+  ["const pickerFocusSemantics = rawRequested.includes('--picker-focus-semantics');\n","const pickerFocusSemantics = rawRequested.includes('--picker-focus-semantics');\nconst retainedPointerCoverage = rawRequested.includes('--retained-pointer-coverage');\nassert.ok(!retainedPointerCoverage || rawRequested.every(argument => ['--retained-pointer-coverage', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n"],
+  ["rawRequested.filter(argument => argument !== '--picker-focus-semantics')","rawRequested.filter(argument => argument !== '--picker-focus-semantics').filter(argument => argument !== '--retained-pointer-coverage')"],
+  ["|--picker-focus-semantics]');","|--picker-focus-semantics|--retained-pointer-coverage]');"],
+  ["if (pickerFocusSemantics) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${pickerFocusSemanticsReview}.json`;\n","if (pickerFocusSemantics) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${pickerFocusSemanticsReview}.json`;\nif (retainedPointerCoverage) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedPointerCoverageReview}.json`;\n"],
+  ["if (pickerFocusSemantics) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${pickerFocusSemanticsReview}`;\n","if (pickerFocusSemantics) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${pickerFocusSemanticsReview}`;\nif (retainedPointerCoverage) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedPointerCoverageReview}`;\n"],
+];
+const retainedPointerRunnerEdits = [
+  ["createPickerFocusSemanticsReviewReader, pickerFocusSemanticsReview }","createPickerFocusSemanticsReviewReader, pickerFocusSemanticsReview, retainedPointerCoverageReview }"],
+  ["    const applicability=options.caseObligationReviewSha256===pickerFocusSemanticsReview\n","    const applicability=[pickerFocusSemanticsReview,retainedPointerCoverageReview].includes(options.caseObligationReviewSha256)\n"],
+  ["      ? createPickerFocusSemanticsReviewReader({ root, read: auditReadFileSync,\n","      ? createPickerFocusSemanticsReviewReader({ root, read: auditReadFileSync, reviewSha256: options.caseObligationReviewSha256,\n"],
+  ["    diagnosticRead: [pickerFocusSemanticsReview,datepickerMobileOpenDismissReview,","    diagnosticRead: [pickerFocusSemanticsReview,retainedPointerCoverageReview,datepickerMobileOpenDismissReview,"],
+];
+
+function restoreRetainedPointerSelection(source, marker, edits, predecessorSha256) {
+  if (!source.includes(marker)) return source;
+  const previous = applySourceEdits(source, reverseSourceEdits(edits));
+  assert.equal(hash(previous), predecessorSha256, 'Unexpected retained pointer source drift');
+  return previous;
+}
+
 
 const launcherParentSha256 = 'e2c3ecf47e9b22ba1b29ec68f01a7e569f1b12e1d4307c47d3371a77be4a6395';
 const pickerMode = '--picker-focus-semantics';
@@ -201,7 +226,9 @@ export function preparePickerFocusSemanticsLauncher(bytes) {
 }
 
 export function restorePickerFocusSemanticsLauncher(bytes) {
-  const previous = applySourceEdits(normalized(bytes), reverseSourceEdits(launcherEdits));
+  const source = restoreRetainedPointerSelection(normalized(bytes), 'const retainedPointerCoverage = ', retainedPointerLauncherEdits,
+    'e404363f7852d71e02d490a5163a34ba798dc3772c2054376aa75c8ec790f6a1');
+  const previous = applySourceEdits(source, reverseSourceEdits(launcherEdits));
   assert.equal(hash(previous), launcherParentSha256, 'Unexpected picker launcher drift');
   return previous;
 }
@@ -256,7 +283,9 @@ export function preparePickerFocusSemanticsRunner(bytes) {
 }
 
 export function restorePickerFocusSemanticsRunner(bytes) {
-  const previous = applySourceEdits(normalized(bytes), reverseSourceEdits(runnerEdits));
+  const source = restoreRetainedPointerSelection(normalized(bytes), 'pickerFocusSemanticsReview, retainedPointerCoverageReview }', retainedPointerRunnerEdits,
+    '477526cb178996d9b79056847c48d69b060dd37254634da343e4ecda5d3d0dc3');
+  const previous = applySourceEdits(source, reverseSourceEdits(runnerEdits));
   assert.equal(hash(previous), runnerParentSha256, 'Unexpected picker runner drift');
   return previous;
 }
@@ -295,10 +324,11 @@ export function restorePickerFocusSemanticsBenchmarkReader(bytes) {
   return previous;
 }
 
-export function createPickerFocusSemanticsReviewReader({ root, read, predecessor }) {
+export function createPickerFocusSemanticsReviewReader({ root, read, predecessor, reviewSha256 = pickerFocusSemanticsReview }) {
+  assert.ok([pickerFocusSemanticsReview, retainedPointerCoverageReview].includes(reviewSha256));
   assert.equal(predecessor.sha256, 'a095cf9b57430eb73acc3a3d33f4092644cfef4ac21a1a494ec71acde09c719f');
   assert.equal(predecessor.sourceApplicability.joinSource.sha256, datepickerReaderParentSha256);
-  const file = path.resolve(root, artifacts, 'working-audit', 'proposals', pickerFocusSemanticsReview + '.json');
+  const file = path.resolve(root, artifacts, 'working-audit', 'proposals', reviewSha256 + '.json');
   const joinSource = 'tests/material-parity/mobile-picker-controls-findings.mjs';
   return {
     read(name, options) {
@@ -306,11 +336,13 @@ export function createPickerFocusSemanticsReviewReader({ root, read, predecessor
       return predecessor.read(name, options);
     },
     sourceApplicability: {
-      mode: 'retained-picker-focus-and-semantics',
+      mode: reviewSha256 === retainedPointerCoverageReview ? 'retained-pointer-coverage' : 'retained-picker-focus-and-semantics',
       joinSource: { file: joinSource, sha256: hash(read(path.resolve(root, joinSource))) },
       predecessorReview: predecessor.sha256,
       predecessorApplicability: predecessor.sourceApplicability,
-      boundary: 'Exact retained picker actions and ownership observations. Current rendering and whole-case acceptance remain open.',
+      boundary: reviewSha256 === retainedPointerCoverageReview
+        ? 'Exact retained hover, held, disabled pointer, keyboard and focus observations. Current rendering and whole-case acceptance remain open.'
+        : 'Exact retained picker actions and ownership observations. Current rendering and whole-case acceptance remain open.',
     },
   };
 }

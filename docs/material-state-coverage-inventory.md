@@ -654,6 +654,19 @@ dependencies. Accepted 87915914 and all case flags were preserved.
 Replay SHA-256 6167d179c1a393b2ba20c61d85f4b8539f6a2e50a5efb78932bc7ea7cc0ecca0.
 Materialization SHA-256 3f04488a6ea1269bd3cfeb0502bfe1c0b54868bb253a91ab3b241d517cf479fb.
 
+The live launcher and runner support --retained-pointer-coverage for
+the verified 3a0dfc9c review. The focused checks select both the old picker
+and new review digests, recover exact predecessor sources and reject
+mixed selectors and source drift.
+Focused receipt SHA-256 ad579ef126752cc6fa4974c16e95146aaeccc582e072b4dbc950752121d8d2ac.
+
+Before the coherent export, the exact accepted 87915914 manifest and
+Markdown were copied. Its compressed payload was backed up by an
+immutable store hard link with a distinct file ID from the live docs.
+Backup receipt SHA-256 b2c578514aa155f3adc9d6c7d05ed1fd21dc7ef2eacf0f073928141c18beb237.
+The canonical comparison, cold replay, isolated import and promotion
+remain required for the new generation.
+
 The successor has no row receipts for the launcher, audit runner or
 picker reader. All three are declared source fingerprints. The semantic
 reader remains bound to the earlier receipt in 815 rows, so keep that
