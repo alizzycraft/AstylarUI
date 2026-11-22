@@ -1164,6 +1164,21 @@ canonical candidate and rendering acceptance are tracked above.
 Report SHA-256 439362d55ed1919cf7a23a7662d0c5b0c8f5f40a1ae3c93b628dc1728de2c218.
 Delta SHA-256 f9d99b3e5e65bdeb8446f4f8e7554c0ef2c927f91b1bbb8733a4b5cb90553032.
 
+Six retained light and dark mobile Autocomplete, Select and Timepicker
+open-dismiss cases now bind focus between the earlier settled samples.
+All 18 Escape operations show a blur and refocus on the same Astylar
+DOM node. Thirteen restore focus before keyup and five after keyup.
+Each restoration has one semantic bridge syncFocus call. Material
+records no focus transition during Escape. Timepicker settles on the
+Astylar icon and the Material input, consistent with earlier samples.
+Original normalized focus, events, interaction state and runtime errors
+agree in all six cases. The action source reverses to the original and
+all 1,887 served asset hashes match. The cause of the blur and current
+applicability remain open. Staged review 7cf73de8 binds 30,764 receipts,
+leaves 487 focus joins pending and retains all 2,311 partial cases.
+Report SHA-256 acfc8e497da280e9cd6593715ac9cf44da64b0bde94f7ca740b3e5e2bf76982d.
+Delta SHA-256 66de653dd2b54f5789a61bb1fe89d509c50882a4289e511113ebcadc7d0981fb.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
