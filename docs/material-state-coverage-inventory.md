@@ -376,6 +376,29 @@ ancestry nor focus timing. Scope receipt activate-leave-focus-scope-
 20261122.log has SHA-256
 1e8d7a38d9af3637bb97efd94ae0762b2790009d12663da47b6bf4ae97ea5a8e.
 
+The two light desktop DPR1 activate-leave traces preserve focus ancestry
+from immediately before pointer departure to the settled sample. Material
+holds the sheet link or Dialog action button. Astylar holds the sheet opener
+or dialog-cancel. During the sampled departure interval Astylar records
+one blur and refocus with the same logical ID in each case. Each focus call
+maps to semantic bridge syncFocus. IDs alone leave DOM node continuity open.
+
+The same-build, same-browser run with the unchanged harness reproduces
+both focus aliases and primary-target event sequences. The original October
+activate-leave rows also record these aliases, including dialog-cancel.
+The held Dialog row instead records the opener, so keep the actions and
+sample times distinct. The instrumented runner preserves the original
+action when its read-only before-departure hook is reversed.
+
+Trace dialog-sheet-activate-leave-focus-20261122/latest-report.json
+SHA-256 f34578c470431fb915c0ff8ef5d30ddc3a3cf6492659f4ffcf1251bcb57e0a24.
+Runner SHA-256 f470b14daf0f47bef478f0414d8ca630dbcf87b38c484a238671ec5612c96eb3.
+Control dialog-sheet-activate-leave-control-20261122/latest-report.json
+SHA-256 f14b4727488b56dcea83badd2fe7130daad365050545163e5f5153e030479b2b.
+Join the two exact actions after the frozen milestone. Continuous focus,
+later events and current rendering remain open.
+
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are

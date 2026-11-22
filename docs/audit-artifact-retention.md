@@ -37,6 +37,12 @@ report, checkpoint, paired trees and logs. withAuditScratch cleared the
 successful temporary runner and browser trees.
 
 
+Retain dialog-sheet-activate-leave-focus-20261122 and its unchanged-harness
+control. Both retain original report, checkpoint, paired trees and logs.
+The trace has the checkpoint-bound runner. withAuditScratch cleared
+the successful temporary browser and runner directories.
+
+
 Retain picker-static-boundary-virtual-wUB04C and
 picker-static-boundary-virtual-8fiiTY. The two isolated semantic runs
 identify successive source restoration boundaries without touching the
