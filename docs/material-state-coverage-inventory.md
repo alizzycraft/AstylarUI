@@ -142,6 +142,19 @@ After promotion, integrate the historical readers and replay the suite
 with the live audit source. The current browser acceptance gate is open.
 
 
+The frozen picker proposal and successor 8835fb08 each bind the old
+semantic-text-transform reader receipt in 815 case rows. The tested
+replacement fails the existing picker reversal directly. A guard for
+the exact replacement hash serves the frozen Git bytes and recovers
+the local predecessor byte for byte. A changed replacement is rejected.
+Wire this historical read boundary before the live reader update, then
+verify the complete chain. The first attempt instantiated the full
+reader under a 256 MB heap and exhausted it. Preserve its stderr.
+
+Receipt semantic-reader-local-receipt-transition-20261122.log SHA-256
+a9303edc575939e6d414b21ef8ec27f0a84a607915a361e464928bb0730492ac.
+Initial stderr SHA-256 be17be64534d8e24007d7ecbdefd41668091abfbf20a5885618f9af522a9e56f.
+
 The accepted 844c896c bundle is backed up before the picker export. Freeze
 this coherent source generation through export conservation and cold checks.
 All case groups remain partial and current rendering remains unverified.
