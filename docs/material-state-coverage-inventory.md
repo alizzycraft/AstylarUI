@@ -1307,6 +1307,18 @@ another capture. All 2,311 cases still need full source/runtime and
 enforced current rendering evidence.
 Inspection census SHA-256 0128938be06a96c3d4f8ae16691d3fb401f02280473867d5a04e9ca1b221a18e.
 
+The staged review has no direct actual accessibility-tree child for
+the 12 static Button cases. All 24 corresponding raw observations
+authenticate in the retained static capture. Backend DOM identities
+bind the primary, secondary and disabled buttons in every pair.
+All 36 pairs agree on role, name and the recorded state properties.
+Material has three or four ignored direct children per button.
+Astylar has one unignored named StaticText child. This establishes the
+captured projection and its structural difference for the next case
+review. Live activation, screen reader output and source/runtime
+applicability remain open.
+Static Button AX receipt SHA-256 33fd8a2ebc3fd8cb6a34f44a185ccb7df294b6f82071096ab086cd723c801c9a.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,

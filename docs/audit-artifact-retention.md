@@ -334,6 +334,11 @@ October opening screenshots, paired input trees and tint raster receipt.
 The independent windows and translations were evaluated in memory.
 Ordinary-date alignment receipt SHA-256 aa851c01712b4122642f48a2a73fbd28b949bcf079e7ba1f35282faaf9908db2.
 
+Keep button-static-actual-ax-projection-20261122.log with the retained
+static AX manifest, report, verification and 24 raw Button observations.
+The comparison used the archived observations and staged case keys.
+Static Button AX receipt SHA-256 33fd8a2ebc3fd8cb6a34f44a185ccb7df294b6f82071096ab086cd723c801c9a.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
