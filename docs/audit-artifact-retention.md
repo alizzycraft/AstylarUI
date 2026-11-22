@@ -1,5 +1,10 @@
 # Audit artifact retention
 
+Keep the light Timepicker original-icon capture and both Select
+original-control captures, including reports, checkpoints, logs and
+runners. Their closed material inventories support exact-case scope.
+Successful runner and browser scratch was cleared by withAuditScratch.
+
 Keep the picker expected coverage delta receipt and the five dark mobile
 Timepicker captures under timepicker-dark-mobile-caret-contrast-20261122
 and timepicker-dark-mobile-icon-material-owners-20261122. Retain their

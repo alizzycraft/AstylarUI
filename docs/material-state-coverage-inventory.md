@@ -24,6 +24,14 @@ adapter recovers all 159 prior definitions and rejects unrelated drift.
 A separate semantic suite still stops at the older static registration
 reader expecting 192 live definitions. Preserve the full final gates.
 
+The static semantic suite initialization gap has an authenticated route.
+The picker reversal restores the complete 211-row policy. Its original
+205 rows match the 49e1adc5 policy in full and in order. The existing
+historical readers then recover 191 retained static rows, 180 predecessor
+rows and 171 native-checkable predecessor rows, and reject a changed row.
+Wire the exact population transition after the export freeze and check
+the downstream suite separately.
+
 The accepted 844c896c bundle is backed up before the picker export. Freeze
 this coherent source generation through export conservation and cold checks.
 All case groups remain partial and current rendering remains unverified.
@@ -513,6 +521,20 @@ separate. Retain select-mobile-open-dismiss-20261122/latest-report.json
 SHA-256 fafd1f92ae76f807b63ac285ea334295532979440a1bf793da644dbf80fd292a and
 diagnostic-runner.mjs afcb9ff1ea1b44c236ce1d9563bc6ca19213a5ff8630849744f80bc7ed6c01c8.
 
+The original Select control action now has live material observations
+in both retained mobile DPR2 themes. Both show 24/24/24 live and
+23/23/23 tracked materials. Unbound caret ID 154 first appears at
+settled opening and persists through all three closures. No new caret
+identities accumulate across those closures. Focus remains on the
+readonly control. This establishes sampled live stability with a
+retained caret, while control-removal lifetime, late disposal and
+current rendering remain unverified.
+
+The retained directory select-mobile-icon-material-owners-20261122
+contains the configured Select control action. Report SHA-256
+519f4f2206758eada26abaa0b83c90ed471be68a4bf2ded64e3f335dffd9def7.
+Runner SHA-256 d8efdf29a7b42b7b97c2af4f73b6f92bee3c79c9a00541bf9f6acfb2e9f3ee26.
+
 Mobile picker proposal 689530e096179a2be7c26a95067d2e91e1601e6f2181ef8a3b9cc5cd13608b24
 adds the two Select rows to the staged Autocomplete extension d47c1f8d.
 It binds the verified report and runner for the exact theme/action cohort
@@ -624,6 +646,18 @@ SHA-256 is e94dd08166e162701061adc0763b165d48146af14ee6547327529a1d51f18294.
 The original-action identity report SHA-256 is
 957a1ebc9c7b3d2bf7f87cfb5d8f9895e20d9151e669dc005aad3c3f5c13fffb.
 Its runner SHA-256 is cb025f6b23db31eff4d6bbf2a2c25ff0870fad474fe98f10bc01124a5f76963f.
+
+The light original-icon replay matches the dark capture in all three
+complete closed material inventories, including hover ID 151 and
+hover-active IDs 152, 648 and 1095. Both themes have 27/28/29 live
+materials, 25/25/25 tracked and no retained caret. The two pointer-state
+allocation methods match the existing public proof, current source and
+installed code after transpilation, despite whole-file hash changes.
+Add both exact icon rows to the next coherent case join.
+
+Light report timepicker-light-mobile-icon-material-owners-20261122/latest-report.json
+SHA-256 33566b462ddfb99e99e6384f0d9532606c8e98da27e4b918b29697ded1468e1c.
+Its runner SHA-256 is e23bd4b6a3e920fdb4a160c3c0e01bacfeb291931694650a26eb48fb91acdbc9.
 
 The matrix replay also finds a closed Timepicker DOM association difference:
 both sides resolve controls and active descendant while open; after Escape
