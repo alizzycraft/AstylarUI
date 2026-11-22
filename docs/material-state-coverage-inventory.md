@@ -447,9 +447,28 @@ normalization. The disabled branch returns before target lookup or input.
 The retained rows establish a no-action baseline for each exact case.
 They leave the settled DOM focus owner and the control response to an
 attempted activation open. The event and focus comparators pass by default
-for this state. Start with a paired raw active-node sample and a separate
-trusted activation attempt against the same disabled target, using the
-original no-action run as the baseline.
+for this state.
+
+The accepted index and original report agree on all 136 exact case IDs.
+Existing supplementary observations cover 48 of the 120 pending rows.
+The focused replay passed three checks. Forty text-control rows record
+both sides rejecting the sampled focus and pointer attempts. Eight
+Select rows record the reference ARIA-disabled target accepting focus
+while the candidate native disabled input rejects it. The trusted key
+sample preserves value and collapsed state on both sides. Reuse those
+exact receipts for bounded focus and action joins. Current rendering
+and other activation paths remain open.
+
+Those supplements leave 72 pending rows outside their coverage across
+Button, Button Toggle, Chips, Expansion, Menu, Radio, Slide Toggle,
+Stepper and Tabs. Query existing evidence on the actual disabled owner
+before choosing a browser check. In Button the disabled owner is
+button-disabled. The button-primary trace samples a different control.
+
+Receipt disabled-pending-retained-membership-20261122.log SHA-256
+d8158a79e72ab688915d81d26ba3516db3a96bf3fd372f4838a6bad5b51a5730.
+Receipt disabled-pending-exact-supplements-20261122.log SHA-256
+b8ec3d08726574261e36a1a098b1be4cedcc10a936c46185090ce31655371562.
 
 Receipt original-disabled-action-focus-boundaries-20261122.log SHA-256
 fb7d21a83735f3241876f5da3bea4a060e41fbde44b06b90c4857dae8bd91439.
