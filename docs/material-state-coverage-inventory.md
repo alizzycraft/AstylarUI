@@ -361,6 +361,21 @@ Report static-button-select-focus-20261122/latest-report.json SHA-256
 Runner SHA-256 bf801025f529558e140e87bdda3e64f5c3363bac8c25690bfdbd46cd615dc321.
 
 
+The 128 pending activate-leave cases each have an exact original activate
+sibling with the same family, theme and viewport. Moving away changes
+none of the sampled reference or candidate focus aliases, candidate
+logical focus IDs, or recorded primary-target activation sequences.
+The 16 cross-plane alias differences occur in both states and are confined
+to Bottom Sheet and Dialog. Their endpoint aliases do not isolate a
+pointer-leave effect.
+
+Prioritize open focus transfer in these two families. A paired owner
+sample after activation and after pointer departure can test for changes
+hidden by the aliases. The retained rows record neither raw active-node
+ancestry nor focus timing. Scope receipt activate-leave-focus-scope-
+20261122.log has SHA-256
+1e8d7a38d9af3637bb97efd94ae0762b2790009d12663da47b6bf4ae97ea5a8e.
+
 November 21 continuation. The accepted index for generation ab2c875a was
 authenticated against current.json before counting all 2,311 case groups.
 Input/style/structure, semantics, history/ownership and source currentness are
