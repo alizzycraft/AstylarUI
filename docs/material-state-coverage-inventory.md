@@ -473,8 +473,7 @@ traces. For the other 126 cases, the original activate and activate-leave
 siblings preserve the same normalized primary-target sequence, including
 a click in each case. The action and comparator methods match the maintained
 runner. The comparator filters movement, deduplicates adjacent event types
-and omits the input/change tail for checkbox and slider. The remaining
-14 focus alias differences still need direct owner and timing evidence.
+and omits the input/change tail for checkbox and slider.
 
 The reversible delta stages 126 activation comparisons on parent 3a0dfc9c.
 All 2,311 case rows and acceptance flags are preserved. Expected successor
@@ -493,6 +492,25 @@ activate-leave rows also record these aliases, including dialog-cancel.
 The held Dialog row instead records the opener, so keep the actions and
 sample times distinct. The instrumented runner preserves the original
 action when its read-only before-departure hook is reversed.
+
+The 14 remaining Bottom Sheet and Dialog traces reproduce the original
+endpoint aliases and primary-target activation sequences. Material records
+no blur or focus in the departure interval. Astylar records a blur and
+focus with the same logical ID in every case, with a semantic bridge focus
+call. The runner changes only cohort selection and verifies the same
+1,887 served assets. Continuous node identity and current runtime remain open.
+
+The first launch failed before browser startup because the artifact junction
+resolved the runner imports outside the worktree. Preserve the failed runner
+and logs. The unchanged retry ran from worktree-local scratch and cleared
+successful scratch through withAuditScratch.
+Failure stderr SHA-256 d30504797d2f563d34d9c6aa2cc391b31b5f689b1623ad806286b61864ebfaeb.
+Verification SHA-256 85449899241e9c0b0b581e8e43f5dce896c2eac2491281ba232e6a3cb224c970.
+
+The composed delta preserves the 126 activation comparisons and adds 14
+focus observations. It reverses to the complete 2,311-row 3a0dfc9c parent
+and retains every acceptance flag. Expected successor 00295837.
+Composed delta SHA-256 00617419972307e2020bfee18143e264625e7d77e039cbec363367c61a0518b9.
 
 Trace dialog-sheet-activate-leave-focus-20261122/latest-report.json
 SHA-256 f34578c470431fb915c0ff8ef5d30ddc3a3cf6492659f4ffcf1251bcb57e0a24.
