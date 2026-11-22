@@ -279,6 +279,11 @@ authenticated compressed 590f4aec proposal and its replay receipts.
 The census streamed the archived bytes without materializing the proposal.
 Inspection census SHA-256 0128938be06a96c3d4f8ae16691d3fb401f02280473867d5a04e9ca1b221a18e.
 
+Keep divider-line-envelope-join-20261122.log with the retained
+natural line-box, copy-aware baseline, and owner coverage receipts.
+The joined distances were computed in memory from the original traces.
+Divider line envelope receipt SHA-256 751361c768744e1d45565ebd3ef91f9b095fcd9dfaeb446e60275dfaa9a74561.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.

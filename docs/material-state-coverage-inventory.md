@@ -1307,6 +1307,21 @@ another capture. All 2,311 cases still need full source/runtime and
 enforced current rendering evidence.
 Inspection census SHA-256 0128938be06a96c3d4f8ae16691d3fb401f02280473867d5a04e9ca1b221a18e.
 
+The retained Divider natural-height and copy-aware baseline traces
+join on all eight Above/Below owners in the four desktop DPR1 cases.
+They match the recorded served asset inventory, browser version,
+owner text, and native paragraph and inline coordinates. The native
+natural line extends 15/4 px above/below baseline in light and dark,
+14/4 in contrast and 17/5 in custom. The projected Astylar texture
+matches the first three profiles. Custom projects its 23 px backing
+to 22 px, giving 16.26/5.74 px. Its projected top is 0.916 px lower
+and projected baseline 0.177 px lower than Material. This supplies
+the envelope around the measured baseline for these owners. Actual
+font ascent/descent, leading, and other viewport or DPR baselines
+remain open. Review their applicability without remeasuring these
+four existing contexts.
+Divider line envelope receipt SHA-256 751361c768744e1d45565ebd3ef91f9b095fcd9dfaeb446e60275dfaa9a74561.
+
 The Datepicker local paint census has 99 rows with verified primary
 target crops and remaining work. The eight configured desktop opening
 cases can also be measured from their authenticated full screenshots.
