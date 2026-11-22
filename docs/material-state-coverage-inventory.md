@@ -1419,6 +1419,21 @@ uses the full roster and includes the Datepicker paint delta below.
 All 2,311 cases remain partial and current rendering is unverified.
 Combined accessibility conservation SHA-256 2c05f76cec11e17d5529182976d544f0a8415072a823d3b6707a951e607e543f.
 
+The three historical enforced manifests match the current case order
+for 436 static, 1,857 ordinary interaction and 18 mobile flow cases.
+The installed root lock receipt also matches. Each manifest differs
+from the available 1,887-file browser build at four added and four
+removed asset paths and three updated files. The runner changed in
+each comparison. The checkpoint helper also differs in the two
+earlier enforced runs. A fresh current-build gate is still required.
+
+The prior full capture is 687,429,217 logical bytes. D: free space
+was 287,539,200 bytes, so reserve separate output capacity before
+recapture. Preserve the existing installed dependency and asset
+paths for evidence replay while preparing the fresh package. The
+unfiltered benchmark configuration suite waits on the combined
+strict replay. It is the enforced runner?s first gate.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,
