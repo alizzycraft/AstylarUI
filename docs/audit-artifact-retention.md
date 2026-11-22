@@ -323,6 +323,12 @@ with the October full report, its 16 opening input trees, and the
 November owner geometry report. The comparison used retained files.
 Header and focus applicability receipt SHA-256 9bead90689566abf3e3f73e130aa6ee4bf87e091c73aaa1a11bd0820ca0d57bb.
 
+Keep datepicker-desktop-opening-tint-raster-20261122.log with the
+eight original October checkpoints and 16 screenshots, the header and
+focus applicability receipt, and the November exact tint receipt.
+Masks and connected components were computed in memory.
+Desktop tint raster receipt SHA-256 e9dee31fe7872c8e1b2bf9417eb687ab9baf394712807cd85d87b7306cd8475d.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.

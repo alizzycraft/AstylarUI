@@ -1534,6 +1534,18 @@ The source inputs extend to these eight cases. The November geometry,
 texture readback and pixel measurements apply to its own capture.
 Header and focus applicability receipt SHA-256 9bead90689566abf3e3f73e130aa6ee4bf87e091c73aaa1a11bd0820ca0d57bb.
 
+The eight October paired screenshots confirm the focus-state paint
+split. The two program-focused Material cases each contain one
+connected 3,348-pixel tint region inside the date ring. The six
+mouse-focused Material cases contain zero pixels of that tint color
+inside the measured panel interior. Candidate occurrences are isolated
+single pixels. No Astylar opening shows a comparable tint region.
+Near-border-color raster footprints place the Astylar ring center
+33.5 to 34.5 CSS px lower across the eight openings. This extends the
+October placement observation with raster bounds. The November
+used geometry and ink measurements retain their own date and scope.
+Desktop tint raster receipt SHA-256 e9dee31fe7872c8e1b2bf9417eb687ab9baf394712807cd85d87b7306cd8475d.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
