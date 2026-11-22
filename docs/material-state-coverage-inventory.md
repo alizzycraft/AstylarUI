@@ -79,8 +79,15 @@ stages activation, programmatic focus and DOM semantics in those three
 exact cases. Removing the nine children restores predecessor 0ff6f39f by
 digest across all 2,311 rows. The source maps were already bound. Only the
 desktop report and runner are new dependency receipts, both authenticated.
-The total is 19,380 receipts. Run the strict inherited-dependency replay
-after the frozen Datepicker cold check and isolated import release memory.
+The total is 19,380 receipts. The strict loader is queued after the
+frozen Datepicker cold check and isolated import release memory.
+The maintained catalog matches the accepted ordered 436 static and 1,875
+interaction case IDs. Inventory SHA-256
+ce986c6e2d828177153562f9509174b885fde2ac93d569f0b27aa44c040c245f.
+The replay will read the staged proposal directly and delegate every
+evidence dependency to the retained Datepicker reader chain. The existing
+Datepicker reader delegates those same paths to the Snackbar/Opener
+predecessor. Its separate proposal does not need to be rebuilt.
 
 The staged picker source registry now includes the Datepicker missing
 pointer-dismiss restore request, separately from opening focus transfer
