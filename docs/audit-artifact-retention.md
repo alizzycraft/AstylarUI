@@ -274,6 +274,11 @@ paired trees and screenshots, and panel region receipt. The glyph
 and divider samples were computed in memory.
 Weekday receipt SHA-256 1d99adf82895f5ef4955c9f7ab1a6886d9941569548c65e6a62d0f8b44239976.
 
+Keep datepicker-month-marker-paint-20261122.log with the opening
+checkpoint, measured rows, paired trees and screenshots, and panel
+region receipt. The local translations were computed in memory.
+Month-marker receipt SHA-256 21f45b27eb9161b92babc93bf2bbd5907ca4815139f1054929fa09631b2d0e7b.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful

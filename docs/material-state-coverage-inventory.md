@@ -1418,6 +1418,20 @@ and navigation-icon authoring findings. A one-case owner measurement
 is queued for the remaining used header control and date-ring bounds.
 Weekday receipt SHA-256 1d99adf82895f5ef4955c9f7ab1a6886d9941569548c65e6a62d0f8b44239976.
 
+The isolated NOV label accounts for the full 114,044 summed RGB
+error in the measured month-marker band. Both rows measure 40 px
+high. The Astylar row starts six pixels above Material. Shifting
+its ink down by the measured row offset removes 19.6% of the error.
+The best local ink shift, two pixels right and five down, removes
+68.8%. The retained inputs corroborate the established month-marker
+table/grid and typography findings. Material records line-height
+0 px, start alignment and 13.1875 px left padding. Astylar omits
+line-height, requests center alignment and records 12 px left
+padding. The colors differ in blue by two channel values. The
+remaining ink error requires equivalent inputs before it can be
+assigned to rendering.
+Month-marker receipt SHA-256 21f45b27eb9161b92babc93bf2bbd5907ca4815139f1054929fa09631b2d0e7b.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree
