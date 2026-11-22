@@ -459,11 +459,37 @@ sample preserves value and collapsed state on both sides. Reuse those
 exact receipts for bounded focus and action joins. Current rendering
 and other activation paths remain open.
 
-Those supplements leave 72 pending rows outside their coverage across
-Button, Button Toggle, Chips, Expansion, Menu, Radio, Slide Toggle,
-Stepper and Tabs. Query existing evidence on the actual disabled owner
-before choosing a browser check. In Button the disabled owner is
-button-disabled. The button-primary trace samples a different control.
+Of the 72 pending rows outside those supplements, 40 have a disabled
+state label without an authored disabled control. These are all eight
+contexts each for Button Toggle, Chips, Menu, Stepper and Tabs. The
+retained proof authenticates all 80 trees and both application sources
+still match its hashes. The no-action baseline and owner evidence
+support an applicability review. Store-dependent actions, startup
+focus, and the other case obligations still need their own evidence.
+
+The other 32 pending rows span Button, Expansion, Radio and Slide
+Toggle. The retained composite keyboard capture matches exactly two
+pending IDs, both light desktop DPR1. Radio focuses the candidate
+radio-team while the reference skips its disabled radios. Slide Toggle
+skips the disabled owner and preserves selection on both sides in the
+sampled sequence. The dark mobile records have no matching pending
+ID. Retain the Button keyboard proof as supplementary evidence from
+1440 x 900 with no disabled-state query. Its actual disabled owner is
+button-disabled, distinct from the button-primary trace.
+
+The next small browser check is a trusted pointer attempt on the actual
+disabled Radio and Slide Toggle owners at light desktop DPR1. The retained
+keyboard receipts leave pointer blocking open. Use raw event target,
+active owner and value or checked-state observations to distinguish
+hit routing from suppression after delivery.
+
+The existing focused proofs passed 2/2 using the hash-identical retained
+candidate source map. The first run passed the owner inventory and
+stopped the keyboard proof at the missing dist path. Keep both logs.
+Receipt disabled-owner-and-keyboard-overlap-v2-20261122.log SHA-256
+44f3a78c9db7079aa7c984a1b84869b88df33995ce74c71d7c563575b2ac9e1b.
+First run disabled-owner-and-keyboard-overlap-20261122.log SHA-256
+2b4f618fb430420e0f1e144f40ab287f7ba0b2509b77911e9ee5e4e2d00cd6b4.
 
 Receipt disabled-pending-retained-membership-20261122.log SHA-256
 d8158a79e72ab688915d81d26ba3516db3a96bf3fd372f4838a6bad5b51a5730.
