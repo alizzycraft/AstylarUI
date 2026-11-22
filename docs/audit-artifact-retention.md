@@ -26,6 +26,12 @@ datepicker-mobile-open-dismiss-coverage-conservation-20261122.log (SHA-256
 786db9c73055b11980f84e7a422cd525666d58b133b5d9bd5d2895ed856ace77),
 the two exact case dependencies and both independent cold run logs.
 
+Datepicker generation 844c896c and index e15edc4a passed cold equality,
+isolated import and accepted store verification. Retain the isolated import
+receipt 4888db3c, promotion receipt 0daaca1f, both import waiters and the
+failed dependency replay log. The successful import used the original
+receipt path. The predecessor bundle and both stores remain retained.
+
 November5 accepted button/toolbar milestoneab2c875a/indexb26b0abd reuses86
 hash-verified immutable hard links from its verified isolated store;complete
 verification passes before/after accepted pointer advancement. Keep cold,

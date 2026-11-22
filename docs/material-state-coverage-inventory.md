@@ -574,12 +574,15 @@ report are the only new case dependencies, and all 19,366 predecessor
 receipts are conserved. The Datepicker applicability record wraps the
 prior chain. Within that chain only the Text Backing reader current hash
 changes, from 56922108 to 91f806eb, with retained receipt 60056387 intact.
-The independent cold canonical run is active. The original import waiter
-expected optional phase messages that this launch did not enable. The
-replacement waits for the exact launcher and child running --check,
-requires both successful exits and zero disk hits, and compares the three
-candidate file hashes before importing. Promotion and current rendering
-gates remain open.
+The independent cold canonical check passed, with zero disk hits and
+5,479,215,110 verified evidence bytes. The original isolated importer
+completed and verified 84 shards. The accepted store checked 86 immutable
+links and verified the candidate before and after the pointer advanced to
+844c896c, index e15edc4a. The 0c2cc1b9 predecessor remains retained.
+Promotion receipt SHA-256 0daaca1f86b1049b40c48111ac4f4384b664b9850b7a1b4448380b6056fb80c0.
+All 2,311 cases remain partial. The picker dependency replay stopped at
+startup because it expected the replacement importer receipt. Its retry
+uses the verified original importer receipt. Current rendering gates remain open.
 
 The span/opener audit generation 0c2cc1b9 is accepted at index 31fb68e7.
 Section comparison conserved 69 of 80 sections. Metadata conserved all prior
