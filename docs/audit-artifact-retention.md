@@ -6,6 +6,14 @@ pre-export backup. Keep the corrected section comparison, independent
 cold replay v2 logs, isolated import and accepted promotion logs.
 See the coverage ledger for the exact hashes and milestone scope.
 
+The isolated 0c103b3d index 10cad8ea now uses NTFS compression. The byte
+count, SHA-256, original hard link and accepted pointer were checked
+before and after compression. Keep the post-cold verifier against this
+exact index. Compression receipt SHA-256
+32e61975f463d363bd0595b5a7fb5fcaf38afbf81912c5f775b316baad54fcc0.
+Retain materialized 68836d43 and the causal browser receipts referenced
+in the coverage ledger. The verified materialization scratch was removed.
+
 Closed indexes for 844c896c, 0c2cc1b9, ab2c875a and a58e7a47 now use NTFS
 compression. Their hashes, byte counts and hard links match before and after.
 The operation recovered 756,195,328 bytes and preserved the accepted pointer.

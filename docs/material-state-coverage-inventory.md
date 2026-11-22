@@ -676,6 +676,14 @@ Successor 68836d43 reversibly attaches the 15 exact observations to the
 existing 539 changed rows. Current rendering remains unverified.
 Delta SHA-256 e0f1659cff66ebf9457f3c29bbcd1ce75d46b6ede966e1b4f4193e3c4f2a6919.
 
+The materialized 68836d43 proposal reproduces all 2,311 configured rows
+and the reversible 539-row delta. It retains all 19,539 parent receipts
+and verifies the 87 new ones at materialization. The full 19,626-receipt
+loader is queued behind the frozen cold check and isolated verification.
+Package SHA-256 7bbfb2cfc3872e862cadc0730efae7375b3b1b7956289f148cefc12272c4b37a.
+Dependency list SHA-256 468e5fb4620a3c06aae913a22c3c4c3f3f5b164c889774909891a7ef673367b0.
+Materialization SHA-256 7b1b457b0b024b7418086cda7968b6dc3264a2b7e065d2c0673e9f981f4d8695.
+
 The remaining 14 causal traces are queued after the frozen pointer
 export to avoid competing for memory. Their earlier focus traces remain
 valid for the sampled owners and events.
