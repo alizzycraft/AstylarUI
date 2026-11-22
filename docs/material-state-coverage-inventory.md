@@ -7,6 +7,14 @@ All case, inspection and rendering flags are conserved. The live launcher
 now selects this batch and keeps the Datepicker predecessor reproducible
 on demand. Reading picker dependencies does not build that prior envelope.
 
+Direct comparison of proposal 78616399 against accepted 844c896c restores
+all 2,311 ordered case rows after removing exactly 45 observation children
+from ten rows. All 19,368 inherited dependency receipts are conserved
+and 17 added paths authenticate. The expected coverage delta receipt
+picker-focus-semantics-expected-coverage-delta-20261122.log has SHA-256
+c88ecd0fedd8c8f4534ab6c30a6f341944b9ace0f4510463b434f38f3b94d9db.
+Use it to check the exported candidate against the exact scope.
+
 The live source census matches the accepted 1,162 path receipt when
 reversed. It adds the picker registration and Datepicker reader paths and
 changes exactly the launcher, runner, policy, producer and benchmark reader
@@ -578,6 +586,44 @@ An independent check conserved its 19,380 dependency receipts and verified
 the one newly referenced public proof, public-caret-ownership-e1a737f-final.log
 SHA-256 931e1c04fd561d11fc810ca01e4b3544af63474bfc944f24edd2e6fc3b580a52.
 The queued strict predecessor replay still supplies inherited evidence.
+
+The controlled dark mobile DPR2 experiment held the served asset vector,
+Chromium 157, reference target, sampling and settlement methods fixed.
+It varied the candidate input versus icon target and a click versus only
+movement at 10,10 before opening. All four arms reported 25/25/25 tracked
+materials. The live scene and named caret identities differ.
+
+| Candidate target | Prelude | Closed live materials | Unbound caret IDs by cycle |
+| --- | --- | --- | --- |
+| Input | Move only | 26/26/26 | 153, 153, 153 |
+| Input | Click | 26/27/28 | 153, 153+724, 153+724+1245 |
+| Icon | Move only | 27/28/29 | None |
+| Icon | Click | 27/28/29 | None |
+
+The input comparison isolates the prior blur click as the trigger for
+repeated caret accumulation under these conditions. The icon path has a
+different retained material. A second capture preserved all four original
+action and settlement methods and sampled scene identities without a
+prelude. It also closed at 27/28/29 live versus 25/25/25 tracked.
+Timepicker icon hover material 151 stayed unbound. Hover-active IDs 152,
+648 and 1095 appeared at successive openings and remained unbound after
+dismissal. The served bundle constructs these names in its pointer-state
+material branch. The public pointer-state ownership reduction already
+isolates the lifetime defect at DPR1/2 without a showcase plugin.
+
+Apply core-pointer-state-material-allocation-escapes-render-owner to the
+scoped dark original icon observation and keep the input caret finding
+on its separate route. Exact teardown call order, light icon applicability,
+late disposal, surface isolation and current rendering remain open.
+The frozen picker export stays pinned to proposal 78616399. Add these
+later observations in the next coherent case join.
+
+Retained bundles timepicker-dark-mobile-caret-contrast-20261122 and
+timepicker-dark-mobile-icon-material-owners-20261122. The controlled runner
+SHA-256 is e94dd08166e162701061adc0763b165d48146af14ee6547327529a1d51f18294.
+The original-action identity report SHA-256 is
+957a1ebc9c7b3d2bf7f87cfb5d8f9895e20d9151e669dc005aad3c3f5c13fffb.
+Its runner SHA-256 is cb025f6b23db31eff4d6bbf2a2c25ff0870fad474fe98f10bc01124a5f76963f.
 
 The matrix replay also finds a closed Timepicker DOM association difference:
 both sides resolve controls and active descendant while open; after Escape

@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep the picker expected coverage delta receipt and the five dark mobile
+Timepicker captures under timepicker-dark-mobile-caret-contrast-20261122
+and timepicker-dark-mobile-icon-material-owners-20261122. Retain their
+reports, checkpoints, logs and runners to bind the two lifetime paths.
+Successful temporary browser and runner folders were cleared by
+withAuditScratch. The original matrix receipts remain retained.
+
 Keep picker-focus-semantics-pre-export-844c-20261122 through export, cold
 equality and import. The manifest and Markdown are exact copies of the
 accepted files. The payload links to immutable generation 844c896c and
