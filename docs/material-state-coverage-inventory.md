@@ -1297,6 +1297,14 @@ remains current pending isolated verification and promotion.
 Cold stdout SHA-256 985b88ed87c2676834d0c1e05bab6e32e4fa383f20e18ef6ce9112ff2f885406.
 Cold stderr SHA-256 745b9a3cb9c5f9f3115f8165d542853e302032b0ea0fc56937fa8b3ee2c8f54b.
 
+The existing proof-pointer test now replays the 248-proof historical
+inventory from Git 14d759e3 and checks the 501 current proofs against
+the independently cold-verified section from 5a208846. Modified and
+duplicated proof controls still reject, and the missing-source control
+still reports its one unresolved anchor. All five workflow tests pass.
+The test file is outside the canonical producer inputs and all 35,439
+case dependencies in the running successor review.
+
 The authenticated 590f4aec proposal still leaves five shared inspection
 obligations partial in every case. They are input and anonymous structure,
 local paint, actual semantics, history and resource ownership, and

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -93,22 +94,37 @@ test('diagnostic capture preflight separates retained replay while enforced vali
 
 test('all canonical proof pointers resolve after focused/integration test moves', async () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
-  const ast = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);
-  const code = ['focusedProofInventory', 'proof'].map(name => {
-    const matches = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
-    assert.equal(matches.length, 1); return matches[0].getText(ast);
-  }).join('\n');
-  const inspect = reader => vm.runInNewContext(code + '; focusedProofInventory(root)',
-    { readFileSync: reader, path, root: process.cwd() });
-  const proofs = inspect(readFileSync);
-  // Cold-verified e7d22b1a publication has248 proofs,section8d484b87.
-  // Exact03fafef8 replay of the seven changed registered sources recovers
-  // that section. All248 records/order/non-line fields conserve. Reviewed test
-  // insertions shift anchors only; no unchecked proof additions or claim edits.
-  assert.equal(proofs.length, 248);
-  const expected = [{ name: 'focusedProofs', tokens: 4465,
-    sha256: '421b2d190e288589563209e81be62f2a9162d570925340fc12b63f2a6af923c4' }];
+  const root = process.cwd();
+  const inspect = reader => {
+    const ast = ts.createSourceFile(file, reader(file, 'utf8'), ts.ScriptTarget.Latest, true);
+    const code = ['focusedProofInventory', 'proof'].map(name => {
+      const matches = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+      assert.equal(matches.length, 1);
+      return matches[0].getText(ast);
+    }).join('\n');
+    return vm.runInNewContext(code + '; focusedProofInventory(root)', { readFileSync: reader, path, root });
+  };
   const digestProofs = value => sectionDigests([Buffer.from(JSON.stringify({ focusedProofs: value }))]);
+  const historicalRevision = '14d759e35b056707e19f6665c2c7e60f33a5ab61';
+  const historicalFiles = new Map();
+  const historicalProofs = inspect(name => {
+    const relative = path.relative(root, path.resolve(root, name)).split(path.sep).join('/');
+    if (!historicalFiles.has(relative)) {
+      const content = execFileSync('git', ['show', historicalRevision + ':' + relative],
+        { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+      historicalFiles.set(relative, content);
+    }
+    return historicalFiles.get(relative);
+  });
+  assert.equal(historicalProofs.length, 248);
+  assert.deepEqual(await digestProofs(historicalProofs), [{ name: 'focusedProofs', tokens: 4465,
+    sha256: '421b2d190e288589563209e81be62f2a9162d570925340fc12b63f2a6af923c4' }]);
+
+  // Candidate 5a208846 conserves this section and passes independent cold replay.
+  const proofs = inspect(readFileSync);
+  assert.equal(proofs.length, 501);
+  const expected = [{ name: 'focusedProofs', tokens: 9019,
+    sha256: '41c88a59d53b3c09bdb62efcc591b05a7a2f762b4b024cf98edd84a0908c5512' }];
   assert.deepEqual(await digestProofs(proofs), expected);
   const altered = JSON.parse(JSON.stringify(proofs));
   altered[0].description += ' unchecked claim';
