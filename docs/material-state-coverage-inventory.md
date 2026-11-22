@@ -873,6 +873,31 @@ Report SHA-256 caf3e3c9f620fc2b4cd4032a5762eb04cffef3ac8f31c5b529792be0473aca35.
 Runner SHA-256 d5aa6c529997e330dda2b1f8c3a1b420b04c969c0ccf54f80a49542d2affc10b.
 Delta SHA-256 9350d215c7a55e8f5f0869a8731ae241b9c5b094b4cfe6e70ec6464df5bb1049.
 
+The 95 pending static Checkbox, Radio, Select, Slider, Slide Toggle,
+Button Toggle, Tabs and Stepper cases now have startup observations.
+The original light desktop Select join was already verified. Both
+retained builds settled with BODY active in all 95 replays. Observers
+installed before navigation recorded no focus calls, element focus
+events or activation events. All 1,887 original served assets and both
+sets of case checkpoints verified.
+
+The reference trees match byte for byte in 83 cases. The 12 Radio
+trees differ only in four computed radii shared by two opacity-zero
+native inputs per case. Chromium 154 recorded 0px and Chromium 157
+recorded 50%. Neither captured author rule declares radius or appearance.
+In an isolated Chromium 157 probe, native appearance computes 50%,
+disabling it computes 0px, and restoring it returns to 50%. The
+Astylar tree differences remain confined to the style revision and two
+position properties of an unused Datepicker rule.
+
+Compact successor 50229baf reverses to ab3c6ad9 and leaves 1,148
+programmatic-focus and 324 authored-activation rows pending. The
+remaining 167 static cases need both observations. Later interaction,
+current rendering and full case inspection remain open.
+Report SHA-256 6fb6ac809b91020fde8b281ab13218e8b667fc335b210f5ebfd08bdce7c66654.
+Runner SHA-256 18f641378a7fe512364160d13e2c962fa9e70750f004b45806774cefa51cf0bb.
+Delta SHA-256 82ef8f2bf8ede49b9a7b5b48e5727858156784183d0e2d02c35a74ba7e3b704c.
+
 All 12 pending static Dialog cases have an authenticated opener crop.
 Each of the 24 images reconstructs pixel for pixel from the original
 capture and reference-box bounds. All profiles and viewports agree

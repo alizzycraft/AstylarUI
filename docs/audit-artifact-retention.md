@@ -42,6 +42,16 @@ ab3c6ad9 and static-overlay-startup-verify-20261122.log. The
 successful served-asset scratch assembly was cleaned.
 Verification SHA-256 60552703c7068888efe91991a02495447ce99e2a2dd4a87e76311be86f24d7d6.
 
+Keep static-selection-startup-focus-20261122 with its runner, manifest,
+95 checkpoints, paired captures and logs. Retain compact delta
+50229baf, both Radio native-appearance receipts and the v2 verifier.
+The successful served-asset scratch assembly was cleaned.
+Verification SHA-256 1a8ae6eab7b29952084a83fe898647173a27d8aa9f0fa18b75496103c8d48ec6.
+The October 29 Badge metadata log retains its bytes, file identity
+and modification time after NTFS compression. Its allocation fell
+from 291,697,232 to 136,364,032 bytes.
+Headroom receipt SHA-256 3f620b7e033f108b4e46295b89f4a9270f23d8e1dca14942c8b10c37aa0534d9.
+
 Retain accepted 0c103b3d and index 10cad8ea with the verified 86 hard
 links, predecessor 87915914 and canonical receipts for both generations.
 Keep the stopped cold attempt and early isolated import. The successful
