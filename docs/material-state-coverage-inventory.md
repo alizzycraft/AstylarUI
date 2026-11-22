@@ -477,6 +477,24 @@ the separate input-click probe's 26/27/28 remains a valid failure observation.
 This is an action/owner distinction, not an isolated proof of every contributor
 to the resource difference. Keep both scopes explicit in the next join.
 
+The two supplemental input-click logs identify the retained objects.
+Both themes retain cursorMaterial_timepicker-control IDs 153, then 153
+and 724, then 153, 724 and 1245. The other unbound material names keep
+one instance each. Whole-surface teardown clears the sampled materials.
+This supports applicability of the existing
+core-caret-focus-allocation-escapes-render-owner finding to the observed
+input-click growth. The plugin-free proof isolates allocation and cleanup.
+The matrix action supplies counts with icon focus and no per-material
+identities. The exact contributor differences between routes remain open.
+
+Proposal 4bcec81bd110b7857f5175b8138166a3a2550a541fa9abd33ddb231085f94e8b
+scopes that ownership clarification to two Timepicker case records.
+Reverting those fields reproduces cde07143 across all 2,311 rows.
+An independent check conserved its 19,380 dependency receipts and verified
+the one newly referenced public proof, public-caret-ownership-e1a737f-final.log
+SHA-256 931e1c04fd561d11fc810ca01e4b3544af63474bfc944f24edd2e6fc3b580a52.
+The queued strict predecessor replay still supplies inherited evidence.
+
 The matrix replay also finds a closed Timepicker DOM association difference:
 both sides resolve controls and active descendant while open; after Escape
 only Astylar retains the unresolved controls link. This matches the
