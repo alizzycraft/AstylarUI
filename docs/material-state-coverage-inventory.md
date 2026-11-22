@@ -235,6 +235,24 @@ wrapped methods. The retained-browser run is queued after strict replay.
 Runner SHA-256 3ea47f8936899fccb1cd7068a20d72c08ac185f532ad852bf1d778d8138ed016.
 Instrumentation check SHA-256 f2add7b0f433493f553981cecbbac7ba0363b63e2f1192571736c341c673a74f.
 
+For the 768 pending local-paint rows in 68836d43, the exact original cases
+contain no configured focused raster, state-paint detail, uniform
+background or shadow check. The largest missing groups include 62 each
+for Slider and Sidenav, 60 Input, 56 Checkbox and 54 Dialog.
+Census SHA-256 2dd6d22d4d77f1242c3971350f0c5fe1870861cc146c3151def19753e313525e.
+
+The existing Slider comparison applies to all 62 exact pending rows and
+all 124 images rehash. Nine crops fall below the comparison diagnostic
+threshold. The separate 12 static samples preserve four native and seven
+candidate solid track rows per DPR unit and corroborate the accepted
+4 CSS px versus 7.68 CSS px authored thickness finding. The cropped
+comparison leaves other paint owners and current rendering open.
+
+Successor 61d5d601 stages 62 partial local-paint observations and four
+picker history additions, with a full reversible 2,311-row check. This
+leaves 706 pending local-paint joins if the staged review is accepted.
+Delta SHA-256 f90114f5a22c5a89ddc7fa3e3657b65d7c8f2993360fc52d78160d076d59a2e1.
+
 The authenticated accepted 844c896c index has 1,335 cases with both
 focus and activation evidence joins pending. The largest cohorts are
 static 324 across 27 families, hover 209 across 26, held 193 across 24,
