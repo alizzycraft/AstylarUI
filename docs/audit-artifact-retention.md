@@ -68,7 +68,9 @@ for expected successor e421ed21, and the initial profile guard failure. The succ
 initial failed scratch contains the retained served asset assembly.
 Keep the datepicker-desktop-canvas-dismiss-focus-caller-20261122
 runner, report, captures and checkpoint with compact delta 838adb11.
-The successful desktop scratch assembly was cleaned.
+Keep the datepicker-desktop-outside-dismiss-focus-caller-20261122
+package with compact delta dcd805e8. Both successful desktop scratch
+assemblies were cleaned.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the
