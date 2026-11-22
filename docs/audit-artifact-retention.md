@@ -12,6 +12,49 @@ Retain the two index headroom receipts. The four compressed indexes
 preserve their bytes and hard links.
 Picker index SHA-256 receipt c26a0db0f8c15f6f79b13051676e7a2cb201dc2a9592f26ed912a0e1f9dd8c02.
 Historical indexes receipt SHA-256 fd5b070d2dcc32b08df6bd9c6e5f5414d6ce001cc500808ebcf4158e591a871e.
+Keep the coverage projection v2 and its initial failure, which omitted
+the loader's implicit legacy schema version. Retain the Dialog
+closed-opener replay and the paired original image and tree receipts.
+Keep Tree static replay v3 and both failed attempts. The first assumed
+48 px rows across profiles. The second assumed the label bands fit
+the projected row inset. V3 derives bands from the retained pixels.
+Retain the Tree focus top-stroke replay, its original screenshots and
+trees, and the verified composed delta d53c0519. Retain the Dialog
+interaction paint replay, its original images and trees, and the
+composed successor 5486be2f. Keep the Tree pointer raster replay,
+its original hover and later screenshots and trees, and the composed
+successor 9601c9a8. Retain the Core interior replay, held composition
+check, source report, original screenshots and trees, and the verified
+composed successor 4065143f. Retain the Card action interior replay,
+the original screenshots and trees, and composed successor d4eec1d7.
+Keep Grid List tile replay v2 with the original hover and later state
+screenshots and trees, and composed successor ecf8ba1a. Retain the
+initial corner-control failure. Stderr SHA-256
+43ef800bc0281b72ebfae88d59241d6b7e3d9a3550126f2f2d2b526d6e4d3884.
+Keep the Chips interior layer replay, its paired original images and
+trees, and the verified composed successor cd320f65. Keep the Paginator
+action-layer replay, paired original screenshots and trees, and the
+verified composed successor c5f7d9a1. Retain Tooltip replay v2, its
+original and hover images and trees, and the separate supplementary
+open evidence. Keep composed successor f07dfcf7 and the initial
+paired-geometry assumption failure. Stderr SHA-256
+74c7209d2335560c28598b1b9028acae0ee3ed5e197b1ef8552012e0846d3ca5.
+Keep the Bottom Sheet opener, scrim and panel replay, original endpoint
+and desktop open control images and trees, and successor 9901f8d5.
+Keep the static field fill and underline replay, its paired original
+trees and screenshots, and verified composed successor 756fe9f9.
+Keep the static Radio and Slide Toggle paint replay, its paired original
+trees and images, and verified composed successor c8790365.
+Keep Menu and Expansion replay v2, original trees and images,
+and successor 6d508ba5. Retain the initial mobile glyph sampling
+failure. Stderr SHA-256
+f6b64982ad303d5eb568ac76f7d0e5c3dca6f0d2c76f9d61bbeea088e243fc13.
+Keep the Icon applicability v2 receipt, the failed similarity-flag
+check and all original and reproduced evidence. Retain materialized
+ded9e7ce and its delta. The historical f16b51d2 index compression
+preserved logical bytes, digest, hard links and the accepted pointer.
+Headroom receipt SHA-256 772368ddd50c114f560447688bbff073945503f263f76b1c9a65e0210b7b40a4.
+Retain the verified section comparison for candidate 1a64273f.
 
 Retain the accepted picker package 87915914 and index 64a72bdb, its
 86 hard-linked verified isolated files, predecessor 844c896c and the

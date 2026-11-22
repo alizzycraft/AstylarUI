@@ -283,6 +283,327 @@ across static, focus, hover, held, activate and activate-leave. Check
 Dialog's retained opener crops first for input and raster applicability,
 then check Tree's full screenshots for an isolatable leaf paint region.
 A retained paint observation supports only its exact case and region.
+
+All 12 static Tree captures isolate three labels per side. The 36 pairs
+agree on retained foreground and background colors. Of 25,820 reference
+ink pixels, 19,130 depart from single-alpha blending by more than three
+channel values. All 26,325 candidate ink pixels fit within that tolerance.
+Light and dark agree on recorded font size. Contrast uses native 16 px
+and candidate 14.4 px and yields narrower candidate ink. Custom uses
+native 16 px and candidate 18.4 px and yields wider candidate ink.
+The native line-height is normal and the candidate resolves 20 px.
+Contrast records native 28 px and candidate 40 px item heights while
+both parent boxes span 84 px. The label bands are measured directly from
+the full images. This evidence leaves raster cause, child used-height
+attribution and current rendering open.
+Tree static replay SHA-256 e156c1762d000845d41d180ce85ac45c6eca69e779a2e26bf7c4be8706c151fd.
+
+Across eight retained Tree focus cases, the original report records
+matching focus aliases. The candidate's focused-class rule resolves a
+2 CSS px solid border on the first item. Its color appears in all 24
+sampled top-edge columns. The native item records a zero-width border
+and its sampled pixels exclude the candidate stroke color. A different
+native edge color occurs in several samples and its outline owner is
+open. The retained rule locates the candidate stroke at authored input.
+Tree focus replay SHA-256 1490c78d8f98902c977f3b36138f862a3447fd090a7ab772969175f96d6e5d02.
+
+The compact successor d53c0519 stages 32 partial paint joins on
+24c22d1a and reverses to all 2,311 parent rows. It preserves 20,232
+parent dependencies and authenticates 91 new paths. It leaves
+448 pending local-paint joins before the Dialog interaction extension.
+Composed delta SHA-256 5e7417b86b64651bd49d969eceae13176ab22da3514d4f9ab6d036488a8b00ea.
+
+All 42 pending Dialog interactions have paired opener samples that
+match their own captured paint inputs within one channel value.
+The 16 hover and held pairs match visually at the sampled points.
+Native composes its persistent layer at 0.08 and 0.12 opacity.
+The candidate supplies the resulting color as the opener fill.
+The eight activate-leave and eight desktop outside-dismiss pairs also
+agree. All 16 open-panel interiors match their captured fills.
+
+The eight activation pairs differ because native suppresses its opener
+state layer while the candidate keeps its tinted opener fill behind
+the same 0.32 scrim. Light and dark mobile dismissal also differ.
+Native retains the 0.12 layer and the candidate resolves the
+hover-equivalent fill, with both panels absent. This localizes the
+sampled differences to the retained paint inputs. Transient layers,
+edges, text, shadows, timing and current rendering remain open.
+Dialog interaction replay SHA-256 57ef21ba72bdbc9e2ae23e9ed60c8fdd407597cdbf0947cbacbf051648b427fc.
+
+Compact successor 5486be2f contains 74 partial paint joins and reverses
+to all 2,311 rows in 24c22d1a. It preserves the 20,323 dependencies
+in d53c0519 and authenticates 85 new paths. This leaves 406 pending
+local-paint joins before the Tree pointer extension. Dialog's original
+pending paint rows have partial observations.
+Composed delta SHA-256 05de652dc8d017af9b31491316832cd4b47efe53bafd697238f31638191b51a9.
+
+In the 32 retained Tree pointer cases, each side's inset tree raster is
+byte-identical to its own hover control across held, activation and
+departure. The candidate adds the focused class to the second item in
+all 24 later captures. The inspected fill, border, height and text
+inputs match its hover control. The retained stroke rule found in the
+separate focus cohort targets the first item. This records pointer
+paint conservation for the inset region. The outside edge, outline
+ownership, paint during transitions and current rendering remain open.
+Tree pointer replay SHA-256 1102718de6485cb563ec91f4f4ea3d5875bac5830cfe0ad753b29e1ab550aa73.
+
+Compact successor 9601c9a8 stages 106 partial joins on 24c22d1a and
+reverses to all 2,311 parent rows. It keeps all 20,408 predecessor
+dependencies and verifies 65 new ones. No Dialog or Tree row remains
+pending local paint in this successor. There are 374 pending joins,
+including Core at 44 and Grid List, Card, Chips and Paginator at 40 each
+before the Core extension.
+Composed delta SHA-256 5a48b1fc782122ba2bfc15207e5e82e924c4d495fe4da864bb481536c2a93b38.
+
+The 44 pending Core cases yield 36 matching pairs at the sampled
+button interiors across static, hover, activation and departure.
+The eight held pairs differ. Native captures record a 0.12 persistent
+layer and a visible 0.12 transient ripple. Applying both captured
+layers predicts the sampled native pixels within one channel value.
+Applying only the persistent layer leaves 19 to 27 channel values
+of error. The candidate samples match its captured button fill exactly
+while the separate state-layer input records phase 1. This localizes
+the held difference to the observed local composition. Candidate
+transient extent, paint between captures and current rendering remain
+open.
+Core interior replay SHA-256 a59283c24d7f02bd43cb78c270572439594fef008fdfd87aa35acdd00d04f9d9.
+Core held composition SHA-256 da13c88ca57f93e3acc76461fa02c90d1694c151eb5415b1eb82dab705a5f874.
+
+Compact successor 4065143f stages 150 partial joins and reverses to all
+2,311 rows in 24c22d1a. It preserves 20,473 predecessor dependencies
+and verifies 90 new paths. It leaves 330 pending local-paint joins
+before the Card extension.
+Composed delta SHA-256 5730b302c79b504c8966b3e7455143defe943f30f2dbea99d10a3fe7d7b88466.
+
+Across the 40 pending Card action cases, both interior points and
+both outside controls on each side follow the captured Card surface
+and action inputs within one channel value. All eight focus pairs
+differ despite matching reported focus aliases. Native composes the
+0.12 persistent layer and the candidate action remains transparent.
+The dark focus pairs also have different card surface fills. The
+other eight mismatches are dark hover, held, activation and departure.
+The captured candidate .material-card rule supplies #fff7ff and the
+native card supplies #f8f2f6. Pointer state fills follow their own
+backing inputs and the captured action declarations. No transient
+ripple node appears on the native action in these captures.
+Action edge paint, between-sample timing and current rendering remain
+open.
+Card action replay SHA-256 c3e51cbc34dad8a1a17e43557780cc85ef7c6c5dab727557a4ff76be629f83fe.
+
+Compact successor d4eec1d7 stages 190 partial joins and reverses to all
+2,311 rows in 24c22d1a. It preserves 20,563 predecessor dependencies
+and verifies 81 new paths. It leaves 290 pending local-paint joins
+before the Grid List extension.
+Composed delta SHA-256 ccfbe4a8160c9269337bcde9e53d8d38c50da5ba3b0c1c92254463cd1641fe45.
+
+All 40 pending Grid List cases have equal sampled tile fills.
+The transparent native tiles show their nearest painted ancestor.
+The candidate tiles resolve that same color as their own fill.
+Each side's inset grid and tile rasters match its own hover capture
+across focus, held, activation and departure. The native 1 CSS px
+gutter and candidate zero gutter preserve the existing geometry
+finding. The sampled seam has the same surrounding color in both
+cases. The initial root control landed on the custom 36 px rounded
+corner. The corrected check uses the flat top-center fill. The corner
+raster difference, cross-side glyph paint and current rendering
+remain open.
+Grid List replay SHA-256 fad10afce044206cb187176b75133c1a09387b9641a76dac3ef10a710d36710b.
+
+Compact successor ecf8ba1a stages 230 partial joins on 24c22d1a and
+reverses to all 2,311 original rows. It preserves 20,644 predecessor
+dependencies and authenticates 81 new paths. There are 250 pending
+local-paint joins before the Chips extension.
+Composed delta SHA-256 fb0dcd4998b9b239031844e4c35f88fa223a57acf13b4dc5366733177e984f2b.
+
+All 40 pending Chips captures preserve two sampled interiors on
+each chip and side. Both sides follow their own captured inputs
+within one channel value. The first chip differs in all eight
+focus cases despite matching reported focus aliases. Its native
+child overlay is at 0.12 opacity. The candidate resolves the
+selected base fill. First-chip hover and held samples agree
+within one channel value through the native 0.08 or 0.12 layers
+and captured candidate hover and active fills. Selected and
+disabled-labelled samples agree, and the second chip matches
+throughout. The disabled label establishes capture membership.
+Edge and glyph paint, actual disabled ownership, timing and
+current rendering remain open.
+Chips replay SHA-256 f9f63df0b287cf0b829492433a06906276cb651fea3764588a91edeeaf987494.
+
+Compact successor cd320f65 stages 270 partial joins on 24c22d1a
+and reverses to all 2,311 parent rows. It preserves 20,725
+predecessor dependencies and verifies 81 new paths. This leaves
+210 pending local-paint joins before the Paginator extension.
+Composed delta SHA-256 9222e074d87df853f2d9842e3f02b40d71c56b0955c5a9c8f172aba8447f4afa.
+
+All 40 pending Paginator captures have sampled Previous and Next
+interiors. The positions derive from the measured range and
+paginator geometry, the 32 px range margin, 8 px container
+padding and captured action sizes. Both independent horizontal
+anchors agree. The original report omits measured action boxes.
+Both sides share the same underlying paginator fill and their
+pixels fit their own inputs within one channel value. Native
+Previous differs in eight focus cases through a 0.12 layer.
+Native Next differs in the other 32 cases through a 0.08 hover
+layer or 0.12 held, activation and departure layer. The candidate
+keeps both actions transparent. Previous records different
+disabled representations in the focus cases despite matching
+reported paginator focus aliases. Glyph paint, exact action
+edges, layer timing and current rendering remain open.
+Paginator replay SHA-256 2a735f895a960a3f1b58f6c926e679d1efa0f0b04e8f03382cd116edac72917c.
+
+Compact successor c5f7d9a1 stages 310 partial joins on 24c22d1a.
+It reverses to all 2,311 parent rows, preserves all 20,806
+predecessor dependencies and verifies 81 new paths. It leaves
+170 pending local-paint joins before the Tooltip extension.
+Composed delta SHA-256 763451a6295068579a6d3d813fbd6f92c0c8830603aa2b9ef5560a54d345484e.
+
+All 36 pending Tooltip captures have matching sampled opener
+fills. The exact desktop hover controls confirm popup paint
+and locate its interior. Original activate and activate-leave
+show only the backing fill at those points in all 16 cases.
+Original open shows candidate popup fill and native backing
+fill in all eight cases, with the same ownership in both
+endpoint trees. The paired geometry missing flag alone
+cannot establish per-side absence. Independent supplementary
+open captures corroborate the original per-side result with
+their own bound images and trees. The first proof attempt
+treated the shared flag as bilateral absence and failed.
+Popup glyphs, edge paint, timing and current rendering remain open.
+Tooltip replay SHA-256 5371ab8bcbd1bb8c498971e3031d6c9a0bcf0abef2ddeba2eac81402ee8c43ae.
+
+Compact successor f07dfcf7 stages 346 partial joins on 24c22d1a
+and reverses to all 2,311 rows. It preserves 20,887 predecessor
+dependencies and verifies 89 new paths. It leaves 134 pending
+local-paint joins before the Bottom Sheet extension.
+Composed delta SHA-256 12b3b6193172aa8ef9dc7d8f9849fe6e0de5a0ae42b293befa8b40fa66898486.
+
+All 30 pending Bottom Sheet captures have sampled opener and
+background controls. The 28 static, hover and held opener pairs
+match. The two mobile dismissal pairs follow different captured
+opener inputs. Native retains the 0.12 persistent layer and the
+candidate resolves the hover fill. Both sides lack panel and
+scrim owners at all 30 sampled endpoints. For 16 desktop hover
+and held cases, separate matched open controls locate the panel
+region. The closed points show the backing fill. All eight
+desktop open scrim pairs match their captured 0.32 composition.
+Six panel pairs match, while the two dark pairs reproduce the
+captured #f8f2f6 native and #211f26 candidate fills. Mobile
+open-panel paint, edges, glyphs, timing and current rendering
+remain open.
+Bottom Sheet replay SHA-256 7975b5c0a1205f8cdf4773189390c897aaf8f0c9072c1c2f5f7fbc9994b91c3b.
+
+Compact successor 9901f8d5 stages 376 partial joins on 24c22d1a.
+It reverses to all 2,311 rows, preserves 20,976 predecessor
+dependencies and verifies 77 new paths. There are 104 pending
+local-paint joins before the static field extension.
+Composed delta SHA-256 3fda68f4fcc1abe1fa688ded87de80f93bf446cb62259188ed336940a05b14d3.
+
+All 48 pending static Autocomplete, Select, Datepicker and Timepicker
+cases match at the sampled filled-field interiors. Native uses a
+1 CSS px pseudo-element bottom border. The candidate field surface
+uses a 1 CSS px vertical-offset shadow. Dark samples place the darkest
+row at the same device position. Light places the candidate row
+one CSS px lower and custom places it one to 1.5 CSS px lower.
+In contrast, Autocomplete and Select author a 35 px candidate
+surface versus native 36 px. Both picker surfaces resolve 48 px
+versus native 36 px. Their darkest rows are 13 device pixels lower
+at DPR1 and 25 lower at DPR2. Again in contrast, the DPR1 candidate
+samples lack a row at the full shadow color. These are distinct
+captured height and paint inputs. Suffix icons, labels, unsampled
+edges and current rendering remain open.
+Field fill and underline replay SHA-256 22d3e41ab75cad6b42735c524feb7b1cc613ccfd19101d15635a3e325af4d508.
+
+Compact successor 756fe9f9 stages 424 partial joins on 24c22d1a
+and reverses to all 2,311 rows. It preserves 21,053 predecessor
+dependencies and verifies 97 new paths. There are 56 pending
+local-paint joins before the Radio and Slide Toggle extension.
+Composed delta SHA-256 3b49e2fa0b25a8d8415d5895628a64e583f6087463ecced664fabb36e56cb459.
+
+The 12 static Radio captures show different unselected ring colors.
+Native records rgb(73, 69, 78) across profiles. The candidate uses
+its on-surface token. The sampled rings match their own inputs, and
+selected dot samples share the captured primary color. The run
+search uses measured group bounds and the retained 20 px ring and
+2 px stroke inputs. Exact static label bounds remain unavailable.
+
+The 12 static Slide Toggle captures match at the sampled selected
+track. The native thumb is white in light, contrast and custom
+and black in dark. The candidate thumb uses the profile surface.
+The resulting sampled thumb difference occurs in all nine light,
+dark and custom cases. Contrast supplies three matching controls.
+Exact silhouettes, glyphs, other states and current rendering
+remain open.
+Static control replay SHA-256 e5e66a2127d989e21aaadfb059568feb8d1fa3b6a9a0258c9ca8fcad3f1349ec.
+
+Compact successor c8790365 stages 448 partial joins on 24c22d1a
+and reverses to all 2,311 rows. It preserves 21,150 predecessor
+dependencies and verifies 49 new paths. It leaves 32 pending joins
+before the Menu and Expansion extension.
+Composed delta SHA-256 352243186949109bd58a8fb31dd2df9b29cd16c757cfb8f9909598486d64fad5.
+
+All 12 Menu opener interiors and all 12 Expansion panel interiors
+match at the sampled points. Menu has no popup owner in the paired
+static trees. Expansion has different shadow declarations in light,
+dark and custom. In the three contrast cases, both sides have equal
+normalized shadow inputs and backing controls at aligned sample
+coordinates, while the sampled shadow differs by up to 10 channel
+values at DPR1 and 31 at DPR2. This leaves a shadow raster residual
+whose owner and cause need a focused source or public reduction.
+Moving the first interior sample above the text avoids the mobile
+glyph it hit. Glyphs, other edges and current rendering remain open.
+Menu and Expansion replay SHA-256 4475d346177adcaa2ba4fe139273c4de92d0358b5aa69e9c512dfde8d21c3bc3.
+
+Compact successor 6d508ba5 stages 472 partial joins on 24c22d1a.
+It reverses to all 2,311 rows, preserves 21,199 predecessor
+dependencies and verifies 49 new paths. It leaves eight Icon inspect
+joins before the final local-paint extension.
+Composed delta SHA-256 8b76fbfe2c11f18157a5d39c3a42c987c0d40ada3263e890a7ea57e0b0283974.
+
+All eight Icon inspect cases match the root-paint proof's measured
+geometry and style inputs. All 16 original screenshots are byte-equal
+to the reproduced files. Seven diagnostic sources match directly.
+The existing exact lookup reversal verifies the eighth source.
+The eight similarity checks pass. Four DPR2 target sharpness checks
+fail. The root proof retains two sharpness failures and the contrast
+DPR1 shadow-profile failure. All eight sampled root centers agree.
+The initial applicability check confused similarity and sharpness
+flags. The corrected check verifies both. Original runner provenance,
+full case inspection and current rendering remain open.
+Icon applicability SHA-256 75c06b53ad5245806fd245295a9c252056bc9f74fd0fc88b547009dce230a1cc.
+
+Materialized successor ded9e7ce stages 480 partial joins on
+24c22d1a. It reverses to all 2,311 rows and carries 21,249
+dependencies. All 2,311 local-paint rows now have partial observations.
+Every whole-case inspection remains partial and all current rendering
+is unverified. The largest explicitly pending dispositions are 1,496
+programmatic focus and 583 authored activation. Prioritize them by
+actual owner and action applicability while the current export runs.
+Composed delta SHA-256 25e4fc85d8e627b88d2c0f5afbb08e58cf5f9ec7e4d31979b0432e8adcd3b714.
+Materialization SHA-256 d166b2c8bb9b90f364f1c557f8e3d9cb0d931a4ba3bf65801d7bd5a80488bf37.
+
+Candidate 1a64273f for review 24c22d1a completed export and conserved
+78 of 80 sections. Only the predicted source fingerprints and coverage
+sections changed, with both digests matching exactly. Independent cold
+verification is running with isolated import queued. Accepted generation
+0c103b3d remains authoritative.
+Section comparison SHA-256 98fbfc2516f1d1e009409a8a6559c62653d7a558f8a2f0c5e6108e4634bb4391.
+
+All 12 pending static Dialog cases have an authenticated opener crop.
+Each of the 24 images reconstructs pixel for pixel from the original
+capture and reference-box bounds. All profiles and viewports agree
+on paired resolved fill inputs. Both sides match those inputs at both
+sampled interior points in every case. Original geometry records the
+panel, title, Cancel and Save as absent in these closed states.
+This supports a partial closed-opener paint join after the current
+export freeze. Edges, text paint, shadows, interaction and current
+rendering remain open.
+Dialog replay SHA-256 2abe3a6906e66495d963f5d1a3e4b781345bb2b2a06ae7c7a9d159fc001f6d9c.
+
+The canonical export for 24c22d1a is running on published source
+3ea3a189. The section comparison checks 78 conserved sections and
+exact predicted coverage and sourceFingerprints changes. An independent
+cold check and isolated import are queued behind those checks.
+Expected coverage receipt SHA-256 bead9b84688b584ac1142d0549ab6f2a86d3153e70a1db6fd31af7586a6c0c09.
 Materialization SHA-256 baf4b21e6d2d2bc952997daa9284d82bf05ed0021b3836e9deff00f536bddd15.
 
 For the 768 pending local-paint rows in 68836d43, the exact original cases
