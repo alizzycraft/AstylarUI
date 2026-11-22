@@ -574,6 +574,26 @@ the earlier 128 changed rows. The check reproduces both the complete
 2,311-row parent and successor 31b58316 and preserves acceptance flags.
 Delta SHA-256 ea0488326fd5eaa656a0a333be5294256e092ad8e228a161becee4d5aeefec3d.
 
+The 153 pending activate focus rows join to exact original report rows
+and 306 verified input trees. Both planes report the same primary alias
+in 136 cases. In 112 of those, the candidate logical owner maps to a
+descendant of the candidate primary node. In the other 24, both candidate
+IDs map to the same authored node. Eight of those cases are Slider, where
+the configured action explicitly focuses the control and presses End.
+The reference alias is absent in nine Datepicker and eight Dialog cases.
+The original and maintained alias methods match and the activate focus
+flag is true by default. Native owner and focus timing remain open.
+Endpoint receipt SHA-256 1b50c03766433aa95c3b23b5dd45a3f607e5c2862df35910c1aeab815a8d81ea.
+Tree replay SHA-256 6abe4755aefec1e8a2583d82780e42df70bf068429ee7932d7677323f0eaeafa.
+
+Successor e1b3dd03 stages the 153 observations across 290 changed rows,
+reproduces successor 783119d6 and reverses to all 2,311 parent rows.
+The new observations preserve their parent dispositions and acceptance
+flags. For Datepicker, compare the active node and ancestry before and
+after the exact light desktop DPR1 activate click. The missing native
+alias could represent focus in the calendar or a return to the document.
+Delta SHA-256 9d3daac7d6349cb03c8a76a28be52c49ccfead2c324b71455807d861ab2e253c.
+
 The remaining 14 causal traces are queued after the frozen pointer
 export to avoid competing for memory. Their earlier focus traces remain
 valid for the sampled owners and events.
