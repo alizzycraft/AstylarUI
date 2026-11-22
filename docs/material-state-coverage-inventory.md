@@ -1330,6 +1330,15 @@ one named StaticText child. Open popup relationships, live action
 delivery and current runtime applicability remain separate.
 Static action AX receipt SHA-256 a18ceb1fc2a2676b5c1b7e5a3af7f07aedf3abbe75507613e3dd760079b6a5d1.
 
+A compact delta stages one retained accessibility-tree child for each
+of the 72 static Button and related action cases. It authenticates
+149 distinct evidence receipts. Removing the 72 children restores
+the complete 2,311-row review 590f4aec byte for byte. The predicted
+successor is f2da53e2. Inspection and rendering dispositions stay
+partial and unverified. The delta awaits the existing loader before
+selection for export.
+Static action AX delta SHA-256 c8ef18ad9ee3e6e0289aeb7f2547413f3cb6cc68ebb585cc093fade2746269a6.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,

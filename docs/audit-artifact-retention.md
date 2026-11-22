@@ -344,6 +344,11 @@ static AX report, manifest, independent verification and 120 raw
 Toolbar, Menu, Dialog, Bottom Sheet and Snackbar observations.
 Static action AX receipt SHA-256 a18ceb1fc2a2676b5c1b7e5a3af7f07aedf3abbe75507613e3dd760079b6a5d1.
 
+Keep static-action-actual-ax-composed-delta-20261122.log with compressed
+review 590f4aec and both static action projection receipts. The
+comparison streamed the parent and saved 72 additions with row digests.
+Static action AX delta SHA-256 c8ef18ad9ee3e6e0289aeb7f2547413f3cb6cc68ebb585cc093fade2746269a6.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
