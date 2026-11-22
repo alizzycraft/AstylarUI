@@ -1322,6 +1322,18 @@ remain open. Review their applicability without remeasuring these
 four existing contexts.
 Divider line envelope receipt SHA-256 751361c768744e1d45565ebd3ef91f9b095fcd9dfaeb446e60275dfaa9a74561.
 
+Both retained custom Divider textures have a fully transparent
+23rd row. The matching captured source map requests nearest-neighbor
+sampling. A vertical CPU sampling model keeps the first 22 rows, the
+22 px mesh and each owner position fixed. The 23-row versus 22-row
+comparison changes 397 of 1,144 alpha samples for Above and none of
+1,122 for Below. Their different projected origins give different
+pixel phases. The linear control changes 402 and 401 respectively.
+This isolates how sampling and position can change the coverage
+effect of the extra row. The model leaves horizontal sampling, live
+GPU filtering and the final composite unverified.
+Backing alpha receipt SHA-256 4a62059d2e7151d9d77d6b78b26083df5279dd4083bf05a2b9bd425b61c73eff.
+
 The Datepicker local paint census has 99 rows with verified primary
 target crops and remaining work. The eight configured desktop opening
 cases can also be measured from their authenticated full screenshots.

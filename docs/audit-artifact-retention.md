@@ -284,6 +284,14 @@ natural line-box, copy-aware baseline, and owner coverage receipts.
 The joined distances were computed in memory from the original traces.
 Divider line envelope receipt SHA-256 751361c768744e1d45565ebd3ef91f9b095fcd9dfaeb446e60275dfaa9a74561.
 
+Keep divider-backing-alpha-phase-bound-20261122.log with the live
+texture, line envelope, public backing control and captured map.
+The alpha sampling model ran in memory. Retain the earlier receipt
+divider-backing-alpha-phase-20261122.log. It used the same producer
+module from a different authenticated build. The bound receipt pins
+the map from the actual Divider capture.
+Backing alpha receipt SHA-256 4a62059d2e7151d9d77d6b78b26083df5279dd4083bf05a2b9bd425b61c73eff.
+
 Keep datepicker-month-marker-paint-20261122.log with the opening
 checkpoint, measured rows, paired trees and screenshots, and panel
 region receipt. The local translations were computed in memory.
