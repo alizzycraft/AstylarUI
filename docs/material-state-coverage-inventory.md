@@ -253,6 +253,23 @@ picker history additions, with a full reversible 2,311-row check. This
 leaves 706 pending local-paint joins if the staged review is accepted.
 Delta SHA-256 f90114f5a22c5a89ddc7fa3e3657b65d7c8f2993360fc52d78160d076d59a2e1.
 
+The original Sidenav checkpoints and 124 paired images cover all 12
+static and 50 interaction rows still pending local paint. The sampled
+drawer and content fills each follow their own retained effective inputs
+within one channel value. Content differs in every case, where transparent
+native content shows the container and the candidate authors its own fill.
+Drawer fills differ in 46 light, contrast and custom cases. The 16 dark
+drawer samples agree under equal colors. These matched and unequal-input
+controls localize the sampled difference to paint inputs before the
+renderer. Edges, labels, shadows and current rendering remain open.
+Static replay SHA-256 b3c3e524fbd7e1b13814c2da67e3ff33b4aa2d72db95ce6b4e87785c5f91de52.
+Interaction replay SHA-256 8d62614dd51dfd731f491dcef4820624027829849e92486f47df169cbf15c58a.
+
+Successor 69ba5ccf stages these 62 partial local-paint inspections.
+The combined delta changes 128 of 2,311 rows and reverses exactly.
+If accepted, 644 local-paint joins remain pending.
+Delta SHA-256 601a8f025dbe6c73a7d5489edf7f5e9a9265bf48a3f277d0049130c4cecfea.
+
 The authenticated accepted 844c896c index has 1,335 cases with both
 focus and activation evidence joins pending. The largest cohorts are
 static 324 across 27 families, hover 209 across 26, held 193 across 24,
