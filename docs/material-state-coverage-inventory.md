@@ -1,5 +1,23 @@
 # Material comparison/state coverage inventory
 
+## Current audit state
+
+Accepted canonical generation `5a208846` remains the baseline for all
+2,311 configured cases. Its successor export selects `750e3af9` and
+waits for the enforced browser matrix. The export preflight predicts
+changes to `sourceFingerprints` and `coverage`. Section conservation,
+independent cold equality and isolated import are still required.
+
+The compact popup and Datepicker successors have passed the full
+dependency loader. The next staged Timepicker review adds 108 exact
+case observations. All case inspections remain partial. The priority
+after the active gates is to reconcile the staged evidence and close
+the shared input, paint, semantics, ownership and source-applicability
+obligations against exact cases. Divider's complete owner census
+already identifies which property and paint mappings remain open.
+
+## Evidence ledger
+
 Accepted generation 0c103b3d and index 10cad8ea passed 80-section
 conservation, independent cold byte equality and isolated and accepted
 store verification. Both changed sections match their predictions.
@@ -1841,9 +1859,13 @@ Actual DOM and AX runner SHA-256 402c2bca9acd09d41911b77dc0ad9d2a11616421399cde7
 
 The compact Datepicker delta binds 124 distinct receipts to the 41
 rows and reverses to the complete 2,311-row popup successor 4db22a50.
-The predicted review is 7a7a2cf1 with partial dispositions. Source
-registration and strict successor replay remain queued work.
+Successor 7a7a2cf1 passed the full dependency loader across all 2,311
+cases and 35,598 unique receipts. All 35,475 inherited receipts match
+the popup vector. Its manifest is shared with the new Datepicker
+evidence, leaving 123 new paths. Source registration remains open.
 Datepicker delta SHA-256 d84317b4234aa87dc74c5d8ff8f9a0bbf16d9b5ee925d63389f5baa50592b76f.
+Strict replay SHA-256 6c947e2811a2c5c94f72d3b7a62665c89df9976e1ce9f9edf5d0b6cb3bd66c33.
+Dependency vector SHA-256 7c5d2fb82fba3aaca91ccb566f6f6da5b4dd31456617673f2ed9a39bdb73fa64.
 
 In the November 22 capture, the 15 odd-numbered ordinary days give
 a median Astylar glyph centroid about 1 px lower within the aligned
@@ -3443,6 +3465,13 @@ owner identity in the case review alongside those summaries.
 Current input census SHA-256 a27ff9da1119fc507fa372762369e33e5727aae712052cb925357420e20c30f2.
 Actual DOM and AX report SHA-256 1cd329350bc77c17e5510c7e422665befb6b9f648d6862e3cb007b3c68e6fed3.
 Actual DOM and AX runner SHA-256 c22eac1d2e698b01151fae027e1bfaf2b5b6a4c6d7b1d1e52ddd41c653b8e438.
+
+The compact Timepicker delta binds 328 distinct receipts across the
+108 cases and includes the three actual DOM and AX replays at their
+exact case keys. Removing its children recovers all 2,311 rows and
+the complete Datepicker successor 7a7a2cf1. The proposed review is
+77c72e73 and awaits full dependency replay.
+Timepicker delta SHA-256 f108b7cb06eb15c08e96bfd4380946344a9693b3e01a60bc1510a4b9d471276f.
 
 The Datepicker focused proposal reader interface check passed exact envelope
 equality, path/encoding behavior, buffer isolation and predecessor delegation.
