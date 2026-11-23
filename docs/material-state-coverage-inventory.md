@@ -57,7 +57,7 @@ three popup relationship findings in the accepted source inventory.
 Case inspections remain partial. Divider's complete owner census
 identifies the exact property and paint mappings still open. The
 current single-span line-box split now covers all 24 Divider cases.
-The inherited strut reproduces the used geometry in four sampled
+The isolated native strut reproduces the used geometry in all 24
 contexts. Matched-input paint attribution remains open.
 
 ## Evidence ledger
@@ -83,9 +83,19 @@ eight paragraphs, removing the visible span from the isolated observer
 preserves the height and baseline split. The zero-font control collapses
 to zero. An explicit 4 CSS px increase adds 2 px on either side of the
 baseline. The visible paragraph and its text bounds are preserved
-throughout. This closes the isolated native geometry question in the
-four sampled contexts. The other contexts and matched-input paint
-attribution remain open.
+throughout.
+
+The remaining 20 contexts reproduce the same control outcomes. Every
+post-probe native frame matches its enforced PNG byte for byte. Across
+all 24 cases and 48 paragraphs, the inherited strut sets the used
+line-box height and baseline split. Matched-input paint attribution
+remains open.
+
+- Remaining strut replay `artifacts/material-parity/divider-current-inherited-strut-remaining-20261123.json`
+  SHA-256 `d743d5323600fb1857994f8921d3eb33621afe5a2a3f2d13011291c24acfda71`.
+- Remaining strut case delta `artifacts/material-parity/divider-current-inherited-strut-remaining-composed-delta-20261123.log`
+  SHA-256 `c811f38e4c1be013d3bd4186e9ca4411ff716053e232fc0c1d9f843e2911e691`.
+  Staged successor `e9d4d6e4` binds 20 cases and 65 receipt paths.
 
 - Strut replay `artifacts/material-parity/divider-current-inherited-strut-20261123.json`
   SHA-256 `f1aacee6263605f5263997feab0f16e25471f08f671a45b7384053aa41d6b17e`.
