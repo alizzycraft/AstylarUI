@@ -1563,36 +1563,32 @@ This binds the phase-dependent effect to the retained Astylar
 output. The live comparison below now tests the same backing change.
 Backing screen receipt SHA-256 32f3a89fc1245ec6f54c1d7ea1d8a8c14648f54a08f0ddb4a7130b55c5fbccdd.
 
-Current custom desktop DPR1 and mobile DPR2 each have a live
-backing-height intervention on the authenticated enforced build. Their
-original, same-size replacement and restored frames match the enforced
-PNGs byte for byte. Cropping one transparent bottom row from each
-nearest-sampled backing leaves the 22 CSS px glyph boxes and measured
-styles unchanged. The 23-to-22-row render changes 389 pixels inside
-Above at DPR1. The 45-to-44-row render changes 739 at DPR2. Of those,
-376 and 693 differ by more than two channel values. Below and the rest
-of each frame are pixel-identical. At DPR2, all 18 changed Above
-scanlines fall within the 28 rows predicted to sample different
-texels. Below has three such rows at the bottom of the texture.
-This isolates a live sampling effect of backing height at both DPRs.
-Desktop backing capture SHA-256 930983249d2553678a2dd866bfd5516e22f3bd232655c3e596adb2ef991dd1f4.
-Desktop backing verification SHA-256 a3a7ad77037ca49cdd5784e7054f2530c22731a8c7b8109fd897f206f70a830e.
-Mobile backing capture SHA-256 7e084aaee298d8fc6dbffbb94888221e671745c457773caf20c5eca85a8fc34e.
-Mobile backing verification SHA-256 2b358db6d285bab3b63fb29f085c013c61b98562e16adacd79621fd5460b671e.
+Current custom desktop DPR1 and mobile DPR2 use a live crop of one
+transparent bottom row in both backing slots. Original, same-size and
+restored frames match the enforced PNGs byte for byte. The 22 CSS px
+glyph boxes and measured styles agree through the intervention. The
+crop changes 389 Above pixels at DPR1 and 739 at DPR2. Of those, 377
+and 693 differ by more than two channel values. Below and the rest of
+each frame are pixel-identical. The earlier diffuse-only diagnostic
+has the same changed-pixel counts and different RGB values. Its
+original receipts remain available for the slot attribution below.
+Configured paired-slot capture SHA-256 d002e68debf322bcf41e6adebf843d6556b6934e32b3dda98a32f36262e108af.
+Configured paired-slot verification SHA-256 126e6f93243bd5d83c95334fae291dc355fd68f37d8b0ed9631e58e6f96d8a97.
+Desktop diffuse-only verification SHA-256 a3a7ad77037ca49cdd5784e7054f2530c22731a8c7b8109fd897f206f70a830e.
+Mobile diffuse-only verification SHA-256 2b358db6d285bab3b63fb29f085c013c61b98562e16adacd79621fd5460b671e.
 
 The current public-package comparison uses identical Arial text,
 22 px explicit line height, paint inputs and paragraph boxes on both
 sides. The 16 px control allocates 22 backing rows at DPR1 and 44 at
-DPR2. At 18.4 px, removing the one extra row changes 216 and 491
-pixels, respectively, inside the unchanged glyph box. Same-size and
-restored frames match the original. Against Chromium's native pixels
-in the same white interior, the sum of absolute RGB differences falls
-from 57,454 to 29,028 at DPR1 and from 123,612 to 60,240 at DPR2.
-The crop restores the last native ink row at both DPRs. This confirms
-the backing-height contribution under equal inputs. The remaining
-differences can be localized to the stages below. These measurements
-do not transfer native glyph equivalence to the unequal-input Divider
-fixture.
+DPR2. At 18.4 px the initial diffuse-only crop changes 216 and 491
+pixels inside the glyph box and restores the last native ink row.
+Same-size and restored frames match the original. In the same white
+interior, the sum of absolute RGB differences against native is
+57,454 before cropping, 29,028 after the diffuse-only crop, and 26,718
+after the paired-slot crop at DPR1. The respective DPR2 totals are
+123,612, 60,240 and 54,799. The paired-slot result measures the
+backing-height contribution under equal inputs. Whole-case Divider
+equivalence remains open.
 Equal-input glyph capture SHA-256 936f056fa2bfae4c553e7540cc97737c381de9399b3bf9ad0582bf99dc5ca209.
 Equal-input verification SHA-256 1be10f477cc9b3d12111a6a30fa504da5be120ca3a4f129f14d37e7101ed073e.
 Raster comparison SHA-256 7ffdecf586576c623100943d94828b4e4acc9e87d517dc2610dfaf9676755bc9.
@@ -1607,10 +1603,6 @@ preserves alpha. At 16 px, nearest sampling and white composition
 reproduce the Astylar glyph interior byte for byte at both DPRs.
 The native difference is already present in the 2D canvas raster.
 
-For the cropped 18.4 px backing, the sum of absolute RGB differences
-between the model and native pixels is 26,718 at DPR1 and 54,799 at
-DPR2. The model also differs from the Astylar frame in 115 and 236
-pixels. The GPU checks below localize that difference further.
 Backing upload receipt SHA-256 c6eb432d82b07d80762885d822323dd57c89e1c88716645a775d570c1fe2a8d2.
 Plain canvas receipt SHA-256 49aab8775d34be30fabad6d0c53d7ae1bdc7be578930506c22890f7703827782.
 Residual verification SHA-256 ced4f83d1e975c1d0a7ce72dca2e6e1d30d4686622a03345b0d0b0352a118f83.
@@ -1622,13 +1614,17 @@ nearest minification and magnification, and the glyph mesh spans the
 whole texture. A transparent texture yields white across all sampled
 glyph pixels. A context-creation diagnostic switches from four samples
 to zero and reproduces both full cropped frames byte for byte. Default
-framebuffer readback then matches all 924 and 3,696 glyph-box pixels in
-the screenshots, including the 115 and 236 model discrepancies.
-The residual is present in the WebGL draw or blend before screenshot
-composition. The next causal check needs the fragment sampling and
-blend state during the glyph draw. The first filter adapter's duplicate
-declaration stopped at parse time and its stderr remains retained.
+framebuffer readback matches all 924 and 3,696 glyph-box pixels in
+the screenshots. Before the glyph draw the framebuffer is white.
+Disabling blending for that draw exposes cropped diffuse alpha and
+RGB from the original emissive texture. Source-over composition of
+those exact fragments reproduces both diffuse-only frames. The
+115 and 236 model discrepancies come from the diagnostic replacing
+one slot of a shared backing. Replacing both slots gives exact
+agreement with the full-crop model at both DPRs. The first filter
+adapter's parse failure remains retained with the original receipts.
 GPU boundary verification SHA-256 b6583127a676b38bae1d9cdbf04811767c73e306a9fc6d57caccebcc2c7986b8.
+Public paired-slot verification SHA-256 a0721ca591ee91a53dd83817816760dc4b2533f79e460c1909a04b48e3a46d21.
 
 The captured Divider runtime keeps a configured handler count of one
 after each of 60 Angular retirements in 20 physical contexts. The
