@@ -48,6 +48,28 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Datepicker popup paint by action state
+
+The saved November frames compare each profile and DPR against its
+own `open` frame. Across 24 action frames per side, 10 Material
+popups and 16 Astylar popups match their baseline pixels exactly.
+All remaining popup changes lie inside the retained day 1 and day 23
+regions, padded by two physical pixels and aligned to the `open`
+panel origin. On both sides, all eight `open-hover-content` cases
+change the day 1 region. The day 23 region changes in eight Material
+frames and zero Astylar frames. Two Material frames change both regions.
+
+The `activate-leave` checkpoints lack a measured panel box. The
+comparison uses the same absolute crop as `open` and records that
+measurement gap. It localizes the affected pixels. The events and
+paint inputs behind the day 23 changes still require direct evidence.
+
+- State raster replay `artifacts/material-parity/datepicker-current-popup-state-raster-20261123.log`
+  SHA-256 `ec0863cef90a4ab4e47c62212be1d5cc432d9c394b3e0a2da10b9f5f1929215a`.
+- Case delta `artifacts/material-parity/datepicker-current-popup-state-raster-composed-delta-20261123.log`
+  SHA-256 `b3b55065b2aa09ff7e32ab9534fb96b3392a1ba63d4f82ec88df135c17ee5065`.
+  Staged successor `35326a90` binds 32 cases and 99 receipt paths.
+
 ### Current Datepicker month-marker layout
 
 All 32 current desktop month-view cases use November 2026. Material
