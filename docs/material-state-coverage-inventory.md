@@ -1314,6 +1314,20 @@ dispositions stay partial, and current rendering is unverified.
 Combined strict replay SHA-256 6d124f861f8e880de1634765b52f6b29e56901a4e85fd685d10953a5a99b99e8.
 Divider trusted-peer delta SHA-256 e6dbd2639db0b5d604d9927d22d45a39a5b777dc8288572ef65308c8674b960e.
 
+The seven retained deltas now materialize 750e3af9 in the existing
+proposal format. The 2,311 rows and 35,450 receipt paths match the
+strict replay. The named export selects this proposal, and the older
+launcher and runner restore byte-for-byte. Conflicting selectors
+reject. The selector changes the launcher, runner and picker reader.
+Together with the direct benchmark changes, this leaves seven changed
+fingerprints among 1,164 paths and conserves all 501 focused proofs.
+The predicted `sourceFingerprints` section digest is
+4e8ef6d1401663f5281660b91979e0bfd4c52e9e46050d02a5e93b9978c416bd.
+Compare the canonical sections after export. The expected changes
+are `sourceFingerprints` and `coverage`. Keep accepted 5a208846 until
+the independent cold check and isolated import also pass.
+Materialized proposal SHA-256 3d67df1b5e311cd8bbc95f21069f02952e4f2b57cecef40b178f498f2ea58592.
+
 The existing proof-pointer test now replays the 248-proof historical
 inventory from Git 14d759e3 and checks the 501 current proofs against
 the independently cold-verified section from 5a208846. Modified and

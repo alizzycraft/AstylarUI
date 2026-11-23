@@ -178,6 +178,7 @@ export const retainedPointerCoverageReview = '3a0dfc9c476e49a6c5878be3f287b8eadb
 export const retainedPaintOwnershipReview = '24c22d1ae764ec131a2f1ca5a0d7be1fdb6729a5328406ab2a9abe6721e46031';
 export const retainedCaseObservationsReview = '919dbc1c33cebb522b5fb1d002f19100f3fe17a43b5ecc371b6c527aea2955a3';
 export const retainedFocusBoundariesReview = '590f4aecfe3092c1b9af9d47e1f47aa4c06dce51a10708d2c2084b96c44781ed';
+export const retainedAccessibilityPaintReview = '750e3af9f9644eda1997e367be6bec0189efeaef4e410ec769c422065ee8a7ca';
 
 // Reverse the exact coverage selector before each older picker transition.
 const retainedPointerLauncherEdits = [
@@ -262,6 +263,15 @@ const retainedFocusBoundariesLauncherEdits = [
   ["if (retainedCaseObservations) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedCaseObservationsReview}`;","if (retainedCaseObservations) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedCaseObservationsReview}`;\nif (retainedFocusBoundaries) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedFocusBoundariesReview}`;"]
 ];
 
+const retainedAccessibilityPaintLauncherEdits = [
+  ["retainedCaseObservationsReview, retainedFocusBoundariesReview }", "retainedCaseObservationsReview, retainedFocusBoundariesReview, retainedAccessibilityPaintReview }"],
+  ["const retainedFocusBoundaries = rawRequested.includes('--retained-focus-boundaries');", "const retainedFocusBoundaries = rawRequested.includes('--retained-focus-boundaries');\nconst retainedAccessibilityPaint = rawRequested.includes('--retained-accessibility-paint');\nassert.ok(!retainedAccessibilityPaint || rawRequested.every(argument => ['--retained-accessibility-paint', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');"],
+  ["filter(argument => argument !== '--retained-focus-boundaries')", "filter(argument => argument !== '--retained-focus-boundaries').filter(argument => argument !== '--retained-accessibility-paint')"],
+  ["|--retained-focus-boundaries]", "|--retained-focus-boundaries|--retained-accessibility-paint]"],
+  ["if (retainedFocusBoundaries) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedFocusBoundariesReview}.json.gz`;", "if (retainedFocusBoundaries) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedFocusBoundariesReview}.json.gz`;\nif (retainedAccessibilityPaint) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${retainedAccessibilityPaintReview}.json`;"],
+  ["if (retainedFocusBoundaries) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedFocusBoundariesReview}`;", "if (retainedFocusBoundaries) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedFocusBoundariesReview}`;\nif (retainedAccessibilityPaint) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${retainedAccessibilityPaintReview}`;"],
+];
+
 export function preparePickerFocusSemanticsLauncher(bytes) {
   const source = normalized(bytes);
   assert.equal(hash(source), launcherParentSha256, 'Unknown picker launcher parent');
@@ -269,7 +279,9 @@ export function preparePickerFocusSemanticsLauncher(bytes) {
 }
 
 export function restorePickerFocusSemanticsLauncher(bytes) {
-  const retainedCaseSource = restoreRetainedReviewSelection(normalized(bytes), 'const retainedFocusBoundaries = ', retainedFocusBoundariesLauncherEdits,
+  const focusSource = restoreRetainedReviewSelection(normalized(bytes), "const retainedAccessibilityPaint = ", retainedAccessibilityPaintLauncherEdits,
+    '2456994775db5747fac07d7fb6b0b6dca2a996ec0e3e50b8b0de08358538b21a');
+  const retainedCaseSource = restoreRetainedReviewSelection(focusSource, 'const retainedFocusBoundaries = ', retainedFocusBoundariesLauncherEdits,
     '4028f09096226e4febafad0abda946626913c41277714f0558c75e76522b10f3');
   const retainedPaintSource = restoreRetainedReviewSelection(retainedCaseSource, 'const retainedCaseObservations = ', retainedCaseLauncherEdits,
     '00e62c58718d21f578332e4683fe188500ad996eb0ad7b5852910539cb8a5295');
@@ -331,6 +343,12 @@ const retainedFocusBoundariesRunnerEdits = [
   ["retainedPaintOwnershipReview,retainedCaseObservationsReview,datepickerMobileOpenDismissReview,","retainedPaintOwnershipReview,retainedCaseObservationsReview,retainedFocusBoundariesReview,datepickerMobileOpenDismissReview,"]
 ];
 
+const retainedAccessibilityPaintRunnerEdits = [
+  ["retainedCaseObservationsReview, retainedFocusBoundariesReview }", "retainedCaseObservationsReview, retainedFocusBoundariesReview, retainedAccessibilityPaintReview }"],
+  ["retainedCaseObservationsReview,retainedFocusBoundariesReview].includes", "retainedCaseObservationsReview,retainedFocusBoundariesReview,retainedAccessibilityPaintReview].includes"],
+  ["retainedCaseObservationsReview,retainedFocusBoundariesReview,datepickerMobileOpenDismissReview,", "retainedCaseObservationsReview,retainedFocusBoundariesReview,retainedAccessibilityPaintReview,datepickerMobileOpenDismissReview,"],
+];
+
 export function preparePickerFocusSemanticsRunner(bytes) {
   const source = normalized(bytes);
   assert.equal(hash(source), runnerParentSha256, 'Unknown picker runner parent');
@@ -338,7 +356,9 @@ export function preparePickerFocusSemanticsRunner(bytes) {
 }
 
 export function restorePickerFocusSemanticsRunner(bytes) {
-  const retainedCaseSource = restoreRetainedReviewSelection(normalized(bytes), 'retainedPaintOwnershipReview, retainedCaseObservationsReview, retainedFocusBoundariesReview }', retainedFocusBoundariesRunnerEdits,
+  const focusSource = restoreRetainedReviewSelection(normalized(bytes), "retainedCaseObservationsReview, retainedFocusBoundariesReview, retainedAccessibilityPaintReview }", retainedAccessibilityPaintRunnerEdits,
+    '97be4738f2b46c9595a2ba527255d16d4854466eff52e2274f4c3124d0cdc6e3');
+  const retainedCaseSource = restoreRetainedReviewSelection(focusSource, 'retainedPaintOwnershipReview, retainedCaseObservationsReview, retainedFocusBoundariesReview }', retainedFocusBoundariesRunnerEdits,
     'cdedefd7250a14b277ebd792a4d2bfe4130af1c9b59a5b6d3ff3a47c835bea96');
   const retainedPaintSource = restoreRetainedReviewSelection(retainedCaseSource, 'retainedPaintOwnershipReview, retainedCaseObservationsReview }', retainedCaseRunnerEdits,
     'b0f88c8aa525fd6fd335a2e00e8173ea669997b379678216666909306f14e0b1');
@@ -398,6 +418,10 @@ export function restorePickerFocusSemanticsBenchmarkReader(bytes, root = process
 
 export function createPickerFocusSemanticsReviewReader({ root, read, predecessor, reviewSha256 = pickerFocusSemanticsReview }) {
   const applicability = {
+    [retainedAccessibilityPaintReview]: {
+      mode: 'retained-accessibility-paint',
+      boundary: 'Exact retained accessibility, Datepicker paint and Divider ownership observations. Whole-case inspection and current rendering remain open.',
+    },
     [retainedFocusBoundariesReview]: {
       mode: 'retained-focus-boundaries',
       boundary: 'Exact retained interaction, editing and focus observations. Whole-case inspection and current rendering remain open.',

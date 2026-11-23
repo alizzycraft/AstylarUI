@@ -7,8 +7,11 @@ activation joins accounted for. The next review 750e3af9 passed the
 existing loader with 35,450 dependencies. The unfiltered benchmark
 configuration now passes all 33 tests using authenticated historical
 reads for the six original failures. The isolated current build passed
-and the enforced browser capture is in progress. Reconcile the five
-updated source fingerprints in the next canonical export.
+and the enforced browser capture is in progress. Use
+`--retained-accessibility-paint` for the next canonical export. Its
+preflight reconciles seven source fingerprints and conserves all 501
+focused proofs. Keep the accepted pointer at 5a208846 until section
+comparison, independent cold equality and isolated import pass.
 
 The retained case observations generation 20baa74b now passes section
 conservation, independent cold equality, isolated import and accepted
