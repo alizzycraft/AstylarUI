@@ -41,12 +41,29 @@ passed and the complete guarded replay is queued after isolated import.
 Materialized successor `1e46195b` binds the Timepicker gutter, option
 typography, and retained ink evidence to 56 distinct cases. Its
 dependency extension has passed.
+Materialized successor `15aa8628` joins the Datepicker month topology,
+action raster, and focus tint evidence for 32 cases. All 71 added
+dependency paths passed verification.
 Case inspections remain partial. After the canonical gates, close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
+
+### Combined current Datepicker review
+
+Review `15aa8628` replays three staged deltas against `1e46195b`.
+It preserves all 2,311 configured case rows and all 43,378 inherited
+dependency records. All 71 added paths passed digest verification.
+The combined 43,449-path vector has SHA-256
+`d9fbb5a0898d1d4879e3ee1a5b2194f7ed4dbbd8cea0bf6d333532ba97f8bff7`.
+The complete dependency loader and case inspections remain open.
+
+- Materialization `artifacts/material-parity/current-datepicker-month-state-focus-materialization-20261123.log`
+  SHA-256 `40830fbc3aeb2c0548e3479fa789b0c6a208f5ce0ee1be815f2907bf8a1e4eb1`.
+- Dependency extension `artifacts/material-parity/current-datepicker-month-state-focus-dependency-extension-20261123.log`
+  SHA-256 `fdb561d6756cff7f5add578e56e747306863b6f8c0d8c1a71d6acd182fdb4770`.
 
 ### Current Datepicker popup paint by action state
 
