@@ -42,6 +42,31 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Dialog Save multisample coverage
+
+The light `open` controls reproduce the saved Astylar PNGs at both
+desktop DPRs. Readback finds WebGL 2 with antialiasing, one sample
+buffer and four samples on the default draw framebuffer. The scene
+and active camera have no custom output target.
+
+At the projected Save polygon, a rotated four-point grid predicts
+all 484 DPR1 and 1,966 DPR2 curved-edge pixels within one RGB channel
+value. The grid coordinates in device pixels are (0.625, 0.125),
+(0.125, 0.375), (0.875, 0.625) and (0.375, 0.875). The summed maximum
+channel error changes from 2,841 to 83 at DPR1 and from 6,041 to 172
+at DPR2, relative to continuous area on the same polygon.
+
+Across all 32 saved cases, all 39,200 sampled curve pixels are
+within one channel value of a quarter-coverage mixture of the fill
+and panel colors. The exact sample position fit belongs to the two
+readback controls. Native paint and glyph attribution remain open.
+
+- Sample-grid report `dialog-current-save-sample-grid-20261123.json`
+  SHA-256 `800c6ff228307fa481bc96bdbe2a7f569955b1aab618f3b2ce54c4ed974b0429`.
+- Case delta `dialog-current-save-sample-grid-composed-delta-20261123.log`
+  SHA-256 `9a8ad92647419156538f940c16f9efcf40c695a11af6ce36929fead0da147a4e`.
+  Staged successor `8682c658` binds 32 cases and 167 receipt paths.
+
 ### Current Dialog Save curved-edge coverage
 
 The curve comparison measures the saved pixels against continuous
@@ -59,8 +84,7 @@ exact polygon area reduces the candidate model error from 2,912
 to 2,841 at DPR1 and from 6,285 to 6,041 at DPR2. Maximum channel
 errors remain 59 and 71. This bounds what geometry alone explains
 under continuous area sampling. A decisive further attribution
-requires the effective raster sample or coverage rule, and the
-current evidence leaves that rule open.
+uses the framebuffer readback and four-sample coverage fit above.
 
 - Curved-edge report `dialog-current-save-curved-edge-20261123.json`
   SHA-256 `20fe3b4ddabe74b930d61941fdbf496e53c5ecb99ecbd8270663d531995ab526`.
