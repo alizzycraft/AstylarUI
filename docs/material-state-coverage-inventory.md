@@ -2691,8 +2691,7 @@ Astylar interaction runtime also calls canvas focus. The canvas keeps
 focus through commit. Reopening restores the input and masks the
 intermediate discrepancy in the terminal measurement. The trace
 establishes the first focus transfer and Material's restoration.
-A public-API reduction for the missing Astylar restoration and
-applicability to other configured cases remain open.
+A public-API reduction for the missing Astylar restoration remains open.
 
 At startup and after commit, the Astylar DOM retains an unresolved
 `aria-controls` ID. The authenticated showcase source at
@@ -2707,6 +2706,19 @@ Browser report SHA-256 506be608f6af8958eaae3ceb872243298e69c2cb5dfeedc9862ccaf55
 Browser runner SHA-256 8a8acad83710ba4f1231342cde4a945958d62d179b188634cd7f9543f232db0c.
 Focus report SHA-256 e69996a180eec6af7dea221b8172290a1c29fffdc0cac914ba555dd60afabd3d.
 Focus runner SHA-256 f86131cf8db5bb8d1562afb371301ec6603c7b22bb5fe2dd9bfedd2ed5eb66a0.
+
+The seven remaining configured desktop Autocomplete commit-and-reopen
+cases reproduce the same settled values, focus owners and relationships.
+Across all four profiles at DPR1 and DPR2, the candidate commits Cape Town
+with canvas focus while Material settles on the input. Both reopen with
+input focus and a resolved AX listbox target. In all eight cases, the
+closed Astylar DOM holds the dangling ID and Chromium omits it from AX.
+The combined verification checks exact configured membership and all
+32 paired boundaries. The mapped focus call ordering is scoped to the
+instrumented contrast DPR2 case. Compare Select's option commit next to
+test whether the loss of focus is shared across the two popup fixtures.
+Remaining desktop report SHA-256 fa1ec1d519ee5491b42ac9bc18ce10193a43698715dc331bbff70181e4ca59cc.
+Remaining desktop runner SHA-256 36bf14418dc5d91548ea87ea8a0db4a7efe9b28b82067f3316e3977a12cfb290.
 
 Successor 26e5ffb8 stages 16 partial activation observations and attaches
 editing and pointer focus evidence to the same rows. The 435-row batch
