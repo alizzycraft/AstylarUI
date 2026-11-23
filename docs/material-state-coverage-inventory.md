@@ -2691,7 +2691,6 @@ Astylar interaction runtime also calls canvas focus. The canvas keeps
 focus through commit. Reopening restores the input and masks the
 intermediate discrepancy in the terminal measurement. The trace
 establishes the first focus transfer and Material's restoration.
-A public-API reduction for the missing Astylar restoration remains open.
 
 At startup and after commit, the Astylar DOM retains an unresolved
 `aria-controls` ID. The authenticated showcase source at
@@ -2733,15 +2732,33 @@ The Select contrast DPR2 trace reproduces the same first canvas transfer
 as Autocomplete, with the same mapped Babylon and Astylar runtime call
 sites. The Material option temporarily moves DOM focus to the popup DIV
 and the option click restores MAT-SELECT. Both Select sides confirm Team
-before commit and Solo after commit. A plug-in-free public-API reduction
-can now test whether a detached option and the generic pointer focus
-path suffice to reproduce the missing restoration.
+before commit and Solo after commit.
 Select contrast report SHA-256 b68b6545e1b5300dc57c6a47cf095aaf3f69f4594b6358fae0d57cc05ba58395.
 Select contrast runner SHA-256 d2c35bc7a303d16eaacdafbe74594771df4e39417efce983d73bf8e9f301eafd.
 Select remaining desktop report SHA-256 bed21ed6170baaf8ed50748f2af0465485ced063798ec5e84e14cd665834eccb.
 Select remaining desktop runner SHA-256 d52934b82798dcccbeb7adc8c399f49deb893eb52cf58060d980b5acb758ae0c.
 Select focus report SHA-256 78d9dae0ea4d240b3f2783a43057d93b9328377e59fb364b9c00aa039b12ec31.
 Select focus runner SHA-256 7c22f35e1e62fda702854b929e610d97f2bda7c9f0d16d3bf4154481c5a73199.
+
+The public-API reduction reuses the isolated package. Its bundled
+interaction runtime matches the served source-map content after restoring
+the installed source-map directive. With equivalent input and role-option
+declarations, a trusted pointerdown moves HTML focus to BODY and Astylar
+DOM focus to CANVAS before either commit handler runs. Both options are
+still mounted. The retain and detach controls produce the same focus
+owners after click, so popup removal is unnecessary for the transfer.
+
+An explicit post-update restoration control returns HTML focus to the
+input. Astylar's `surface.focus()` returns true, dispatches public focus
+for the input and reports it as the logical focus owner. DOM focus
+remains on the canvas both immediately and after settlement. The
+DPR2 reduction distinguishes the generic pointer transfer
+from subsequent DOM focus restoration. The exact semantic-bridge
+scheduling cause for the public-focus boundary remains open.
+Public option report SHA-256 556402f3f1688a4319b4d68cf275dc30a25dbe267d1e4f4ae56558ab80282751.
+Public option runner SHA-256 c36c6d53c4af3760e125aa24d2968266d2c524750a91f64af84a683d5b2b525f.
+Restoration report SHA-256 717f9ec3eb6e044289d674e8ea3db71b74d7cfca93973491d7c97ffc88517c46.
+Restoration runner SHA-256 898be34cfdf3817c6b9eb74a892f93e61f6807f243e7a0242fe2043985bbac48.
 
 Successor 26e5ffb8 stages 16 partial activation observations and attaches
 editing and pointer focus evidence to the same rows. The 435-row batch
