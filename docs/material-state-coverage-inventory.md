@@ -45,6 +45,27 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Timepicker scrollbar paint
+
+The enforced frames reproduce all 542,048 retained gutter pixels
+across 32 side frames for 16 desktop `open` and `open-scroll` cases.
+All open-state panel boxes agree with the retained bounds. The wheel
+checkpoints retain the same scroll position of 144 CSS px on both
+sides. The full PNG digest differs only for Material contrast DPR1
+`open`, where the sampled gutter is also pixel-identical.
+
+The retained native rounded 9 CSS px thumb and Astylar flat 8 CSS px
+indicator, track strips, and native arrow samples therefore apply to
+these current frames. The replay used the recorded gutter coordinates.
+Live current scrollbar paint inputs and other viewports remain open.
+
+- Pixel replay `artifacts/material-parity/timepicker-current-scrollbar-pixel-replay-20261123.log`
+  SHA-256 `2e6a838803e813ecdf024d8532605580a12a0cc502baa356c2a115e0b86dbef8`.
+- Case delta `artifacts/material-parity/timepicker-current-scrollbar-gutter-composed-delta-20261123.log`
+  SHA-256 `c1f9a2ea64353b64ca0eea1132159b167f6fc1ccbb876691b1ad3d9b86332b5f`.
+  Staged successor `acc9be35` binds 16 cases and 86 receipt paths to
+  `cabf1610`. All 2,311 case positions were verified.
+
 ### Current Autocomplete and Select option ink placement
 
 The existing ink-center metric reproduces all 64 side measurements
