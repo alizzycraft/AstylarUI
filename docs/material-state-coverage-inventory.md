@@ -17,8 +17,8 @@ loader. Materialized layout review `a185b08a` passes the full guarded
 loader for all 2,311 cases and 37,325 dependencies. Its materialized
 successor `1e54281b` binds the current enforced output checkpoint to
 every case and passes the full loader with 42,652 dependencies.
-Staged review `b29df2e3` adds 88 Select and Timepicker popup semantic
-input mappings and two exact browser accessibility-tree observations.
+Staged review `2c839da5` binds current browser accessibility-tree
+relationships for all 88 mapped Select and Timepicker popup cases.
 All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
@@ -144,6 +144,39 @@ digests and 267 receipt paths.
 - Delta `select-timepicker-current-popup-name-selection-composed-delta-20261123.log`
   SHA-256 `467063c022210aacdbb33c8fdbd5eb29b950ab031f1c79acb915af729ac9863a`.
   Successor `b29df2e3cb3f2086942fdfcc9dd6299cb044297fcfc90224d8c4e086332fd44d`.
+
+### Browser AX verifies the full current active-descendant cohort
+
+A frozen-build replay covers the 86 previously unverified popup
+relationships and reuses the two previous exact probes. In all 88
+cases, the exposed combobox on each side resolves AX controls and
+active descendant to the actual listbox and option backend nodes.
+All 176 recorded DOM descendant IDs match the enforced checkpoints.
+The option names match across implementations.
+
+| Cases | Material listbox | Astylar listbox | Active option selection |
+| --- | --- | --- | --- |
+| 40 Select | Plan, focusable | Unnamed, focusability property absent | Selected on both sides |
+| 48 Timepicker | Meeting time | Unnamed | Material unselected, Astylar selected |
+
+The replay reproduces 163 of 176 terminal frame hashes. Thirteen
+differ in contrast or custom profiles. The report retains their
+hashes. Those cases contribute AX relationship evidence, while the
+causes of their raster differences remain open.
+
+The successor adds the 86 new AX observations and preserves the
+two existing ones and all partial dispositions. Replay verifies
+2,311 row positions, 16 predecessor digests and 89 receipt paths.
+Full successor dependency replay remains pending.
+
+- Matrix report `current-popup-active-descendant-ax-matrix-20261123.json`
+  SHA-256 `01bfdabaecac695501ed8a6915954868e3aec98d68c6f7fee62408ab00d5e52b`.
+  Runner SHA-256 `903349fd849c03f1be70613a229359fa473baa4a999d1be17e3bcdac5b4ef8f2`.
+- Combined AX observation vector SHA-256
+  `1f40aedf3001c4af0adc702aec142d20dae85d3161b9c6d58cf72aae7d123d63`.
+- Delta `select-timepicker-current-popup-ax-matrix-composed-delta-20261123.log`
+  SHA-256 `70c9cdc7efc489707750fe72e09e70cf5a7bf3f2f4aabb1ac90460e346b5b879`.
+  Successor `2c839da5fb4a8e0608ab039d42def2e6f785ae875795fb2919607d9ffc7f6ac0`.
 
 ### Current output checkpoint availability bound for every case
 
