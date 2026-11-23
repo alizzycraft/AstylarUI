@@ -2631,11 +2631,27 @@ objects and order agree with the existing list in all 16 cases. Stack
 locations bind the root call in the served chunk, whose mapped
 `reconcile` and `syncFocus` methods match the current source. This
 extends the existing root focus-continuity attribution beyond the two
-light desktop DPR1 cases. Keep DOM event delivery, caret paint and
-selection timing as separate questions.
+light desktop DPR1 cases. Caret paint and selection timing remain
+separate questions.
 Current checkpoint conservation SHA-256 4bcacf5cf9d25176ea51202c57524af0b4807aaa801134e4953a0189bed37178.
 Current editing trace SHA-256 60580daf7822798b3ee1a39e26abd3298583cda1b319429577a6167ff33b1110.
 Current editing source verification SHA-256 d690a372a844f3b2f7872bc11b60ccd017e8e024897b319360b251f6205d27d6.
+
+An event-boundary trace covers Form Field and Input in light DPR1 and
+custom DPR2. All eight terminal frames match the enforced PNGs. Native
+Backspace delivers trusted `beforeinput` and `input` events with
+`deleteContentBackward`, followed by `change` at the outside click.
+Astylar calls `deleteCharacter` and cancels Backspace in
+`KeyboardInputHandler.handleTextInput`. The semantic root repeats the
+cancellation. `applyControlState` writes the empty value before keyup.
+The target receives no `beforeinput`, `input` or `change` during this
+sequence, and the trace records no synthetic dispatch of those events
+on that target. Stack locations and three complete mapped methods bind
+this managed deletion and DOM value-sync path to the served bundle
+and current source. Public callback delivery and other editing actions
+remain open.
+Current event trace SHA-256 5499df9ab5330ca4466213ca1294b1b667afa2541583bc62201261e239ba80f1.
+Current event verification SHA-256 42dbd58fb24f130f1093c7f81833f5aebefe453057e8250b36c0c41293be388e.
 
 Successor 26e5ffb8 stages 16 partial activation observations and attaches
 editing and pointer focus evidence to the same rows. The 435-row batch
