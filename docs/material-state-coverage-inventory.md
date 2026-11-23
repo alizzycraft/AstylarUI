@@ -8,12 +8,11 @@ waits for the enforced browser matrix. The export preflight predicts
 changes to `sourceFingerprints` and `coverage`. Section conservation,
 independent cold equality and isolated import are still required.
 
-The popup, Datepicker and combined Timepicker and Button/Toolbar
-successors have passed the full dependency loader. The staged Menu
-and Divider review adds 116 case observations and is in dependency
-replay. All case inspections remain partial. After the active gates,
-reconcile the staged evidence
-and close the shared input, paint, semantics, ownership and source-applicability
+The Menu and Divider successor has passed the complete dependency
+loader. Three current Bottom Sheet and Dialog action traces are
+staged on that verified parent. All case inspections remain partial.
+Reconcile the staged evidence after the active gates, then close
+the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
@@ -1778,8 +1777,11 @@ Inspect baseline verification SHA-256 720b1569bb555c2b9a8be1696f3dd9d5af2946b644
 The compact baseline delta joins the eight inspect pairs and 16
 previously verified static pairs to their exact cases. It binds 79
 receipts and reverses to all 2,311 Menu predecessor rows. The combined
-Menu and Divider successor 56f299f9 is in dependency replay with all
-case dispositions preserved.
+Menu and Divider successor 56f299f9 passed the strict loader across
+all 2,311 cases and 36,440 dependencies. All 36,154 inherited receipts
+match, with 286 new paths. Case dispositions are conserved.
+Combined replay SHA-256 502acb4ab0e129015f4139d9c401ec46fd830bc6c43a71620dfa55472502404d.
+Dependency vector SHA-256 d157ae6943b86b381e4c7750c0a13fe140bf775e12353830afab87a70e4c698f.
 Divider baseline delta SHA-256 7ed05588b047414f9aabfcef881153278b9c1111ca2e724e718d43ad5d688475.
 
 With equal authored inputs on the current public package, a 16 px
@@ -2615,6 +2617,33 @@ Operation report SHA-256 1eb3bc7a75850fc03d064ea3b19a721cb1590a7b9d339c9b9635d8f
 Operation runner SHA-256 b6beb10a7cabc0c60e20e6ddd879aa1da768db83500a905855ab59b7ef5ae2e8.
 Verification SHA-256 7824f02f5cbaf9d0088326eebdb4ff369c9331268d8b758a0c91bfbbc8e32a20.
 First verifier stderr SHA-256 a7a1cbbfa73cb33f5462991f3030141c0fa00e941dd41379d844d1dc8aa62dd5.
+
+On the enforced build, the light and dark desktop DPR1 Bottom Sheet
+activate-leave replays match all four checkpoint frames. Each records
+one public surface update request, issued before pointer departure.
+The request comes from the Angular surface's SiteData effect and adds
+the overlay, panel and action nodes. Before departure, the descendant
+replacement blurs the opener. After departure, root replacement
+blurs it again. In both operations the same button token is restored.
+Material keeps its active token with no departure focus events.
+No second public update is observed after the move. Internal revision
+scheduling remains open. The served frames map to the Angular update
+and both semantic bridge replacement sites.
+Bottom Sheet verification SHA-256 bf1ac5f3d80f76bebb944f06d592763d619a835cf1e35f9535d277e48409290b.
+
+The current Dialog light desktop DPR1 control also records one public
+update before departure. Root replacement blurs and refocuses the
+same Cancel button token after departure. The sampled opener interval
+has no such replacement. The Astylar terminal PNG matches its enforced
+checkpoint. The Material PNG differs, and the Material control supplies
+only the observed focus boundary here.
+Dialog verification SHA-256 d0cd3ea13e27f4bdd2c8210755e2eaffce1f359ac69dc84c26399a79047f7f6b.
+
+The three exact traces form a compact delta on verified review
+56f299f9. The delta binds ten distinct receipts and reverses to the
+complete 2,311-case parent. Proposed successor 4c6ae573 preserves all
+case dispositions.
+Current modal focus delta SHA-256 c8f600ec41a9077449f533fee367d45d0c58d692411bd90b3b57a252bbbf2475.
 
 Node identity report SHA-256 5d9d71f5fb0aa48fba794ccfbd54f623e7f728ee5b79fd7d6e29d8499bbc43fa.
 Runner SHA-256 a35dc03d2bf1fa6d30b8d91d6d1a399f29f6ef14f64f59d5a169878c2a36e2b0.
