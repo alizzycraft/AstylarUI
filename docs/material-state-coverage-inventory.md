@@ -48,6 +48,29 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Datepicker month-marker layout
+
+All 32 current desktop month-view cases use November 2026. Material
+places the seven-column NOV marker in its own 40 CSS px row, with day
+1 in column 1 of the following row. Astylar requests a full-span
+marker and no leading blanks. Every current Astylar day cell has
+40 by 40 CSS px registry dimensions.
+
+The 32 paired October cases use Material's four-column OCT marker
+and three day cells in the same row. Astylar requests a full marker
+row followed by four leading blank cells. Native column counting
+uses the preceding cell spans because the first day's
+`data-mat-col` value is zero in both captures. The October row-structure
+difference is date-dependent. Absolute day placement and glyph
+and selection paint still require their own observations.
+
+- Topology replay `artifacts/material-parity/datepicker-current-month-topology-20261123.log`
+  SHA-256 `0b1987ffc1b9badc44e157f1e074e9453ac0836808b626c6ba9daecd7a07ec4b`.
+- Case delta `artifacts/material-parity/datepicker-current-month-topology-composed-delta-20261123.log`
+  SHA-256 `a411f2edc634376e9159285b305c55a6a6e3afd4b3f8ca34ff88e76b45ac7347`.
+  Staged successor `6b72f12d` binds all 32 cases and 195 receipt paths.
+  The replay verified all 2,311 review row positions.
+
 ### Popup option typography and ink case review
 
 Successor `1e46195b` binds the verified option typography and frame
