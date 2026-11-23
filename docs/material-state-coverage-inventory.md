@@ -1641,11 +1641,28 @@ The mesh stays 22 CSS px high. Projecting the 17 CSS px local draw
 baseline shifts it by −0.739 CSS px at DPR1 and −0.378 at DPR2. With
 the row placement, the projected Astylar baseline is about 0.177 CSS
 px below native at DPR1 and 0.260 above native on mobile DPR2. This
-accounts for the measured single-label baseline offsets. Equal-input
-anonymous-line struts, glyph coverage and the eight inspect cases
-remain open.
+accounts for the measured single-label baseline offsets. Glyph
+coverage and the eight inspect cases remain open.
 Current baseline capture SHA-256 2143e91707614bdcbc6ef88e0da583573fdf3e3206f475c044e964293d1b7b83.
 Current baseline verification SHA-256 90c4fe8a100aec22198993e655273d874172f02a05cd06a585987f8703d22f86.
+
+With equal authored inputs on the current public package, a 16 px
+inline span with 20 px line height sits in an auto-height paragraph.
+At DPR1 and DPR2, the 16 px parent with 20 px line height yields a 20 px
+paragraph on both sides. The 24 px parent with 30 px line height yields
+30 px in Chromium and 20 px in Astylar. Astylar retains the parent and
+child line-height requests. Chromium's native baseline shifts from
+15 px to 23 px while the text range height stays 17 px. The existing
+inline-row owner check matches four current and installed methods.
+When executed with a text span, the owner sizes both rows from the
+child's 20 px box without reading the parent's font size or line height.
+This extends the existing `core-inline-replaced-row-omits-parent-line-box`
+mechanism to a non-replaced text span. The unequal authored Divider rows,
+wrapping, mixed runs and glyph paint stay separately scoped. Carry this
+evidence into the next source-finding batch after the queued export.
+Public parent-strut report SHA-256 5143e9873f53776e3e8036b73a68f49ba0e9b74a4a33d4410febeb083dbdb5eb.
+Independent verification SHA-256 a610984cf90db2e95cfb873860fd860ee83a8f9323f8fb1de4f5af4609154727.
+Inline owner receipt SHA-256 e2812cefc6f8b9301cfb9fbba85271f3f381c415cfd30eea6dd6276222bd5481.
 
 The Datepicker local paint census has 99 rows with verified primary
 target crops and remaining work. The eight configured desktop opening
