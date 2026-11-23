@@ -12,8 +12,9 @@ changes to `sourceFingerprints` and `coverage`. Section conservation,
 independent cold equality and isolated import are still required.
 
 The Menu and Divider successor has passed the complete dependency
-loader. Three current Bottom Sheet and Dialog action traces are
-staged on that verified parent. All case inspections remain partial.
+loader. The staged successor `39d68468` binds the three current
+Bottom Sheet and Dialog action and font-focus traces. All case
+inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -85,6 +86,22 @@ these two pixels in the sampled captures. Its cause remains open.
   and `8689b5d5dcd2`, in case order above. The font listener and cache
   clear are at `src/lib/astylar.ts:470` and `:571`. Session follow-up
   scheduling is in `src/lib/astylar-render-session.ts:173`.
+
+The existing case-review delta format now binds the font and focus
+observations to three exact `programmaticFocus` obligations. Streaming
+replay reconstructs the frozen base and all seven predecessor review
+digests across 2,311 rows. Only the three target rows change in this
+successor. Eight receipt paths verify, including four new report and
+runner paths. All three row dispositions stay partial. The accepted
+canonical pointer remains `5a208846`. Full dependency integration is
+still pending for the staged successor.
+
+- Delta `modal-departure-font-operation-composed-delta-20261123.log`
+  SHA-256 `250dd38ba1e4cc25721e95cf432efba95809186bdacfbf9e842bb46636dda8df`.
+- Parent `4c6ae5736aee5263ef6c4853ee8e9cbd66b28fd9c9d799189f0e91da3e40c0e0`.
+- Successor `39d68468ebc9d4ce008de0e8bd11df1990473a6ae2f51f37781458b3a7270f8e`.
+- Receipt list SHA-256
+  `bcbbe038ea61094abf29599d6e92b7c927b875c3ca2b22c7a461eca3650f04b2`.
 
 ### Current unfiltered enforced browser matrix passed
 
