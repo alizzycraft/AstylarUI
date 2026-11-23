@@ -7,14 +7,15 @@ Accepted canonical generation `5a208846` remains the baseline for all
 436 static and 1,875 interaction cases. This establishes benchmark output
 acceptance. Input equivalence and case inspections remain open.
 
-The running successor export selects `750e3af9`. Its preflight predicts
-changes to `sourceFingerprints` and `coverage`. Section conservation,
-independent cold equality and isolated import are still required.
+The canonical candidate `b53047be` has been written from frozen review
+`750e3af9`. Its payload hash matches the manifest. Section conservation
+is running, with independent cold equality and isolated import pending.
 
 The Menu and Divider successor has passed the complete dependency
 loader. Materialized layout review `a185b08a` passes the full guarded
-loader for all 2,311 cases and 37,325 dependencies. Its staged successor
-`1e54281b` binds the current enforced output checkpoint to every case.
+loader for all 2,311 cases and 37,325 dependencies. Its materialized
+successor `1e54281b` binds the current enforced output checkpoint to
+every case and passes the full loader with 42,652 dependencies.
 All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
@@ -22,6 +23,19 @@ obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
+
+### Retained accessibility and paint canonical candidate written
+
+Frozen review `750e3af9` completed canonical encoding and writing.
+Candidate `b53047be72502ba1d2bb8d7921767e90d73f6853243a49e0223b5811e22e8ce7`
+rehashes to the documented 103,927,951-byte compressed payload. The
+export reports 8,483 differences, 389,202 occurrences and 215 source
+findings. Its input-equivalence result is no. The baseline accepted
+pointer stays `5a208846` through section conservation, cold verification
+and isolated import.
+
+- Export log `retained-accessibility-paint-canonical-export-20261123.log`
+  SHA-256 `3c11ef2c30e296ccc6793023a2fa8c086027462a8e8cd1c13b61de2de6843f6c`.
 
 ### Current output checkpoint availability bound for every case
 
@@ -43,8 +57,11 @@ evidence within its verified scope.
 
 Streaming replay verifies the row vector and all 12 predecessor
 digests. All 2,311 rows add a partial current-output observation, and
-6,937 distinct receipt paths in those additions verify. Full dependency
-replay of the staged successor remains pending.
+6,937 distinct receipt paths in those additions verify. The materialized
+successor passes the existing loader for all 2,311 rows and 42,652
+dependencies, including the 16 guarded historical source reads. All
+current capture attachments verify. Inspection and rendering
+acceptance flags remain false.
 
 - Prior and current checkpoint manifests SHA-256
   `c81dac4a475cc53f52446d8b426f247b3330c99b2da38831b5ce303abaeab6a6`
@@ -56,6 +73,13 @@ replay of the staged successor remains pending.
   Successor `1e54281bc57c42155a89b56c88963480fc2c8dd856f9fd1fb5e3307ca1c6b44f`.
 - Added receipt vector SHA-256
   `aa143b4544fd48ed34e9b09423feff185b3eb8eed72bdb2d2b3a1bd5fe5387a1`.
+
+- Materialized all-case proposal SHA-256
+  `e687cfab7dd867a79eeb437c7f991004ac9990a12ac4b535b43f2922fb21ea2e`.
+- Full replay `all-case-current-enforced-successor-guarded-full-replay-20261123.log`
+  SHA-256 `28d33f84d8c5076d117a6e9ef0b235e542595f215e7e77e48fd09a353225141b0`.
+  Dependency vector SHA-256
+  `ebb5ec6a84a175db06918f9ca69eefb5f4302cda010357677f911605e4548748`.
 
 ### Staged layout successor materialized and dependency additions verified
 
