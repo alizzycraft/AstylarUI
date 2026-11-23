@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+Accepted generation 5a208846 passes independent cold byte equality,
+isolated import and accepted store verification. It binds all 2,311
+case rows and 35,332 dependency receipts with the focus and authored
+activation joins accounted for. The next review 750e3af9 passed the
+existing loader with 35,450 dependencies. The unfiltered benchmark
+configuration suite has six historical source digest failures.
+The fresh build and enforced browser capture remain pending.
+
 The retained case observations generation 20baa74b now passes section
 conservation, independent cold equality, isolated import and accepted
 store verification. Frozen review 919dbc1c binds all 2,311 cases and

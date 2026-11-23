@@ -1,5 +1,16 @@
 # Audit artifact retention
 
+Retain accepted 5a208846 and index 493d4be9 with the 84 verified
+shards, off-volume isolated store and predecessor 20baa74b.
+The payload has a verified hard link and the remaining 85 files
+were copied and verified. Keep both failed promotion logs and
+the partial index routed from its original path to a verified
+archive on C:. Keep the first strict replay failure and the
+successful replay of 750e3af9.
+Accepted promotion SHA-256 7e35e8c3d229383469924d4e596b012e163b1909ed1d145c8cd07fbb9b873be5.
+Failed promotion archive SHA-256 264350ab951af865a0e2b05ffdb45b037c3d7675a2cae76d7b58a57aa56ac999.
+Combined strict replay SHA-256 6d124f861f8e880de1634765b52f6b29e56901a4e85fd685d10953a5a99b99e8.
+
 NTFS compression reduced the retained October 27 Snackbar candidate
 index from 263,536,350 to 112,852,992 allocated bytes. The index hash,
 file identity, link count and modification time match. D: free space

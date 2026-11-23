@@ -1292,10 +1292,27 @@ zero disk-cache hits and 36,806 reverified files. The section check
 conserves 78 sections and reconciles sourceFingerprints and coverage.
 The isolated import v2 launcher stopped at pointer parsing. It read
 only the opening line of a JSON document. The v3 import reads the
-complete pointer and reuses the cold receipt. Accepted 20baa74b
-remains current pending isolated verification and promotion.
+complete pointer and reuses the cold receipt. Isolated import and
+promotion then pass as recorded below.
 Cold stdout SHA-256 985b88ed87c2676834d0c1e05bab6e32e4fa383f20e18ef6ce9112ff2f885406.
 Cold stderr SHA-256 745b9a3cb9c5f9f3115f8165d542853e302032b0ea0fc56937fa8b3ee2c8f54b.
+
+Accepted store generation 5a208846 and index 493d4be9 now verify.
+The isolated import authenticated all 84 shards. Promotion rechecked
+85 off-volume copies and the canonical payload hard link before
+and after advancing the pointer. The first copy ran out of disk
+space. Its partial index is retained at its original path through
+a verified off-volume copy. The predecessor remains retained.
+Accepted promotion SHA-256 7e35e8c3d229383469924d4e596b012e163b1909ed1d145c8cd07fbb9b873be5.
+
+The combined successor 750e3af9 verifies 154 evidence additions
+across 141 cases and all 35,450 dependencies. It includes the
+single-case Datepicker AX and Divider trusted-peer joins. The first
+wrapper expected schema 2 after the loader returned implicit
+schema 1. The retry preserves the predecessor schema. All case
+dispositions stay partial, and current rendering is unverified.
+Combined strict replay SHA-256 6d124f861f8e880de1634765b52f6b29e56901a4e85fd685d10953a5a99b99e8.
+Divider trusted-peer delta SHA-256 e6dbd2639db0b5d604d9927d22d45a39a5b777dc8288572ef65308c8674b960e.
 
 The existing proof-pointer test now replays the 248-proof historical
 inventory from Git 14d759e3 and checks the 501 current proofs against
