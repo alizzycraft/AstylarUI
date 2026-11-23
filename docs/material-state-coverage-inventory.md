@@ -17,8 +17,9 @@ loader. Materialized layout review `a185b08a` passes the full guarded
 loader for all 2,311 cases and 37,325 dependencies. Its materialized
 successor `1e54281b` binds the current enforced output checkpoint to
 every case and passes the full loader with 42,652 dependencies.
-Staged review `f8d0f960` adds 88 Select and Timepicker semantic target
-mappings. All case inspections remain partial.
+Staged review `e0086e9a` adds 88 Select and Timepicker semantic target
+mappings and two exact browser accessibility-tree observations.
+All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -79,6 +80,43 @@ dependency replay remains pending.
   SHA-256 `e6c855b68ef4dafada2f107ec6966c5dcad9cfd5a39dff5d4f5eec9ae54e9e2a`.
   Successor `f8d0f96083401b7063d9d311c4c58f9deaacb2a1f925236b17aebcb06e423a23`.
 - Comparator source `tests/material-parity/run-material-parity.mjs:1800`.
+
+### Current browser AX resolves Select and Timepicker popup targets
+
+The open question was whether the recorded DOM targets were also
+exposed through the browser accessibility tree. The frozen build
+replayed Select pointer-open and Timepicker open-scroll in light
+desktop DPR1. The combobox AX `controls` and `activedescendant`
+properties resolve to the same backend DOM nodes as the listboxes
+and active options on both sides. All four terminal PNG hashes
+match their enforced checkpoints.
+
+Select exposes Team as selected on both sides. The Material listbox
+has the accessible name Plan and is focusable. The Astylar listbox
+has an empty name and no focusable property. Timepicker exposes
+12:00 AM before and after scrolling. The Material listbox is named
+Meeting time and the option is unselected. The Astylar listbox is
+unnamed and its option is selected. The Astylar listbox authoring
+omits the names and explicitly marks the initial Timepicker option
+selected. These two cases establish current AX target exposure and
+the retained authored differences at those action boundaries.
+
+The staged successor adds its observations to two partial
+`semantics` rows. Replay verifies 2,311 row positions, 14 predecessor
+digests and five receipt paths.
+
+- Report `select-timepicker-active-descendant-ax-v3-20261123.json`
+  SHA-256 `9b99e9a164feea939efd9f0f3e89ff2968ac1935e22aee490b16b645d343d295`.
+  Runner SHA-256 `abaf5875298af7468e0703489aeccbd1c18fd97be5cb5e1a4b3b234bb9371db6`.
+- First attempt selected the generic Select wrapper. Its stderr SHA-256
+  is `68a9b1380104694cfec4ebb5d4a68ff9ab682345d746ab66260ce583546852f9`.
+  The second lacked the captured scroll-box helper. Its stderr SHA-256
+  is `53cbcf819b228f7e2898b2201dbc8546065ffcfded7676aa998abc5f542b4e63`.
+- Delta `select-timepicker-current-active-descendant-ax-composed-delta-20261123.log`
+  SHA-256 `6354e5393d84baf830f455f43a31991180f22ef3e0ac382344c5a0b7e778c761`.
+  Successor `e0086e9ac627c3c0a76dc44ee35a88441f206082c6f0fcaade43c34717ba55df`.
+- Candidate listbox source `examples/material-showcase/src/app/astylar.component.ts:953`
+  and `:1052`.
 
 ### Current output checkpoint availability bound for every case
 
