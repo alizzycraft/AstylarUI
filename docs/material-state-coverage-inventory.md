@@ -9,14 +9,16 @@ acceptance. Input equivalence and case inspections remain open.
 
 The canonical candidate `b53047be` has been written from frozen review
 `750e3af9`. Its payload hash matches the manifest. Section conservation
-is running, with independent cold equality and isolated import pending.
+passed. Independent cold verification is running and isolated import
+is pending.
 
 The Menu and Divider successor has passed the complete dependency
 loader. Materialized layout review `a185b08a` passes the full guarded
 loader for all 2,311 cases and 37,325 dependencies. Its materialized
 successor `1e54281b` binds the current enforced output checkpoint to
 every case and passes the full loader with 42,652 dependencies.
-All case inspections remain partial.
+Staged review `f8d0f960` adds 88 Select and Timepicker semantic target
+mappings. All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -36,6 +38,47 @@ and isolated import.
 
 - Export log `retained-accessibility-paint-canonical-export-20261123.log`
   SHA-256 `3c11ef2c30e296ccc6793023a2fa8c086027462a8e8cd1c13b61de2de6843f6c`.
+
+Section comparison conserves 78 sections. The only changes are
+`sourceFingerprints` and `coverage`. The source section digest matches
+preflight,
+`4e8ef6d1401663f5281660b91979e0bfd4c52e9e46050d02a5e93b9978c416bd`.
+The section receipt is
+`retained-accessibility-paint-canonical-sections-20261123.log`, SHA-256
+`224b98ade7d7dd4bf35f9eaf026b7d1adb891c5e46ae56f57b407d8987f99214`.
+
+### Current semantic comparator and active-descendant coverage
+
+The exact enforced runner's comparator reproduces every recorded row.
+Of 7,484 configured target occurrences, it compares 5,930. Those
+include 5,428 observed counterparts and 502 paired absences. It excludes
+272 static and 1,282 interaction targets. The interaction exclusions
+include 100 dynamic Bottom Sheet targets and 68 dynamic Snackbar
+targets. The 68 unequal raw Checkbox values are ignored by the
+comparator's native form-submission value rule.
+
+The comparator checks active-descendant presence rather than the
+target identity. All 88 present pairs use different generated IDs.
+An authenticated paired-tree join resolves each ID to one option under
+a listbox. The normalized option text matches in all 88 cases. The 40
+Select observations resolve to Team or Solo. The 48 Timepicker
+observations resolve to 12:00 AM. This establishes the exact current
+target mapping. Other relationships, browser accessibility-tree
+exposure and complete semantic inspection remain open.
+
+The staged successor attaches the 88 mappings to their partial
+`semantics` obligations. Streaming replay verifies 2,311 row positions,
+13 predecessor digests and 266 attached receipt paths. Full successor
+dependency replay remains pending.
+
+- Configured target and exclusion digest
+  `8a0da24e04741b5bb7a1dc6724c3ac481cf217ce93d2b6d642f4889fb929e309`.
+- Active-descendant owner join SHA-256
+  `e908aaa0eeb287fe63534b7eb617e41a531568219f424f4cfbf6469c8a5d6338`.
+- Delta `select-timepicker-current-active-descendant-composed-delta-20261123.log`
+  SHA-256 `e6c855b68ef4dafada2f107ec6966c5dcad9cfd5a39dff5d4f5eec9ae54e9e2a`.
+  Successor `f8d0f96083401b7063d9d311c4c58f9deaacb2a1f925236b17aebcb06e423a23`.
+- Comparator source `tests/material-parity/run-material-parity.mjs:1800`.
 
 ### Current output checkpoint availability bound for every case
 
