@@ -1612,10 +1612,18 @@ All 32 Above/Below label boxes project at the width and height stored
 in the Astylar core dimension registry. Material's measured heights
 match, and its widths differ by less than 0.016 CSS px. The label top
 offset persists after subtracting the respective Divider root origins,
-with native minus Astylar offsets from −0.900 to +0.310 CSS px. This
-locates the difference in placement within the Divider. The remaining
-check is to distinguish row placement from the anonymous text line
-placement within each row.
+with native minus Astylar offsets from −0.900 to +0.310 CSS px. All
+32 native label boxes and their input-tree hashes match the retained
+natural-height diagnostic. In those observations the label and
+paragraph tops coincide. On Astylar, the resolved absolute row `top`
+plus the Divider root border predicts all 32 projected label tops
+relative to the root within 0.000010 CSS px. This confirms the existing
+`fixture-divider-replaces-paragraph-flow-with-coordinates` finding for
+the measured top offsets. Paired anonymous strut and painted-baseline
+correspondence remain open.
+Native line-box evidence SHA-256 cc4839ff5ce689aec6bf01689d15abb41cacd4a3e2b675083cd0f37d8b304416.
+The checkpoint binds the authored row rules in `chunk-MJYXOH2D.js`
+at b4bf6c7694e878aafa49f73f98c73b9250e154f676db188f35974f324e78ec45.
 
 The Datepicker local paint census has 99 rows with verified primary
 target crops and remaining work. The eight configured desktop opening
