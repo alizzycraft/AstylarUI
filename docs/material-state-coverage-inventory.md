@@ -3418,6 +3418,32 @@ relationships and the unequal popup kind separately. These are retained
 390 x 844 DPR2 observations, with current applicability and broader
 event/ownership requirements still open. Reuse them for the pending case join.
 
+The current Timepicker input census authenticates 108 configured
+checkpoints and their paired trees. In all 48 open cases, both sides
+resolve a 48-option listbox and target the first option as active.
+The candidate marks option zero selected while the reference keeps
+all options unselected. In all 60 closed cases, Astylar authors a
+controls ID for the absent listbox. The reference omits that ID.
+The popup classification stays dialog on Astylar and listbox on the
+reference throughout. The two mobile flows still await enforced
+checkpoints. These inputs corroborate the existing popup metadata,
+relationship lifetime and selection findings.
+
+Three current light desktop DPR1 replays sample eight paired DOM and
+Chromium AX boundaries across open, outside dismissal and canvas
+dismissal. Chromium preserves the different popup type and the
+first option's selected state. Both open relationships resolve in AX,
+and neither closed AX tree exposes the unresolved controls ID. At
+each sampled opening, Material focuses its input and Astylar focuses
+its icon button. Both dismissal replays end on BODY for Material
+and CANVAS for Astylar. All three enforced checkpoints mark focus
+as matching. Their focus summaries combine the two opening owners
+under timepicker-primary and omit both dismissal owners. Keep actual
+owner identity in the case review alongside those summaries.
+Current input census SHA-256 a27ff9da1119fc507fa372762369e33e5727aae712052cb925357420e20c30f2.
+Actual DOM and AX report SHA-256 1cd329350bc77c17e5510c7e422665befb6b9f648d6862e3cb007b3c68e6fed3.
+Actual DOM and AX runner SHA-256 c22eac1d2e698b01151fae027e1bfaf2b5b6a4c6d7b1d1e52ddd41c653b8e438.
+
 The Datepicker focused proposal reader interface check passed exact envelope
 equality, path/encoding behavior, buffer isolation and predecessor delegation.
 Do not repeat it for ledger edits.
