@@ -1575,11 +1575,27 @@ of each frame are pixel-identical. At DPR2, all 18 changed Above
 scanlines fall within the 28 rows predicted to sample different
 texels. Below has three such rows at the bottom of the texture.
 This isolates a live sampling effect of backing height at both DPRs.
-Native glyph coverage under equal input remains open.
 Desktop backing capture SHA-256 930983249d2553678a2dd866bfd5516e22f3bd232655c3e596adb2ef991dd1f4.
 Desktop backing verification SHA-256 a3a7ad77037ca49cdd5784e7054f2530c22731a8c7b8109fd897f206f70a830e.
 Mobile backing capture SHA-256 7e084aaee298d8fc6dbffbb94888221e671745c457773caf20c5eca85a8fc34e.
 Mobile backing verification SHA-256 2b358db6d285bab3b63fb29f085c013c61b98562e16adacd79621fd5460b671e.
+
+The current public-package comparison uses identical Arial text,
+22 px explicit line height, paint inputs and paragraph boxes on both
+sides. The 16 px control allocates 22 backing rows at DPR1 and 44 at
+DPR2. At 18.4 px, removing the one extra row changes 216 and 491
+pixels, respectively, inside the unchanged glyph box. Same-size and
+restored frames match the original. Against Chromium's native pixels
+in the same white interior, the sum of absolute RGB differences falls
+from 57,454 to 29,028 at DPR1 and from 123,612 to 60,240 at DPR2.
+The crop restores the last native ink row at both DPRs. This confirms
+the backing-height contribution under equal inputs. The residual
+RGB differences, including those in the 16 px control, still need
+paint attribution. These measurements do not transfer native glyph
+equivalence to the unequal-input Divider fixture.
+Equal-input glyph capture SHA-256 936f056fa2bfae4c553e7540cc97737c381de9399b3bf9ad0582bf99dc5ca209.
+Equal-input verification SHA-256 1be10f477cc9b3d12111a6a30fa504da5be120ca3a4f129f14d37e7101ed073e.
+Raster comparison SHA-256 7ffdecf586576c623100943d94828b4e4acc9e87d517dc2610dfaf9676755bc9.
 
 The captured Divider runtime keeps a configured handler count of one
 after each of 60 Angular retirements in 20 physical contexts. The
