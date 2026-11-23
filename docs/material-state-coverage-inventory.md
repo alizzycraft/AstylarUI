@@ -17,8 +17,8 @@ loader. Materialized layout review `a185b08a` passes the full guarded
 loader for all 2,311 cases and 37,325 dependencies. Its materialized
 successor `1e54281b` binds the current enforced output checkpoint to
 every case and passes the full loader with 42,652 dependencies.
-Staged review `e0086e9a` adds 88 Select and Timepicker semantic target
-mappings and two exact browser accessibility-tree observations.
+Staged review `b29df2e3` adds 88 Select and Timepicker popup semantic
+input mappings and two exact browser accessibility-tree observations.
 All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
@@ -117,6 +117,33 @@ digests and five receipt paths.
   Successor `e0086e9ac627c3c0a76dc44ee35a88441f206082c6f0fcaade43c34717ba55df`.
 - Candidate listbox source `examples/material-showcase/src/app/astylar.component.ts:953`
   and `:1052`.
+
+### Current popup name and selection inputs across the 88 mapped cases
+
+The paired-tree check asked whether the name and selection differences
+sampled in the browser AX probes also appear in the other current
+captures. In all 40 Select cases, the Material listbox has
+`aria-label="Plan"` and `tabindex="-1"`. Its active option is
+selected, as is the corresponding Astylar option. In all 48
+Timepicker cases, Material's listbox label reference resolves to
+Meeting time. Its active 12:00 AM option has `aria-selected="false"`,
+while Astylar authors the option selected.
+
+None of the 88 Astylar listbox owners authors a name, label reference
+or tab index. These exact input differences are consistent with the
+two browser probes above. The all-case join establishes captured
+input applicability. Browser AX exposure remains scoped to its own
+current receipts.
+
+The staged successor adds partial `semantics` observations to all
+88 rows. Replay verifies all 2,311 row positions, 15 predecessor
+digests and 267 receipt paths.
+
+- Popup attribute and resolved label vector SHA-256
+  `23f59a0934d8fcd4e7c9f16ef6e0ec122fa1a6dc2510568751bea33a17482377`.
+- Delta `select-timepicker-current-popup-name-selection-composed-delta-20261123.log`
+  SHA-256 `467063c022210aacdbb33c8fdbd5eb29b950ab031f1c79acb915af729ac9863a`.
+  Successor `b29df2e3cb3f2086942fdfcc9dd6299cb044297fcfc90224d8c4e086332fd44d`.
 
 ### Current output checkpoint availability bound for every case
 
