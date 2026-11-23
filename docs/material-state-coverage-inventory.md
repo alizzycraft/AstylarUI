@@ -19,8 +19,9 @@ successor `1e54281b` binds the current enforced output checkpoint to
 every case and passes the full loader with 42,652 dependencies.
 Materialized review `2c839da5` passes the full loader with 42,656
 dependencies. It binds current browser accessibility-tree relationships
-for all 88 mapped Select and Timepicker popup cases.
-All case inspections remain partial.
+for all 88 mapped Select and Timepicker popup cases. Staged review
+`9f316925` localizes the 13 terminal raster variants and isolates two
+to the Timepicker caret. All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -189,6 +190,43 @@ and both false acceptance flags. The canonical pointer still names
   SHA-256 `ca383b030338a7f566774ca0a17c78199c02c65c8f6b4c5da053874a163cca2f`.
   Dependency vector SHA-256
   `3e87849cdc6a26cba4a73f132c2525f6655135ff0650675d79723dc18649fa76`.
+
+### Popup raster variants localized and two caret differences isolated
+
+The focused replay saved two successive settled screenshots of the
+affected implementation in each of the 13 cases. Every pair is
+byte-identical within the replay. Seven pairs match the enforced frame,
+five match the earlier AX replay frame, and one is a third recorded
+variant. In the six cases that differ from the enforced frame, the
+changes lie outside the popup box. Four frames contain 14 changed
+pixels in total, each with a maximum channel change of one. The causes
+of those small differences and of the seven earlier variants remain
+open.
+
+The remaining two cases are Astylar Timepicker custom focus at DPR1
+and DPR2. Their replay differences occupy 40 and 156 pixels at the
+input's left text edge. A controlled replay hides only the live
+`cursor_timepicker-control` mesh and reproduces both enforced frames
+byte-for-byte. Restoring its visibility reproduces both prior AX
+replay frames. This isolates the pixel difference to caret visibility.
+The reason the caret differed at the original capture boundary
+remains open.
+
+The staged delta binds all 13 localized observations and the two
+caret interventions to partial `localPaint` obligations. Replay
+verifies 2,311 row positions, 17 predecessor digests and 35 attached
+receipt paths.
+
+- Raster report `current-popup-raster-variants-20261123.json` SHA-256
+  `93bc670c6d9503ff43cfda05fef8efa4c86fa1d41308a572545d7f54a4f08a54`.
+  Pixel comparison vector
+  `0866751ff55602a2954c425bf1c9b75b4a33aadafc4164c53022c1883e0c4c1d`.
+- Caret report `timepicker-custom-focus-caret-isolation-20261123.json`
+  SHA-256 `9f92684e427a51f6a014a4981817ab325e3f3ef367bd802a7a6ca517a0df5adc`.
+  The runner and visible/hidden PNG receipts are in the staged delta.
+- Delta `select-timepicker-current-popup-raster-variants-composed-delta-20261123.log`
+  SHA-256 `be574c1befe27581cbac6fa88a4e7ef6c98e577312c3a7480aab728a674ee38c`.
+  Successor `9f31692533359e73186ae4c981807e1f32547c327975b6dc12968db2a55023fd`.
 
 ### Current output checkpoint availability bound for every case
 
