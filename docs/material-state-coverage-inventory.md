@@ -48,14 +48,31 @@ dependency extension has passed.
 Materialized successor `15aa8628` joins the Datepicker month topology,
 action raster, and focus tint evidence for 32 cases. All 71 added
 dependency paths passed verification.
-Staged successor `bfad5bcd` adds six glyph and two mobile Timepicker
-replays. It binds 67 receipt paths and verifies all 2,311 case positions.
-Case inspections remain partial. After the canonical gates, close
-the shared input, paint, semantics, ownership and source-applicability
-obligations against exact cases. Divider's complete owner census
-already identifies which property and paint mappings remain open.
+Materialized successor `bfad5bcd` joins two Datepicker focus traces,
+six glyph replays, and two mobile Timepicker scrollbar replays. The
+full guarded loader rehashed all 43,499 dependency paths for 2,311
+cases, including 16 authenticated historical sources. It preserves
+the `3bc80bd0` accepted pointer. The compact store confirms all
+three popup relationship findings in the accepted source inventory.
+Case inspections remain partial. Divider's complete owner census
+identifies the exact property and paint mappings still open. Use
+those mappings and the case closure checklist for the next passive
+cohort review.
 
 ## Evidence ledger
+
+### Guarded popup review replay
+
+The materialized review replays both staged digests against
+`15aa8628`. Its dependency extension conserved 43,449 predecessor
+records and authenticated 50 added paths. The independent full
+loader verified the combined vector SHA-256
+`337d6acad02255811110efe74135e59048adcfe0cdbc07b3c3b3d7ef250658a5`.
+
+- Materialization `artifacts/material-parity/current-popup-glyph-mobile-scrollbar-materialization-20261123.log`
+  SHA-256 `646f345f6ce7a425507035c575f782f5cff359c3ab592dc136419bfddd5b65be`.
+- Full replay `artifacts/material-parity/current-popup-glyph-mobile-scrollbar-guarded-full-replay-20261123.log`
+  SHA-256 `0400332f10fef2b4586b1369f0db6782a1a85468be4dbbcb6f86ed1297386fc0`.
 
 ### Combined current Datepicker review
 
