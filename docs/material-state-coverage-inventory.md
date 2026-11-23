@@ -12,9 +12,9 @@ changes to `sourceFingerprints` and `coverage`. Section conservation,
 independent cold equality and isolated import are still required.
 
 The Menu and Divider successor has passed the complete dependency
-loader. The staged successor `39d68468` binds the three current
-Bottom Sheet and Dialog action and font-focus traces. All case
-inspections remain partial.
+loader. The staged successor `1a2d1a8d` binds current Tabs size
+and text evidence alongside the three modal action and font-focus
+traces. All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -155,6 +155,21 @@ attributing any remaining paint difference.
 - Source owners are the label texture inspection in `src/lib/astylar.ts:933`
   and the plugin baseline and drawing path in
   `examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts:368`.
+
+The staged review records matched owner dimensions under
+`inputStyleStructure` and the label texture and authored panel inputs
+under `localPaint` for all 58 configured Tabs interactions. Eight
+predecessor review digests and all 2,311 row positions replay. Only the
+58 Tabs rows change. The additions retain partial dispositions and
+validate 179 evidence paths, including the paired input trees and
+current checkpoint records. Full dependency integration remains pending.
+
+- Delta `tabs-current-matched-size-text-composed-delta-20261123.log`
+  SHA-256 `2f92b1760e4ebab42fe4cda780658dcb3751fca6dae6e02c2cc152c4bf3803af`.
+- Parent `39d68468ebc9d4ce008de0e8bd11df1990473a6ae2f51f37781458b3a7270f8e`.
+- Successor `1a2d1a8db1586022769beca6cac4ad5f85bde2b2e948b1f59ff552a63d79dc87`.
+- Receipt list SHA-256
+  `46648c061e20036b3da30c4968dd08d7d73f3948165ebbd1e158cd2bbf988405`.
 
 ### Font completion accounts for the second modal departure reflow
 
