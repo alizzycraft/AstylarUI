@@ -63,6 +63,33 @@ control. Configured native glyph attribution remains open.
 
 ## Evidence ledger
 
+### Current Divider native glyph raster
+
+The current Chromium capture covers all 24 configured Divider cases
+and 48 Above and Below labels. The controls reuse the native text,
+computed font, ink color, measured baseline and solid background.
+Every original and restored frame matches its enforced PNG. The
+accepted source files and export remain at generation `3bc80bd0`.
+
+At DPR1, opaque Canvas reproduces all 32 native label crops exactly.
+The alpha-enabled Canvas changes 236 to 358 pixels per label. This
+extends the earlier four-desktop control to every configured DPR1
+layout. At DPR2, all 16 opaque Canvas crops retain a difference of
+757 to 1,359 pixels. Across eight desktop inspect labels, CSS-size
+text drawn through a 2? transform, device-size text, and a
+device-pixel-rounded baseline give identical opaque Canvas rasters.
+The DPR2 native-to-Canvas generation difference remains unresolved.
+Attribution to the configured Astylar paint also requires accounting
+for the measured input and placement differences.
+
+- Native raster replay `artifacts/material-parity/divider-current-native-canvas-20261123.json`
+  SHA-256 `e3480a1c3a856b2eb19d9992b5bbcffe5be684b9536dfea5849119e63fc14fcb`.
+- DPR2 scale controls `artifacts/material-parity/divider-current-native-canvas-dpr2-scale-20261123.json`
+  SHA-256 `e0a31a225f0e38144c32499afa618ef8d273d4e773bc8df59b34158c91a7c1ad`.
+- Case delta `artifacts/material-parity/divider-current-native-canvas-composed-delta-20261123.log`
+  SHA-256 `791a9c038d66f77d8d09d92562e4a06ba80b79b8ed16f3628ab1ad4c9ff5992c`.
+  Staged successor `275e3de9` binds 24 cases and 53 receipt paths.
+
 ### Current custom Divider backing-row paint
 
 The public equal-authored-input reproduction isolates the extra
