@@ -38,8 +38,9 @@ and lossless recompression are running.
 Materialized review `cabf1610` combines the staged popup geometry,
 Dialog action paint, and Spinner paint evidence. Its dependency extension
 passed and the complete guarded replay is queued after isolated import.
-Staged successor `1e46195b` binds the Timepicker gutter, option typography,
-and retained ink evidence to exact cases.
+Materialized successor `1e46195b` binds the Timepicker gutter, option
+typography, and retained ink evidence to 56 distinct cases. Its
+dependency extension has passed.
 Case inspections remain partial. After the canonical gates, close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -61,6 +62,18 @@ The staged replay verified all 2,311 row positions, replayed the
 verified 486 receipt paths for the new findings. Inspection and
 current rendering acceptance remain open. Live label geometry and
 texture attribution await the queued browser replay.
+
+The materialization preserves all 2,311 row positions and verifies
+both staged review digests. The dependency extension preserves the
+43,146 paths inherited from `cabf1610` and verifies all 232 added paths.
+The combined vector covers 43,378 paths and has SHA-256
+`b028e9472ddfb52d496bc5bef61212cce8e85c308aff153db8cba983e5515761`.
+The complete loader remains pending.
+
+- Materialization `artifacts/material-parity/current-popup-option-scrollbar-materialization-20261123.log`
+  SHA-256 `96b62e151daa8cba04339d32f1fb1977d6db2f80c6c5a4595ffeeefee01109a9`.
+- Dependency extension `artifacts/material-parity/current-popup-option-scrollbar-dependency-extension-20261123.log`
+  SHA-256 `a429da8cf72260b8dd6a25e6249bbcf1b02f90f90979d68d6aea0e731474d526`.
 
 - Case delta `artifacts/material-parity/popup-option-current-typography-and-ink-composed-delta-20261123.log`
   SHA-256 `d715eb171bafe8651af61d9a7ab7040df06637e965f2b603bc924d44bafccc7b`.
