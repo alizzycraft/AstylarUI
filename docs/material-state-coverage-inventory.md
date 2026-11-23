@@ -3,8 +3,11 @@
 ## Current audit state
 
 Accepted canonical generation `5a208846` remains the baseline for all
-2,311 configured cases. Its successor export selects `750e3af9` and
-waits for the enforced browser matrix. The export preflight predicts
+2,311 configured cases. The unfiltered enforced browser run passed all
+436 static and 1,875 interaction cases. This establishes benchmark output
+acceptance. Input equivalence and case inspections remain open.
+
+The running successor export selects `750e3af9`. Its preflight predicts
 changes to `sourceFingerprints` and `coverage`. Section conservation,
 independent cold equality and isolated import are still required.
 
@@ -17,6 +20,28 @@ obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
+
+### Current unfiltered enforced browser matrix passed
+
+The isolated build and unfiltered configuration suite passed. The enforced
+Chromium 157.0.8103.51 run exited 0 with 436/436 static and 1,875/1,875
+interaction cases passing. Static minimum SSIM was 0.965296 and maximum
+edge error was 0.984 CSS px. Interaction minimum SSIM was 0.954514.
+All 120 static and 880 interaction focused-raster checks passed. The capture
+directory is `artifacts/material-parity/current-enforced-62f7b001-20261122`.
+
+- `latest-summary.md` SHA-256
+  `040254323a6ce6e725c151fa8e6f8dccb2cd7aedfa3462760b0bb38ebf304983`.
+- `checkpoint/manifest.json` SHA-256
+  `d0791bca30e413ce6bd417fcfbfffb6efd6509b40159dbe810ba114feb6e62a9`.
+- `artifacts/material-parity/current-enforced-browser-v2-20261123.log` SHA-256
+  `8d601b98e805e1224328902f215c69f849cd2facf2915020dcd1eb3bca5c2ec8`.
+
+The browser benchmark applies its geometry, raster, event, state and
+resource thresholds. Per-case equal-input findings still require matched
+authored inputs, local paint and semantic evidence, and ownership review.
+The canonical export uses the frozen retained review and its own validation
+chain. The passing browser run triggers that chain.
 
 ### Current compact interaction output and input boundaries
 
