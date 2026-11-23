@@ -58,9 +58,33 @@ Case inspections remain partial. Divider's complete owner census
 identifies the exact property and paint mappings still open. The
 current single-span line-box split now covers all 24 Divider cases.
 The isolated native strut reproduces the used geometry in all 24
-contexts. Matched-input paint attribution remains open.
+contexts. All six custom cases now have a direct backing-row paint
+control. Configured native glyph attribution remains open.
 
 ## Evidence ledger
+
+### Current custom Divider backing-row paint
+
+The public equal-authored-input reproduction isolates the extra
+backing row with equal 22 CSS px line heights. The current configured
+captures measure its contribution inside the Astylar frame. The paired
+diffuse and emissive crop preserves text layout and removes one backing
+pixel, from 23 to 22 at DPR1 and 45 to 44 at DPR2. Original, same-size
+replacement, and restored PNGs match each enforced Astylar frame byte
+for byte.
+
+The crop changes Above by 389 pixels in each desktop, tablet,
+comparison, and DPR1 inspect case and by 739 on mobile. It changes
+Below by 691 pixels in DPR2 inspect. Each change is confined to the
+projected glyph bounds and to scanlines where cropping changes the
+sampled texture row. The remaining native glyph differences still need
+matched-input attribution.
+
+- Six-case verification `artifacts/material-parity/divider-current-custom-backing-cohort-20261123.log`
+  SHA-256 `9ef1db3455aad12d94ee4ba03bed01c898d810f52da524a76426943b08a7fbf2`.
+- Case delta `artifacts/material-parity/divider-current-custom-backing-cohort-composed-delta-20261123.log`
+  SHA-256 `95d631070d6a6ac1e7387a7cfee7309daac7969d7a26fa89792af5280ba9f4a2`.
+  Staged successor `0dd64704` binds six cases and 44 receipt paths.
 
 ### Current Divider used line-box split
 
