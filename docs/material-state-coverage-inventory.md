@@ -55,11 +55,34 @@ cases, including 16 authenticated historical sources. It preserves
 the `3bc80bd0` accepted pointer. The compact store confirms all
 three popup relationship findings in the accepted source inventory.
 Case inspections remain partial. Divider's complete owner census
-identifies the exact property and paint mappings still open. Use
-those mappings and the case closure checklist for the next passive
-cohort review.
+identifies the exact property and paint mappings still open. The
+current single-span line-box split now covers all 24 Divider cases.
+The independent inherited strut and equal-input paint attribution
+remain open.
 
 ## Evidence ledger
+
+### Current Divider used line-box split
+
+All 48 Above and Below observations across the 24 Divider cases
+have one baseline-aligned span per paragraph, matching paragraph
+and span typography, no generated content, and zero vertical padding
+and border. The native marker gives the used split from paragraph top
+to baseline and from baseline to bottom. The splits are 15/4 CSS px
+for light and dark, 14/4 for contrast, and 17/5 for custom.
+
+The projected Astylar label boxes match the native total heights.
+Light, dark, and contrast also match the baseline splits. Custom
+projects the baseline at 16.261 CSS px at DPR1 and 16.622 CSS px at
+DPR2 within its 22 CSS px label box. These are used line-box and
+projected label measurements. An isolated strut measurement and
+matched-input paint attribution remain open.
+
+- Line-box replay `artifacts/material-parity/divider-current-used-line-box-split-20261123.log`
+  SHA-256 `340f761c4de3ff9f11bfc2b2e80814f89276366467ca5a89e9747c5a11737b1e`.
+- Case delta `artifacts/material-parity/divider-current-used-line-box-split-composed-delta-20261123.log`
+  SHA-256 `edf27b7c522b88524d7d234ec3c116c2c5d4cd47117e1e6caae0d6f0978d98d8`.
+  Staged successor `0ead8bcd` binds 24 cases and 79 receipt paths.
 
 ### Guarded popup review replay
 
