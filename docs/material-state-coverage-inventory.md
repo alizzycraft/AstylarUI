@@ -82,6 +82,32 @@ paint, and native glyph controls. DPR2 glyph attribution remains open.
   SHA-256 `976c6074aee16fb86b09ecc2213ce43be0b944601620438f01b6c35ef04bf966`.
   Dependency vector SHA-256 `065b40fab5fb4ba1a24f13747ef80ff172d2129490ba7d73b7076b4f9e97e838`.
 
+### Current Divider Astylar glyph projection
+
+The readback covers all 48 labels in the 24 configured cases.
+Original and restored screenshots match the enforced Astylar PNGs.
+Hiding the text meshes preserves measured layout and changes 25,695
+pixels around the projected labels. The GPU upload preserves every
+backing alpha byte after reversing the readback row order. All 2,826
+changed RGB channels differ by one.
+
+The captured texels, projected rectangles, nearest sampling and
+background-only frames reconstruct every interior glyph sample within
+one channel value. The pixel-center coverage model leaves 32 edge
+errors above two channel values. The four-sample coverage model
+reduces every remaining error to one channel value, with 28 sampled
+pixels differing in any channel. This accounts for the configured
+Astylar output. The remaining paint comparison needs to quantify the
+effect of the measured native and Astylar input and placement differences.
+
+- Texture capture `artifacts/material-parity/divider-current-texture-projection-20261123/latest-report.json`
+  SHA-256 `cf29db85893884539ef56f85e7adcb252494c8da9f9dd373d33a265217821957`.
+- Four-sample comparison `artifacts/material-parity/divider-current-texture-projection-20261123/projection-four-sample-model.json`
+  SHA-256 `0a11d2f714adb0b451eef4b64540cb9a50aa55f057ca06fa1da0c782234659a6`.
+- Projection case delta `artifacts/material-parity/divider-current-texture-projection-composed-delta-20261123.log`
+  SHA-256 `3ccc9862bc27eeb252927f944686bd3da5b0472d4c5828f65403e0eb088eb89d`.
+  Staged successor `b60ab360` binds 24 cases and 78 receipt paths.
+
 ### Current Divider native glyph raster
 
 The current Chromium capture covers all 24 configured Divider cases
@@ -128,9 +154,9 @@ match after a one-device-row downward shift of the Canvas comparison
 crop. All eight integer-baseline controls match without a shift.
 
 This accounts for the native-to-Canvas diagnostic residual across all
-16 configured DPR2 labels. Attribution to configured Astylar paint
-still needs its texture projection and the measured input and placement
-differences.
+16 configured DPR2 labels. The configured Astylar projection is
+verified below. The paired paint attribution still needs to quantify
+the measured input and placement differences.
 
 - Custom mobile replay `artifacts/material-parity/divider-mobile-custom-native-canvas-transport-control-20261123.json`
   SHA-256 `799d7618e7cb4b570d86a9592b2ce771b89c1b5e8ec88734199123807c732752`.
