@@ -42,6 +42,30 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Dialog action button placement
+
+Among current paired geometry records with both dimensions within
+0.02 CSS px, no position offset reaches 2 CSS px. At 0.5 CSS px,
+the cohort includes 64 Dialog action buttons and six Divider text
+owners. The Dialog cohort shares a 1 CSS px vertical offset across
+32 `activate`, `activate-leave`, `open` and `open-hover-content` cases.
+
+The panel and action row have matching positions and sizes in every
+case. Both button sizes and horizontal positions agree. Material's
+action row has a transparent 1 CSS px top border and symmetric
+16 CSS px vertical padding. Astylar authors 16 CSS px top padding,
+17 CSS px bottom padding and zero border. In both centered flex rows,
+the remaining content height agrees. The differing top insets predict
+both button positions within 0.0000001 CSS px for all 32 cases. The
+first divergence is the authored action-row box model. Local button
+paint and the separate Divider placement residual remain open.
+
+- Ordered geometry digest
+  `42dfbf203bf796a59a13d2393265d963bf0ac1a5e0697319b2130dd2d21c0108`.
+- Case delta `dialog-current-action-row-insets-composed-delta-20261123.log`
+  SHA-256 `5a3a9632f48f53adb3958080a59df2f8e303239d64a08d0b1c17eec6afb09e0e`.
+  Staged successor `eac484e0` binds 32 cases and 97 receipt paths.
+
 ### Missing popup geometry reconciled against both captured trees
 
 All 546 missing geometry pairs across 165 current cases have
