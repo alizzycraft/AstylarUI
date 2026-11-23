@@ -1619,11 +1619,33 @@ paragraph tops coincide. On Astylar, the resolved absolute row `top`
 plus the Divider root border predicts all 32 projected label tops
 relative to the root within 0.000010 CSS px. This confirms the existing
 `fixture-divider-replaces-paragraph-flow-with-coordinates` finding for
-the measured top offsets. Paired anonymous strut and painted-baseline
-correspondence remain open.
+the measured top offsets. Paired anonymous strut geometry remains open.
 Native line-box evidence SHA-256 cc4839ff5ce689aec6bf01689d15abb41cacd4a3e2b675083cd0f37d8b304416.
 The checkpoint binds the authored row rules in `chunk-MJYXOH2D.js`
 at b4bf6c7694e878aafa49f73f98c73b9250e154f676db188f35974f324e78ec45.
+
+The retained desktop baseline trace matches the fresh label-box heights
+and tops within 0.000016 CSS px. Each side accessed five assets that
+changed or disappeared in the fresh build, and the Chromium version
+changed. A focused run on the enforced build now measures all 32 label
+baselines across the 16 static cases. It verifies 521 accessed assets,
+the native marker's unchanged line geometry, and the live Astylar
+draw, copy and projected texture for each label. The fresh geometry
+matches the corresponding enforced checkpoints.
+
+Light, dark and contrast preserve the same local baseline offset on
+both sides. Their projected baseline difference follows the authored
+row placement. In custom, the same served backing owner rounds
+22.000000000000004 CSS px up to 23 backing px at DPR1 and 45 at DPR2.
+The mesh stays 22 CSS px high. Projecting the 17 CSS px local draw
+baseline shifts it by −0.739 CSS px at DPR1 and −0.378 at DPR2. With
+the row placement, the projected Astylar baseline is about 0.177 CSS
+px below native at DPR1 and 0.260 above native on mobile DPR2. This
+accounts for the measured single-label baseline offsets. Equal-input
+anonymous-line struts, glyph coverage and the eight inspect cases
+remain open.
+Current baseline capture SHA-256 2143e91707614bdcbc6ef88e0da583573fdf3e3206f475c044e964293d1b7b83.
+Current baseline verification SHA-256 90c4fe8a100aec22198993e655273d874172f02a05cd06a585987f8703d22f86.
 
 The Datepicker local paint census has 99 rows with verified primary
 target crops and remaining work. The eight configured desktop opening
