@@ -1801,7 +1801,21 @@ requires paired glyph and selection paint evidence. This replay uses
 retained served assets and the recorded November date.
 Opening child-paint verification SHA-256 69948ad67e232d2162c5770580b12f023bd90d47d1414785ba1b077418d9c400.
 
-In the same November capture, the 15 odd-numbered ordinary days give
+The current light desktop DPR1 opening checkpoint records November 23,
+2026. Its authenticated November 22 predecessor uses the same Chromium
+version and has the same recorded event comparison and focus summary.
+The reference date marker moves from day 22 to day 23. The candidate
+date-ring rule moves 40 CSS px to the right on the same row. Across
+the full 1440 x 1000 frames, all 1,259 changed reference pixels and all
+356 changed Astylar pixels lie in the retained day-22 or day-23 cell
+bounds. Every pixel outside those cells is unchanged on each side.
+This supports reuse of the November 22 raster evidence for the
+unchanged regions of this exact case. The two date cells retain
+date-specific evidence. Actual focus ownership and other configured
+cases require their own receipts.
+Current date-paint applicability SHA-256 2cd64cac9b2afe9b447b21ad53e844dd5facb1f4d9dc698eacd658d5f3c823d7.
+
+In the November 22 capture, the 15 odd-numbered ordinary days give
 a median Astylar glyph centroid about 1 px lower within the aligned
 cell. Using that one measured offset on 14 held-out even-numbered
 ordinary days reduces mean RGB error from 0.01947 to 0.00674 and
