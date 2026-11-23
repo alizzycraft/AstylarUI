@@ -87,8 +87,23 @@ recorded date border, label color, and focus pseudo-element styles
 stay stable within each comparison. A 12% sRGB blend reproduces
 the dominant flat-color transition within one channel value for
 23,261 of the 26,313 differing day 23 pixels. The matched day 1
-hover rule appears in all eight hover cases. Exact focus-event
-timing and the remaining edge and glyph paint are open.
+hover rule appears in all eight hover cases. The remaining edge
+and glyph paint are open.
+
+A light desktop DPR2 trace observed the same native sequence for
+`open` and `activate`. The trusted pointer action focuses the toggle.
+About 134 ms after pointerdown, focus moves to the November 23
+button and the calendar gains its program-focus class. Both replay
+PNGs match the enforced `open` PNG byte for byte. The enforced
+`activate` frame records mouse focus and transparent day fill. The
+replay establishes that `activate` can produce the program-focused
+variant. The original event timing and the trigger for the saved
+mouse-focused variant remain open.
+
+- Native focus trace `artifacts/material-parity/datepicker-native-focus-transition-20261123/latest-report.json`
+  SHA-256 `d90ca09b208fe9bc8006bfcb01691b41df8acb5a2e5c4d561ae675aeacb7d199`.
+- Trace runner `artifacts/material-parity/datepicker-native-focus-transition-20261123.mjs`
+  SHA-256 `948fe826d099c985be806d0dc75617bc38b526ccf8edcec9590b8a0b6170b0de`.
 
 - Focus tint replay `artifacts/material-parity/datepicker-current-focus-tint-paint-20261123.log`
   SHA-256 `bd53cfc5e393bf6a8da5e7d6efa3746a3d407edbc6158dbd2b1eedc0e962ce73`.
