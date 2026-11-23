@@ -82,6 +82,34 @@ paint, and native glyph controls. DPR2 glyph attribution remains open.
   SHA-256 `976c6074aee16fb86b09ecc2213ce43be0b944601620438f01b6c35ef04bf966`.
   Dependency vector SHA-256 `065b40fab5fb4ba1a24f13747ef80ff172d2129490ba7d73b7076b4f9e97e838`.
 
+### Current Divider paired glyph paint
+
+All 48 labels have the same native ink as their fully opaque GPU
+texels. The native and Astylar backdrop RGB bytes agree over every
+compared region. The verified projection model differs from the
+enforced Astylar frame by at most one channel level and reproduces
+the six saved custom crop frames exactly within the label regions.
+
+The placement control translates the Astylar texture to the native
+left edge and measured baseline. It leaves light and dark unchanged
+at both DPRs and contrast unchanged at DPR1. At contrast DPR2, the
+summed absolute RGB difference rises from 377,612 to 574,204.
+The contrast Below label accounts for the increase in both cases.
+
+At custom DPR2, the summed difference is 659,501 for the enforced
+pair, 596,978 for placement alone, 642,988 for crop alone, and
+413,434 for the crop with the original projection translation.
+Recalculating the translation against the cropped backing's effective
+baseline yields 776,054. The controls show that placement and backing
+rows interact through pixel sampling. Remaining differences require
+a comparison of native channel coverage and projected texture alpha.
+
+- Paired paint model `artifacts/material-parity/divider-current-glyph-paint-attribution-20261123.json`
+  SHA-256 `7529055547ec020e64e60214102284493df70743ba82602794dda537ea13f583`.
+- Paired paint case delta `artifacts/material-parity/divider-current-glyph-paint-attribution-composed-delta-20261123.log`
+  SHA-256 `f9a6df0795d0875850e233236ee89cdc4cef4ad3bed3561423e3dbdde7a5a9eb`.
+  Staged successor `2a326355` binds 24 cases and 108 receipt paths.
+
 ### Current Divider Astylar glyph projection
 
 The readback covers all 48 labels in the 24 configured cases.
