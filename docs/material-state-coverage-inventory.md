@@ -18,6 +18,51 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current compact interaction output and input boundaries
+
+All eight configured compact interactions pass the current benchmark case
+checks. Authenticated checkpoint reads compare the complete PNG inventories
+with `current-ancestry-audit`. The Bottom Sheet, two Slider, two Snackbar
+and two Tooltip cases reproduce all 34 prior PNG hashes. The short
+Datepicker case changes all four PNGs while its measured root and opener
+edges differ by at most 0.002 CSS px between implementations.
+
+The Datepicker comparison tested whether the changed frames came with a
+different calendar input or whether the same calendar was rendered
+differently. Both retained input trees show SEP 2026, and both current trees
+show NOV 2026. Native calendar labels enumerate the corresponding month on
+each run. All changed pixels are within x=84 to 350 and y=265 to 563 in the 1440 by 600
+full frames. The changed inputs and bounded pixels corroborate the existing
+live-clock applicability finding. Retain the current short-viewport PNGs
+for this clock context. The check does not isolate a same-date residual.
+
+All 18 current Slider drag cases preserve the earlier raw input sequences.
+Material emits 35, 40 for the start and 70, 75 for the end. Astylar emits
+31, 33, 34, 35, 36, 38, 39, 40 for the start and emits eight values for the
+end. The intermediate end value after 71 is 73 on standard viewports and
+72 in the compact pane. The interaction predicate checks matching final
+values and validates each nine-sample trace independently. Both compact
+drags also retain 21 CSS px edge differences on the measured range input
+owners. The interaction geometry field is diagnostic. This confirms the
+existing authoring and hit-region boundaries on the current configured
+drag observations. The range declarations are in
+`examples/material-showcase/src/app/reference.component.ts:82` and
+`examples/material-showcase/src/app/astylar.component.ts:903`. The candidate
+calendar reads live date values in `astylar.component.ts:1332`. The
+runner's interaction geometry and trace predicates are in
+`tests/material-parity/run-material-parity.mjs:475` and `:1307`.
+
+| Case | Checkpoint key prefix | Current record SHA-256 prefix |
+| --- | --- | --- |
+| Datepicker short activate | `5118018dfa1b` | `b751ef2e5f28` |
+| Bottom Sheet compact activate | `9a9c55ceefba` | `b3992721abd9` |
+| Slider compact drag-start | `c53d565c701c` | `b82552002006` |
+| Slider compact drag-end | `3176d6b554c6` | `8e490eeafe6f` |
+| Snackbar compact activate | `b9dd08d63ee0` | `79b3b2aa3c54` |
+| Snackbar compact activate-twice | `f1b9475441ed` | `604be0ade9c5` |
+| Tooltip compact hover | `fa5d22802ca2` | `82b2b30c5eb0` |
+| Tooltip compact held | `234a88d01218` | `ca3beb2c0978` |
+
 ### Current Divider comparison and Snackbar action captures
 
 The focused check asked whether differences in the current checkpoint records
