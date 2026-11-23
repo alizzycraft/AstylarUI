@@ -66,6 +66,41 @@ assigning paired-box or paint equivalence.
   and `:1780`, `examples/material-showcase/src/app/astylar.component.ts:285`
   and `src/lib/astylar.ts:925`.
 
+### Measured box size follows registry dimensions on current owners
+
+The follow-up compared each stored dimension with the candidate box
+independently projected from the mesh's world vertices. All 6,714 paired
+owners agree on width and height within 0.000000000056 CSS px. Adding the
+recorded padding is unnecessary for this box comparison. This verifies
+size at the sampled projection boundary. Positions and raster effects
+still require their own comparisons.
+
+Against Material, 845 of 1,040 static and 4,148 of 5,674 interaction
+observations agree on both dimensions within 0.02 CSS px. All 536
+differences of at least 2 CSS px in either dimension are interactions,
+across 12 owner IDs. These are box differences before owner matching or
+cause classification.
+
+Tabs contributes 174 of the 536 observations. In all 58 configured Tabs
+interactions, both Material tab IDs resolve to text spans inside tabs,
+while Astylar measures the role-bearing buttons. The Material panel
+target is a text span inside the tabpanel. Astylar measures the authored
+`showcase.material:tab-panel` owner. The largest width gap, 620.5625 CSS
+px, belongs to that panel comparison. Use matched control and text
+owners before attributing these gaps to layout. Slider contributes
+another 132 observations from its two range input owners and retains
+the known fixed half-domain authoring difference.
+
+- The comparison reuses the configured-order checkpoint and tree digest
+  `ab6806c34e9b24950f2226995ebd9a09d98d82a27788f31ba2d8f29c2fa33794`.
+- The 174 Tabs identity joins use the digest
+  `2ac98f791a3b5f615948d7e11058ebdd8ddaf5e387192e51a08b465d13b7f4d5`
+  over case key, owner ID, paired tree digests and owner types.
+- The projection, native Tabs and candidate Tabs definitions are at
+  `examples/material-showcase/src/app/astylar.component.ts:1144`,
+  `examples/material-showcase/src/app/reference.component.ts:88` and
+  `examples/material-showcase/src/app/astylar.component.ts:974`.
+
 ### Font completion accounts for the second modal departure reflow
 
 The prior departure traces found one public surface update and two revision
