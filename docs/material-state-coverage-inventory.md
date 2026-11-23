@@ -42,6 +42,33 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Dialog Save button contour
+
+Across 32 current Save buttons, the captured box is 78.671875 by
+40 CSS px. Material requests 9999 CSS px at each corner, which
+normalizes to 20 CSS px at this height. Astylar requests 20 CSS px.
+Both declare the same fill. This establishes the nominal contour
+for this size.
+
+After accounting for action-row placement, 12,384 of 66,432 samples
+differ within 2 CSS px of the nominal contour. All sampled edge
+colors are within 1.5 RGB channel values of a mixture of the fill
+and panel colors. No sample farther outside the contour differs.
+The interior includes the previously identified label differences.
+
+Read-only mesh projection for light `open` at both desktop DPRs
+reproduces the two enforced candidate PNG hashes. The 68 projected
+vertices lie on the nominal capsule, and chord midpoints are at
+most 0.0241 CSS px inward. These controls bound the geometric
+approximation. The contributions of polygon shape and raster
+sampling to the measured edge differences remain open.
+
+- Contour report `dialog-current-save-contour-20261123.json`
+  SHA-256 `cf9db06ad3c7ddc85898db23efa4ffa2d19cfe4b8559f3d06720ec1a650e02a4`.
+- Case delta `dialog-current-save-contour-composed-delta-20261123.log`
+  SHA-256 `391ce5945b6e38262f85686bd51126ee87d1442540581840525a2759f7b8e0b8`.
+  Staged successor `02464636` binds 32 cases and 166 receipt paths.
+
 ### Current Dialog action label placement and paint inputs
 
 The existing weighted ink-center metric reproduces all 64 button
