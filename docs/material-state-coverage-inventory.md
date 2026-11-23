@@ -1815,6 +1815,36 @@ date-specific evidence. Actual focus ownership and other configured
 cases require their own receipts.
 Current date-paint applicability SHA-256 2cd64cac9b2afe9b447b21ad53e844dd5facb1f4d9dc698eacd658d5f3c823d7.
 
+Current Datepicker date-state inputs cover all 41 configured openings.
+The enforced checkpoints supply 32 month-view and eight year-view
+pairs. A focused replay supplies the short-viewport activation and
+confirms actual DOM output in one standard opening per view. Material
+marks the current day or year with `aria-current="date"` and records
+`aria-pressed="false"`. Astylar styles the corresponding date or year
+but omits `ariaCurrent` from the authored cell. The three actual DOM
+pairs confirm the attribute difference and record the actual focus
+owners. The sampled Chromium AX properties omit a current-state
+entry on both sides.
+
+The served showcase source binds the day and year declarations at
+`astylar.component.ts:1064-1071`. The served semantic bridge matches
+the core projection branch at `astylar-semantic-bridge.ts:442`.
+That branch emits `aria-current="date"` for supplied date input.
+The first date indicator (87f7f830), year grid (d973f847) and live day
+helper (d1fc52a3) all omit the input. Core support predates them in
+598092ef. Classify this as a showcase authoring omission, separately
+from the existing live-period and range-description finding. The
+short viewport still awaits its enforced checkpoint.
+Current date-state census SHA-256 59a9f4a0ab936d62ca73b35b83722c46c2493054f7ab60ee289255a26d6f434c.
+Actual DOM and AX report SHA-256 861be1724b457395bc0744f4ce4b829abd59c21fc9accdb903fb4fd7331e7bda.
+Actual DOM and AX runner SHA-256 402c2bca9acd09d41911b77dc0ad9d2a11616421399cde76a3bcc0bed96a712d.
+
+The compact Datepicker delta binds 124 distinct receipts to the 41
+rows and reverses to the complete 2,311-row popup successor 4db22a50.
+The predicted review is 7a7a2cf1 with partial dispositions. Source
+registration and strict successor replay remain queued work.
+Datepicker delta SHA-256 d84317b4234aa87dc74c5d8ff8f9a0bbf16d9b5ee925d63389f5baa50592b76f.
+
 In the November 22 capture, the 15 odd-numbered ordinary days give
 a median Astylar glyph centroid about 1 px lower within the aligned
 cell. Using that one measured offset on 14 held-out even-numbered
