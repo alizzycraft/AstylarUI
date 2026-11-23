@@ -42,6 +42,30 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Dialog Save straight-edge coverage
+
+The straight edge removes the rounded polygon from the comparison.
+All 24,608 sampled pixels across 32 current cases match a model
+that rounds Material's vertical edges to whole CSS pixels.
+Astylar's pixels match the fractional mesh boundary within one
+RGB channel value. Both recorded box boundaries end in half a CSS
+pixel after accounting for the action-row offset.
+
+At DPR1 the native top boundary row is panel color and the bottom
+row is fill color, while Astylar samples are approximately half
+fill at both boundaries. At DPR2 the candidate has one additional
+solid-fill row at the top and Material has one at the bottom.
+They occupy the same nominal span. The native effective fill
+coverage is half a CSS pixel lower than the fractional boundary
+model. This accounts for 3,520 differing straight-edge pixels.
+The native paint implementation and curved-edge residual remain open.
+
+- Straight-edge report `dialog-current-save-straight-edge-20261123.json`
+  SHA-256 `aca390da8b20dc6278f6a428467860cb05a3ad59c5077cdd8efb87083b5376ba`.
+- Case delta `dialog-current-save-straight-edge-composed-delta-20261123.log`
+  SHA-256 `26107e610ab128c47742f70a3364f119d390c3a1c9f1f4e4f7baa05c3ba1b4e5`.
+  Staged successor `8926cbe5` binds 32 cases and 165 receipt paths.
+
 ### Current Dialog Save button contour
 
 Across 32 current Save buttons, the captured box is 78.671875 by
