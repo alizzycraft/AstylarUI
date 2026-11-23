@@ -8,10 +8,10 @@ waits for the enforced browser matrix. The export preflight predicts
 changes to `sourceFingerprints` and `coverage`. Section conservation,
 independent cold equality and isolated import are still required.
 
-The compact popup and Datepicker successors have passed the full
-dependency loader. The staged Timepicker and Button/Toolbar batch adds
-220 case observations and is in strict replay. All case inspections
-remain partial. After the active gates, reconcile the staged evidence
+The popup, Datepicker and combined Timepicker and Button/Toolbar
+successors have passed the full dependency loader. The staged Menu
+review adds 92 exact case observations. All case inspections remain
+partial. After the active gates, reconcile the staged evidence
 and close the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
@@ -4189,9 +4189,12 @@ Current material verification SHA-256 b775103b6d4b0495fb26d7c28f3e703b56fe874c0a
 
 The compact Button and Toolbar delta binds 231 distinct receipts
 across 112 cases and restores the complete Timepicker parent
-77c72e73 when reversed. Combined successor fab185f3 is in strict
-dependency replay. Case inspection and rendering dispositions stay
-partial and unverified.
+77c72e73 when reversed. Combined successor fab185f3 passed the
+full dependency loader across all 2,311 cases and 36,154 receipts.
+All 35,598 Datepicker-parent receipts match, with 556 new paths.
+Case inspection and rendering dispositions stay partial and unverified.
+Combined strict replay SHA-256 bf0146a0d55f049e57f1c2157183c01844098bef90a21e40b8e19c35477a1e6f.
+Dependency vector SHA-256 83613b0a82c686d20ab58dbd1fd36d9ea6039130acbf4b146d4af2a07ce32d0f.
 Current paint delta SHA-256 d5a6ea916a8e0d5fa91c2147dc84839054a4ad8b908b256cc186181455aab47a.
 
 November5 button/toolbar milestone is accepted as ab2c875a/indexb26b0abd after
@@ -39850,6 +39853,30 @@ the read-only cold check/log,not a full capture or new compact generation.
 Recover further verified headroom before import/push publication. No active
 output or source was compressed/removed. Current typography applicability and
 focused2/2 proof were committed independently at a4df1a8f before export ended.
+
+Current Menu checkpoints authenticate 92 configured cases and 528
+PNGs. Of those images, 512 match the retained bytes. The 16 changed
+images are Astylar full frames and their focused crops across eight
+cases. All 59 changed full-frame pixels are within 2.75 CSS px of
+the live measured panel perimeter, with RGB channel changes of at
+most five. The affected trigger, panel and two item owners retain
+the same authored, resolved and painted-text inputs.
+Current raster census SHA-256 739d357663f5f4c030f984ff9d416d3902c9991d56c565a6c3c527d85cfaf258.
+
+The maintained action replays reproduce both original PNG hashes
+in six cases from the same settled page and unchanged measured
+panel bounds. The light DPR2 opening reproduced only the retained
+hash, and the dark DPR2 activate-leave reproduced only the enforced
+hash. Both also produced alternate frames with differences confined
+to the same panel-edge region. The individual missing hashes and the
+cause of the edge variability remain unresolved. The two configured
+mobile flows still await their enforced checkpoints.
+Current repeat verification SHA-256 ba3c3181a5c2051a9533a0f7e4e99060a11c07ed50c6ab279e0bee5c7c6d3970.
+
+The Menu delta binds 210 distinct receipts across 92 cases and
+reverses to the full validated predecessor fab185f3. The proposed
+successor is 2feda858 with partial case dispositions.
+Menu raster delta SHA-256 b83310bcc68b3a1b6cd66f13c3988350053e44f99b4d2c3e5cf1ba3a1acfaf1c.
 
 Known Menu typography findings are now joined to eight current-checkpoint
 matched-focus contexts without inventing another cause. Authenticated compact
