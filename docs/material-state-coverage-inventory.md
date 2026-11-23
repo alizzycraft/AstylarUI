@@ -14,9 +14,9 @@ independent cold equality and isolated import are still required.
 The Menu and Divider successor has passed the complete dependency
 loader. The staged successor `a185b08a` adds Chips width and adjacent
 placement evidence to the Checkbox, Slide Toggle, Expansion, Tabs and
-modal observations. It is materialized with 885 new evidence paths
-verified against the last fully replayed dependency list. Full guarded
-replay remains pending. All case inspections remain partial.
+modal observations. The materialized review passes the full guarded
+loader for all 2,311 cases and 37,325 evidence dependencies. All case
+inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -41,10 +41,29 @@ canonical pointer remains `5a208846`.
 A raw full-loader invocation rejected the expected historical digest for
 `scripts/audit-material-configured-control-activation.mjs`. The two
 retries through the existing historical reader exhausted 1,152 and
-2,304 MiB heaps. Retain all three stderr receipts. Run the full guarded
-loader once after the export chain releases enough memory. This
-dependency comparison establishes the additions and conservation while
-the historical full replay remains pending.
+2,304 MiB heaps. Retain all three stderr receipts.
+
+The full loader subsequently passed with a bounded read route. A raw
+census identified 16 historical source paths and zero missing paths.
+Each historical source was recovered from an ancestor of the frozen
+export revision. The route requires the known live digest and returns
+only Git bytes that match the proposal's retained digest. Other paths
+use their live bytes. This lets the existing loader validate the exact
+materialized proposal without rebuilding older proposal bodies.
+
+The existing loader reauthenticated all 2,311 rows and 37,325
+dependencies. Its vector matches the earlier dependency extension.
+The accepted pointer remains `5a208846`. Case inspection and current
+rendering acceptance remain open.
+
+- Raw path census `staged-layout-successor-raw-path-census-20261123.log`
+  SHA-256 `1b7311462816a890476c78a7e08729c5afeb08386ff221477bdfe1ce0d362a64`.
+- Exact Git source route `staged-layout-successor-historical-source-git-v2-20261123.log`
+  SHA-256 `cc353d2655f1febb02aa0d4fbe646daba6fa0d070f686d028943e15b39e2b2dc`.
+  The first Git lookup hit its stdout buffer limit. Retained stderr
+  SHA-256 `72f47efb4e2d8aa67e73ea74672db446a29cf4dfa7eb7cfa5f5220bb09ea9755`.
+- Full replay `staged-layout-successor-guarded-full-replay-20261123.log`
+  SHA-256 `b2ddc7509d19e67db4c787703f923f967bb0954a98a02366516cbaf1c2c174b0`.
 
 - Materialization receipt `staged-layout-successor-materialization-20261123.log`.
 - Dependency extension `staged-layout-successor-dependency-extension-20261123.log`
