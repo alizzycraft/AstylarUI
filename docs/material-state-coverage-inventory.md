@@ -14,13 +14,48 @@ independent cold equality and isolated import are still required.
 The Menu and Divider successor has passed the complete dependency
 loader. The staged successor `a185b08a` adds Chips width and adjacent
 placement evidence to the Checkbox, Slide Toggle, Expansion, Tabs and
-modal observations. All case inspections remain partial.
+modal observations. It is materialized with 885 new evidence paths
+verified against the last fully replayed dependency list. Full guarded
+replay remains pending. All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
+
+### Staged layout successor materialized and dependency additions verified
+
+Review `a185b08a` materializes in the existing proposal envelope.
+Streaming reconstruction verifies the 2,311 rows and all 12 delta
+stages against their recorded review digests. The proposal is 170,456,000
+bytes with SHA-256
+`270560ff054bee33ce556d798d7f1115c68b6a5513920cbb0cbc184fc2b6c530`.
+
+The dependency comparison reconstructs the exact 36,440-path vector
+from fully replayed parent `56f299f9`. All inherited path digests are
+conserved. The 885 new paths verified from disk, totaling 58,450,584
+bytes. The successor vector covers 37,325 dependencies. The accepted
+canonical pointer remains `5a208846`.
+
+A raw full-loader invocation rejected the expected historical digest for
+`scripts/audit-material-configured-control-activation.mjs`. The two
+retries through the existing historical reader exhausted 1,152 and
+2,304 MiB heaps. Retain all three stderr receipts. Run the full guarded
+loader once after the export chain releases enough memory. This
+dependency comparison establishes the additions and conservation while
+the historical full replay remains pending.
+
+- Materialization receipt `staged-layout-successor-materialization-20261123.log`.
+- Dependency extension `staged-layout-successor-dependency-extension-20261123.log`
+  SHA-256 `0f241e5ec73c4fca350613953436953c4accc0ebdbcc51eeaec2e70a121a9d04`.
+- Successor dependency vector SHA-256
+  `8a41397a7c8997e0d91a365f2bcc97d2bfea6bca3806eabae1556e1088ffe01a`.
+- Raw rejection stderr SHA-256
+  `3475a2db9d3f15346da78cd1e834047dcb55d01091df93c52f21f9d34258c09c`.
+  Guarded retry stderr digests
+  `3197a7afc30706c0642121c02fe68a02f26286ef3fbe6d629693de90666580a9`
+  and `1ea16e7ae105997c6a6cdb49364dc8a0624607467819f314458cba93e3ebab8`.
 
 ### Current dimension-registry coverage and the Tooltip open exception
 
