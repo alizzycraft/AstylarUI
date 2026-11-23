@@ -101,8 +101,26 @@ pair, 596,978 for placement alone, 642,988 for crop alone, and
 413,434 for the crop with the original projection translation.
 Recalculating the translation against the cropped backing's effective
 baseline yields 776,054. The controls show that placement and backing
-rows interact through pixel sampling. Remaining differences require
-a comparison of native channel coverage and projected texture alpha.
+rows interact through pixel sampling.
+
+Native RGB channels show a coverage spread above two percentage points
+at 18,504 glyph pixels. Astylar has zero such pixels. On every label,
+the native red centroid lies right of green and blue lies left. This
+direction holds using encoded RGB and linear-light contrast. Astylar's
+horizontal channel centroids stay within 0.012 device px of green.
+
+Even choosing the best shared alpha independently at every pixel with
+the matched ink and backdrop leaves 1,467,350 of the 2,892,865 observed
+absolute RGB units in the continuous model. An 8-bit model with
+channel rounding gives the same 50.7% bound. These bounds can overlap
+with placement-related errors. The physical raster implementation
+and contract classification remain open.
+
+- Channel coverage `artifacts/material-parity/divider-current-glyph-channel-coverage-20261123.json`
+  SHA-256 `70e337a65bbd55801915677313d05e59dad61a511f5d4d4be4d32bc51a6cbf97`.
+- Channel coverage case delta `artifacts/material-parity/divider-current-glyph-channel-coverage-composed-delta-20261123.log`
+  SHA-256 `049de65125e4ec9c8e98759b3f1fdf8014115f113f9b4dedd6eb252dba734306`.
+  Staged successor `3a6a5616` binds 24 cases and 102 receipt paths.
 
 - Paired paint model `artifacts/material-parity/divider-current-glyph-paint-attribution-20261123.json`
   SHA-256 `7529055547ec020e64e60214102284493df70743ba82602794dda537ea13f583`.
