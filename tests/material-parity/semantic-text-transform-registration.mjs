@@ -436,7 +436,10 @@ export function readHistoricalBenchmarkSource(file, options) {
   else if (name === 'position-composition-producer-transition.mjs') restored = restoreSemanticRegistrationTransitionSource(raw);
   else {
     restored = normalized(raw);
-    const usesRetainedBenchmark = digest(restored) === 'f383821eef926747bd1de6ce675a858e0a3f75ff170e3c00cce81a77427b86e7';
+    const usesRetainedBenchmark = [
+      'f383821eef926747bd1de6ce675a858e0a3f75ff170e3c00cce81a77427b86e7',
+      'd596955050f5d887e40fd2d47186577ba45ffec7f9c65cd357e8eb0216e60bac',
+    ].includes(digest(restored));
     if (usesRetainedBenchmark) {
       restored = execFileSync('git', ['show', '96fd626066a4f6e3691c7a9f7ff662091c77b078:tests/material-parity/benchmark-config.spec.mjs'], { encoding: 'utf8' });
       assert.equal(digest(restored), 'a270e3d3330d361512593efa60f69771c71709f70f2f679c8787f186ceb275d0');

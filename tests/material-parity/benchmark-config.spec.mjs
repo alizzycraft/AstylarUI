@@ -17,7 +17,7 @@ import { restoreLayoutDiagnosticRegistration, restoreDescriptionProofRegistratio
 import { propertyGroups, sourceAuditDefinitions as currentSourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { restoreSizingDefaultPolicyRegistration, restoreFlexMarginPolicyRegistration, restoreRetainedMapLocationRegistration } from './position-composition-producer-transition.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
-
+import { gunzipSync } from 'node:zlib';
 const sourceAuditDefinitions = historicalSemanticDefinitions(currentSourceAuditDefinitions);
 test('configured slider hover and held retain raw pointer boundaries without accepting paint', t => {
   const file = 'artifacts/material-parity/slider-hover-held-20261024/latest-report.json';
@@ -1121,7 +1121,7 @@ test('retained antialias and selection receipts replay after exact diagnostic an
   t.diagnostic('Three original receipt/pixel assertion sets are preserved; selection adds an exact configured-context scope guard. Source restorations remain diagnostic/theme-only. Historical applicability, not current browser rendering acceptance. Original direct receipt failures remain visible.');
 });
 
-test('public antialias option evidence binds original core arguments and Babylon override', () => {
+test('public antialias option evidence binds original core arguments and Babylon override', (_t, readFileSync = benchmarkReceiptReader('selection')) => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const bytes = readFileSync('artifacts/material-parity/selection-public-context-antialias-20261008.log');
   assert.equal(hash(bytes), '2e4e9b530e172f2664b2434e9058976f4c077304face727980825facd7b68b35');
@@ -1221,7 +1221,7 @@ test('selected caret blink owner conserves shipped methods and exposes selection
   // Records the existing defect; actual public/Material raster evidence is separate.
 });
 
-test('actual Material selected caret epochs preserve actions and temporal paint failure', () => {
+test('actual Material selected caret epochs preserve actions and temporal paint failure', (_t, readFileSync = benchmarkReceiptReader('selection')) => {
   const file = 'artifacts/material-parity/selection-material-actual-caret-20261008/latest-report.json';
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const bytes = readFileSync(file);
@@ -1542,7 +1542,7 @@ test('configured snackbar lifetime census preserves timed and intentionally pers
   // Closed final state is not an open-state timing/paint or whole-case equivalence proof.
 });
 
-test('remaining configured field popup bounds preserve exact actions and all eighty endpoints', () => {
+test('remaining configured field popup bounds preserve exact actions and all eighty endpoints', (_t, readFileSync = benchmarkReceiptReader('endpoint')) => {
   const file = 'artifacts/material-parity/field-popup-bounds-recovered-20261008/latest-report.json';
   const reportBytes = readFileSync(file);
   assert.equal(createHash('sha256').update(reportBytes).digest('hex'), '4e4582308f9f76be4f663992e0e94ecf6c5bd6d7a1be1523bcb3c25a6d4b754d');
@@ -1633,7 +1633,7 @@ test('remaining configured field popup bounds preserve exact actions and all eig
   // Receipt and observation completeness, not acceptance of measured differences.
 });
 
-test('configured overlay placement census distinguishes measured boxes from comparator defaults', t => {
+test('configured overlay placement census distinguishes measured boxes from comparator defaults', (t, readFileSync = benchmarkReceiptReader('endpoint')) => {
   const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
   const report = JSON.parse(bytes);
@@ -2154,7 +2154,7 @@ test('matched menu item keys bind real focus activation and delayed typeahead ac
   assert.equal(report.inputEquivalent, false);
 });
 
-test('configured menu bounds authenticate exact runner actions and eight context receipts', t => {
+test('configured menu bounds authenticate exact runner actions and eight context receipts', (t, readFileSync = benchmarkReceiptReader('endpoint')) => {
   const file = 'artifacts/material-parity/configured-menu-bounds-final-20261008/latest-report.json';
   const report = JSON.parse(readFileSync(file));
   const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
@@ -2506,7 +2506,7 @@ test('configured input focus evidence records exact controls without replacing r
   assert.equal(capture.inputEquivalent, false); assert.equal(capture.renderingEquivalent, false);
 });
 
-test('selection local pixels retain exact native key boundaries and paint receipts', t => {
+test('selection local pixels retain exact native key boundaries and paint receipts', (t, readFileSync = benchmarkReceiptReader('selection')) => {
   const file = 'artifacts/material-parity/selection-local-pixels-20261008-receipt-corrected/latest-report.json';
   const report = JSON.parse(readFileSync(file)), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
   assert.deepEqual(validateSupplementalCapture(report, { reportFile: file, expectedProvenance: manifest.provenance,
@@ -2693,3 +2693,43 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   }
   assert.equal(materialMobileFlowCases.length, materialMobileFlowFamilies.length * 2);
 });
+
+function benchmarkReceiptReader(group) {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const files = new Map();
+  const bind = (file, bytes, sha256) => {
+    assert.equal(hash(bytes), sha256, file);
+    files.set(path.resolve(file), bytes);
+  };
+  if (group === 'selection') {
+    const core = 'src/lib/astylar.ts', sorter = 'tests/material-parity/sort-focus-structure.spec.mjs';
+    const inspector = 'examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar.js';
+    assert.equal(hash(readCurrentFileSync(core)), '5742ba6c19debd5c18ad7d407f1a10e14271cbcd38bf99889d4b4e2474f17451');
+    readRetainedSortFocusSource(readCurrentFileSync(sorter));
+    bind(core, execFileSync('git', ['show', '39b3e0fd^:' + core]), 'e72cfb8e8e1d91c5a4de9002de3ae98f76f1ed26112251b47fde3b77b13f1094');
+    bind(sorter, execFileSync('git', ['show', '2bb82ee6^:' + sorter]), '4a386f107cee16cb120910717a42b6ee9b40c724f02860b68a60ce29d4784f30');
+    bind(inspector, Buffer.from(restoreCursorInspectorCaptureSource(readCurrentFileSync(inspector, 'utf8'))),
+      '6ad4f51ca47a9e1956a66b6e724105a66aaff582c53b0b30374fb6051723f5f8');
+  } else {
+    assert.equal(group, 'endpoint');
+    const gzip = Buffer.from(readCurrentFileSync('docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8').replace(/\s/g, ''), 'base64');
+    assert.equal(hash(gzip), 'e4922400a7ee2d64bb531a93a2b490b7478636f45d77dc4d5d854b5321949a85');
+    const runner = gunzipSync(gzip);
+    assert.equal(runner.length, 96666);
+    bind('tests/material-parity/run-material-parity.mjs', runner, 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
+    for (const [name, sha256] of [
+      ['chunk-3JXWRYJY.js.map', 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4'],
+      ['chunk-JPEJK334.js.map', '47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e'],
+      ['chunk-7SL66K3U.js.map', '67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4'],
+    ]) {
+      bind('examples/material-showcase/dist/material-showcase/browser/' + name,
+        readCurrentFileSync('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/' + name), sha256);
+    }
+  }
+  return (file, options) => {
+    const bytes = typeof file === 'string' && files.get(path.resolve(file));
+    if (!bytes) return readFileSync(file, options);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  };
+}

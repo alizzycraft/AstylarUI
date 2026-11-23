@@ -381,6 +381,10 @@ export function preparePickerFocusSemanticsBenchmarkReader(bytes) {
 
 export function restorePickerFocusSemanticsBenchmarkReader(bytes, root = process.cwd()) {
   let source = normalized(bytes);
+  if (hash(source) === '853acae3da08f53f8229024206ac0f2a08759b57f86344e01aa9b8a6a2187305') {
+    source = normalized(execFileSync('git', ['show', '51915dcddeb5a81c5fba0bbc7f3bd5e8cd94ad8e:' + benchmarkReaderFile], { cwd: root }));
+    assert.equal(hash(source), '3a57cfcd60ecf9f1828d1ee3c2f0368237366d0d77dc65841032ce43c957fe8e');
+  }
   // This later reader has its own exact registration. Recover the earlier
   // picker reader before reversing its changes for historical receipts.
   if (hash(source) === '3a57cfcd60ecf9f1828d1ee3c2f0368237366d0d77dc65841032ce43c957fe8e') {

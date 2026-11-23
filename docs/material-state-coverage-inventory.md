@@ -1492,10 +1492,24 @@ All 33 tests pass with zero skips. The temporary module reader
 targets only benchmark-config.spec.mjs. The original runner
 is active in unfiltered enforced mode against the isolated
 build. Its browser actions, thresholds and case roster are
-the maintained ones. The direct configuration invocation still
-needs the retained readers integrated and source receipts reconciled.
+the maintained ones. The direct configuration suite also passes all
+33 tests with zero skips. Each affected assertion authenticates its
+own historical evidence. The original failure logs remain retained.
 Scoped configuration stdout SHA-256 bfbee0e3123332259057c27cd15d5bf1c43dd81a69af7e31f5ad89cfbb6242dd.
 Scoped configuration reader SHA-256 b5f19a2eb8e33c81c7d11da0b17025505567b40878ad2247c756334a33db9c7b.
+Direct configuration stdout SHA-256 e40d694d3d4736ec75f544b39f60d9fd996cd03776c4efec2c7a566652bdfb4e.
+
+The live source preflight accounts for five configuration and reader
+changes among 1,164 paths. All 501 focused proof records conserve.
+The predecessor fingerprint section matches 5a208846 exactly. The
+predicted section digest for the next export is
+1775ad4c74cc498e99fe52e91574449b83d090396edc0f50b856cb020a2dfe48.
+The text-backing and picker readers return the exact two historical
+hashes bound by 750e3af9. The focused Snackbar path also returns its
+authenticated benchmark source. Its standalone historical suite stops
+earlier, in the badge reader's span/opener producer restoration. The
+same failure reproduces with all five source files from 51915dcd.
+Failure stdout SHA-256 1cabcbdd88ab39031e7c1c17eb83a3beefe376a03163a6329f7bef4a39cf0fab.
 
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
