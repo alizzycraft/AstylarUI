@@ -21,6 +21,43 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Font completion accounts for the second modal departure reflow
+
+The prior departure traces found one public surface update and two revision
+increments. The open question was whether another application update,
+pointer invalidation, or a resource callback requested the second reflow.
+The existing departure probe wrapped the live session's invalidation and
+reflow methods on the frozen enforced build. The cases were Bottom Sheet
+light and dark desktop DPR1 and Dialog light desktop DPR1, all
+`activate-leave`. Each probe verified the served asset bytes against the
+enforced capture manifest.
+
+Each case requests one public update before moving the pointer away.
+The first reflow consumes only `update`. While it is rendering,
+`FontFaceSet.handleFontsLoaded` requests `font`. The next reflow consumes
+only `font`. The update promise settles after both. The Bottom Sheet
+revision advances from 2 to 4 in both profiles and Dialog from 3 to 5.
+The semantic operations again show Bottom Sheet descendant and root
+replacement on the opener and Dialog root replacement on Cancel.
+The probe attributes reflow requests. It leaves the exact font face and
+operation-to-reflow timing open.
+
+Both light cases reproduce both enforced terminal PNGs. Dark Bottom Sheet
+reproduces the Material PNG and has a different Astylar PNG. That raster
+discrepancy remains open. The underlying enforced cases still pass their
+benchmark checks.
+
+- Bottom Sheet light report `bottom-sheet-departure-invalidation-reasons-20261123.json`
+  SHA-256 `4a51b16ee94f7122d0dac4e4f711d2f89de49286efcda21fc602f9426a9bf378`.
+  Runner SHA-256 `3bb4911bfe484e6e31b56b27acffa7d4e43a3788a3c505a30937a8e414b0b1c6`.
+- Bottom Sheet dark and Dialog light report `modal-departure-invalidation-peers-20261123.json`
+  SHA-256 `091cb8d56c337502039c915581620d2297d9e4e8dff5e8051bcf7b859abc4806`.
+  Runner SHA-256 `71513a876998cd5bdda0876a1b58bf77a145be0f86effe7c24de5c92e3461878`.
+- Enforced checkpoint key prefixes `7b4f5ebd0749`, `d6d4a73f7815`
+  and `8689b5d5dcd2`, in case order above. The font listener and cache
+  clear are at `src/lib/astylar.ts:470` and `:571`. Session follow-up
+  scheduling is in `src/lib/astylar-render-session.ts:173`.
+
 ### Current unfiltered enforced browser matrix passed
 
 The isolated build and unfiltered configuration suite passed. The enforced
