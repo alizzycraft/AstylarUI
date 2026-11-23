@@ -69,7 +69,7 @@ assigning paired-box or paint equivalence.
 ### Measured box size follows registry dimensions on current owners
 
 The follow-up compared each stored dimension with the candidate box
-independently projected from the mesh's world vertices. All 6,714 paired
+independently projected from the mesh's world-space bounding-box corners. All 6,714 paired
 owners agree on width and height within 0.000000000056 CSS px. Adding the
 recorded padding is unnecessary for this box comparison. This verifies
 size at the sampled projection boundary. Positions and raster effects
@@ -86,16 +86,36 @@ interactions, both Material tab IDs resolve to text spans inside tabs,
 while Astylar measures the role-bearing buttons. The Material panel
 target is a text span inside the tabpanel. Astylar measures the authored
 `showcase.material:tab-panel` owner. The largest width gap, 620.5625 CSS
-px, belongs to that panel comparison. Use matched control and text
-owners before attributing these gaps to layout. Slider contributes
-another 132 observations from its two range input owners and retains
-the known fixed half-domain authoring difference.
+px, belongs to that panel comparison. Slider contributes another 132
+observations from its two range input owners and retains the known fixed
+half-domain authoring difference.
+
+Following the two native label spans to their role-bearing ancestors
+recovers the matched control sizes from the retained computed styles in
+all 58 interactions. Material's tabs use equal padding and
+`flex: 1 0 auto`. The label width difference predicts their opposing
+width offsets to within 0.0005 CSS px. At desktop sizes the native widths
+are 365.312 and 354.688 CSS px. In the mobile cases they are 135.312 and
+124.688 CSS px. Astylar authors 50% width and stores 360 or 130 CSS px
+for both controls. Height matches for both controls in every case.
+
+The native role-bearing tabpanel and the Astylar plugin owner agree on
+width in all 58 cases at 720 or 260 CSS px. Native and candidate heights
+are 19 and 20 CSS px in light and dark, 18 and 19.6154 in contrast, and
+22 and 22 in custom. These are matched owner sizes. Their positions,
+text rasters and equivalent-input behavior remain open.
 
 - The comparison reuses the configured-order checkpoint and tree digest
   `ab6806c34e9b24950f2226995ebd9a09d98d82a27788f31ba2d8f29c2fa33794`.
 - The 174 Tabs identity joins use the digest
   `2ac98f791a3b5f615948d7e11058ebdd8ddaf5e387192e51a08b465d13b7f4d5`
   over case key, owner ID, paired tree digests and owner types.
+- The matched-owner size join adds the recorded box sizing and flex
+  basis, native computed border-box dimensions and candidate registry
+  dimensions. Digest
+  `27d1e874b138dc511ef5917badff4b4209fadf46195cbe70e6a0c24789fd7765`.
+  Candidate size declarations are at
+  `examples/material-showcase/src/app/astylar.component.ts:727`.
 - The projection, native Tabs and candidate Tabs definitions are at
   `examples/material-showcase/src/app/astylar.component.ts:1144`,
   `examples/material-showcase/src/app/reference.component.ts:88` and
