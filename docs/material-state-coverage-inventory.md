@@ -23,8 +23,10 @@ for all 88 mapped Select and Timepicker popup cases. Staged review
 `f37a1ce5` extends the localization of the 13 terminal raster variants
 with a natural caret blink replay for two Timepicker cases. Its staged
 successor `b7238449` binds actual Chromium description associations for
-the eight configured Tooltip desktop `open` cases. All case inspections
-remain partial.
+the eight configured Tooltip desktop `open` cases. Staged review
+`a4cbcc7f` binds the original Progress Bar and Progress Spinner
+raster measurements to exact current frames for 40 cases. All case
+inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -52,6 +54,40 @@ preflight,
 The section receipt is
 `retained-accessibility-paint-canonical-sections-20261123.log`, SHA-256
 `224b98ade7d7dd4bf35f9eaf026b7d1adb891c5e46ae56f57b407d8987f99214`.
+
+### Current Progress Bar and Spinner raster applicability
+
+The check asked whether changes to the captured inputs limit reuse of
+the retained fill and arc measurements. All 80 current PNGs match the
+measured October originals and the earlier ancestry checkpoints
+byte-for-byte. The existing checkpoint reader also authenticates the
+case keys, results and paired trees for all 24 static and 16 passive
+interaction cases. Recorded role and value comparator results agree
+with the ancestry checkpoints.
+
+All 80 input-tree hashes differ. On Material, the changes are stylesheet
+rule locations, CSS text spacing and the removal of a Slide Toggle
+selector branch with no matching Progress descendant. On Astylar, they
+are added dimension-registry observations, revision counters and two
+position values on an unused Datepicker rule. Progress authored nodes,
+existing resolved styles and Material computed values are conserved
+between the two capture generations.
+
+The measurements therefore apply to the current pixels for native left
+fill versus Astylar right fill and the track RGB difference, and for the
+opposing spinner arc directions and angular occupancy. These are
+exact-color measurements. Equal-input antialiased edge and cap paint,
+focused paint and broader ownership and disposal still need evidence.
+
+Replay verified 2,311 review row positions, 20 predecessor digests and
+488 receipt paths. The 40 paint observations remain partial and need the
+combined dependency load.
+
+- Delta `progress-current-raster-applicability-composed-delta-20261123.log`
+  SHA-256 `a1c9058b0f382ceef137b7f6af6b5f5810996345c987247caa8523a0e343ec23`.
+  Successor `a4cbcc7f78e90759f3cb83bc1c93c7caa481e7806fb06cb6672c435063ebcb5c`.
+  The delta binds both checkpoint manifests, the original measurement
+  logs and all three generations of PNGs.
 
 ### Current Tooltip open description and target association
 
