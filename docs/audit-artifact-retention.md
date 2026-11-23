@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+Retain canonical generation 3723a548, predecessor 3bc80bd0 and the
+isolated import. Preserve the section, cold and promotion receipts.
+The original export is preserved in `artifacts/material-parity/working-audit/candidate-validation/divider-glyph-oversized-original-20261123`.
+The transport payload decodes to identical bytes.
+Two workspace index writes ran out of space. The isolated import on a
+separate volume succeeded. After lossless compression of four closed
+historical indexes, the verified index and shards were staged together.
+Retain the failed paths, both failure logs, and the recovery receipt.
+Promotion SHA-256 7261c8fda3c39c521d8211cfa496b57bd839db482a85277064e7913cd99fca9b.
+
 Retain canonical generation 3bc80bd0, predecessor b53047be, and the
 verified isolated transport store. The promotion retains 86 verified
 hard links and all cold, repack and import receipts. The original

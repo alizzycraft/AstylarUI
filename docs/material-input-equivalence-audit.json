@@ -5,8 +5,8 @@
   "payload": "material-input-equivalence-audit.json.gz",
   "encoding": "utf-8",
   "compression": "gzip",
-  "compressedBytes": 102500245,
-  "compressedSha256": "3bc80bd084648ed3ee68be6d007ae7cbdca4d43353028f495bfb5a1b0de7e08f",
-  "uncompressedBytes": 2410345730,
-  "uncompressedSha256": "2b4f5b1793052b8813a64229157a7662f1ac6631cc1396bfe5a5a1f37da40442"
+  "compressedBytes": 102897118,
+  "compressedSha256": "3723a548d241675e18048cf652f51919954d69b402b8ad3f95d9edd5b02b349c",
+  "uncompressedBytes": 2412678436,
+  "uncompressedSha256": "9b1a591d9744bf813f87b81d2b9c26596263bc5fab6e4a8700ffcbe5e985ec06"
 }

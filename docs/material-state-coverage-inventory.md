@@ -2,7 +2,7 @@
 
 ## Current audit state
 
-Accepted canonical generation `3bc80bd0` is the baseline for all
+Accepted canonical generation `3723a548` is the baseline for all
 2,311 configured cases. The unfiltered enforced browser run passed all
 436 static and 1,875 interaction cases. This establishes benchmark output
 acceptance. Input equivalence and case inspections remain open.
@@ -89,8 +89,11 @@ selectors, an unknown review or altered proposal bytes.
 The source collector reconciles three changed selector files in the
 1,164-path vector and preserves all 501 focused proof records. The
 expected canonical section changes are coverage and source fingerprints.
-The accepted package remains at `3bc80bd0` pending export, independent
-cold verification and isolated import.
+The canonical export conserves 78 sections. The independent cold
+check passes with zero disk-cache hits, and the isolated import
+verifies 84 shards. Accepted generation `3723a548` contains review
+`3a6a5616` and 43,634 dependency paths. All case inspections remain
+partial. Promotion SHA-256 `7261c8fda3c39c521d8211cfa496b57bd839db482a85277064e7913cd99fca9b`.
 
 - Export selection verification `artifacts/material-parity/divider-glyph-export-selection-verification-20261123.log`
   SHA-256 `ada6fe609c644f8bb85e86ff94fe9cea789e20a846e35b6f3d6bc6192722ab42`.
