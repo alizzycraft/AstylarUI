@@ -1587,6 +1587,26 @@ The declared 1,887-file build matches the retained baseline and all
 Garbage collection, other cohorts and current rendering remain open.
 Trusted Divider peer receipt SHA-256 bd582f416e92b5bad0144f63bc4b7396b0f3a900cd39861bb1a80babf32cd96d.
 
+The enforced run's first 12 static Divider cases have authenticated
+checkpoints across desktop, tablet and mobile. All 72 corresponding
+screens and crops match the retained baseline byte for byte. Geometry,
+semantics, errors and case threshold outcomes also match. The style
+record changes only the reference stylesheet index. The text record
+adds measurement and crop coordinates. This confirms applicability
+for those measured outputs across the two browser builds. Comparison
+viewports and the remaining case inspection obligations stay open.
+Fresh Divider receipt SHA-256 fc1104a0f2619fc0f4e0605e5e3b3f013ee4b86235dedca8a2e4b2c2f9408c12.
+
+The paired input trees for those 12 cases authenticate against both
+checkpoints. All 24 affected authored rule records have matching
+selectors, rule paths, and declarations after dropping the stylesheet
+index. Six native density selectors lose an unused slide-toggle branch.
+The Astylar rule list changes the coordinates of `.datepicker-selected`,
+which matches zero captured Divider nodes. The fresh collector also
+records retained dimensions for 108 nodes and a different style revision
+in ten cases. These changes leave captured structure, resolved styles,
+and the measured comparison outputs conserved for the 12 cases.
+
 The Datepicker local paint census has 99 rows with verified primary
 target crops and remaining work. The eight configured desktop opening
 cases can also be measured from their authenticated full screenshots.
