@@ -2611,6 +2611,32 @@ Exact key values, caret and selection timing, settled active-node identity
 and current rendering remain open. Replay SHA-256
 0462fab3c46702f28d4d637c1067c6f7d14eb8fab07b6e047cfbd14033e7d91b.
 
+The current enforced checkpoints for Form Field and Input cover 48
+empty-and-blur, disabled and error cases across four profiles and both
+desktop DPRs. All 128 screenshots and crops match the retained frames.
+The recorded settled values, disabled flags and invalid flags agree
+across sides. In the 24 Form Field cases, Material points to the
+captured hint or error text and the Astylar control omits the authored
+description association. This extends the existing hint and error
+findings to the fresh checkpoints.
+
+The current edit replay authenticates both terminal frames for all
+16 empty-and-blur cases. Native Backspace dispatches a trusted
+`deleteContentBackward` input event and focus leaves at the outside
+click. Astylar's document event trace has no input event in this
+interval. The value is empty by keyup. Its first focusout occurs
+synchronously inside the semantic root's `replaceChildren`, then the
+same input refocuses before the outside click. The requested child
+objects and order agree with the existing list in all 16 cases. Stack
+locations bind the root call in the served chunk, whose mapped
+`reconcile` and `syncFocus` methods match the current source. This
+extends the existing root focus-continuity attribution beyond the two
+light desktop DPR1 cases. Keep DOM event delivery, caret paint and
+selection timing as separate questions.
+Current checkpoint conservation SHA-256 4bcacf5cf9d25176ea51202c57524af0b4807aaa801134e4953a0189bed37178.
+Current editing trace SHA-256 60580daf7822798b3ee1a39e26abd3298583cda1b319429577a6167ff33b1110.
+Current editing source verification SHA-256 d690a372a844f3b2f7872bc11b60ccd017e8e024897b319360b251f6205d27d6.
+
 Successor 26e5ffb8 stages 16 partial activation observations and attaches
 editing and pointer focus evidence to the same rows. The 435-row batch
 reproduces its prior successor and reverses to the full 2,311-row parent.
