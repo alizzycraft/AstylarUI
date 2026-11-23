@@ -28,8 +28,10 @@ the eight configured Tooltip desktop `open` cases. Staged review
 raster measurements to exact current frames for 40 cases. Combined
 review `a4a3b200` also binds current browser focus, paint, accessibility
 and same-surface ownership for those cases. Its 397 added paths verified.
-The complete loader is queued behind the cold canonical check and
-isolated import. All case inspections remain partial.
+The complete loader for that batch is queued behind the cold canonical
+check and isolated import. Staged successor `00a6ec38` adds actual SVG
+and tube endpoint geometry for all 20 Spinner cases. All case
+inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -57,6 +59,37 @@ preflight,
 The section receipt is
 `retained-accessibility-paint-canonical-sections-20261123.log`, SHA-256
 `224b98ade7d7dd4bf35f9eaf026b7d1adb891c5e46ae56f57b407d8987f99214`.
+
+### Current Spinner cap requests and rendered mesh geometry
+
+The current Chromium replay checked whether the old standalone
+Babylon geometry result also applies to the rendered Spinner
+indicator. Material requests a butt cap, miter join, miter limit 4 and
+10% stroke on a radius-45 circle in a 100 by 100 SVG viewBox.
+All 20 cases request a 282.743 px dash and 101.788 px offset.
+Chromium's `getTotalLength()` readback is 282.28659 in every case.
+These are distinct observations. The length readback alone cannot
+attribute endpoint pixels.
+
+All 20 Astylar cases render a 41-point tube with tessellation 12.
+The vertex buffers confirm flat endpoint disks. The maximum observed
+distance of a cap ring vertex from its chord-normal plane is
+0.00000118 in mesh coordinates. The chord normal places each cap
+plane 2.88 degrees from the exact circle tangent direction. This
+confirms the retained shape class and segmentation result in the
+actual browser. Authored arc placement still differs, and the
+comparison leaves antialiased edge and equal-input raster attribution
+open.
+
+Replay verified all 2,311 review row positions, 23 predecessor digests
+and 67 attached paths. The 20 additions are staged for a later coherent
+integration batch.
+
+- Current cap report `progress-spinner-current-cap-geometry-20261123.json`
+  SHA-256 `6592ba68694c2d601a19f6956c2789e85bac8ebe42f226882540f0c4c6964e2a`.
+- Case delta `progress-spinner-current-cap-geometry-composed-delta-20261123.log`
+  SHA-256 `56f4f690e2b9d2f5743085d94ab097d0f6efbc6800884e50ea82e768a3138d55`.
+  Successor `00a6ec38018be2a4b84abbbc9f9c5c057a29328f1d24d7aad19a54738d71b8c6`.
 
 ### Current Progress material ownership through element removal
 
