@@ -58,6 +58,11 @@ Materialized successor `275e3de9` combines all five current Divider
 deltas for 24 cases. The guarded loader verifies all 2,311 rows and
 43,570 dependencies, including 71 newly referenced paths. Accepted
 generation `3bc80bd0` remains the canonical export.
+Materialized successor `3a6a5616` adds six Divider glyph deltas
+for 24 cases. The guarded loader verifies all 2,311 rows and 43,634
+dependencies, including 64 newly referenced paths. All 1,164 source
+fingerprints match the published export vector. The canonical runner
+still needs to select the guarded reader for this review.
 Case inspections remain partial. Divider's complete owner census
 identifies the exact property and paint mappings still open. The
 current single-span line-box split now covers all 24 Divider cases.
@@ -66,6 +71,26 @@ contexts. All six custom cases now have a direct backing-row paint
 control. Configured native glyph attribution remains open.
 
 ## Evidence ledger
+
+### Combined current Divider glyph review
+
+The six glyph deltas replay in order from `275e3de9`. All six
+intermediate digests and all 43,570 inherited dependency records
+conserve. The existing loader authenticates the combined proposal,
+including the 16 historical source routes. Case inspections remain
+partial and the accepted generation remains `3bc80bd0`.
+
+The live source collector emits the same 1,164-path vector used for
+`3bc80bd0`. The remaining canonical preparation is selection of the
+guarded reader for `3a6a5616`, reconciliation of any selection source
+changes, and storage preflight for export, cold check and isolated import.
+
+- Materialization `artifacts/material-parity/divider-glyph-review-materialization-20261123.log`
+  SHA-256 `10908f9d46a8d6af7cf9e23377804c171f46c6aedc49286cae20499026924885`.
+- Guarded replay `artifacts/material-parity/divider-glyph-review-guarded-replay-20261123.log`
+  SHA-256 `834279c163f844407a60b632e87270f40d31bea78c355cb17e32e47f7f4880f5`.
+- Source preflight `artifacts/material-parity/divider-glyph-review-canonical-preflight-20261123.log`
+  SHA-256 `82fdbb034bd165e6ebf5b079dc9d459a14fbac4980a7efaad0001c49fc4e6b0b`.
 
 ### Combined current Divider review
 
