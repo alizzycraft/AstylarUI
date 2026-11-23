@@ -22,6 +22,50 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current dimension-registry coverage and the Tooltip open exception
+
+The check asked whether measured owners lack registry evidence or whether
+the paired geometry collector omits a side when a peer is absent. All
+2,311 configured checkpoint keys, result digests and Astylar input-tree
+receipts verify against the enforced manifest. Every geometry row with a
+recorded pair joins to exactly one authored Astylar owner with finite
+`core-dimension-registry` dimensions.
+
+| Case kind | Cases | Geometry rows | Paired rows with registry | Missing pair |
+| --- | ---: | ---: | ---: | ---: |
+| Static | 436 | 1,196 | 1,040 | 156 |
+| Interaction | 1,875 | 6,064 | 5,674 | 390 |
+
+Of the 546 missing pairs, 538 have no corresponding authored Astylar
+owner at the captured boundary. They concern Bottom Sheet, Dialog,
+Snackbar and Tooltip popup targets. The other eight are all Tooltip
+`open` cases across four profiles and both desktop DPRs. Their paired
+geometry rows say `missing`, but their authenticated Astylar trees retain
+a 106.79833984375 by 24 CSS px popup owner with 4 CSS px vertical and
+8 CSS px horizontal padding. All eight authenticated Material trees
+lack the popup surface. All eight benchmark cases pass. The placement
+predicate returns success without checking popup bounds in `open`.
+The runner returns a missing pair when either side is absent and the
+benchmark-only Astylar click handler authors the open state. This
+confirms the earlier action-input asymmetry on the current build.
+
+Use the existing registry values for the 6,714 paired owner observations
+when tracing requested size and padding into layout. Box mapping,
+paint attribution and final case closure remain separate checks. For
+Tooltip `open`, compare authored activation and popup presence before
+assigning paired-box or paint equivalence.
+
+- Checkpoint manifest `d0791bca30e413ce6bd417fcfbfffb6efd6509b40159dbe810ba114feb6e62a9`.
+- Configured-order digest of newline-delimited JSON arrays of checkpoint
+  key hash, result digest and Astylar tree digest
+  `ab6806c34e9b24950f2226995ebd9a09d98d82a27788f31ba2d8f29c2fa33794`.
+- Tooltip `open` checkpoint key prefixes `9dcfb17c5e11`, `936d56201273`,
+  `b4b0b12e57d4`, `53ef894f62ff`, `c32d68646bac`, `aabafd3b17b0`,
+  `ad1754e90895` and `a527494e0ccd`.
+- Source boundaries `tests/material-parity/run-material-parity.mjs:1004`
+  and `:1780`, `examples/material-showcase/src/app/astylar.component.ts:285`
+  and `src/lib/astylar.ts:925`.
+
 ### Font completion accounts for the second modal departure reflow
 
 The prior departure traces found one public surface update and two revision
