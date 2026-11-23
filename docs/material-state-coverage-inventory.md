@@ -35,12 +35,30 @@ are reconciled against `b53047be`. The successor was exported as
 limit. Section comparison conserved 78 sections and matched the
 preflight source fingerprint vector. Independent cold verification
 and lossless recompression are running.
+Materialized review `cabf1610` combines the staged popup geometry,
+Dialog action paint, and Spinner paint evidence. Its dependency extension
+passed and the complete guarded replay is queued after isolated import.
 Case inspections remain partial. After the canonical gates, close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
+
+### Combined popup geometry and paint review
+
+Review `cabf1610` replays ten staged deltas against `00a6ec38` and
+preserves all 2,311 configured case keys. It updates 217 distinct cases
+across popup geometry (165), Dialog action paint (32), and Spinner paint
+(20). The extension preserved 43,057 inherited dependency records and
+verified the contents of all 89 added paths. The combined 43,146-path
+vector has SHA-256
+`d484a5d9b8b688f02d5d4f207552d3eb3f26a31e9c005cba00116ebecd67ed06`.
+
+- `artifacts/material-parity/current-popup-dialog-spinner-materialization-20261123.log`
+  SHA-256 `b5af81f055c94534a91a6e12fd30eed4324d94a016ee67f1ea20cae859170247`.
+- `artifacts/material-parity/current-popup-dialog-spinner-dependency-extension-20261123.log`
+  SHA-256 `a3ef6bbc083d49af5f85405fe31aaa5f21a97422c6622deb39c256adb085b185`.
 
 ### Current Spinner multisample coverage
 
