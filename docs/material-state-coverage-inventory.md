@@ -21,8 +21,10 @@ Materialized review `2c839da5` passes the full loader with 42,656
 dependencies. It binds current browser accessibility-tree relationships
 for all 88 mapped Select and Timepicker popup cases. Staged review
 `f37a1ce5` extends the localization of the 13 terminal raster variants
-with a natural caret blink replay for two Timepicker cases. All case
-inspections remain partial.
+with a natural caret blink replay for two Timepicker cases. Its staged
+successor `b7238449` binds actual Chromium description associations for
+the eight configured Tooltip desktop `open` cases. All case inspections
+remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -50,6 +52,40 @@ preflight,
 The section receipt is
 `retained-accessibility-paint-canonical-sections-20261123.log`, SHA-256
 `224b98ade7d7dd4bf35f9eaf026b7d1adb891c5e46ae56f57b407d8987f99214`.
+
+### Current Tooltip open description and target association
+
+The open question was whether the different popup states also leave
+different accessible descriptions after the configured action. The frozen
+Chromium replay sampled both trigger trees before the action and at the
+settled boundary for all four profiles and both desktop DPRs.
+
+All eight Material buttons expose `Create a project` at both boundaries.
+They reference a persistent CDK description node that Chromium marks
+ignored as a separate AX node. All eight Astylar buttons gain that same
+description at settlement through their newly exposed `tooltip` popup.
+Chromium's related backend node IDs identify the exact DOM targets at
+each boundary. The button name and role agree throughout, and logical
+focus is on both triggers at settlement.
+
+The reference visual popup is absent throughout. The enforced
+checkpoints report a missing paired popup, preserve matching trigger
+focus and pass the benchmark, whose placement predicate skips Tooltip
+`open`. The description difference begins with the fixture's
+popup-conditioned `ariaDescribedby`. Once supplied, the association
+resolves in Chromium. These observations cover the two configured action
+boundaries. Whole-case paint, ownership and assistive-technology output
+still require their own evidence.
+
+Replay verified 2,311 review row positions, 19 predecessor digests and
+28 attached receipt paths. The staged successor still needs the
+combined dependency load.
+
+- AX report `tooltip-current-open-actual-ax-20261123.json` SHA-256
+  `3f9e730a9a4b68684dd220033c6892134b3a6573e312db45267a455cc3274454`.
+- Delta `tooltip-current-open-actual-ax-composed-delta-20261123.log`
+  SHA-256 `55bcef9d83bf56c03ffa2707e3608da3f619c93b1b4090df95658b323f82095f`.
+  Successor `b7238449fc54f0121287a966c49ca33f914ee805ba2c584624f9131542b57bd1`.
 
 ### Current semantic comparator and active-descendant coverage
 
