@@ -57,8 +57,8 @@ three popup relationship findings in the accepted source inventory.
 Case inspections remain partial. Divider's complete owner census
 identifies the exact property and paint mappings still open. The
 current single-span line-box split now covers all 24 Divider cases.
-The independent inherited strut and equal-input paint attribution
-remain open.
+The inherited strut reproduces the used geometry in four sampled
+contexts. Matched-input paint attribution remains open.
 
 ## Evidence ledger
 
@@ -75,8 +75,23 @@ The projected Astylar label boxes match the native total heights.
 Light, dark, and contrast also match the baseline splits. Custom
 projects the baseline at 16.261 CSS px at DPR1 and 16.622 CSS px at
 DPR2 within its 22 CSS px label box. These are used line-box and
-projected label measurements. An isolated strut measurement and
-matched-input paint attribution remain open.
+projected label measurements.
+
+The current native observer isolates the inherited strut in the light,
+contrast, and custom desktop cases and custom DPR2 inspect. Across all
+eight paragraphs, removing the visible span from the isolated observer
+preserves the height and baseline split. The zero-font control collapses
+to zero. An explicit 4 CSS px increase adds 2 px on either side of the
+baseline. The visible paragraph and its text bounds are preserved
+throughout. This closes the isolated native geometry question in the
+four sampled contexts. The other contexts and matched-input paint
+attribution remain open.
+
+- Strut replay `artifacts/material-parity/divider-current-inherited-strut-20261123.json`
+  SHA-256 `f1aacee6263605f5263997feab0f16e25471f08f671a45b7384053aa41d6b17e`.
+- Strut case delta `artifacts/material-parity/divider-current-inherited-strut-composed-delta-20261123.log`
+  SHA-256 `53ca7ddae4d0b5a5fe153efd4b045cdb94d26d779bbf48675e21f8eda321082c`.
+  Staged successor `c8629b67` binds four cases and 12 receipt paths.
 
 - Line-box replay `artifacts/material-parity/divider-current-used-line-box-split-20261123.log`
   SHA-256 `340f761c4de3ff9f11bfc2b2e80814f89276366467ca5a89e9747c5a11737b1e`.
