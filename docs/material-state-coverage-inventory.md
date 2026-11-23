@@ -42,6 +42,34 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Dialog action label placement and paint inputs
+
+The existing weighted ink-center metric reproduces all 64 button
+readings from the current PNGs. In owner-local coordinates, the
+maximum vertical shift is 0.00202 CSS px for Cancel and 0.03971 CSS px
+for Save. The on-screen shift is about 1 CSS px and follows the
+action-row box model.
+
+The native label spans and candidate control textures use the same
+text, Roboto first, 14 CSS px and weight 500. The native spans request
+0.096 CSS px tracking and normal line height. The candidate texture
+uses zero tracking and a 17 CSS px line height. These are distinct
+recorded inputs. Their individual effect on glyph paint remains
+unresolved.
+
+After accounting for placement, Save still differs at 10,656
+interior and 9,744 perimeter samples. The interior uses the
+benchmark's central ink region. Cancel also differs in both regions
+and includes the previously measured state-layer color differences.
+This bounds the label-placement question and leaves glyph and edge
+raster causality open.
+
+- Label report `dialog-current-action-labels-20261123.json`
+  SHA-256 `e6dd2df1b83e1e6b37ba42cf446e9711da43673111f15905d3e94eaead8df301`.
+- Case delta `dialog-current-action-labels-composed-delta-20261123.log`
+  SHA-256 `449321b7200ec787f708225c84e0039f240094b868063494aa2db82bf0f72e5b`.
+  Staged successor `3650497f` binds 32 cases and 164 receipt paths.
+
 ### Current Dialog action button paint
 
 For each of the 32 open-state cases, the comparison reads the
