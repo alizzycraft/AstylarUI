@@ -1560,9 +1560,26 @@ across Above and Below within one RGB channel value. The hypothetical
 22-row backing misses by more than two channel values at 377 of
 1,122 Above pixels. At Below, both models give identical samples.
 This binds the phase-dependent effect to the retained Astylar
-output. A rendered 22-row comparison and a paired equal-input native
-comparison remain open.
+output. The live comparison below now tests the same backing change.
 Backing screen receipt SHA-256 32f3a89fc1245ec6f54c1d7ea1d8a8c14648f54a08f0ddb4a7130b55c5fbccdd.
+
+Current custom desktop DPR1 and mobile DPR2 each have a live
+backing-height intervention on the authenticated enforced build. Their
+original, same-size replacement and restored frames match the enforced
+PNGs byte for byte. Cropping one transparent bottom row from each
+nearest-sampled backing leaves the 22 CSS px glyph boxes and measured
+styles unchanged. The 23-to-22-row render changes 389 pixels inside
+Above at DPR1. The 45-to-44-row render changes 739 at DPR2. Of those,
+376 and 693 differ by more than two channel values. Below and the rest
+of each frame are pixel-identical. At DPR2, all 18 changed Above
+scanlines fall within the 28 rows predicted to sample different
+texels. Below has three such rows at the bottom of the texture.
+This isolates a live sampling effect of backing height at both DPRs.
+Native glyph coverage under equal input remains open.
+Desktop backing capture SHA-256 930983249d2553678a2dd866bfd5516e22f3bd232655c3e596adb2ef991dd1f4.
+Desktop backing verification SHA-256 a3a7ad77037ca49cdd5784e7054f2530c22731a8c7b8109fd897f206f70a830e.
+Mobile backing capture SHA-256 7e084aaee298d8fc6dbffbb94888221e671745c457773caf20c5eca85a8fc34e.
+Mobile backing verification SHA-256 2b358db6d285bab3b63fb29f085c013c61b98562e16adacd79621fd5460b671e.
 
 The captured Divider runtime keeps a configured handler count of one
 after each of 60 Angular retirements in 20 physical contexts. The
