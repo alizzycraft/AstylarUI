@@ -18,6 +18,39 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Divider comparison and Snackbar action captures
+
+The focused check asked whether differences in the current checkpoint records
+changed the saved rendered frames or reflected newer capture instrumentation.
+It joined configured keys through `openMaterialCheckpoint` and compared paired
+PNG receipts between `current-ancestry-audit` and
+`current-enforced-62f7b001-20261122`. All four Divider static comparison-pane
+profiles reproduce all 24 prior PNG hashes and the prior benchmark outcome.
+Text alignment gains geometry and crop provenance, and the Astylar input tree
+gains retained layout. The two changed position declarations belong to
+`.datepicker-selected`, which has no owner in any of these four trees.
+Reference stylesheet indices and selector serialization also change.
+Surface reconciliation counters differ, so carry forward the sampled raster
+evidence independently of the history and input-tree obligations.
+
+| Divider profile | Checkpoint key prefix | Current record SHA-256 prefix |
+| --- | --- | --- |
+| light | `e131df33` | `e9b279c3` |
+| dark | `9d14d238` | `4a8a0f35` |
+| contrast | `b6b87f26` | `240940c1` |
+| custom | `8c24c3a0` | `f81a7cb6` |
+
+All 24 standard desktop Snackbar `activate`, `activate-leave` and
+`activate-twice` checkpoints reproduce all 96 prior PNG hashes and their
+benchmark outcomes. The current geometry and control-paint fields are new.
+The maximum sampled edge error is 0.157 CSS px rounded up across the root,
+opener, overlay and surface. The added control-paint geometry measures the
+opener only. Earlier resource snapshots now expose camera state and different
+reconciliation counts. The comparison supports the recorded action frames.
+The fade timeline, repeated ownership and compact interaction checkpoints
+require their own evidence.
+
+
 Accepted generation 0c103b3d and index 10cad8ea passed 80-section
 conservation, independent cold byte equality and isolated and accepted
 store verification. Both changed sections match their predictions.
