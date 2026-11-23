@@ -1475,12 +1475,15 @@ matches its Git blob after normalization where needed. The normal
 prepare command will replace only the isolated showcase installation.
 The retained build and dependency paths remain available for replay.
 The new workspace-relative capture path resolves to an empty C:
-directory with inherited NTFS compression. The configuration suite
-must pass before the queued package and showcase build can proceed.
-The unfiltered enforced runner waits for the verified build output.
-It checks the current source tree against the snapshot and uses
---skip-build to serve the isolated bundle. The runner still executes
-its complete configuration suite and all 2,311 browser cases.
+directory with inherited NTFS compression. The library package and
+development showcase build passed in isolation. The retained lock
+and installed package metadata still match their pre-build hashes.
+The fresh bundle has 1,887 files. It shares 1,872 path/hash pairs
+with the retained bundle, with ten added, ten removed and five
+changed paths. The enforced run still requires the complete
+configuration suite and all 2,311 browser cases.
+Fresh browser inventory SHA-256 4d97a1f2748fea1aa611af25af6b095427ef3963dafaefcc3f094de69eaf524f.
+Isolated build log SHA-256 0de940e7c0657d64ab1bd0a0c99cc3d9cad91bdaba644b49b52456cdd88e45ac.
 Build snapshot manifest SHA-256 d124867b65cacd73ad89166d8bece6e88ef54d0a236fe8b79579a1bc465b5c4a.
 
 The retained Divider natural-height and copy-aware baseline traces
