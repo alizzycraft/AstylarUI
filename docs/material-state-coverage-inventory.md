@@ -2,7 +2,7 @@
 
 ## Current audit state
 
-Accepted canonical generation `b53047be` is the baseline for all
+Accepted canonical generation `3bc80bd0` is the baseline for all
 2,311 configured cases. The unfiltered enforced browser run passed all
 436 static and 1,875 interaction cases. This establishes benchmark output
 acceptance. Input equivalence and case inspections remain open.
@@ -34,7 +34,10 @@ are reconciled against `b53047be`. The successor was exported as
 `4ab493f6`. Its 106,075,383-byte payload exceeds the GitHub Git file
 limit. Section comparison conserved 78 sections and matched the
 preflight source fingerprint vector. Independent cold verification
-and lossless recompression are running.
+passed with zero disk-cache hits. The transport repack preserves the
+decoded export and was imported and verified across all 84 shards.
+Accepted generation `3bc80bd0` contains review `00a6ec38` with
+43,057 dependency paths. Promotion SHA-256 `17083f2b593202d5acc3014eaa6a9e4d08a89702ef09d15cdbef2e1af104584f`.
 Materialized review `cabf1610` combines the staged popup geometry,
 Dialog action paint, and Spinner paint evidence. Its dependency extension
 passed and the complete guarded replay is queued after isolated import.

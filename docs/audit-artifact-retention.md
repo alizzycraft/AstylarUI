@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Retain canonical generation 3bc80bd0, predecessor b53047be, and the
+verified isolated transport store. The promotion retains 86 verified
+hard links and all cold, repack and import receipts. The original
+oversized export and its manifest are preserved in
+`artifacts/material-parity/working-audit/candidate-validation/current-enforced-review-oversized-original-20261123`. The repacked payload contains the same
+decoded export. Promotion SHA-256 17083f2b593202d5acc3014eaa6a9e4d08a89702ef09d15cdbef2e1af104584f.
+
 Retain canonical generation b53047be, its isolated verification store and
 predecessor 5a208846. The accepted store verifies 84 shards and the original
 compressed payload. Preserve the section, independent cold, isolated
