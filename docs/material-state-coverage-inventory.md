@@ -42,6 +42,31 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Dialog action button paint
+
+For each of the 32 open-state cases, the comparison reads the
+original pixels at the same screen coordinates and at the measured
+owner-local coordinates. Accounting for the 1 CSS px offset lowers
+the summed RGB error for both buttons in every case. Across the
+cohort it falls from 6,266,269 to 3,287,029 for Cancel and from
+8,299,728 to 2,280,208 for Save. The owner-local comparison is
+diagnostic evidence alongside the original screen-space samples.
+
+Both Save fill samples agree in all 32 cases. Cancel has 15 matching
+sample pairs at zero native opacity and transparent Astylar fill.
+Five cases have the native 8% tint and Astylar hover fill, with one
+channel off by one. Nine have the native 12% layer and transparent
+Astylar fill. Three have the native 12% layer and Astylar hover fill.
+The captured native ripple pseudo-element opacity and the resolved
+Astylar background predict these samples within one channel value.
+The remaining label and edge differences require separate attribution.
+
+- Paint report `dialog-current-action-raster-placement-20261123.json`
+  SHA-256 `488331ea980a6a3362140c5cff85ed22509d81c01590e78da76bbc3c82b56119`.
+- Case delta `dialog-current-action-raster-placement-composed-delta-20261123.log`
+  SHA-256 `771de45a961c97326de5d3a3778877746b2406c4ce76d8559293fc529e88e5b1`.
+  Staged successor `ef52aacf` binds 32 cases and 164 receipt paths.
+
 ### Current Dialog action button placement
 
 Among current paired geometry records with both dimensions within
