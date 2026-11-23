@@ -45,6 +45,32 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Autocomplete and Select option ink placement
+
+The existing ink-center metric reproduces all 64 side measurements
+from the October receipt when applied to the authenticated November
+frames. This covers both labels in all 16 desktop
+`open-hover-content` cases, across all profiles and both DPRs. The
+readback uses each side's retained 184 CSS px label region. It also
+reproduces both contrast DPR1 Select measurements on the Material
+frame with a different PNG digest. Astylar's row-relative ink center
+ranges from 0.014 CSS px higher to 1.001 CSS px lower for Autocomplete
+and from 0.015 CSS px higher to 0.998 CSS px lower for Select.
+
+This carries forward the local raster observations with their retained
+bounds. It leaves live label-box and texture attribution open. A
+six-case light-profile replay of the two DPRs and three popup families
+passed the checkpoint and 1,887-asset preflight. It is queued after the
+complete guarded review replay. It will measure both leading options,
+including the nested Autocomplete and Select text owners.
+
+- Ink replay `artifacts/material-parity/popup-option-ink-current-frame-replay-20261123.mjs`
+  SHA-256 `87784ba568f1c74183fa8e1d435821e4f277567af58d7dc82827b4ae14870dfb`.
+- Reproduced measurement vector SHA-256
+  `4d991d4c0b9411a141f379925f4fa960eeb8c1b4b622ce5baf72f714aa34d1c9`.
+- Glyph replay `artifacts/material-parity/popup-option-current-glyph-paint-20261123.mjs`
+  SHA-256 `dc13f0c9fdc84df663e7c902d9a81fc65d247a017f08cb4ffc0596ef8bd90475`.
+
 ### Current option typography and retained raster applicability
 
 The October and November checkpoints agree on the text owner and eight
