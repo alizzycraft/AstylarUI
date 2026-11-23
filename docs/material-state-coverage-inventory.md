@@ -20,8 +20,9 @@ every case and passes the full loader with 42,652 dependencies.
 Materialized review `2c839da5` passes the full loader with 42,656
 dependencies. It binds current browser accessibility-tree relationships
 for all 88 mapped Select and Timepicker popup cases. Staged review
-`9f316925` localizes the 13 terminal raster variants and isolates two
-to the Timepicker caret. All case inspections remain partial.
+`f37a1ce5` extends the localization of the 13 terminal raster variants
+with a natural caret blink replay for two Timepicker cases. All case
+inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -209,8 +210,24 @@ input's left text edge. A controlled replay hides only the live
 `cursor_timepicker-control` mesh and reproduces both enforced frames
 byte-for-byte. Restoring its visibility reproduces both prior AX
 replay frames. This isolates the pixel difference to caret visibility.
-The reason the caret differed at the original capture boundary
-remains open.
+The enforced and AX capture paths both use Playwright screenshots with
+animations disabled. To test whether ordinary renderer timing explains
+the variants, a focused replay observed the existing 530 ms
+`TextCursorRenderer.startBlinking` callback. The natural
+visible-hidden-visible sequence reproduced the earlier, enforced and
+earlier PNG bytes at both DPRs. Logical focus and the surface revision
+stayed stable through both ticks and all captures. The original capture
+timestamps were not recorded.
+
+The blink delta adds two partial `localPaint` observations. Replay
+verified 2,311 row positions, 18 predecessor digests and 11 receipt
+paths. The complete dependency loader remains due for the combined batch.
+
+- Blink report `timepicker-custom-focus-caret-blink-20261123.json`
+  SHA-256 `21429e8117b2b0cf7ec4ad2eba1ebb9be2fbc2b5f559f9eb051c488f9b750acb`.
+- Delta `timepicker-custom-focus-caret-blink-composed-delta-20261123.log`
+  SHA-256 `5187d9c21d7c04ddc6098faaf9a164972a0994994535efd518bccc1295dd4562`.
+  Successor `f37a1ce59b04de4eef1accaeb69ea1327b17177ab75b04be6fda8772a07da8c8`.
 
 The staged delta binds all 13 localized observations and the two
 caret interventions to partial `localPaint` obligations. Replay
