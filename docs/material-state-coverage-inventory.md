@@ -38,12 +38,34 @@ and lossless recompression are running.
 Materialized review `cabf1610` combines the staged popup geometry,
 Dialog action paint, and Spinner paint evidence. Its dependency extension
 passed and the complete guarded replay is queued after isolated import.
+Staged successor `1e46195b` binds the Timepicker gutter, option typography,
+and retained ink evidence to exact cases.
 Case inspections remain partial. After the canonical gates, close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
+
+### Popup option typography and ink case review
+
+Successor `1e46195b` binds the verified option typography and frame
+comparisons to all 48 Autocomplete, Select, and Timepicker opening
+and popup-hover cases. The underlying case data covers 832 paired
+labels, and the 16 Autocomplete and Select hover cases include 32
+reproduced label-ink measurements. The delta links the exact retained
+and current checkpoint, tree, and frame receipts for each case.
+
+The staged replay verified all 2,311 row positions, replayed the
+16 Timepicker scrollbar additions from predecessor `acc9be35`, and
+verified 486 receipt paths for the new findings. Inspection and
+current rendering acceptance remain open. Live label geometry and
+texture attribution await the queued browser replay.
+
+- Case delta `artifacts/material-parity/popup-option-current-typography-and-ink-composed-delta-20261123.log`
+  SHA-256 `d715eb171bafe8651af61d9a7ab7040df06637e965f2b603bc924d44bafccc7b`.
+- Case receipt vector SHA-256
+  `92f49155a5cde946d91232d891b1076ffe7e3205bd2c5ecaf5f34cce2ca3bba4`.
 
 ### Current Timepicker scrollbar paint
 
