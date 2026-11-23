@@ -43,9 +43,14 @@ The probe attributes reflow requests. It leaves the exact font face and
 operation-to-reflow timing open.
 
 Both light cases reproduce both enforced terminal PNGs. Dark Bottom Sheet
-reproduces the Material PNG and has a different Astylar PNG. That raster
-discrepancy remains open. The underlying enforced cases still pass their
-benchmark checks.
+reproduces the Material PNG. To distinguish a changing settled frame from
+a repeatable raster variant, a second dark-only replay saved two successive
+Astylar screenshots. Both exactly match the first instrumented dark replay.
+Against the enforced frame, only pixels (36, 229) and (37, 231) change, by
+one channel level at most. They sit at the enforced demo root's left edge,
+outside the opener and bottom panel boxes. The dark replay again consumes
+`update` and `font` in separate reflows. The raster variation is bounded to
+these two pixels in the sampled captures. Its cause remains open.
 
 - Bottom Sheet light report `bottom-sheet-departure-invalidation-reasons-20261123.json`
   SHA-256 `4a51b16ee94f7122d0dac4e4f711d2f89de49286efcda21fc602f9426a9bf378`.
@@ -53,6 +58,11 @@ benchmark checks.
 - Bottom Sheet dark and Dialog light report `modal-departure-invalidation-peers-20261123.json`
   SHA-256 `091cb8d56c337502039c915581620d2297d9e4e8dff5e8051bcf7b859abc4806`.
   Runner SHA-256 `71513a876998cd5bdda0876a1b58bf77a145be0f86effe7c24de5c92e3461878`.
+- Dark-only report `bottom-sheet-dark-departure-raster-20261123.json`
+  SHA-256 `39fce0ce2edf147d633a618b833a60aa049c08ec83dc6741f27502e89e45c5d9`.
+  Runner SHA-256 `67dde4566a43d37a2eeee68fe48b2788552e269b1b7b054f2b16965ec77dcd38`.
+  Both retained PNGs have SHA-256
+  `05f60db92993ab6338eeae119c566541380d124e75b8367c61cf67da7fe54776`.
 - Enforced checkpoint key prefixes `7b4f5ebd0749`, `d6d4a73f7815`
   and `8689b5d5dcd2`, in case order above. The font listener and cache
   clear are at `src/lib/astylar.ts:470` and `:571`. Session follow-up
