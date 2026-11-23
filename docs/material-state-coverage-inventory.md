@@ -1610,11 +1610,25 @@ The native difference is already present in the 2D canvas raster.
 For the cropped 18.4 px backing, the sum of absolute RGB differences
 between the model and native pixels is 26,718 at DPR1 and 54,799 at
 DPR2. The model also differs from the Astylar frame in 115 and 236
-pixels. The remaining question is which GPU upload, sampling or
-composition step accounts for that model-to-frame difference.
+pixels. The GPU checks below localize that difference further.
 Backing upload receipt SHA-256 c6eb432d82b07d80762885d822323dd57c89e1c88716645a775d570c1fe2a8d2.
 Plain canvas receipt SHA-256 49aab8775d34be30fabad6d0c53d7ae1bdc7be578930506c22890f7703827782.
 Residual verification SHA-256 ced4f83d1e975c1d0a7ce72dca2e6e1d30d4686622a03345b0d0b0352a118f83.
+
+GPU texture readback preserves every observed alpha byte after
+accounting for the inverted row order. RGB differs from the canvas
+upload by at most one channel value. The cropped 18.4 px texture uses
+nearest minification and magnification, and the glyph mesh spans the
+whole texture. A transparent texture yields white across all sampled
+glyph pixels. A context-creation diagnostic switches from four samples
+to zero and reproduces both full cropped frames byte for byte. Default
+framebuffer readback then matches all 924 and 3,696 glyph-box pixels in
+the screenshots, including the 115 and 236 model discrepancies.
+The residual is present in the WebGL draw or blend before screenshot
+composition. The next causal check needs the fragment sampling and
+blend state during the glyph draw. The first filter adapter's duplicate
+declaration stopped at parse time and its stderr remains retained.
+GPU boundary verification SHA-256 b6583127a676b38bae1d9cdbf04811767c73e306a9fc6d57caccebcc2c7986b8.
 
 The captured Divider runtime keeps a configured handler count of one
 after each of 60 Angular retirements in 20 physical contexts. The
