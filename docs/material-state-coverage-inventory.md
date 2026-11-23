@@ -25,8 +25,11 @@ with a natural caret blink replay for two Timepicker cases. Its staged
 successor `b7238449` binds actual Chromium description associations for
 the eight configured Tooltip desktop `open` cases. Staged review
 `a4cbcc7f` binds the original Progress Bar and Progress Spinner
-raster measurements to exact current frames for 40 cases. All case
-inspections remain partial.
+raster measurements to exact current frames for 40 cases. Combined
+review `87e2f7d4` also binds current browser focus, paint and accessibility
+for those cases. Its 395 added dependency paths verified. The complete
+loader is queued behind the cold canonical check and isolated import.
+All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -55,6 +58,41 @@ The section receipt is
 `retained-accessibility-paint-canonical-sections-20261123.log`, SHA-256
 `224b98ade7d7dd4bf35f9eaf026b7d1adb891c5e46ae56f57b407d8987f99214`.
 
+### Current Progress programmatic focus and local paint
+
+The October focus proof used Chromium 154. The current frozen Chromium
+157 replay tested whether the authored focusability difference still
+reaches the host and its local paint. It ran both implementations for
+all 24 static and 16 passive interaction cases with their configured
+theme, viewport and reduced-motion settings.
+
+All Material hosts have `tabindex=-1`, expose a focusable AX node and
+take focus on a direct DOM `focus()` call. Astylar's fixture omits
+`tabindex`, its semantic bridge has no value to transfer, and the
+browser leaves focus on BODY in all 40 cases. Both hosts expose
+`progressbar`, an empty name, and determinate value 64 with range 0 to
+100. This confirms the existing authoring failure on the current build.
+
+All 20 Material spinner crops change after focus, with the computed
+outline changing from `none` to `auto`. Material bar and Astylar crops
+stay pixel-stable. All 80 before crops match October bytes. Two of
+the focused Material spinner crops differ from October by one pixel
+with a maximum channel difference of one. Both still show focus paint.
+The crop comparison covers the unequal authored focus inputs. Cap and
+edge paint and broader ownership and disposal remain open.
+
+The targeted retained focus-paint assertion passes. The new composed
+review conserves all 42,656 inherited dependency entries and verifies
+395 new paths. The full guarded loader remains pending.
+
+- Current report `progress-current-programmatic-focus-20261123.json`
+  SHA-256 `b67619ee9caa44351de54f4b767cf25296c0eedec7054e8d759e26cc190884f7`.
+- Case delta `progress-current-programmatic-focus-composed-delta-20261123.log`
+  SHA-256 `6cb174c60e9cd8b02ea2ce69645ca6d42377563a5d058f5b7407ded5979adb8b`.
+- Combined review `87e2f7d4093dd29c0f20c594330e4d8b48c6d55e1c39776261aadd13c2d292f6`.
+  Dependency extension `current-popup-progress-successor-dependency-extension-20261123.log`
+  SHA-256 `943e6828f9c5eebe7ab4912fb7144ce2b14491c7dd8d8383b5df30e252e6c7f8`.
+
 ### Current Progress Bar and Spinner raster applicability
 
 The check asked whether changes to the captured inputs limit reuse of
@@ -76,8 +114,9 @@ between the two capture generations.
 The measurements therefore apply to the current pixels for native left
 fill versus Astylar right fill and the track RGB difference, and for the
 opposing spinner arc directions and angular occupancy. These are
-exact-color measurements. Equal-input antialiased edge and cap paint,
-focused paint and broader ownership and disposal still need evidence.
+exact-color measurements. Equal-input antialiased edge and cap paint and broader ownership and
+disposal still need evidence. The current focus replay above addresses
+the unequal-focusability paint boundary.
 
 Replay verified 2,311 review row positions, 20 predecessor digests and
 488 receipt paths. The 40 paint observations remain partial and need the
