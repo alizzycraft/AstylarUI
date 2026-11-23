@@ -17,8 +17,9 @@ loader. Materialized layout review `a185b08a` passes the full guarded
 loader for all 2,311 cases and 37,325 dependencies. Its materialized
 successor `1e54281b` binds the current enforced output checkpoint to
 every case and passes the full loader with 42,652 dependencies.
-Staged review `2c839da5` binds current browser accessibility-tree
-relationships for all 88 mapped Select and Timepicker popup cases.
+Materialized review `2c839da5` passes the full loader with 42,656
+dependencies. It binds current browser accessibility-tree relationships
+for all 88 mapped Select and Timepicker popup cases.
 All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
@@ -165,9 +166,13 @@ hashes. Those cases contribute AX relationship evidence, while the
 causes of their raster differences remain open.
 
 The successor adds the 86 new AX observations and preserves the
-two existing ones and all partial dispositions. Replay verifies
-2,311 row positions, 16 predecessor digests and 89 receipt paths.
-Full successor dependency replay remains pending.
+two existing ones and all partial dispositions. Streaming replay
+verifies 2,311 row positions, 16 predecessor digests and 89 attached
+receipt paths. The materialized proposal replays all 17 delta stages.
+The full guarded loader then verifies 42,656 dependencies and the
+88 browser AX attachments. Its receipt retains the 13 frame variants
+and both false acceptance flags. The canonical pointer still names
+`5a208846`.
 
 - Matrix report `current-popup-active-descendant-ax-matrix-20261123.json`
   SHA-256 `01bfdabaecac695501ed8a6915954868e3aec98d68c6f7fee62408ab00d5e52b`.
@@ -177,6 +182,13 @@ Full successor dependency replay remains pending.
 - Delta `select-timepicker-current-popup-ax-matrix-composed-delta-20261123.log`
   SHA-256 `70c9cdc7efc489707750fe72e09e70cf5a7bf3f2f4aabb1ac90460e346b5b879`.
   Successor `2c839da5fb4a8e0608ab039d42def2e6f785ae875795fb2919607d9ffc7f6ac0`.
+
+- Materialized AX proposal SHA-256
+  `23c687968dc538bfc2483a5c2a33c07e7ef9215eee760c81f2b9b4ceccc863bc`.
+- Full replay `current-popup-ax-successor-guarded-full-replay-20261123.log`
+  SHA-256 `ca383b030338a7f566774ca0a17c78199c02c65c8f6b4c5da053874a163cca2f`.
+  Dependency vector SHA-256
+  `3e87849cdc6a26cba4a73f132c2525f6655135ff0650675d79723dc18649fa76`.
 
 ### Current output checkpoint availability bound for every case
 
