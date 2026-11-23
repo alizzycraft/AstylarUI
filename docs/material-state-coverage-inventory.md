@@ -92,7 +92,20 @@ sides. The full PNG digest differs only for Material contrast DPR1
 The retained native rounded 9 CSS px thumb and Astylar flat 8 CSS px
 indicator, track strips, and native arrow samples therefore apply to
 these current frames. The replay used the recorded gutter coordinates.
-Live current scrollbar paint inputs and other viewports remain open.
+Live current scrollbar paint inputs remain open.
+
+For mobile DPR2, the two enforced Timepicker cases end after dismissal.
+Their checkpoints contain no open-popup or post-wheel frame. The eight
+retained light and dark mobile frames verify, and both sides recorded
+144 CSS px of wheel movement. The complete scrollbar geometry and
+Babylon paint modules match across the retained and current bundle
+maps. The current chunk also matches the served asset receipt. This
+supports reuse of the two module observations. A focused mobile
+opening and wheel capture is still needed for current gutter pixels
+and live paint inputs.
+
+- Mobile applicability `artifacts/material-parity/timepicker-mobile-scrollbar-current-applicability-20261123.log`
+  SHA-256 `fdc42d02f343cf62aff5a31922bed9e16ad27935f15d82e47159fc7ccf70a399`.
 
 - Pixel replay `artifacts/material-parity/timepicker-current-scrollbar-pixel-replay-20261123.log`
   SHA-256 `2e6a838803e813ecdf024d8532605580a12a0cc502baa356c2a115e0b86dbef8`.
