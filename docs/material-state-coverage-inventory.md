@@ -45,6 +45,31 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Popup paint measurement coverage in current checkpoints
+
+Review `cabf1610` retains 2,311 partial cases. Input and structure,
+local paint, semantics, history and ownership, and source applicability
+remain partial in every case. Datepicker, Autocomplete, Timepicker,
+and Select have the most open required obligations. Their shared
+popup paint boundary is the next high-impact check.
+
+A focused replay of the existing checkpoint reader verified each
+artifact digest for 64 desktop popup `open` and `open-hover-content`
+cases across the four profiles and both DPRs. The focused rasters
+cover the primary controls. The full frames and paired input trees
+are available for pixel and authored-input comparisons. Datepicker
+and Timepicker have separate popup placement fields. The 64 records
+contain zero popup paint mesh observations. In the 16 Dialog positive
+controls, the same reader finds panel rasters and action mesh geometry.
+All 80 cases pass the benchmark. The exact checkpoint-record vector
+SHA-256 is
+`b36bc4bfc7703ad0782570d92603778c588b2e0957cf22921330c9fbaf5379fd`.
+
+For popup paint attribution, reuse the authenticated frames and trees
+and compare them with existing live observations at matching owners.
+Where those observations are missing, sample the popup surface and
+option paint owners with the established focused browser runner.
+
 ### Combined popup geometry and paint review
 
 Review `cabf1610` replays ten staged deltas against `00a6ec38` and
