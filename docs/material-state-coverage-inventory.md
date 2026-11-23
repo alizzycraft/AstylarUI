@@ -26,10 +26,10 @@ successor `b7238449` binds actual Chromium description associations for
 the eight configured Tooltip desktop `open` cases. Staged review
 `a4cbcc7f` binds the original Progress Bar and Progress Spinner
 raster measurements to exact current frames for 40 cases. Combined
-review `87e2f7d4` also binds current browser focus, paint and accessibility
-for those cases. Its 395 added dependency paths verified. The complete
-loader is queued behind the cold canonical check and isolated import.
-All case inspections remain partial.
+review `a4a3b200` also binds current browser focus, paint, accessibility
+and same-surface ownership for those cases. Its 397 added paths verified.
+The complete loader is queued behind the cold canonical check and
+isolated import. All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -58,6 +58,40 @@ The section receipt is
 `retained-accessibility-paint-canonical-sections-20261123.log`, SHA-256
 `224b98ade7d7dd4bf35f9eaf026b7d1adb891c5e46ae56f57b407d8987f99214`.
 
+### Current Progress material ownership through element removal
+
+The current frozen Astylar build retained one unused plugin
+`-transparent` material per progress owner across three equivalent
+updates in each of the 40 configured cases. Its identity and settled
+counts stayed stable, and live counts matched tracked counts. The
+progress mesh used the separate zero-alpha core `-material`.
+The plugin allocates its transparent root material before
+`ElementCreationService` applies the resolved background and assigns
+the core material.
+
+A same-surface public update removed just the authored Progress
+element. The mesh and semantic node disappeared. The unused material
+left the scene and its disposal callback fired once in all 40 cases.
+Restoring the authored document returned the original resource counts
+with a newly allocated unused material. Final surface disposal cleared
+the sampled live resources, textures and plugin ownership and disposed
+each restored material once. This establishes redundant allocation and
+observed cleanup at these boundaries. Cross-surface remount, cached
+default reuse and GPU retention remain outside the replay.
+
+The combined review conserves 42,656 inherited dependency entries and
+authenticates 397 added paths. Its full loader replaces the earlier
+queued `87e2f7d4` run, which had opened no evidence. The canonical worker
+and isolated import launcher continue independently.
+
+- Ownership report `progress-current-ownership-removal-20261123.json`
+  SHA-256 `a3881c9d474faf981fdb880b8550654261783f11e1dc9b5b75c0b237af84cfc7`.
+- Case delta `progress-current-ownership-removal-composed-delta-20261123.log`
+  SHA-256 `06bcac345541e293ac51665e3957d2430a66979852623ebc98ccd6574d01a4f9`.
+- Combined review `a4a3b200d28684ab21b868598da9dc3061e42cdb29112ab699e3f9acaf5bb3f3`.
+  Dependency extension `current-popup-progress-ownership-dependency-extension-20261123.log`
+  SHA-256 `890e737ea61d36fbc229e176e57d487135ca67450238856c8d5f5464c5ae71d7`.
+
 ### Current Progress programmatic focus and local paint
 
 The October focus proof used Chromium 154. The current frozen Chromium
@@ -79,11 +113,12 @@ stay pixel-stable. All 80 before crops match October bytes. Two of
 the focused Material spinner crops differ from October by one pixel
 with a maximum channel difference of one. Both still show focus paint.
 The crop comparison covers the unequal authored focus inputs. Cap and
-edge paint and broader ownership and disposal remain open.
+edge paint and the cross-surface ownership questions above remain open.
 
 The targeted retained focus-paint assertion passes. The new composed
 review conserves all 42,656 inherited dependency entries and verifies
-395 new paths. The full guarded loader remains pending.
+395 new paths. The latest staged successor and its pending guarded
+loader are recorded above.
 
 - Current report `progress-current-programmatic-focus-20261123.json`
   SHA-256 `b67619ee9caa44351de54f4b767cf25296c0eedec7054e8d759e26cc190884f7`.
