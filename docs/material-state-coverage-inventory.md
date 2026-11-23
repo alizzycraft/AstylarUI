@@ -2803,10 +2803,17 @@ A compact case-review delta adds the current DOM and AX observations to
 the 16 exact Autocomplete and Select commit-and-reopen rows. It
 authenticates all 16 enforced checkpoints and 25 distinct receipts.
 Removing the added children recovers all 2,311 predecessor rows and
-the complete 750e3af9 digest. The predicted successor is 4db22a50.
-The queued canonical export still selects 750e3af9. Replay the delta
-with the complete dependency loader at the next integration milestone.
+the complete 750e3af9 digest. Successor 4db22a50 passed the existing
+strict loader across all 2,311 cases and 35,475 dependencies. The
+35,450 inherited receipts match the predecessor vector, and all
+25 additions authenticate. The first invocation hit the Node heap
+limit. The retry released the composed envelope after handing it
+to the loader and completed without writing another proposal copy.
+The queued canonical export still selects 750e3af9. All case
+dispositions remain partial and current rendering stays unverified.
 Delta SHA-256 de9bb55070d85cb0a02ec0076a94a663330872b7f1985a8ad06a3e234c948522.
+Strict replay SHA-256 d76c359659de85c9758394f8010af864b56a4d185e8328eca405a7ac0fc55039.
+Dependency vector SHA-256 00519c2fe941996f40a3779119c525373c176be7d703420590dd5bc58172677e.
 
 Successor 26e5ffb8 stages 16 partial activation observations and attaches
 editing and pointer focus evidence to the same rows. The 435-row batch
