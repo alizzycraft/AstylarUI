@@ -77,8 +77,30 @@ The crop changes Above by 389 pixels in each desktop, tablet,
 comparison, and DPR1 inspect case and by 739 on mobile. It changes
 Below by 691 pixels in DPR2 inspect. Each change is confined to the
 projected glyph bounds and to scanlines where cropping changes the
-sampled texture row. The remaining native glyph differences still need
-matched-input attribution.
+sampled texture row.
+
+A public equal-input replay tests the remaining Arial glyph difference
+at 16 and 18.4 CSS px at DPR1 and DPR2. Chromium reports ArialMT
+and the same native baseline and Canvas draw baseline in every case.
+A transparent Canvas and an alpha-enabled Canvas filled white render
+identically. With an opaque backing context, all four comparisons
+match every native RGB pixel inside the paragraph. The native frame
+contains one additional blue-channel pixel one device pixel left of
+the paragraph in each case.
+
+At 18.4 CSS px, the alpha-enabled comparisons reproduce the post-crop
+RGB difference totals of 26,718 and 54,799. The opaque-context control
+isolates the Canvas text raster as the source of the interior residual
+for these matched Arial inputs. The result extends the existing Roboto
+text raster evidence. The configured Divider cases still require
+attribution for unequal typography, background and placement. The
+accepted source classifications remain pending the next canonical
+integration.
+
+- Arial Canvas replay `artifacts/material-parity/public-backing-glyph-opaque-canvas-v5-20261123.mjs`
+  SHA-256 `9adf45da8fa82657101b99f0e075de421a1a484695446a1d2ee744b6957b47f2`.
+- Replay result `artifacts/material-parity/public-backing-glyph-opaque-canvas-v5-20261123.log`
+  SHA-256 `4cee3e35bbbe096b15fc14d4a7a71bb2d7bc95d3c59c541e5041e88e40cd0ef9`.
 
 - Six-case verification `artifacts/material-parity/divider-current-custom-backing-cohort-20261123.log`
   SHA-256 `9ef1db3455aad12d94ee4ba03bed01c898d810f52da524a76426943b08a7fbf2`.
