@@ -42,6 +42,32 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Dialog Save curved-edge coverage
+
+The curve comparison measures the saved pixels against continuous
+pixel-area coverage models. It samples 39,200 pixels across 32
+current Save buttons in the band within 2 CSS px of the nominal
+curved contour. All cases fit best when both axes of the native
+rectangle are rounded to whole CSS pixels before constructing the
+capsule. Summing the maximum RGB channel error per pixel gives
+836,400 for fractional native bounds, 270,144 for rounded vertical
+bounds and 24,352 for rounding both axes. The last model reduces
+error by about 97% and leaves a maximum channel error of 11.
+
+For the two light `open` cases with authenticated mesh readback,
+exact polygon area reduces the candidate model error from 2,912
+to 2,841 at DPR1 and from 6,285 to 6,041 at DPR2. Maximum channel
+errors remain 59 and 71. This bounds what geometry alone explains
+under continuous area sampling. A decisive further attribution
+requires the effective raster sample or coverage rule, and the
+current evidence leaves that rule open.
+
+- Curved-edge report `dialog-current-save-curved-edge-20261123.json`
+  SHA-256 `20fe3b4ddabe74b930d61941fdbf496e53c5ecb99ecbd8270663d531995ab526`.
+- Case delta `dialog-current-save-curved-edge-composed-delta-20261123.log`
+  SHA-256 `5ed32eebc0914df2e47aeacc1dc3ad066245d6fb187502702afd6cefc81abb95`.
+  Staged successor `d1cd14c5` binds 32 cases and 167 receipt paths.
+
 ### Current Dialog Save straight-edge coverage
 
 The straight edge removes the rounded polygon from the comparison.
