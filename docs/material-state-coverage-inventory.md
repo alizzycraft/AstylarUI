@@ -104,10 +104,32 @@ Rounded character positions change all ten Canvas rasters. Native
 Chromium identifies Roboto Regular as the sole face for each word.
 The measured Canvas word widths differ from the native ranges by
 less than 1/64 CSS px. The unchanged DPR2 residual rules out
-accumulated Canvas glyph advances in these cases. The next boundary
-is glyph rasterization for a matched font and origin. Attribution to
-the configured Astylar paint still requires accounting for the measured
-input and placement differences.
+accumulated Canvas glyph advances in these cases.
+
+The DPR2 desktop scratch replay reproduces all eight enforced native
+crops and the original narrow Canvas crops byte for byte. Aligning
+the displayed Canvas edges to integer CSS pixels preserves its
+backing bytes and makes the displayed pixels match the backing.
+The original diagnostic had resampled those bytes during Chromium
+page composition. With that sampling removed, five measured-baseline
+crops match native exactly. The other three match after moving the
+Canvas comparison crop down one device row. All eight integer-baseline
+controls match without a shift. A separate quarter-CSS-pixel baseline
+control gives an exact one-row shift for all 12 Arial and Roboto
+comparisons at DPR2. Shift direction depends on the tested phase.
+
+The desktop native-to-Canvas diagnostic residual is accounted for.
+The current mobile DPR2 labels still need the aligned display control.
+Configured Astylar paint attribution also needs the measured input and
+placement differences and the Astylar texture projection.
+
+- Canvas display and baseline replay `artifacts/material-parity/divider-native-canvas-transport-control-20261123.json`
+  SHA-256 `73d29e609e453b4ea57614bc3d48fad682614a88a312d35e1f525fce40e7d204`.
+- Display and baseline case delta `artifacts/material-parity/divider-current-native-canvas-transport-composed-delta-20261123.log`
+  SHA-256 `09e0ab7f8bcbfeff0fe382f6074bb9f9502091bfc2cf6feb00d1daef3b55ab22`.
+  Staged successor `4e0abffc` binds four cases and 16 receipt paths.
+- Font and baseline control `artifacts/material-parity/divider-native-canvas-font-control-20261123.json`
+  SHA-256 `0ff4abdc6db300b5d2a9d19c8e92e6c12d2905f0635ac46ca22433af49790b40`.
 
 - Glyph advance replay `artifacts/material-parity/divider-current-native-canvas-glyph-advances-20261123.json`
   SHA-256 `a55ace3e97c6b7ec076bf56268d16ac1bf9eba356bba64b71d6ef88cd5609be3`.
