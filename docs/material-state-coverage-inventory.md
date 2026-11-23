@@ -9,10 +9,10 @@ changes to `sourceFingerprints` and `coverage`. Section conservation,
 independent cold equality and isolated import are still required.
 
 The compact popup and Datepicker successors have passed the full
-dependency loader. The next staged Timepicker review adds 108 exact
-case observations. All case inspections remain partial. The priority
-after the active gates is to reconcile the staged evidence and close
-the shared input, paint, semantics, ownership and source-applicability
+dependency loader. The staged Timepicker and Button/Toolbar batch adds
+220 case observations and is in strict replay. All case inspections
+remain partial. After the active gates, reconcile the staged evidence
+and close the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
@@ -4162,6 +4162,37 @@ coverage integration;open-popup evidence stays separate. No new browser capture,
 canonical regeneration,case promotion or renderer/fixture change. Publication of
 295d351a remains unconfirmed after two terminal HTTP408 pushes;last observed
 remote4cb809b4. Do not blindly repeat publication or completed milestone checks.
+
+Current Button and Toolbar checkpoints authenticate all 112 configured
+cases. The 792 full-frame and focused PNGs match their retained peers
+byte for byte. The 88 interaction cases also record 184 projected
+control meshes. Their edges differ from the corresponding Astylar
+layout boxes by at most 0.000031 CSS px and from the Material boxes
+by at most 0.219 CSS px. Each recorded drawing buffer uses four MSAA
+samples at the configured DPR. This bounds projection drift for
+the measured meshes while preserving the retained paint differences.
+Current raster and projection receipt SHA-256 25fad6e561c4f63565f873f71ef10fc64b448db11d4c78cf0183995db4d8a2a9.
+
+All eight current Toolbar activate-leave replays reproduce the 16
+enforced terminal frames exactly. Material's persistent ripple opacity
+returns to zero. Astylar's resolved background returns to transparent
+and hover moves to the page. The active mesh material stays opaque
+with the exact hover RGB at departure and after a further 300 ms.
+The material ID changes between hover and departure, then remains
+stable across the two departure samples. The serving renderer chunk
+and source map match the already-proven transparent reset owner's
+bytes. This ties the current sampled paint mismatch to that existing
+core finding across the four profiles at both DPRs.
+Current Toolbar material report SHA-256 c9120e8d1db11423cee31acb7c2a6aeb35126c423b3ea25816d3684dbd6887a3.
+Current Toolbar material runner SHA-256 0c1df2293b5de2df9b8aa85c0d89285bf59d10315192fe9014730bc66c0a8ab1.
+Current material verification SHA-256 b775103b6d4b0495fb26d7c28f3e703b56fe874c0ab0f5629577506a8f0695bb.
+
+The compact Button and Toolbar delta binds 231 distinct receipts
+across 112 cases and restores the complete Timepicker parent
+77c72e73 when reversed. Combined successor fab185f3 is in strict
+dependency replay. Case inspection and rendering dispositions stay
+partial and unverified.
+Current paint delta SHA-256 d5a6ea916a8e0d5fa91c2147dc84839054a4ad8b908b256cc186181455aab47a.
 
 November5 button/toolbar milestone is accepted as ab2c875a/indexb26b0abd after
 independent cold equality(exit0,diskHits0;20816 files/4937760875 verified bytes),
