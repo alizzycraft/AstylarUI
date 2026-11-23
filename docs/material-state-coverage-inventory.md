@@ -30,13 +30,40 @@ and same-surface ownership for those cases. Its 397 added paths verified.
 The full loader verifies all 2,311 rows and 43,053 dependencies. Its
 successor `00a6ec38` adds Spinner cap geometry and passes the exporter
 reader with 43,057 dependencies. Its two source fingerprint changes
-are reconciled against `b53047be`. Case inspections remain partial.
-Publish the successor through the canonical gates, then close
+are reconciled against `b53047be`. The successor was exported as
+`4ab493f6`. Its 106,075,383-byte payload exceeds the GitHub Git file
+limit. Section conservation and lossless transport checks are running.
+Case inspections remain partial. After the canonical gates, close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
+
+### Current Spinner stroke interior and radial edges
+
+Across all 20 current cases, the original pixels in the common arc
+interior match exactly at all 16,596 samples. Where only one authored
+arc has support, all 54,905 sampled interior pixels are exact stroke
+color on one side and exact background on the other. The model uses
+CSS radii 41.5 to 48.5 and omits samples within 8 degrees of an
+endpoint when counting interiors. The largest center offset is
+0.01813 CSS px.
+
+The common radial boundaries differ in all 20 cases. Of the 3,803
+different pixels, 3,797 have a partial stroke color on at least one
+side and six have stroke color against background. Both sides'
+edge colors fit mixtures of the same stroke and background colors
+within one channel value. This localizes the residual to edge
+coverage. The relative contributions of geometry, fractional
+placement and antialiasing remain open.
+
+- Raster report `progress-spinner-current-sector-paint-20261123.json`
+  SHA-256 `e0e417c3a5f837612a76a2d5177367ed3b139a8b8efaf307a669693e38d821d9`.
+- Case delta `progress-spinner-current-sector-paint-composed-delta-20261123.log`
+  SHA-256 `8c89cf2dccdddb96a1cf881458ee673e4a4a2ef86ae73cede59060dd14ffe9a5`.
+  Staged successor `fea2eb2e` binds the 20 observations and 64 receipt
+  paths. It follows the frozen export review.
 
 ### Current enforced review registered for export
 
