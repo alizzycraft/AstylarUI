@@ -1589,13 +1589,32 @@ restored frames match the original. Against Chromium's native pixels
 in the same white interior, the sum of absolute RGB differences falls
 from 57,454 to 29,028 at DPR1 and from 123,612 to 60,240 at DPR2.
 The crop restores the last native ink row at both DPRs. This confirms
-the backing-height contribution under equal inputs. The residual
-RGB differences, including those in the 16 px control, still need
-paint attribution. These measurements do not transfer native glyph
-equivalence to the unequal-input Divider fixture.
+the backing-height contribution under equal inputs. The remaining
+differences can be localized to the stages below. These measurements
+do not transfer native glyph equivalence to the unequal-input Divider
+fixture.
 Equal-input glyph capture SHA-256 936f056fa2bfae4c553e7540cc97737c381de9399b3bf9ad0582bf99dc5ca209.
 Equal-input verification SHA-256 1be10f477cc9b3d12111a6a30fa504da5be120ca3a4f129f14d37e7101ed073e.
 Raster comparison SHA-256 7ffdecf586576c623100943d94828b4e4acc9e87d517dc2610dfaf9676755bc9.
+
+The unchanged public bundle reproduces the retained native and
+Astylar PNGs. Chromium reports ArialMT for all four native glyphs.
+A plain Canvas 2D replay of the observed draw matches every backing
+alpha byte across both font sizes and DPRs. At 16 px the RGBA bytes
+also match exactly. At 18.4 px, only six and eleven RGB channel values
+differ by one. Copying the backing into the replacement canvas
+preserves alpha. At 16 px, nearest sampling and white composition
+reproduce the Astylar glyph interior byte for byte at both DPRs.
+The native difference is already present in the 2D canvas raster.
+
+For the cropped 18.4 px backing, the sum of absolute RGB differences
+between the model and native pixels is 26,718 at DPR1 and 54,799 at
+DPR2. The model also differs from the Astylar frame in 115 and 236
+pixels. The remaining question is which GPU upload, sampling or
+composition step accounts for that model-to-frame difference.
+Backing upload receipt SHA-256 c6eb432d82b07d80762885d822323dd57c89e1c88716645a775d570c1fe2a8d2.
+Plain canvas receipt SHA-256 49aab8775d34be30fabad6d0c53d7ae1bdc7be578930506c22890f7703827782.
+Residual verification SHA-256 ced4f83d1e975c1d0a7ce72dca2e6e1d30d4686622a03345b0d0b0352a118f83.
 
 The captured Divider runtime keeps a configured handler count of one
 after each of 60 Angular retirements in 20 physical contexts. The
