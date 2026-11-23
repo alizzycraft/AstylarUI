@@ -118,10 +118,25 @@ controls match without a shift. A separate quarter-CSS-pixel baseline
 control gives an exact one-row shift for all 12 Arial and Roboto
 comparisons at DPR2. Shift direction depends on the tested phase.
 
-The desktop native-to-Canvas diagnostic residual is accounted for.
-The current mobile DPR2 labels still need the aligned display control.
-Configured Astylar paint attribution also needs the measured input and
-placement differences and the Astylar texture projection.
+The mobile replay accounts for all eight DPR2 labels. Six reuse
+desktop controls after verifying identical local glyph inputs, baselines
+and crops against both checkpoints. The paragraph widths differ, with
+the complete glyph crop inside both paragraphs. Fresh controls cover
+the two custom mobile labels at their measured phases. Removing display
+sampling gives six exact matches. Contrast Below and custom Below
+match after a one-device-row downward shift of the Canvas comparison
+crop. All eight integer-baseline controls match without a shift.
+
+This accounts for the native-to-Canvas diagnostic residual across all
+16 configured DPR2 labels. Attribution to configured Astylar paint
+still needs its texture projection and the measured input and placement
+differences.
+
+- Custom mobile replay `artifacts/material-parity/divider-mobile-custom-native-canvas-transport-control-20261123.json`
+  SHA-256 `799d7618e7cb4b570d86a9592b2ce771b89c1b5e8ec88734199123807c732752`.
+- Mobile display and baseline case delta `artifacts/material-parity/divider-current-mobile-native-canvas-transport-composed-delta-20261123.log`
+  SHA-256 `02be0384680982400c60325d4686ad5bb640a93c78956fa2d15b61d54c83cd46`.
+  Staged successor `4618df78` binds four cases and 28 receipt paths.
 
 - Canvas display and baseline replay `artifacts/material-parity/divider-native-canvas-transport-control-20261123.json`
   SHA-256 `73d29e609e453b4ea57614bc3d48fad682614a88a312d35e1f525fce40e7d204`.
