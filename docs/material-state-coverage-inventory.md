@@ -74,8 +74,8 @@ attribute endpoint pixels.
 All 20 Astylar cases render a 41-point tube with tessellation 12.
 The vertex buffers confirm flat endpoint disks. The maximum observed
 distance of a cap ring vertex from its chord-normal plane is
-0.00000118 in mesh coordinates. The chord normal places each cap
-plane 2.88 degrees from the exact circle tangent direction. This
+0.00000118 in mesh coordinates. Each cap plane normal is
+2.88 degrees from the exact circle tangent. This
 confirms the retained shape class and segmentation result in the
 actual browser. Authored arc placement still differs, and the
 comparison leaves antialiased edge and equal-input raster attribution
