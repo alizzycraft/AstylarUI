@@ -42,6 +42,29 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current Spinner multisample coverage
+
+Across 20 saved Spinner cases, all 174,070 sampled candidate
+annulus pixels match quarter-step mixtures of the recorded stroke
+and background colors within one RGB channel value. The comparison
+uses the original frames and includes both authored endpoints.
+
+The two frozen light `inspect` controls reproduce the original
+candidate PNGs at DPR1 and DPR2. The browser reports four samples
+on the default framebuffer. Using the Dialog rotated grid and
+the projected Spinner tube triangles predicts 19,784 of 19,786
+annulus pixels within one channel value. Each remaining pixel has
+one sample whose inclusion changes under a 1/256-device-pixel
+perturbation. This localizes those exceptions to triangle edges.
+The exact GPU edge rule and Material's fractional edge coverage
+remain open.
+
+- Sample-grid report `progress-spinner-current-sample-grid-20261123.json`
+  SHA-256 `83e3818c75223480b2167d11d7ed703f0d02882291ea361bd2d3f7eb8cf0a794`.
+- Case delta `progress-spinner-current-sample-grid-composed-delta-20261123.log`
+  SHA-256 `8b3c2e2aeaf072111ad680f76e61c21a8c4a3760450a34dc086ffca207e9544d`.
+  Staged successor `cabf1610` binds 20 cases and 47 receipt paths.
+
 ### Current Dialog Save multisample coverage
 
 The light `open` controls reproduce the saved Astylar PNGs at both
