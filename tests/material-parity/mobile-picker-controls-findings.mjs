@@ -355,8 +355,20 @@ export function preparePickerFocusSemanticsRunner(bytes) {
   return applySourceEdits(source, runnerEdits);
 }
 
+const currentEnforcedRunnerEdits = [
+  ['retainedFocusBoundariesReview, retainedAccessibilityPaintReview }',
+    'retainedFocusBoundariesReview, retainedAccessibilityPaintReview, currentEnforcedReview, createCurrentEnforcedReviewReader }'],
+  ['    const applicability=[pickerFocusSemanticsReview',
+    '    const applicability=options.caseObligationReviewSha256===currentEnforcedReview\n' +
+    '      ? createCurrentEnforcedReviewReader({ root, read: auditReadFileSync })\n' +
+    '      : [pickerFocusSemanticsReview'],
+  ['    diagnosticRead: [pickerFocusSemanticsReview', '    diagnosticRead: [currentEnforcedReview,pickerFocusSemanticsReview'],
+];
+
 export function restorePickerFocusSemanticsRunner(bytes) {
-  const focusSource = restoreRetainedReviewSelection(normalized(bytes), "retainedCaseObservationsReview, retainedFocusBoundariesReview, retainedAccessibilityPaintReview }", retainedAccessibilityPaintRunnerEdits,
+  const currentSource = restoreRetainedReviewSelection(normalized(bytes), "createCurrentEnforcedReviewReader }", currentEnforcedRunnerEdits,
+    'f115aa8b9e4ca716080656aab29f535de12f604f9822ee6c610e4ca7397beee8');
+  const focusSource = restoreRetainedReviewSelection(currentSource, "retainedCaseObservationsReview, retainedFocusBoundariesReview, retainedAccessibilityPaintReview }", retainedAccessibilityPaintRunnerEdits,
     '97be4738f2b46c9595a2ba527255d16d4854466eff52e2274f4c3124d0cdc6e3');
   const retainedCaseSource = restoreRetainedReviewSelection(focusSource, 'retainedPaintOwnershipReview, retainedCaseObservationsReview, retainedFocusBoundariesReview }', retainedFocusBoundariesRunnerEdits,
     'cdedefd7250a14b277ebd792a4d2bfe4130af1c9b59a5b6d3ff3a47c835bea96');
@@ -414,6 +426,54 @@ export function restorePickerFocusSemanticsBenchmarkReader(bytes, root = process
   const previous = applySourceEdits(source, reverseSourceEdits(benchmarkReaderEdits));
   assert.equal(hash(previous), benchmarkReaderParentSha256, 'Unexpected picker benchmark reader drift');
   return previous;
+}
+
+export const currentEnforcedReview = '00a6ec38018be2a4b84abbbc9f9c5c057a29328f1d24d7aad19a54738d71b8c6';
+const currentEnforcedHistoricalRoute = {
+  file: artifacts + 'staged-layout-successor-historical-source-git-v2-20261123.log',
+  sha256: 'cc353d2655f1febb02aa0d4fbe646daba6fa0d070f686d028943e15b39e2b2dc',
+};
+const currentEnforcedProposal = {
+  file: artifacts + 'working-audit/proposals/' + currentEnforcedReview + '.json',
+  sha256: '9c94a4c20d4c7c0cf35d903734d614bc51a3aabeeca005d9e0e0720db3d79a74',
+};
+
+export function createCurrentEnforcedReviewReader({ root, read }) {
+  const routeBytes = read(path.resolve(root, currentEnforcedHistoricalRoute.file));
+  assert.equal(hash(routeBytes), currentEnforcedHistoricalRoute.sha256, 'Historical source route changed');
+  const routeEncoding = routeBytes[0] === 255 && routeBytes[1] === 254 ? 'utf16le' : 'utf8';
+  const { resolved } = JSON.parse(routeBytes.toString(routeEncoding).replace(/^\uFEFF/, ''));
+  const sources = new Map(resolved.map(source => [path.resolve(root, source.file), source]));
+  assert.equal(sources.size, 16);
+  const proposal = path.resolve(root, currentEnforcedProposal.file);
+  const joinSource = 'tests/material-parity/mobile-picker-controls-findings.mjs';
+  return {
+    read(name, options) {
+      const file = path.resolve(root, name);
+      const source = sources.get(file);
+      if (!source && file !== proposal) return read(name, options);
+
+      let bytes = read(file);
+      if (source) {
+        assert.equal(hash(bytes), source.actual, `Current review source changed: ${source.file}`);
+        bytes = execFileSync('git', ['show', `${source.commit}:${source.file}`], {
+          cwd: root, maxBuffer: 16 * 1024 * 1024,
+        });
+        assert.equal(hash(bytes), source.expected, `Historical review source changed: ${source.file}`);
+      } else {
+        assert.equal(hash(bytes), currentEnforcedProposal.sha256, 'Current enforced proposal changed');
+      }
+      const encoding = typeof options === 'string' ? options : options?.encoding;
+      return encoding ? bytes.toString(encoding) : bytes;
+    },
+    sourceApplicability: {
+      mode: 'current-enforced-case-review',
+      joinSource: { file: joinSource, sha256: hash(read(path.resolve(root, joinSource))) },
+      historicalRoute: currentEnforcedHistoricalRoute,
+      predecessorReview: retainedAccessibilityPaintReview,
+      boundary: 'Current enforced checkpoints and exact retained-source observations. Whole-case inspection and current rendering acceptance remain open.',
+    },
+  };
 }
 
 export function createPickerFocusSemanticsReviewReader({ root, read, predecessor, reviewSha256 = pickerFocusSemanticsReview }) {

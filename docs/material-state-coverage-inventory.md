@@ -27,14 +27,39 @@ the eight configured Tooltip desktop `open` cases. Staged review
 raster measurements to exact current frames for 40 cases. Combined
 review `a4a3b200` also binds current browser focus, paint, accessibility
 and same-surface ownership for those cases. Its 397 added paths verified.
-The full loader verifies all 2,311 rows and 43,053 dependencies. Staged successor `00a6ec38` adds actual SVG
-and tube endpoint geometry for all 20 Spinner cases. All case inspections remain partial.
-Reconcile the staged evidence after the active gates, then close
+The full loader verifies all 2,311 rows and 43,053 dependencies. Its
+successor `00a6ec38` adds Spinner cap geometry and passes the exporter
+reader with 43,057 dependencies. Its two source fingerprint changes
+are reconciled against `b53047be`. Case inspections remain partial.
+Publish the successor through the canonical gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
+
+### Current enforced review registered for export
+
+The existing audit runner selects `00a6ec38` through its exact case
+review flags. Its reader authenticates the materialized proposal and
+uses the verified Git source route for the 16 retained paths. Those
+reads require both the live file digest and the recovered digest.
+Changes to either the route receipt or live input are rejected.
+Reversing the runner selection restores the prior historical reader
+input exactly. Earlier named export selections are still available.
+
+The full loader verified all 2,311 review rows and 43,057 dependency
+receipts. The source fingerprint census conserved 1,162 of 1,164
+entries from the accepted package. Only the review reader and audit
+runner changed. The next export must reconcile those fingerprints
+and coverage through the canonical gates.
+
+- Selection preflight `current-enforced-export-selection-preflight-20261123.log`
+  SHA-256 `9a4fa4f52ee23df9f6abe9ac457b01e0c6ace42ebcca0a5a241aae7375110ecd`.
+- Reader integration `current-enforced-export-reader-integration-20261123.log`
+  SHA-256 `4f3ef37e4f4bbcbb53ecb0056ce1a593ee0776f2f6e25ef94c9611f3ccf7ebec`.
+- Source fingerprint census `current-enforced-export-source-fingerprints-20261123.log`
+  SHA-256 `c81a0ff897bd992a9fa9645f4da91ae7a994e576010881db2888aa0a0c7a78d8`.
 
 ### Retained accessibility and paint canonical generation accepted
 
