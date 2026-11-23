@@ -11,6 +11,13 @@ Accepted promotion SHA-256 7e35e8c3d229383469924d4e596b012e163b1909ed1d145c8cd07
 Failed promotion archive SHA-256 264350ab951af865a0e2b05ffdb45b037c3d7675a2cae76d7b58a57aa56ac999.
 Combined strict replay SHA-256 6d124f861f8e880de1634765b52f6b29e56901a4e85fd685d10953a5a99b99e8.
 
+Keep current-enforced-benchmark-configuration-20261122.log with
+the six original failures and the scoped validation stdout and stderr.
+Keep the exact scoped configuration reader bytes and fresh build log
+with current-enforced-browser-v2-20261123 and its checkpoint output.
+Scoped configuration stdout SHA-256 bfbee0e3123332259057c27cd15d5bf1c43dd81a69af7e31f5ad89cfbb6242dd.
+Scoped configuration reader SHA-256 b5f19a2eb8e33c81c7d11da0b17025505567b40878ad2247c756334a33db9c7b.
+
 NTFS compression reduced the retained October 27 Snackbar candidate
 index from 263,536,350 to 112,852,992 allocated bytes. The index hash,
 file identity, link count and modification time match. D: free space

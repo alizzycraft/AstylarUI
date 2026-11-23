@@ -1486,6 +1486,17 @@ Fresh browser inventory SHA-256 4d97a1f2748fea1aa611af25af6b095427ef3963dafaefcc
 Isolated build log SHA-256 0de940e7c0657d64ab1bd0a0c99cc3d9cad91bdaba644b49b52456cdd88e45ac.
 Build snapshot manifest SHA-256 d124867b65cacd73ad89166d8bece6e88ef54d0a236fe8b79579a1bc465b5c4a.
 
+The six historical source failures resolve when the original
+configuration assertions receive scoped authenticated reads.
+All 33 tests pass with zero skips. The temporary module reader
+targets only benchmark-config.spec.mjs. The original runner
+is active in unfiltered enforced mode against the isolated
+build. Its browser actions, thresholds and case roster are
+the maintained ones. The direct configuration invocation still
+needs the retained readers integrated and source receipts reconciled.
+Scoped configuration stdout SHA-256 bfbee0e3123332259057c27cd15d5bf1c43dd81a69af7e31f5ad89cfbb6242dd.
+Scoped configuration reader SHA-256 b5f19a2eb8e33c81c7d11da0b17025505567b40878ad2247c756334a33db9c7b.
+
 The retained Divider natural-height and copy-aware baseline traces
 join on all eight Above/Below owners in the four desktop DPR1 cases.
 They match the recorded served asset inventory, browser version,
