@@ -12,9 +12,9 @@ changes to `sourceFingerprints` and `coverage`. Section conservation,
 independent cold equality and isolated import are still required.
 
 The Menu and Divider successor has passed the complete dependency
-loader. The staged successor `5222b73f` adds current Checkbox and
-Slide Toggle label width evidence to the Expansion, Tabs and modal
-observations. All case inspections remain partial.
+loader. The staged successor `a185b08a` adds Chips width and adjacent
+placement evidence to the Checkbox, Slide Toggle, Expansion, Tabs and
+modal observations. All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -241,6 +241,46 @@ digests and 341 evidence paths.
 - Delta `checkable-current-label-tracking-composed-delta-20261123.log`
   SHA-256 `c29612774c22fdb7421b4d11a1b2147549db6fa8228fceb6051dc477055ce352`.
   Successor `5222b73f81e70351885ce5f09c9c065b6a97885b67abb26bd1e9c747ccdc1f1f`.
+
+### Chips fixed widths explain adjacent offsets in current captures
+
+All 64 configured Chips interactions agree on the two chips' actual
+selection states. The native outer chip hosts use content sizing while
+the candidate option owners use the known state-dependent fixed widths.
+The candidate requests are 97/68 CSS px for selected/unselected Angular
+and 93/64 CSS px for Astylar. These values survive registry sizing and
+mesh projection. Native used widths are 97.421875/73.421875 and
+92.75/68.75 CSS px, respectively. All 32 size differences of at least 2
+CSS px occur on an unselected chip in 24 interactions.
+
+Both implementations retain exactly 8 CSS px between the chips. In all
+64 cases, the first chip's width difference predicts the second chip's
+left-edge offset after aligning the first chip's left edge. This
+separates the current width and placement evidence from an equal-input
+intrinsic sizing test, which remains open.
+
+The size census now accounts for all 536 paired box differences of
+at least 2 CSS px by their observed input or owner boundary.
+
+| Cohort | Observations | Established boundary |
+| --- | ---: | --- |
+| Tabs | 174 | Span-to-control and span-to-panel owner choices; matched controls use different flex sizing |
+| Slider | 132 | Fixed half-domain candidate range owners |
+| Expansion | 86 | Title flex owner and panel-to-trigger mapping; six contrast frames retain authored height gaps |
+| Checkbox and Slide Toggle | 112 | Native label tracking, isolated in two current controls |
+| Chips | 32 | Unselected fixed candidate widths and conserved adjacent gap |
+
+The staged delta binds the 64 current Chips rows with partial
+`inputStyleStructure` dispositions. Replay verifies all 2,311 row
+positions, eleven predecessor digests and 195 evidence paths.
+
+- Current Chips observation digest
+  `eeb7a90dbf77bcd12f024838be30b7c2bee07c60078cc9f9284244981369c1c8`.
+- Delta `chips-current-fixed-width-placement-composed-delta-20261123.log`
+  SHA-256 `c527e1a93e2a9ab075faace59a7c85a2e5d9c0ff41ad9267efab0987d8bd1ee2`.
+  Successor `a185b08ab3d32036a34310b24682eb8fe22d1ea4b39ffef13296be4b6097a336`.
+- Authored source at `examples/material-showcase/src/app/reference.component.ts:69`
+  and `examples/material-showcase/src/app/astylar.component.ts:698`.
 
 ### Font completion accounts for the second modal departure reflow
 
