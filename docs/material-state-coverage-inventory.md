@@ -39,8 +39,18 @@ only `font`. The update promise settles after both. The Bottom Sheet
 revision advances from 2 to 4 in both profiles and Dialog from 3 to 5.
 The semantic operations again show Bottom Sheet descendant and root
 replacement on the opener and Dialog root replacement on Cancel.
-The probe attributes reflow requests. It leaves the exact font face and
-operation-to-reflow timing open.
+A follow-up associated the loaded face and semantic operations with the
+active reason in the two light cases. The sole completed face in both
+`loadingdone` events is Roboto Latin, normal, weight 400. The served
+`media/roboto-latin-400-normal.woff2` hash is
+`425c0713a8176f92273d378599c7eac57de7fafabd4bd0ed457b70eb8f80d371`.
+The Bottom Sheet descendant replacement occurs during `update`. The
+semantic root replacement occurs during `font` in both cases. It moves
+focus to BODY before focus is restored to the original opener or Cancel
+button token. This follows the text cache clear and semantic reconciliation
+path in `src/lib/astylar.ts:571` and `src/lib/astylar-semantic-bridge.ts:149`.
+The follow-up reproduces both enforced PNGs for each case. The dark case
+still has reason-level attribution only.
 
 Both light cases reproduce both enforced terminal PNGs. Dark Bottom Sheet
 reproduces the Material PNG. To distinguish a changing settled frame from
@@ -58,6 +68,10 @@ these two pixels in the sampled captures. Its cause remains open.
 - Bottom Sheet dark and Dialog light report `modal-departure-invalidation-peers-20261123.json`
   SHA-256 `091cb8d56c337502039c915581620d2297d9e4e8dff5e8051bcf7b859abc4806`.
   Runner SHA-256 `71513a876998cd5bdda0876a1b58bf77a145be0f86effe7c24de5c92e3461878`.
+- Light Bottom Sheet and Dialog face and operation timing report
+  `modal-departure-font-face-operation-timing-20261123.json` SHA-256
+  `ed841fb549b32cd9fe9f769f56ded72b995f5d3c484e408e6d83efade29909df`.
+  Runner SHA-256 `ec9f288eac8f0655873c048f19032cfebe98aeca3ab0238d3884b145c17c18a3`.
 - Dark-only report `bottom-sheet-dark-departure-raster-20261123.json`
   SHA-256 `39fce0ce2edf147d633a618b833a60aa049c08ec83dc6741f27502e89e45c5d9`.
   Runner SHA-256 `67dde4566a43d37a2eeee68fe48b2788552e269b1b7b054f2b16965ec77dcd38`.
