@@ -1,17 +1,18 @@
 # Efficient Material input-audit workflow
 
-Accepted generation 5a208846 passes independent cold byte equality,
-isolated import and accepted store verification. It binds all 2,311
-case rows and 35,332 dependency receipts with the focus and authored
-activation joins accounted for. The next review 750e3af9 passed the
-existing loader with 35,450 dependencies. The unfiltered benchmark
-configuration now passes all 33 tests using authenticated historical
-reads for the six original failures. The isolated current build passed
-and the enforced browser capture is in progress. Use
-`--retained-accessibility-paint` for the next canonical export. Its
-preflight reconciles seven source fingerprints and conserves all 501
-focused proofs. Keep the accepted pointer at 5a208846 until section
-comparison, independent cold equality and isolated import pass.
+Canonical generation b53047be passes the complete retained accessibility
+and paint export chain using review 750e3af9. The independent cold
+comparison recorded zero disk-cache hits. The isolated import and accepted
+store verify 84 shards, 2,311 case rows and 35,450 dependency entries.
+The current enforced browser matrix passed 436 static and 1,875 interaction
+cases. Use the coverage ledger for the staged review and outstanding
+case inspections. The equal-input and final acceptance gates remain open.
+
+Predecessor 5a208846 retains its independently verified 2,311 case rows
+and 35,332 dependency receipts. The current benchmark configuration
+passed all 33 tests with authenticated historical reads for the six
+original failures. The retained accessibility and paint export
+reconciled seven source fingerprints and conserved all 501 proofs.
 
 The retained case observations generation 20baa74b now passes section
 conservation, independent cold equality, isolated import and accepted

@@ -2,15 +2,14 @@
 
 ## Current audit state
 
-Accepted canonical generation `5a208846` remains the baseline for all
+Accepted canonical generation `b53047be` is the baseline for all
 2,311 configured cases. The unfiltered enforced browser run passed all
 436 static and 1,875 interaction cases. This establishes benchmark output
 acceptance. Input equivalence and case inspections remain open.
 
-The canonical candidate `b53047be` has been written from frozen review
-`750e3af9`. Its payload hash matches the manifest. Section conservation
-passed. Independent cold verification is running and isolated import
-is pending.
+The retained accessibility and paint canonical generation `b53047be`
+passed section conservation, independent cold comparison, isolated import
+and accepted-store verification from frozen review `750e3af9`.
 
 The Menu and Divider successor has passed the complete dependency
 loader. Materialized layout review `a185b08a` passes the full guarded
@@ -28,10 +27,8 @@ the eight configured Tooltip desktop `open` cases. Staged review
 raster measurements to exact current frames for 40 cases. Combined
 review `a4a3b200` also binds current browser focus, paint, accessibility
 and same-surface ownership for those cases. Its 397 added paths verified.
-The complete loader for that batch is queued behind the cold canonical
-check and isolated import. Staged successor `00a6ec38` adds actual SVG
-and tube endpoint geometry for all 20 Spinner cases. All case
-inspections remain partial.
+The full loader verifies all 2,311 rows and 43,053 dependencies. Staged successor `00a6ec38` adds actual SVG
+and tube endpoint geometry for all 20 Spinner cases. All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -39,15 +36,17 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
-### Retained accessibility and paint canonical candidate written
+### Retained accessibility and paint canonical generation accepted
 
 Frozen review `750e3af9` completed canonical encoding and writing.
 Candidate `b53047be72502ba1d2bb8d7921767e90d73f6853243a49e0223b5811e22e8ce7`
 rehashes to the documented 103,927,951-byte compressed payload. The
 export reports 8,483 differences, 389,202 occurrences and 215 source
-findings. Its input-equivalence result is no. The baseline accepted
-pointer stays `5a208846` through section conservation, cold verification
-and isolated import.
+findings. Its input-equivalence result is no. The accepted index is
+`732c930638e4468effaf910a6b3134c119f2ed71909e5309302799006bc6ef2d`.
+The isolated import verified all 84 shards and 35,450 dependency entries.
+The accepted-pointer update reused the authenticated store after cold
+comparison with zero disk-cache hits. Generation `5a208846` is retained.
 
 - Export log `retained-accessibility-paint-canonical-export-20261123.log`
   SHA-256 `3c11ef2c30e296ccc6793023a2fa8c086027462a8e8cd1c13b61de2de6843f6c`.
@@ -59,6 +58,10 @@ preflight,
 The section receipt is
 `retained-accessibility-paint-canonical-sections-20261123.log`, SHA-256
 `224b98ade7d7dd4bf35f9eaf026b7d1adb891c5e46ae56f57b407d8987f99214`.
+- Promotion receipt `retained-accessibility-paint-accepted-promotion-20261123.log`
+  SHA-256 `98a8d9b73a6b57d3e96c884e67140692b851d9c2bba248fe0b2f9ff336311438`.
+- Combined review load `current-popup-progress-ownership-guarded-full-replay-20261123.log`
+  SHA-256 `7748eab580311c4a55d5d10628f7393f359d8852f0163c2f8685dc9461d9e2b0`.
 
 ### Current Spinner cap requests and rendered mesh geometry
 

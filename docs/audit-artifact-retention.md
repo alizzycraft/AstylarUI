@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Retain canonical generation b53047be, its isolated verification store and
+predecessor 5a208846. The accepted store verifies 84 shards and the original
+compressed payload. Preserve the section, independent cold, isolated
+import and promotion receipts. Keep the current enforced checkpoints and
+the composed review dependencies referenced in the coverage ledger.
+Promotion SHA-256 98a8d9b73a6b57d3e96c884e67140692b851d9c2bba248fe0b2f9ff336311438.
+
 Retain accepted 5a208846 and index 493d4be9 with the 84 verified
 shards, off-volume isolated store and predecessor 20baa74b.
 The payload has a verified hard link and the remaining 85 files
