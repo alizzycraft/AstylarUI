@@ -2773,6 +2773,27 @@ Public option runner SHA-256 c36c6d53c4af3760e125aa24d2968266d2c524750a91f64af84
 Restoration report SHA-256 717f9ec3eb6e044289d674e8ea3db71b74d7cfca93973491d7c97ffc88517c46.
 Restoration runner SHA-256 898be34cfdf3817c6b9eb74a892f93e61f6807f243e7a0242fe2043985bbac48.
 
+The matched public-blur browser control clears logical focus immediately
+and queues one semantic sync. With DOM focus on the input, the sync clears
+it to BODY and emits one trusted focusout. With logical focus restored
+but DOM focus still on CANVAS, the same sync clears logical focus and
+leaves the canvas active. A trusted input click reacquires DOM focus in
+both paths. This extends the earlier source-only blur proof to one
+DPR2 combobox without a modal or selection. The current focus result
+corroborates `core-public-focus-does-not-synchronize-native-semantic-owner`
+in the accepted audit and extends it to popup commit restoration.
+Public blur report SHA-256 6f5b158d9ffc0d39b466beb88f523fd219b0ae07db7099060b04ffc1e622a936.
+Public blur runner SHA-256 52d69b356737ba6a34900ba6be0de155045c07bcb3c3ae34977cd2fab797006e.
+
+A compact case-review delta adds the current DOM and AX observations to
+the 16 exact Autocomplete and Select commit-and-reopen rows. It
+authenticates all 16 enforced checkpoints and 25 distinct receipts.
+Removing the added children recovers all 2,311 predecessor rows and
+the complete 750e3af9 digest. The predicted successor is 4db22a50.
+The queued canonical export still selects 750e3af9. Replay the delta
+with the complete dependency loader at the next integration milestone.
+Delta SHA-256 de9bb55070d85cb0a02ec0076a94a663330872b7f1985a8ad06a3e234c948522.
+
 Successor 26e5ffb8 stages 16 partial activation observations and attaches
 editing and pointer focus evidence to the same rows. The 435-row batch
 reproduces its prior successor and reverses to the full 2,311-row parent.
