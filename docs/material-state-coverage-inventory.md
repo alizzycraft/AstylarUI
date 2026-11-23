@@ -2648,10 +2648,24 @@ The target receives no `beforeinput`, `input` or `change` during this
 sequence, and the trace records no synthetic dispatch of those events
 on that target. Stack locations and three complete mapped methods bind
 this managed deletion and DOM value-sync path to the served bundle
-and current source. Public callback delivery and other editing actions
-remain open.
+and current source. Other editing actions remain open.
 Current event trace SHA-256 5499df9ab5330ca4466213ca1294b1b667afa2541583bc62201261e239ba80f1.
 Current event verification SHA-256 42dbd58fb24f130f1093c7f81833f5aebefe453057e8250b36c0c41293be388e.
+
+The public callback stream covers all 16 current empty-and-blur cases.
+Each records one focus, one input with the empty value, one change
+with the empty value and one blur, in that order. Four instrumented
+cases reproduce the enforced terminal PNGs on both sides. Astylar's
+runtime dispatches public input during managed keydown, before writing
+the value onto the semantic input. The transient root focusout task
+runs after the same input refocuses and returns through the active
+owner guard. The outside click triggers the runtime focus transition,
+which commits the changed value and dispatches change before blur.
+Three complete mapped handlers and the served stack lines bind that
+sequence. This verifies public callback delivery alongside the
+separately recorded DOM-event difference.
+Current callback trace SHA-256 39ab4799218848dc0083a10f2ce4dd023f2abcb7595daee1e9437195b867a935.
+Current callback verification SHA-256 c620edc6f72527b05e26371a403aade9629f5e701f2317d0437d7b7b1c7719c2.
 
 Successor 26e5ffb8 stages 16 partial activation observations and attaches
 editing and pointer focus evidence to the same rows. The 435-row batch
