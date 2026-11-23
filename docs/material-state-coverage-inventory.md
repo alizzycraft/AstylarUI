@@ -12,9 +12,9 @@ changes to `sourceFingerprints` and `coverage`. Section conservation,
 independent cold equality and isolated import are still required.
 
 The Menu and Divider successor has passed the complete dependency
-loader. The staged successor `4f07f359` binds current Expansion
-owner dimensions alongside Tabs size and text and the three modal
-action and font-focus traces. All case inspections remain partial.
+loader. The staged successor `5222b73f` adds current Checkbox and
+Slide Toggle label width evidence to the Expansion, Tabs and modal
+observations. All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -205,6 +205,42 @@ digests and 171 evidence paths.
 - Authored source at `examples/material-showcase/src/app/reference.component.ts:90`
   and `examples/material-showcase/src/app/astylar.component.ts:458`,
   `:657`, `:658` and `:993`.
+
+### Tracking explains current Checkbox and Slide Toggle label widths
+
+The focused question was whether the shared label width gap begins in
+the text request or after sizing. All 112 current interaction records
+bind the exact native span and Astylar text-registry owner. Both use the
+same label strings, nominal 14 CSS px size and normal weight. Material
+requests 0.256 CSS px tracking. Astylar records zero. The width
+difference is 4.0966796875 CSS px for Checkbox and 4.3623046875 CSS px
+for Slide Toggle. Tracking times character count predicts those
+differences to within 0.011 CSS px. Heights agree in every case.
+
+A frozen-build diagnostic changes only the native tracking to zero for
+each light desktop DPR1 focus case. Checkbox width changes from
+105.5625 to 101.46875 CSS px and Slide Toggle from 122.5625 to
+118.203125 CSS px. Each is 0.0029296875 CSS px wider than its authenticated
+Astylar box. The original widths return after restoring the declaration.
+Other sampled font properties and height are conserved. This isolates
+the width cause in the two probes. The exact-case input joins extend
+the same observation to the other captured states. Native line height
+and wrapping requests still differ from the candidate and require
+their own placement and paint attribution.
+
+The staged review adds a partial `inputStyleStructure` observation
+to each of the 112 rows, with the intervention bound to its exact two
+cases. Streaming replay verifies 2,311 row positions, ten predecessor
+digests and 341 evidence paths.
+
+- Current label join digest
+  `51aa82ed0cc88e180abe7500a300eca6c09eeadacbe97c3dc48198cc934709d9`.
+- `checkable-label-native-tracking-20261123.json` SHA-256
+  `9fecf788c053dac531437e0cf4b9c743a77784941bee78535542865ea252c891`.
+  Runner SHA-256 `8d5c4988d3901b273f0355ef543d9b78b9147e95a62ab60c4027374434ef4317`.
+- Delta `checkable-current-label-tracking-composed-delta-20261123.log`
+  SHA-256 `c29612774c22fdb7421b4d11a1b2147549db6fa8228fceb6051dc477055ce352`.
+  Successor `5222b73f81e70351885ce5f09c9c065b6a97885b67abb26bd1e9c747ccdc1f1f`.
 
 ### Font completion accounts for the second modal departure reflow
 
