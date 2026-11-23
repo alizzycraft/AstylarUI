@@ -1577,6 +1577,31 @@ Configured paired-slot verification SHA-256 126e6f93243bd5d83c95334fae291dc355fd
 Desktop diffuse-only verification SHA-256 a3a7ad77037ca49cdd5784e7054f2530c22731a8c7b8109fd897f206f70a830e.
 Mobile diffuse-only verification SHA-256 2b358db6d285bab3b63fb29f085c013c61b98562e16adacd79621fd5460b671e.
 
+All eight current Divider inspect cases conserve the 48 screenshots
+and crops from the retained checkpoints. The settled resource counts
+are 17 meshes, 16 materials and four textures in both captures.
+Interaction and semantic counters agree. The fresh snapshots report
+reuse and zero reflows, compared with nine reflows in the retained
+last update. Custom desktop DPR2 replays this boundary. Reapplying
+the active theme advances revision 2 to 3 and switches the reported
+strategy to reuse while the site data and both labels' mesh, material
+and texture identities agree. The start and settled phase commands
+leave revision 3 and the identity counts intact. The replay reproduces
+the enforced frame byte for byte.
+
+In that same inspect case, the paired-slot crop changes 691 Below
+pixels, 662 by more than two channel values. Above and the rest of the
+frame are pixel-identical. The 18 affected scanlines fall within the
+28 rows predicted to sample different texels at Below's projected
+position. Above has eight eligible scanlines and no visible change.
+The backing effect thus follows the projected pixel phase across the
+two DPR2 viewports, with Above affected on mobile and Below at desktop
+inspect. Broader resource lifetime and whole-case inspection remain
+open.
+Inspect checkpoint conservation SHA-256 90b54d0568f65a4f6ac206e7b1fc7ec9669f88f902b1a26919feaf1199c68125.
+Inspect paired backing capture SHA-256 f0fbe5fdbf8908a0f784813bce2d7ac622d3211ea58068603d9d21c65471e5de.
+Inspect paired backing verification SHA-256 ec2153ae3ea16c4f31d63850f648604f2212a52da8c670edf20c08d409a18d67.
+
 The current public-package comparison uses identical Arial text,
 22 px explicit line height, paint inputs and paragraph boxes on both
 sides. The 16 px control allocates 22 backing rows at DPR1 and 44 at
@@ -1657,7 +1682,7 @@ semantics, errors and case threshold outcomes also match. The style
 record changes only the reference stylesheet index. The text record
 adds measurement and crop coordinates. This confirms applicability
 for those measured outputs across the two browser builds. The eight
-supplemental Divider cases and remaining inspection obligations stay open.
+inspect cases have separate checkpoint and paint evidence above.
 Fresh Divider receipt SHA-256 fc1104a0f2619fc0f4e0605e5e3b3f013ee4b86235dedca8a2e4b2c2f9408c12.
 Comparison viewport receipt SHA-256 46e0ff250f9c174112ba87f15e02318ce674aded7d64b0196d751e18357d7034.
 
@@ -1703,8 +1728,8 @@ The mesh stays 22 CSS px high. Projecting the 17 CSS px local draw
 baseline shifts it by −0.739 CSS px at DPR1 and −0.378 at DPR2. With
 the row placement, the projected Astylar baseline is about 0.177 CSS
 px below native at DPR1 and 0.260 above native on mobile DPR2. This
-accounts for the measured single-label baseline offsets. Glyph
-coverage and the eight inspect cases remain open.
+accounts for the measured static single-label baseline offsets. Paired
+native glyph coverage and inspect-state baseline coverage remain open.
 Current baseline capture SHA-256 2143e91707614bdcbc6ef88e0da583573fdf3e3206f475c044e964293d1b7b83.
 Current baseline verification SHA-256 90c4fe8a100aec22198993e655273d874172f02a05cd06a585987f8703d22f86.
 
