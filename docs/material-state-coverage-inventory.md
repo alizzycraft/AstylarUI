@@ -2753,8 +2753,21 @@ input. Astylar's `surface.focus()` returns true, dispatches public focus
 for the input and reports it as the logical focus owner. DOM focus
 remains on the canvas both immediately and after settlement. The
 DPR2 reduction distinguishes the generic pointer transfer
-from subsequent DOM focus restoration. The exact semantic-bridge
-scheduling cause for the public-focus boundary remains open.
+from subsequent DOM focus restoration.
+
+The pass-through bridge trace observes zero focus sync requests and zero
+sync calls from the explicit restore through settlement. A trusted click
+on the same input then queues one sync, applies it to `control` and
+moves DOM focus off the canvas. The four installed owning modules match
+the exact inputs of both the observed and instrumented bundles. The
+public surface forwards focus to the interaction runtime, which returns
+success for logical focus and dispatches a `focus` event. The renderer
+event path at `src/lib/astylar.ts:687-695` skips focus sync for that
+event, and this route has no other bridge call. This locates the
+public-API DOM focus gap in the measured restoration sequence.
+Bridge report SHA-256 6177cdd2a095308aa7d1392053fe16ea5af71fa478a826530966508728f83328.
+Bridge runner SHA-256 0d636c984f3ddee22c3f8e0d17307bc316f6687e75aec992ea616022c93ce7e0.
+
 Public option report SHA-256 556402f3f1688a4319b4d68cf275dc30a25dbe267d1e4f4ae56558ab80282751.
 Public option runner SHA-256 c36c6d53c4af3760e125aa24d2968266d2c524750a91f64af84a683d5b2b525f.
 Restoration report SHA-256 717f9ec3eb6e044289d674e8ea3db71b74d7cfca93973491d7c97ffc88517c46.
