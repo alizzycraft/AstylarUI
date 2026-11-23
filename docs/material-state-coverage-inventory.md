@@ -32,13 +32,35 @@ successor `00a6ec38` adds Spinner cap geometry and passes the exporter
 reader with 43,057 dependencies. Its two source fingerprint changes
 are reconciled against `b53047be`. The successor was exported as
 `4ab493f6`. Its 106,075,383-byte payload exceeds the GitHub Git file
-limit. Section conservation and lossless transport checks are running.
+limit. Section comparison conserved 78 sections and matched the
+preflight source fingerprint vector. Independent cold verification
+and lossless recompression are running.
 Case inspections remain partial. After the canonical gates, close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
+
+### Missing popup geometry reconciled against both captured trees
+
+All 546 missing geometry pairs across 165 current cases have
+authenticated paired input trees. Both sides lack the target in 538
+rows across 157 cases. The eight one-sided rows are the known Tooltip
+`open` cases, where only Astylar authors a popup. All 378 paired
+geometry rows for these targets have owners in both trees. The
+comparison follows the collector's IDs, generated native selectors
+and overlay roots.
+
+The 538 rows have no paired popup box at the captured boundary.
+Dismissal, reopening, paint and other states still require their
+own observations. The eight Tooltip rows record unequal presence.
+
+- Presence census `current-popup-geometry-presence-20261123.json`
+  SHA-256 `1ac6499f01e918d53ba87de0a9d8a2bb9ff7d5f3a7ac10e8fbb0e8722e065a99`.
+- Case delta `current-popup-geometry-presence-composed-delta-20261123.log`
+  SHA-256 `22a0e29df0a924850d7dc7dde01f472ddaf55c11ffe8976d3ce6f0187c4e53af`.
+  Staged successor `9bf6da05` binds all 165 cases and 498 receipt paths.
 
 ### Current Spinner stroke interior and radial edges
 
@@ -79,7 +101,10 @@ The full loader verified all 2,311 review rows and 43,057 dependency
 receipts. The source fingerprint census conserved 1,162 of 1,164
 entries from the accepted package. Only the review reader and audit
 runner changed. The next export must reconcile those fingerprints
-and coverage through the canonical gates.
+and coverage through the canonical gates. The section receipt
+`current-enforced-review-canonical-sections-20261123.log`
+verifies this boundary, SHA-256
+`3b111586874ee29fe05993845d8e7cdb9bc42a14038e990b2c1a28217f967efe`.
 
 - Selection preflight `current-enforced-export-selection-preflight-20261123.log`
   SHA-256 `9a4fa4f52ee23df9f6abe9ac457b01e0c6ace42ebcca0a5a241aae7375110ecd`.
