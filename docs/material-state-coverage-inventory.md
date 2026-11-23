@@ -10,8 +10,9 @@ independent cold equality and isolated import are still required.
 
 The popup, Datepicker and combined Timepicker and Button/Toolbar
 successors have passed the full dependency loader. The staged Menu
-review adds 92 exact case observations. All case inspections remain
-partial. After the active gates, reconcile the staged evidence
+and Divider review adds 116 case observations and is in dependency
+replay. All case inspections remain partial. After the active gates,
+reconcile the staged evidence
 and close the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
@@ -1747,9 +1748,39 @@ baseline shifts it by −0.739 CSS px at DPR1 and −0.378 at DPR2. With
 the row placement, the projected Astylar baseline is about 0.177 CSS
 px below native at DPR1 and 0.260 above native on mobile DPR2. This
 accounts for the measured static single-label baseline offsets. Paired
-native glyph coverage and inspect-state baseline coverage remain open.
+native glyph coverage remains open.
 Current baseline capture SHA-256 2143e91707614bdcbc6ef88e0da583573fdf3e3206f475c044e964293d1b7b83.
 Current baseline verification SHA-256 90c4fe8a100aec22198993e655273d874172f02a05cd06a585987f8703d22f86.
+
+All eight current Divider inspect cases now have paired baseline
+observations, with all 16 replayed full frames matching the enforced
+checkpoints. The native marker preserves paragraph and text geometry.
+The candidate draw and copy receipts bind both text meshes to their
+live backing, and projected boxes agree with checkpoint geometry
+within 0.000042 CSS px. The verifier uses the recorded planar UV
+matrix and bounds the small measured width difference. The initial two
+verifier failures remain retained.
+
+Light, dark and contrast match native's local baseline offset.
+Their projected baseline difference is the row placement difference.
+In contrast and custom, Above moves up 0.5 CSS px at DPR2 on the
+candidate. The native top and Below position stay fixed. The served
+DPR-sensitive row rule and the root border account for the recorded
+candidate tops. Custom's backing has 23 rows at DPR1 and 45 at DPR2
+against a 22 CSS px mesh, changing the local projected baseline by
+about -0.739 and -0.378 CSS px respectively. The resulting custom
+DPR2 offsets are +0.038 CSS px for Above and +0.538 for Below, measured
+as candidate minus native. Anonymous ascent, descent and unreviewed paint
+owners remain separate inspection gaps.
+Inspect baseline capture SHA-256 af7280e3608f2637bdb44a6caec310c28dd134dd95433841d7b141744470b60d.
+Inspect baseline verification SHA-256 720b1569bb555c2b9a8be1696f3dd9d5af2946b64479e9d15f9c23904ba01570.
+
+The compact baseline delta joins the eight inspect pairs and 16
+previously verified static pairs to their exact cases. It binds 79
+receipts and reverses to all 2,311 Menu predecessor rows. The combined
+Menu and Divider successor 56f299f9 is in dependency replay with all
+case dispositions preserved.
+Divider baseline delta SHA-256 7ed05588b047414f9aabfcef881153278b9c1111ca2e724e718d43ad5d688475.
 
 With equal authored inputs on the current public package, a 16 px
 inline span with 20 px line height sits in an auto-height paragraph.
