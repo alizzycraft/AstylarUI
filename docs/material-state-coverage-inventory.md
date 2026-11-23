@@ -39,14 +39,17 @@ decoded export and was imported and verified across all 84 shards.
 Accepted generation `3bc80bd0` contains review `00a6ec38` with
 43,057 dependency paths. Promotion SHA-256 `17083f2b593202d5acc3014eaa6a9e4d08a89702ef09d15cdbef2e1af104584f`.
 Materialized review `cabf1610` combines the staged popup geometry,
-Dialog action paint, and Spinner paint evidence. Its dependency extension
-passed and the complete guarded replay is queued after isolated import.
+Dialog action paint, and Spinner paint evidence. The full guarded
+loader passed for all 2,311 cases and 43,146 dependency paths.
+Replay SHA-256 `c8d5b15236fe72564943d5bb08a8f84e763960f6f28be4639ed919d17249e50c`.
 Materialized successor `1e46195b` binds the Timepicker gutter, option
 typography, and retained ink evidence to 56 distinct cases. Its
 dependency extension has passed.
 Materialized successor `15aa8628` joins the Datepicker month topology,
 action raster, and focus tint evidence for 32 cases. All 71 added
 dependency paths passed verification.
+Staged successor `bfad5bcd` adds six glyph and two mobile Timepicker
+replays. It binds 67 receipt paths and verifies all 2,311 case positions.
 Case inspections remain partial. After the canonical gates, close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -159,8 +162,8 @@ and current checkpoint, tree, and frame receipts for each case.
 The staged replay verified all 2,311 row positions, replayed the
 16 Timepicker scrollbar additions from predecessor `acc9be35`, and
 verified 486 receipt paths for the new findings. Inspection and
-current rendering acceptance remain open. Live label geometry and
-texture attribution await the queued browser replay.
+current rendering acceptance remain open. Live label and texture
+measurements now cover the six opening cases described below.
 
 The materialization preserves all 2,311 row positions and verifies
 both staged review digests. The dependency extension preserves the
@@ -199,9 +202,22 @@ retained light and dark mobile frames verify, and both sides recorded
 144 CSS px of wheel movement. The complete scrollbar geometry and
 Babylon paint modules match across the retained and current bundle
 maps. The current chunk also matches the served asset receipt. This
-supports reuse of the two module observations. A focused mobile
-opening and wheel capture is still needed for current gutter pixels
-and live paint inputs.
+supports reuse of the two module observations.
+
+The focused mobile replay records an opening, 144 CSS px of wheel
+movement, and Escape dismissal on both sides in both profiles. Material
+retains a 245 CSS px scroll client width. Astylar has a 260 CSS px
+client width, a 12 CSS px track, and an 8 CSS px thumb. Three Material
+gutter frames match the retained pixels. The dark opening differs by
+494 pixels with a maximum change of one channel value. Each Astylar
+frame differs by the same 52 pixels at the panel top for its profile,
+including after the thumb moves. The cause of the fixed top-edge
+changes remains separate from the observed thumb motion.
+
+- Mobile capture `artifacts/material-parity/timepicker-mobile-current-scrollbar-paint-20261123/latest-report.json`
+  SHA-256 `855eefd7465e649a2ffa00e6db9f3aac7344d5ab418258896767474427c4af19`.
+- Gutter readback `artifacts/material-parity/timepicker-mobile-scrollbar-current-pixel-variants-20261123.log`
+  SHA-256 `f0ffbf4f8f54d44cf718f300adf601ebff376281c62201f0d189124c75a37c99`.
 
 - Mobile applicability `artifacts/material-parity/timepicker-mobile-scrollbar-current-applicability-20261123.log`
   SHA-256 `fdc42d02f343cf62aff5a31922bed9e16ad27935f15d82e47159fc7ccf70a399`.
@@ -225,12 +241,22 @@ frame with a different PNG digest. Astylar's row-relative ink center
 ranges from 0.014 CSS px higher to 1.001 CSS px lower for Autocomplete
 and from 0.015 CSS px higher to 0.998 CSS px lower for Select.
 
-This carries forward the local raster observations with their retained
-bounds. It leaves live label-box and texture attribution open. A
-six-case light-profile replay of the two DPRs and three popup families
-passed the checkpoint and 1,887-asset preflight. It is queued after the
-complete guarded review replay. It will measure both leading options,
-including the nested Autocomplete and Select text owners.
+The six light-profile opening replays measure both leading labels in
+each popup at both DPRs. All 12 native 20 CSS px label boxes and all
+12 Astylar 19 CSS px text planes center within their rows. The bound
+textures authenticate the nested Autocomplete and Select label owners
+and the direct Timepicker text owners. Ten side frames match the
+enforced PNGs. Both remaining DPR2 variants preserve the measured
+label regions. The live replay scope is narrower than the retained
+hover census. The contribution of the unequal typography inputs to
+the remaining raster ink still requires matched-input evidence.
+
+- Glyph observations `artifacts/material-parity/popup-option-current-glyph-paint-20261123/latest-report.json`
+  SHA-256 `4801d15d9267c1fc5edd1b3326f5512e2466116bd00b77466448309e0137612f`.
+- Variant readback `artifacts/material-parity/popup-option-current-glyph-frame-variants-20261123.log`
+  SHA-256 `ab482fa13563999fc955076f6de254b90dd058af83c845e75d3e938bc6a9276c`.
+- Glyph and mobile case delta `artifacts/material-parity/popup-glyph-and-mobile-timepicker-composed-delta-20261123.log`
+  SHA-256 `12db009f395445f6a47baa521d0259d5174dec8ffe1a12d318c7d98322361c2a`.
 
 - Ink replay `artifacts/material-parity/popup-option-ink-current-frame-replay-20261123.mjs`
   SHA-256 `87784ba568f1c74183fa8e1d435821e4f277567af58d7dc82827b4ae14870dfb`.
