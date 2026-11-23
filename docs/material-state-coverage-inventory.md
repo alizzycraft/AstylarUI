@@ -12,17 +12,50 @@ changes to `sourceFingerprints` and `coverage`. Section conservation,
 independent cold equality and isolated import are still required.
 
 The Menu and Divider successor has passed the complete dependency
-loader. The staged successor `a185b08a` adds Chips width and adjacent
-placement evidence to the Checkbox, Slide Toggle, Expansion, Tabs and
-modal observations. The materialized review passes the full guarded
-loader for all 2,311 cases and 37,325 evidence dependencies. All case
-inspections remain partial.
+loader. Materialized layout review `a185b08a` passes the full guarded
+loader for all 2,311 cases and 37,325 dependencies. Its staged successor
+`1e54281b` binds the current enforced output checkpoint to every case.
+All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
 already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
+
+### Current output checkpoint availability bound for every case
+
+The enforced build at `62f7b001` supplies passing output checkpoints for
+all 436 static and 1,875 interaction cases. The successor attaches each
+checkpoint to its exact `sourceCurrentness` row with the authenticated
+build log, capture manifest, enforced summary and paired input trees.
+All checkpoint result digests and both tree digests verify. This closes
+the missing-current-output question. Source applicability for each
+historical finding and input equivalence remain open.
+
+The historical and current manifests have the same installed lockfile
+digest. They list 54 byte-identical font binaries under different
+filenames. All 54 current binaries rehash against the isolated build.
+Both captures list 912 JavaScript artifacts, and their byte digests
+differ. Chromium moved from 152.0.7977.76 to 157.0.8103.51. Five of
+ten harness files also change. Reuse individual font and finding
+evidence within its verified scope.
+
+Streaming replay verifies the row vector and all 12 predecessor
+digests. All 2,311 rows add a partial current-output observation, and
+6,937 distinct receipt paths in those additions verify. Full dependency
+replay of the staged successor remains pending.
+
+- Prior and current checkpoint manifests SHA-256
+  `c81dac4a475cc53f52446d8b426f247b3330c99b2da38831b5ce303abaeab6a6`
+  and `d0791bca30e413ce6bd417fcfbfffb6efd6509b40159dbe810ba114feb6e62a9`.
+- Current font vector SHA-256
+  `24cc3352e4e5639f7345262212b6ef465834b7b18e9edee12942cbbc48801934`.
+- Delta `all-case-current-enforced-source-applicability-composed-delta-20261123.log`
+  SHA-256 `84bdc92b6a94eb6dd4aa06b965667cd17a1844501357eb9a2ba15ec5c0c87c62`.
+  Successor `1e54281bc57c42155a89b56c88963480fc2c8dd856f9fd1fb5e3307ca1c6b44f`.
+- Added receipt vector SHA-256
+  `aa143b4544fd48ed34e9b09423feff185b3eb8eed72bdb2d2b3a1bd5fe5387a1`.
 
 ### Staged layout successor materialized and dependency additions verified
 
