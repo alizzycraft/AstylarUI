@@ -54,6 +54,10 @@ full guarded loader rehashed all 43,499 dependency paths for 2,311
 cases, including 16 authenticated historical sources. It preserves
 the `3bc80bd0` accepted pointer. The compact store confirms all
 three popup relationship findings in the accepted source inventory.
+Materialized successor `275e3de9` combines all five current Divider
+deltas for 24 cases. The guarded loader verifies all 2,311 rows and
+43,570 dependencies, including 71 newly referenced paths. Accepted
+generation `3bc80bd0` remains the canonical export.
 Case inspections remain partial. Divider's complete owner census
 identifies the exact property and paint mappings still open. The
 current single-span line-box split now covers all 24 Divider cases.
@@ -62,6 +66,21 @@ contexts. All six custom cases now have a direct backing-row paint
 control. Configured native glyph attribution remains open.
 
 ## Evidence ledger
+
+### Combined current Divider review
+
+The five deltas replay in order from `bfad5bcd`. All intermediate
+review digests and all 43,499 inherited dependency records conserve.
+The loader authenticates current bytes and the 16 pinned historical
+source paths, and confirms every case remains partial. This review
+binds used line boxes, native inherited struts, custom backing-row
+paint, and native glyph controls. DPR2 glyph attribution remains open.
+
+- Materialization `artifacts/material-parity/divider-combined-review-materialization-20261123.log`
+  SHA-256 `1c8a730e65d6c708bf06cc073685fc83620cac6d67775b549f410c107cb0fb6a`.
+- Guarded replay `artifacts/material-parity/divider-combined-review-guarded-replay-20261123.log`
+  SHA-256 `976c6074aee16fb86b09ecc2213ce43be0b944601620438f01b6c35ef04bf966`.
+  Dependency vector SHA-256 `065b40fab5fb4ba1a24f13747ef80ff172d2129490ba7d73b7076b4f9e97e838`.
 
 ### Current Divider native glyph raster
 
