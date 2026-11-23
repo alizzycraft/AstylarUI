@@ -45,6 +45,30 @@ already identifies which property and paint mappings remain open.
 
 ## Evidence ledger
 
+### Current option typography and retained raster applicability
+
+The October and November checkpoints agree on the text owner and eight
+recorded typography inputs for all 832 option labels across 48
+Autocomplete, Select, and Timepicker desktop opening and popup-hover
+cases. The readback used paired native option children, Astylar text
+registry owners, ordered label identity, and checkpoint artifact
+digests. Every pair retains Material's 20 px line height and 0.096 px
+letter spacing versus Astylar's normal line height and 0 px spacing.
+These input differences persist in all four profiles at both DPRs.
+
+All 48 Astylar frames and 44 Material frames have matching PNG hashes
+across captures. The other four Material frames differ by 14 pixels in
+total, with a maximum change of one per channel. The replay reports
+the exact case and bounds for each. Use the retained pixels and now
+verified input correspondence to scope a focused label paint readback.
+The measured contribution of those typography differences still
+requires paired used glyph geometry and texture evidence.
+
+- Replay `artifacts/material-parity/popup-option-typography-checkpoint-replay-20261123.mjs`
+  SHA-256 `dcb2d1678bf6c8240fad053dccba00cb4fec1dc03b86731e67da176ad53d897a`.
+- Checkpoint and text-owner vector SHA-256
+  `8a641727860379e277959f729e2c43a9e1570502ff08ba356801aa1412b7cb3a`.
+
 ### Popup paint measurement coverage in current checkpoints
 
 Review `cabf1610` retains 2,311 partial cases. Input and structure,
