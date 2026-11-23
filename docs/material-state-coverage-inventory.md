@@ -61,8 +61,23 @@ frames and zero Astylar frames. Two Material frames change both regions.
 
 The `activate-leave` checkpoints lack a measured panel box. The
 comparison uses the same absolute crop as `open` and records that
-measurement gap. It localizes the affected pixels. The events and
-paint inputs behind the day 23 changes still require direct evidence.
+measurement gap.
+
+Material's calendar has a program-focus class and a matched 12%
+background rule in every tinted case. The class and background
+toggle together in exactly the eight day 23 raster variants. The
+recorded date border, label color, and focus pseudo-element styles
+stay stable within each comparison. A 12% sRGB blend reproduces
+the dominant flat-color transition within one channel value for
+23,261 of the 26,313 differing day 23 pixels. The matched day 1
+hover rule appears in all eight hover cases. Exact focus-event
+timing and the remaining edge and glyph paint are open.
+
+- Focus tint replay `artifacts/material-parity/datepicker-current-focus-tint-paint-20261123.log`
+  SHA-256 `bd53cfc5e393bf6a8da5e7d6efa3746a3d407edbc6158dbd2b1eedc0e962ce73`.
+- Focus tint case delta `artifacts/material-parity/datepicker-current-focus-tint-composed-delta-20261123.log`
+  SHA-256 `bb569b72593ab66527adf9f5caccc6ea639574f144211285c672e9d6e087cf05`.
+  Staged successor `15aa8628` binds 32 cases and 99 receipt paths.
 
 - State raster replay `artifacts/material-parity/datepicker-current-popup-state-raster-20261123.log`
   SHA-256 `ec0863cef90a4ab4e47c62212be1d5cc432d9c394b3e0a2da10b9f5f1929215a`.
