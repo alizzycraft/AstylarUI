@@ -2715,10 +2715,33 @@ input focus and a resolved AX listbox target. In all eight cases, the
 closed Astylar DOM holds the dangling ID and Chromium omits it from AX.
 The combined verification checks exact configured membership and all
 32 paired boundaries. The mapped focus call ordering is scoped to the
-instrumented contrast DPR2 case. Compare Select's option commit next to
-test whether the loss of focus is shared across the two popup fixtures.
+instrumented contrast DPR2 case.
 Remaining desktop report SHA-256 fa1ec1d519ee5491b42ac9bc18ce10193a43698715dc331bbff70181e4ca59cc.
 Remaining desktop runner SHA-256 36bf14418dc5d91548ea87ea8a0db4a7efe9b28b82067f3316e3977a12cfb290.
+
+The exact Select commit-and-reopen action shows the same settled pattern
+in all eight configured desktop cases. After committing Solo, Material
+settles on MAT-SELECT and Astylar remains on CANVAS. Both reopen with
+focus on their combobox owner and a resolved AX listbox target. Chromium
+omits the closed AX relationship on both sides. Astylar's closed DOM
+retains the unresolved ID, consistent with the unconditional
+`ariaControls` and conditional listbox in `astylar.component.ts:949-953`.
+The checked Select and Autocomplete cohorts cover 16 exact cases and 64
+paired boundaries on the current browser build.
+
+The Select contrast DPR2 trace reproduces the same first canvas transfer
+as Autocomplete, with the same mapped Babylon and Astylar runtime call
+sites. The Material option temporarily moves DOM focus to the popup DIV
+and the option click restores MAT-SELECT. Both Select sides confirm Team
+before commit and Solo after commit. A plug-in-free public-API reduction
+can now test whether a detached option and the generic pointer focus
+path suffice to reproduce the missing restoration.
+Select contrast report SHA-256 b68b6545e1b5300dc57c6a47cf095aaf3f69f4594b6358fae0d57cc05ba58395.
+Select contrast runner SHA-256 d2c35bc7a303d16eaacdafbe74594771df4e39417efce983d73bf8e9f301eafd.
+Select remaining desktop report SHA-256 bed21ed6170baaf8ed50748f2af0465485ced063798ec5e84e14cd665834eccb.
+Select remaining desktop runner SHA-256 d52934b82798dcccbeb7adc8c399f49deb893eb52cf58060d980b5acb758ae0c.
+Select focus report SHA-256 78d9dae0ea4d240b3f2783a43057d93b9328377e59fb364b9c00aa039b12ec31.
+Select focus runner SHA-256 7c22f35e1e62fda702854b929e610d97f2bda7c9f0d16d3bf4154481c5a73199.
 
 Successor 26e5ffb8 stages 16 partial activation observations and attaches
 editing and pointer focus evidence to the same rows. The 435-row batch
