@@ -12,9 +12,9 @@ changes to `sourceFingerprints` and `coverage`. Section conservation,
 independent cold equality and isolated import are still required.
 
 The Menu and Divider successor has passed the complete dependency
-loader. The staged successor `1a2d1a8d` binds current Tabs size
-and text evidence alongside the three modal action and font-focus
-traces. All case inspections remain partial.
+loader. The staged successor `4f07f359` binds current Expansion
+owner dimensions alongside Tabs size and text and the three modal
+action and font-focus traces. All case inspections remain partial.
 Reconcile the staged evidence after the active gates, then close
 the shared input, paint, semantics, ownership and source-applicability
 obligations against exact cases. Divider's complete owner census
@@ -170,6 +170,41 @@ current checkpoint records. Full dependency integration remains pending.
 - Successor `1a2d1a8db1586022769beca6cac4ad5f85bde2b2e948b1f59ff552a63d79dc87`.
 - Receipt list SHA-256
   `46648c061e20036b3da30c4968dd08d7d73f3948165ebbd1e158cd2bbf988405`.
+
+### Current Expansion shell, trigger and title dimensions
+
+The focused check distinguished large layout differences from measurement
+of different owners. All 56 configured Expansion interaction records
+compare the native panel shell with the candidate trigger under
+`expansion-primary`. The raw height difference is 68 or 72 CSS px in
+the 24 open interactions. With the owners matched, all 56 panel shells
+agree in width and height. The title width gap also reflects unequal
+authoring. Material gives the title a growing flex box with a 0 CSS px
+basis and a used width of 648 CSS px. Astylar gives it an inline span
+with a used width of 132.640625 CSS px in light, dark and contrast, and
+152.536621 CSS px in custom. The box widths do not measure glyph widths.
+
+The matched trigger and outer frame dimensions agree in 50 cases.
+In the six open contrast cases, the Material trigger is 48 CSS px
+high and the Astylar trigger is 52 CSS px. The outer frame heights
+are 178 and 182 CSS px. Both panel shells are 120 CSS px. The first
+differences are the authored low-density trigger height and the
+fixed 88 CSS px open increment on the Astylar frame. Both values
+survive in the candidate registry. Placement and paint remain open.
+
+The staged delta attaches these observations to `inputStyleStructure`
+for exactly 56 interactions while preserving partial dispositions.
+Streaming replay verifies all 2,311 row positions, nine predecessor
+digests and 171 evidence paths.
+
+- Paired owner dimension digest
+  `6144e77b740ccba31d7ff43f16430db9a011ebba469794e667163d8310195ad4`.
+- Delta `expansion-current-matched-size-composed-delta-20261123.log`
+  SHA-256 `6f41af36fcd5cd7202af661afdb87b71662654902a60a93973acbc5c2169f4df`.
+- Successor `4f07f3597406c55468e384f08a1dfcc2dd6910283b051eb28b334af70735c3e4`.
+- Authored source at `examples/material-showcase/src/app/reference.component.ts:90`
+  and `examples/material-showcase/src/app/astylar.component.ts:458`,
+  `:657`, `:658` and `:993`.
 
 ### Font completion accounts for the second modal departure reflow
 
