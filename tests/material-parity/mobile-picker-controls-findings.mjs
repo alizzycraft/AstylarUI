@@ -278,8 +278,23 @@ export function preparePickerFocusSemanticsLauncher(bytes) {
   return applySourceEdits(source, launcherEdits);
 }
 
+const dividerGlyphLauncherEdits = [
+  ["retainedFocusBoundariesReview, retainedAccessibilityPaintReview }",
+    "retainedFocusBoundariesReview, retainedAccessibilityPaintReview, dividerGlyphReview }"],
+  ["const rawRequested = process.argv.slice(2);",
+    "const selectorArguments = process.argv.slice(2);\nconst dividerGlyph = selectorArguments.includes('--divider-glyph');\nassert.ok(!dividerGlyph || selectorArguments.every(argument => ['--divider-glyph', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\nconst rawRequested = selectorArguments.filter(argument => argument !== '--divider-glyph');"],
+  ["|--retained-accessibility-paint]",
+    "|--retained-accessibility-paint|--divider-glyph]"],
+  ["for (const [name, relative] of Object.entries(inputs)) {",
+    "if (dividerGlyph) inputs['case-obligation-review'] = `artifacts/material-parity/working-audit/proposals/${dividerGlyphReview}.json`;\nfor (const [name, relative] of Object.entries(inputs)) {"],
+  ["if (requested.includes('--dry-run')) console.log(",
+    "if (dividerGlyph) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = `--case-obligation-review-sha256=${dividerGlyphReview}`;\nif (requested.includes('--dry-run')) console.log("],
+];
+
 export function restorePickerFocusSemanticsLauncher(bytes) {
-  const focusSource = restoreRetainedReviewSelection(normalized(bytes), "const retainedAccessibilityPaint = ", retainedAccessibilityPaintLauncherEdits,
+  const currentSource = restoreRetainedReviewSelection(normalized(bytes), 'const dividerGlyph = ', dividerGlyphLauncherEdits,
+    '35624aa6239262ba250f19f65acdb5d22dc9814dcf6c064a4ef55449a47aaffd');
+  const focusSource = restoreRetainedReviewSelection(currentSource, "const retainedAccessibilityPaint = ", retainedAccessibilityPaintLauncherEdits,
     '2456994775db5747fac07d7fb6b0b6dca2a996ec0e3e50b8b0de08358538b21a');
   const retainedCaseSource = restoreRetainedReviewSelection(focusSource, 'const retainedFocusBoundaries = ', retainedFocusBoundariesLauncherEdits,
     '4028f09096226e4febafad0abda946626913c41277714f0558c75e76522b10f3');
@@ -365,8 +380,19 @@ const currentEnforcedRunnerEdits = [
   ['    diagnosticRead: [pickerFocusSemanticsReview', '    diagnosticRead: [currentEnforcedReview,pickerFocusSemanticsReview'],
 ];
 
+const dividerGlyphRunnerEdits = [
+  ["currentEnforcedReview, createCurrentEnforcedReviewReader }",
+    "currentEnforcedReview, dividerGlyphReview, createCurrentEnforcedReviewReader }"],
+  ["options.caseObligationReviewSha256===currentEnforcedReview\n      ? createCurrentEnforcedReviewReader({ root, read: auditReadFileSync })",
+    "[currentEnforcedReview, dividerGlyphReview].includes(options.caseObligationReviewSha256)\n      ? createCurrentEnforcedReviewReader({ root, read: auditReadFileSync, reviewSha256: options.caseObligationReviewSha256 })"],
+  ["diagnosticRead: [currentEnforcedReview,pickerFocusSemanticsReview",
+    "diagnosticRead: [currentEnforcedReview,dividerGlyphReview,pickerFocusSemanticsReview"],
+];
+
 export function restorePickerFocusSemanticsRunner(bytes) {
-  const currentSource = restoreRetainedReviewSelection(normalized(bytes), "createCurrentEnforcedReviewReader }", currentEnforcedRunnerEdits,
+  const dividerSource = restoreRetainedReviewSelection(normalized(bytes), 'currentEnforcedReview, dividerGlyphReview, createCurrentEnforcedReviewReader }', dividerGlyphRunnerEdits,
+    'efa90f14fccf18b03886d0ad3c11dacbbe5e866f1f71b6fea3fabbf3c89bd52e');
+  const currentSource = restoreRetainedReviewSelection(dividerSource, "createCurrentEnforcedReviewReader }", currentEnforcedRunnerEdits,
     'f115aa8b9e4ca716080656aab29f535de12f604f9822ee6c610e4ca7397beee8');
   const focusSource = restoreRetainedReviewSelection(currentSource, "retainedCaseObservationsReview, retainedFocusBoundariesReview, retainedAccessibilityPaintReview }", retainedAccessibilityPaintRunnerEdits,
     '97be4738f2b46c9595a2ba527255d16d4854466eff52e2274f4c3124d0cdc6e3');
@@ -429,6 +455,7 @@ export function restorePickerFocusSemanticsBenchmarkReader(bytes, root = process
 }
 
 export const currentEnforcedReview = '00a6ec38018be2a4b84abbbc9f9c5c057a29328f1d24d7aad19a54738d71b8c6';
+export const dividerGlyphReview = '3a6a5616f13458b2a223c8516c6121f07b1ba82756ac19bee3e8af4fd27976d4';
 const currentEnforcedHistoricalRoute = {
   file: artifacts + 'staged-layout-successor-historical-source-git-v2-20261123.log',
   sha256: 'cc353d2655f1febb02aa0d4fbe646daba6fa0d070f686d028943e15b39e2b2dc',
@@ -438,14 +465,21 @@ const currentEnforcedProposal = {
   sha256: '9c94a4c20d4c7c0cf35d903734d614bc51a3aabeeca005d9e0e0720db3d79a74',
 };
 
-export function createCurrentEnforcedReviewReader({ root, read }) {
+const dividerGlyphProposal = {
+  file: artifacts + 'working-audit/proposals/' + dividerGlyphReview + '.json',
+  sha256: '456605815e4f892944a81d8a61bad9d6c12783bda414d8a63dcd32a11985d380',
+};
+
+export function createCurrentEnforcedReviewReader({ root, read, reviewSha256 = currentEnforcedReview }) {
+  assert.ok([currentEnforcedReview, dividerGlyphReview].includes(reviewSha256), 'Unknown current case review');
+  const selected = reviewSha256 === dividerGlyphReview ? dividerGlyphProposal : currentEnforcedProposal;
   const routeBytes = read(path.resolve(root, currentEnforcedHistoricalRoute.file));
   assert.equal(hash(routeBytes), currentEnforcedHistoricalRoute.sha256, 'Historical source route changed');
   const routeEncoding = routeBytes[0] === 255 && routeBytes[1] === 254 ? 'utf16le' : 'utf8';
   const { resolved } = JSON.parse(routeBytes.toString(routeEncoding).replace(/^\uFEFF/, ''));
   const sources = new Map(resolved.map(source => [path.resolve(root, source.file), source]));
   assert.equal(sources.size, 16);
-  const proposal = path.resolve(root, currentEnforcedProposal.file);
+  const proposal = path.resolve(root, selected.file);
   const joinSource = 'tests/material-parity/mobile-picker-controls-findings.mjs';
   return {
     read(name, options) {
@@ -461,16 +495,17 @@ export function createCurrentEnforcedReviewReader({ root, read }) {
         });
         assert.equal(hash(bytes), source.expected, `Historical review source changed: ${source.file}`);
       } else {
-        assert.equal(hash(bytes), currentEnforcedProposal.sha256, 'Current enforced proposal changed');
+        assert.equal(hash(bytes), selected.sha256, 'Current enforced proposal changed');
       }
       const encoding = typeof options === 'string' ? options : options?.encoding;
       return encoding ? bytes.toString(encoding) : bytes;
     },
     sourceApplicability: {
-      mode: 'current-enforced-case-review',
+      mode: reviewSha256 === dividerGlyphReview ? 'current-divider-glyph-review' : 'current-enforced-case-review',
       joinSource: { file: joinSource, sha256: hash(read(path.resolve(root, joinSource))) },
       historicalRoute: currentEnforcedHistoricalRoute,
-      predecessorReview: retainedAccessibilityPaintReview,
+      predecessorReview: reviewSha256 === dividerGlyphReview
+        ? '275e3de9a8a802e6814f0024601826516ca3675c38f3d6d35d64db8ec1d0ca4a' : retainedAccessibilityPaintReview,
       boundary: 'Current enforced checkpoints and exact retained-source observations. Whole-case inspection and current rendering acceptance remain open.',
     },
   };

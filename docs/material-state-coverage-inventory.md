@@ -61,8 +61,8 @@ generation `3bc80bd0` remains the canonical export.
 Materialized successor `3a6a5616` adds six Divider glyph deltas
 for 24 cases. The guarded loader verifies all 2,311 rows and 43,634
 dependencies, including 64 newly referenced paths. All 1,164 source
-fingerprints match the published export vector. The canonical runner
-still needs to select the guarded reader for this review.
+fingerprints matched the published export vector before selector wiring.
+The canonical runner now selects the guarded reader for this review.
 Case inspections remain partial. Divider's complete owner census
 identifies the exact property and paint mappings still open. The
 current single-span line-box split now covers all 24 Divider cases.
@@ -80,10 +80,22 @@ conserve. The existing loader authenticates the combined proposal,
 including the 16 historical source routes. Case inspections remain
 partial and the accepted generation remains `3bc80bd0`.
 
-The live source collector emits the same 1,164-path vector used for
-`3bc80bd0`. The remaining canonical preparation is selection of the
-guarded reader for `3a6a5616`, reconciliation of any selection source
-changes, and storage preflight for export, cold check and isolated import.
+The `--divider-glyph` selector now sends the frozen proposal to
+the existing guarded reader. The live loader repeats all 2,311 rows
+and 43,634 dependency checks. Historical runner and launcher bytes
+restore exactly. Five negative controls reject source drift, conflicting
+selectors, an unknown review or altered proposal bytes.
+
+The source collector reconciles three changed selector files in the
+1,164-path vector and preserves all 501 focused proof records. The
+expected canonical section changes are coverage and source fingerprints.
+The accepted package remains at `3bc80bd0` pending export, independent
+cold verification and isolated import.
+
+- Export selection verification `artifacts/material-parity/divider-glyph-export-selection-verification-20261123.log`
+  SHA-256 `ada6fe609c644f8bb85e86ff94fe9cea789e20a846e35b6f3d6bc6192722ab42`.
+- Source reconciliation `artifacts/material-parity/divider-glyph-export-source-reconciliation-20261123.log`
+  SHA-256 `75b94c08d340eed2ecd1bb364a3eeeb5e6a7fb689557bd759d3140ad29dbcb61`.
 
 - Materialization `artifacts/material-parity/divider-glyph-review-materialization-20261123.log`
   SHA-256 `10908f9d46a8d6af7cf9e23377804c171f46c6aedc49286cae20499026924885`.

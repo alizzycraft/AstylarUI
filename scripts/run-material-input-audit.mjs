@@ -46,7 +46,7 @@ import { createFilledFocusReviewReader, createFilledFocusHistoricalRead } from '
 import { createButtonToolbarReviewReader, createButtonToolbarHistoricalRead } from './join-material-button-toolbar-paint.mjs';
 import { createSnackbarOpenerReviewReader } from './join-material-snackbar-opener-paint.mjs';
 import { createDatepickerMobileOpenDismissHistoricalRead, createDatepickerMobileOpenDismissReviewReader, datepickerMobileOpenDismissReview } from './join-material-datepicker-mobile-open-dismiss.mjs';
-import { createMobilePickerControlsHistoricalRead, createPickerFocusSemanticsReviewReader, pickerFocusSemanticsReview, retainedPointerCoverageReview, retainedPaintOwnershipReview, retainedCaseObservationsReview, retainedFocusBoundariesReview, retainedAccessibilityPaintReview, currentEnforcedReview, createCurrentEnforcedReviewReader } from '../tests/material-parity/mobile-picker-controls-findings.mjs';
+import { createMobilePickerControlsHistoricalRead, createPickerFocusSemanticsReviewReader, pickerFocusSemanticsReview, retainedPointerCoverageReview, retainedPaintOwnershipReview, retainedCaseObservationsReview, retainedFocusBoundariesReview, retainedAccessibilityPaintReview, currentEnforcedReview, dividerGlyphReview, createCurrentEnforcedReviewReader } from '../tests/material-parity/mobile-picker-controls-findings.mjs';
 import { createSliderOpenerHistoricalRead } from '../tests/material-parity/slider-thumb-span-findings.mjs';
 import { dividerConsumerReview, createDividerConsumerRegistrationHistoricalRead } from '../tests/material-parity/divider-consumer-registration.mjs';
 import { createCaptureAvailabilityHistoricalRead } from '../tests/material-parity/capture-availability-registration.mjs';
@@ -106,8 +106,8 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const dividerConsumerEvidenceRead = createDividerConsumerRegistrationHistoricalRead({root,read:triggerPaintHistoricalRead});
     const captureAvailabilityEvidenceRead = (options.caseObligationReviewSha256===captureAvailabilityReview || options.caseObligationReviewSha256===dividerConsumerReview) ? dividerConsumerEvidenceRead : createCaptureAvailabilityHistoricalRead({root,read:dividerConsumerEvidenceRead});
     const dividerConsumerReaderFactory = options.caseObligationReviewSha256===dividerConsumerReview ? createDividerConsumerReviewReader : captureAvailabilityReaderFactory;
-    const applicability=options.caseObligationReviewSha256===currentEnforcedReview
-      ? createCurrentEnforcedReviewReader({ root, read: auditReadFileSync })
+    const applicability=[currentEnforcedReview, dividerGlyphReview].includes(options.caseObligationReviewSha256)
+      ? createCurrentEnforcedReviewReader({ root, read: auditReadFileSync, reviewSha256: options.caseObligationReviewSha256 })
       : [pickerFocusSemanticsReview,retainedPointerCoverageReview,retainedPaintOwnershipReview,retainedCaseObservationsReview,retainedFocusBoundariesReview,retainedAccessibilityPaintReview].includes(options.caseObligationReviewSha256)
       ? createPickerFocusSemanticsReviewReader({ root, read: auditReadFileSync, reviewSha256: options.caseObligationReviewSha256,
         predecessor: createDatepickerMobileOpenDismissReviewReader({ root, read: pickerHistoricalRead }) })
@@ -130,7 +130,7 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);
   const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial,
-    diagnosticRead: [currentEnforcedReview,pickerFocusSemanticsReview,retainedPointerCoverageReview,retainedPaintOwnershipReview,retainedCaseObservationsReview,retainedFocusBoundariesReview,retainedAccessibilityPaintReview,datepickerMobileOpenDismissReview,'1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5'].includes(options.caseObligationReviewSha256)
+    diagnosticRead: [currentEnforcedReview,dividerGlyphReview,pickerFocusSemanticsReview,retainedPointerCoverageReview,retainedPaintOwnershipReview,retainedCaseObservationsReview,retainedFocusBoundariesReview,retainedAccessibilityPaintReview,datepickerMobileOpenDismissReview,'1d3da334b2fa741729308e4c1b065448eb1ef327302b8646c2f4cfb8dfbd9fe5'].includes(options.caseObligationReviewSha256)
       ? createCaptureAvailabilityHistoricalRead({root,read:createSliderOpenerHistoricalRead({root,read:createDatepickerMobileOpenDismissHistoricalRead({root,read:pickerHistoricalRead})})})
       : options.caseObligationReviewSha256==='904af088ac58f326d54af5453ed8cd6341a5571acb3b6538a2faccafa07ae8c4'
       ? createCaptureAvailabilityHistoricalRead({root,read:createButtonToolbarHistoricalRead({root,read:pickerHistoricalRead})})
