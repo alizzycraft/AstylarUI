@@ -97,9 +97,23 @@ layout. At DPR2, all 16 opaque Canvas crops retain a difference of
 757 to 1,359 pixels. Across eight desktop inspect labels, CSS-size
 text drawn through a 2? transform, device-size text, and a
 device-pixel-rounded baseline give identical opaque Canvas rasters.
-The DPR2 native-to-Canvas generation difference remains unresolved.
-Attribution to the configured Astylar paint also requires accounting
-for the measured input and placement differences.
+The DPR2 inspect follow-up draws each letter at its measured native
+character position. The result reproduces the whole-word Canvas raster
+byte for byte in all eight DPR2 labels and both DPR1 control labels.
+Rounded character positions change all ten Canvas rasters. Native
+Chromium identifies Roboto Regular as the sole face for each word.
+The measured Canvas word widths differ from the native ranges by
+less than 1/64 CSS px. The unchanged DPR2 residual rules out
+accumulated Canvas glyph advances in these cases. The next boundary
+is glyph rasterization for a matched font and origin. Attribution to
+the configured Astylar paint still requires accounting for the measured
+input and placement differences.
+
+- Glyph advance replay `artifacts/material-parity/divider-current-native-canvas-glyph-advances-20261123.json`
+  SHA-256 `a55ace3e97c6b7ec076bf56268d16ac1bf9eba356bba64b71d6ef88cd5609be3`.
+- Glyph advance case delta `artifacts/material-parity/divider-current-native-glyph-advances-composed-delta-20261123.log`
+  SHA-256 `ad8498f4f318a611d938a31627ddca0a857e5faa5aa7608396ffecd3fe1290ea`.
+  Staged successor `319bc8fa` binds five cases and 14 receipt paths.
 
 - Native raster replay `artifacts/material-parity/divider-current-native-canvas-20261123.json`
   SHA-256 `e3480a1c3a856b2eb19d9992b5bbcffe5be684b9536dfea5849119e63fc14fcb`.
