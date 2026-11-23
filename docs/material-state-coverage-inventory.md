@@ -2667,6 +2667,47 @@ separately recorded DOM-event difference.
 Current callback trace SHA-256 39ab4799218848dc0083a10f2ce4dd023f2abcb7595daee1e9437195b867a935.
 Current callback verification SHA-256 c620edc6f72527b05e26371a403aade9629f5e701f2317d0437d7b7b1c7719c2.
 
+### Current Autocomplete commit and reopen
+
+The enforced checkpoint at 62f7b001 binds all 32 desktop Autocomplete
+open, commit-and-reopen, outside-dismiss and canvas-dismiss cases to
+their retained counterparts. Of 128 authenticated images, 126 match
+byte for byte. Both changes belong to contrast desktop DPR2
+commit-and-reopen and pass the configured thresholds. The exact
+maintained action reproduced both full Astylar images during ordinary
+caret blinking. An enabled caret mesh alternated visibility while
+focus, value and selection stayed fixed. The two frames differ by
+194 physical pixels within x318-322 and y372-410, including the changed
+focused raster. This identifies the capture difference as blink timing.
+Checkpoint comparison SHA-256 c4337b56e8f069e49ade9b5a7fb9b6b2746b428a16010dae73dd7c84e95239fc.
+
+The same contrast DPR2 replay shows an intermediate focus divergence.
+Both comboboxes resolve an AX listbox relationship when open and
+reopened. After committing Cape Town, Material's option click restores
+the input after a temporary blur. On Astylar, the first canvas focus
+call during option pointerdown comes from Babylon's scene input
+manager. It synchronously moves focus off the input before the
+Astylar interaction runtime also calls canvas focus. The canvas keeps
+focus through commit. Reopening restores the input and masks the
+intermediate discrepancy in the terminal measurement. The trace
+establishes the first focus transfer and Material's restoration.
+A public-API reduction for the missing Astylar restoration and
+applicability to other configured cases remain open.
+
+At startup and after commit, the Astylar DOM retains an unresolved
+`aria-controls` ID. The authenticated showcase source at
+`astylar.component.ts:917-920` declares the relationship unconditionally
+and creates the listbox only while open. This confirms the existing
+authoring finding in the checked desktop case. Chromium 157 omits
+the unresolved relation from AX and exposes the resolved relation on
+both sides while open. AX focus on the combobox differs after commit.
+Browser and focus trace reports and their runners are retained under
+`artifacts/material-parity/autocomplete-commit-reopen-current-*`.
+Browser report SHA-256 506be608f6af8958eaae3ceb872243298e69c2cb5dfeedc9862ccaf55fe6f40c.
+Browser runner SHA-256 8a8acad83710ba4f1231342cde4a945958d62d179b188634cd7f9543f232db0c.
+Focus report SHA-256 e69996a180eec6af7dea221b8172290a1c29fffdc0cac914ba555dd60afabd3d.
+Focus runner SHA-256 f86131cf8db5bb8d1562afb371301ec6603c7b22bb5fe2dd9bfedd2ed5eb66a0.
+
 Successor 26e5ffb8 stages 16 partial activation observations and attaches
 editing and pointer focus evidence to the same rows. The 435-row batch
 reproduces its prior successor and reverses to the full 2,311-row parent.
