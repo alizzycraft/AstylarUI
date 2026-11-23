@@ -121,6 +121,41 @@ text rasters and equivalent-input behavior remain open.
   `examples/material-showcase/src/app/reference.component.ts:88` and
   `examples/material-showcase/src/app/astylar.component.ts:974`.
 
+### Current Tabs label texture and panel paint inputs
+
+The focused question was whether the retained alignment differences
+start with the same text requests. Authenticated paired trees and
+`core-control-texture` records cover both tab labels in all 58 current
+interactions. All 116 labels agree on text, nominal 14 CSS px size and
+weight 500. Material requests Roboto, a 14 CSS px line height,
+0.096 CSS px tracking, nowrap and baseline alignment. Astylar's
+painted label input requests Roboto with Arial and sans-serif fallbacks,
+a 20 CSS px line height, zero tracking, normal wrapping and middle
+alignment. These are explicit input differences before rasterization.
+The evidence records family requests and leaves actual font selection
+and any individual contribution to ink placement open.
+
+For all 58 panel observations, Material's text matches the candidate
+authored label and the native 400-weight size agrees with the plugin's
+authored size. The sizes are 16 CSS px in light and dark, 14.4 in
+contrast and 18.4 in custom. The native line height is normal. The
+candidate plugin owns its canvas baseline, including a -0.2 authored
+offset in custom. The core control-texture inspector does not expose
+that plugin's pixel inputs. The existing text-substitution attribution
+therefore still applies to the panel.
+
+All 116 label and 58 panel alignment checks pass. The largest measured
+center-offset errors are 0.6393 and 0.7218 CSS px respectively. Such
+passes do not establish equal text inputs or isolate the raster cause.
+Use matched owner sizes and the exact text requests together when
+attributing any remaining paint difference.
+
+- Configured-order receipt digest over case key, owner ID and paired tree
+  digests `cbe75c80b0352f299748b8e2b6857c8d95e519c73ff050b7b123b1de64ecb5cc`.
+- Source owners are the label texture inspection in `src/lib/astylar.ts:933`
+  and the plugin baseline and drawing path in
+  `examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts:368`.
+
 ### Font completion accounts for the second modal departure reflow
 
 The prior departure traces found one public surface update and two revision
